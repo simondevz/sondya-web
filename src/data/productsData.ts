@@ -1,8 +1,8 @@
-type productType = {
+export type productType = {
   product: string;
 };
 
-export const Products: Array<productType> = [
+export const Productsdata: Array<productType> = [
   {
     product: "Electronics",
   },
