@@ -2,7 +2,7 @@ type serviceType = {
   service: string;
 };
 
-export const Services: Array<serviceType> = [
+export const Servicesdata: Array<serviceType> = [
   {
     service: "Laundry and Dry Cleaning Services",
   },

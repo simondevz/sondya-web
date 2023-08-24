@@ -31,3 +31,25 @@ code {
     font-size: 12px;
   }
 }
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("../public/fonts/playfair-display/static/PlayfairDisplay-Regular.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Germania One";
+  src: url("../public/fonts/germania-one/GermaniaOne-Regular.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.playfair-display {
+  font-family: "Playfair Display", serif;
+}
+.germania-one {
+  font-family: "Germania One", serif;
+}
