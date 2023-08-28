@@ -73,7 +73,7 @@ export const DropdownProducts = ({ options }: DropdownProps<productType>) => {
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700]">
+        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-40">
           <div className="py-1">
             {options.map((option, index) => (
               <button

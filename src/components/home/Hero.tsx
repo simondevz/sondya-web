@@ -23,12 +23,12 @@ const Hero = () => {
       {homeCarousel.map((t, i) => {
         if (i === index) {
           return (
-            <div className={`animate__animated ${animate}`} key={i}>
+            <div key={i} className={`animate__animated ${animate}`}>
               <img src={t.image} alt="" />
             </div>
           );
         }
-        return <div className="hidden"></div>;
+        return <div key={i} className="hidden"></div>;
       })}
       <img
         className="h-14 md:h-auto absolute right-0 z-10 top-1/2 transform -translate-y-1/2"
