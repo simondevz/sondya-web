@@ -9,6 +9,11 @@ import {
   productImage8,
   productImage9,
   productImageA,
+  productImageB,
+  productImageC,
+  productImageD,
+  productImageE,
+  productImageF,
 } from "../images/products";
 
 export type productItemsType = {
@@ -22,6 +27,7 @@ export type productItemsType = {
   sold?: boolean;
   rating?: number;
   totalrating?: number;
+  like?: boolean;
 };
 
 export const ProductsItemsdata: Array<productItemsType> = [
@@ -35,17 +41,20 @@ export const ProductsItemsdata: Array<productItemsType> = [
     body: "Games built using the Xbox Series X|S development kit showcase unparalleled load times, visuals.",
     rating: 5,
     totalrating: 52677,
+    like: true,
   },
   {
     image: productImage2,
     sold: true,
     pricenow: 2300,
     name: "Bose Sport Earbuds - Wireless Earphones - Bluetooth In Ear...",
+    like: true,
   },
   {
     image: productImage3,
     pricenow: 220,
     name: "Simple Mobile 4G LTE Prepaid Smartphone",
+    like: true,
   },
   {
     image: productImage4,
@@ -53,28 +62,33 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricebefore: 865,
     pricenow: 150,
     name: "4K UHD LED Smart TV with Chromecast Built-in",
+    like: false,
   },
   {
     image: productImage5,
     pricenow: 1200,
     name: "Sony DSCHX8 High Zoom Point & Shoot Camera",
+    like: true,
   },
   {
     image: productImage6,
     pricenow: 299,
     name: "Dell Optiplex 7000x7480 All-in-One Computer Monitor",
+    like: false,
   },
   {
     image: productImage7,
     pricebefore: 865.99,
     pricenow: 70,
     name: "Portable Wshing Machine, 11lbs capacity Model 18NMFIAM",
+    like: false,
   },
   {
     image: productImage8,
     hot: true,
     pricenow: 160,
     name: "2-Barrel Carburetor Carb 2100 Engine Increase Horsepower",
+    like: false,
   },
   {
     image: productImage9,
@@ -82,6 +96,7 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricebefore: 360,
     pricenow: 250,
     name: "JBL FLIP 4 - Waterproof Portable Bluetooth Speaker - Black",
+    like: false,
   },
 ];
 
@@ -91,23 +106,23 @@ export const ProductsItemsdata2: Array<productItemsType> = [
     name: "Computer & Laptop",
   },
   {
-    image: productImageA,
+    image: productImageB,
     name: "SmartPhone",
   },
   {
-    image: productImageA,
+    image: productImageC,
     name: "Headphones",
   },
   {
-    image: productImageA,
+    image: productImageD,
     name: "Accessories",
   },
   {
-    image: productImageA,
+    image: productImageE,
     name: "Camera & Photo",
   },
   {
-    image: productImageA,
+    image: productImageF,
     name: "TV & Homes",
   },
 ];
