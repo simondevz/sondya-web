@@ -1,6 +1,6 @@
 const ContactUsLastPart = () => {
   return (
-    <div className="flex flex-col md:flex-row bg-[#000000] text-white p-8  md:p-10 gap-10 md:gap-3 justify-center">
+    <div className="flex flex-wrap bg-[#000000] text-white p-8  md:p-10 gap-10 md:gap-3 justify-center">
       <div className="max-w-[18rem] mx-auto">
         <div className="text-[#EDB842] text-xl font-[500]">Free Delivery</div>
         <div className="">

@@ -1,0 +1,9 @@
+export { default as bgInterior } from "./bg-interior.png";
+export { default as InteriorBed } from "./interior-bed.png";
+export { default as InteriorBlender } from "./interior-blender.png";
+export { default as InteriorCoffee } from "./interior-coffee.png";
+export { default as InteriorLight } from "./interior-light.png";
+export { default as InteriorPot } from "./interior-pot.png";
+export { default as InteriorSofa } from "./interior-sofa.png";
+export { default as InteriorSpread } from "./interior-spread.png";
+export { default as InteriorVase } from "./interior-vase.png";

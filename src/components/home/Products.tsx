@@ -17,6 +17,7 @@ import {
 import { DropdownProducts } from "../shareables/Dropdown";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { Ratings } from "../shareables/Ratings";
+import { Like } from "../shareables/like";
 
 const Products = () => {
   const [like, setLike] = useState<boolean>(false);
@@ -32,7 +33,7 @@ const Products = () => {
       <div className="flex flex-row gap-2 md:gap-4 w-full p-2 items-baseline text-[lg]">
         <div className="flex flex-row  w-10/12">
           <DropdownProducts options={limitedproductsdata} />
-          <div className="flex flex-row gap-2 overflow-x-scroll font-[600] border-b-[2px] border-[#000]">
+          <div className="hidden md:flex flex-row gap-2 overflow-x-scroll font-[600] border-b-[2px] border-[#000]">
             {limitedproductsdata.map((t, i) => {
               return (
                 <div key={i} className="whitespace-nowrap">
@@ -42,7 +43,7 @@ const Products = () => {
             })}
           </div>
         </div>
-        <div className="flex flex-row gap-1 md:gap-2 font-[600] md:whitespace-nowrap">
+        <div className="flex flex-row gap-1 md:gap-2 font-[600] whitespace-nowrap">
           View more{" "}
           <span className="text-2xl">
             <AiOutlineArrowRight />
@@ -165,18 +166,6 @@ const Products = () => {
   );
 };
 
-const Like = () => {
-  const [like, setLike] = useState<boolean>(false);
-  return (
-    <div
-      className="text-xl bg-[#EDB842] text-white p-1 rounded-full"
-      onClick={() => setLike(!like)}
-    >
-      {like ? <MdFavorite /> : <MdOutlineFavoriteBorder />}
-    </div>
-  );
-};
-
 const ProductsMultiCarousel = () => {
   const limitedproductsdataitems2 = ProductsItemsdata2.slice(0, 15);
   let [index, setIndex] = useState<number>(0);
@@ -235,20 +224,6 @@ const ProductsMultiCarousel = () => {
       </button>
     </div>
   );
-  // return (
-  //   <div className="flex flex-row whitespace-nowrap">
-  //     {limitedproductsdataitems2.map((t, i) => {
-  //       return (
-  //         <div className="flex flex-col" key={i}>
-  //           <img className="object-cover" src={t.image} alt="" />
-  //           <div className="whitespace-nowrap" style={{ width: "600px" }}>
-  //             {t.name}
-  //           </div>
-  //         </div>
-  //       );
-  //     })}
-  //   </div>
-  // );
 };
 
 export default Products;

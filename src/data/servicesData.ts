@@ -1,4 +1,4 @@
-type serviceType = {
+export type serviceType = {
   service: string;
 };
 

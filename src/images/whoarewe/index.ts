@@ -1,0 +1,11 @@
+export { default as AboutUsContact } from "./about-us-contact.png";
+export { default as AboutUsPayment } from "./about-us-payment.png";
+export { default as AboutUsReturn } from "./about-us-return.png";
+export { default as arrowLeftTestimonial } from "./arrow-left.png";
+export { default as arrowRightTestimonial } from "./arrow-right.png";
+export { default as bgWhoAreWe } from "./bg-whoarewe.png";
+export { default as WhoAreWeIcon1 } from "./icon1.png";
+export { default as WhoAreWeIcon2 } from "./icon2.png";
+export { default as WhoAreWeIcon3 } from "./icon3.png";
+export { default as rect } from "./rect.png";
+export { default as testimonial } from "./testimonial.png";
