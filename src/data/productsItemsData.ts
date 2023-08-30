@@ -48,6 +48,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     sold: true,
     pricenow: 2300,
     name: "Bose Sport Earbuds - Wireless Earphones - Bluetooth In Ear...",
+    rating: 4,
+    totalrating: 52677,
     like: true,
   },
   {
@@ -55,6 +57,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricenow: 220,
     name: "Simple Mobile 4G LTE Prepaid Smartphone",
     like: true,
+    rating: 3.4,
+    totalrating: 52677,
   },
   {
     image: productImage4,
@@ -63,18 +67,24 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricenow: 150,
     name: "4K UHD LED Smart TV with Chromecast Built-in",
     like: false,
+    rating: 5,
+    totalrating: 52677,
   },
   {
     image: productImage5,
     pricenow: 1200,
     name: "Sony DSCHX8 High Zoom Point & Shoot Camera",
     like: true,
+    rating: 5,
+    totalrating: 52677,
   },
   {
     image: productImage6,
     pricenow: 299,
     name: "Dell Optiplex 7000x7480 All-in-One Computer Monitor",
     like: false,
+    rating: 5,
+    totalrating: 52677,
   },
   {
     image: productImage7,
@@ -82,6 +92,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricenow: 70,
     name: "Portable Wshing Machine, 11lbs capacity Model 18NMFIAM",
     like: false,
+    rating: 5,
+    totalrating: 52677,
   },
   {
     image: productImage8,
@@ -89,6 +101,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricenow: 160,
     name: "2-Barrel Carburetor Carb 2100 Engine Increase Horsepower",
     like: false,
+    rating: 5,
+    totalrating: 52677,
   },
   {
     image: productImage9,
@@ -97,6 +111,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     pricenow: 250,
     name: "JBL FLIP 4 - Waterproof Portable Bluetooth Speaker - Black",
     like: false,
+    rating: 5,
+    totalrating: 52677,
   },
 ];
 

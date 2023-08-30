@@ -1,3 +1,4 @@
+export { default as JBL } from "./jbl.png";
 export { default as productImage1 } from "./products-1.png";
 export { default as productImage2 } from "./products-2.png";
 export { default as productImage3 } from "./products-3.png";

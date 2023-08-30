@@ -8,7 +8,7 @@ import {
 
 const ContactUsForm = () => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 py-14 px-3">
       <div className="w-4/5 md:w-3/5 mx-auto text-center">
         <div className="">Get In Touch With Us</div>
         <div className="text-[#9F9F9F]">

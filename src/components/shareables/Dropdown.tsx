@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdExpandMore } from "react-icons/md";
 import { categoryType } from "../../data/CategoryData";
 import { productType } from "../../data/productsData";
+import { serviceType } from "../../data/servicesData";
 
 interface DropdownProps<T> {
   options: T[];
@@ -82,6 +83,48 @@ export const DropdownProducts = ({ options }: DropdownProps<productType>) => {
                 onClick={() => handleOptionClick(option.product)}
               >
                 {option.product}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const DropdownServices = ({ options }: DropdownProps<serviceType>) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const handleOptionClick = (option: string) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative inline-block text-left w-36">
+      <div>
+        <button
+          type="button"
+          className="inline-flex justify-center w-full border-b-[8px] border-[#EDB842] px-4 py-2 items-center font-[700]"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {selectedOption || "Services"}{" "}
+          <span className="text-2xl">
+            <MdExpandMore />
+          </span>
+        </button>
+      </div>
+      {isOpen && (
+        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-40">
+          <div className="py-1">
+            {options.map((option, index) => (
+              <button
+                key={index}
+                className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-t"
+                onClick={() => handleOptionClick(option.service)}
+              >
+                {option.service}
               </button>
             ))}
           </div>
