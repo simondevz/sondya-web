@@ -156,7 +156,7 @@ const Nav = () => {
         className={`hidden md:hidden`}
         // style={{ display: isScrolled ? "hidden !important" : "visible" }}
       >
-        <div className="animate__animated animate__slideInRight absolute z-20 flex flex-col items-start pt-5 ps-8 space-y-5 font-bold  sm:w-auto sm:self-center top-0 left-44 right-0 bottom-0 bg-[#6c6a6a] text-white rounded-b-lg">
+        <div className="fixed animate__animated animate__slideInRight z-20 flex flex-col items-start pt-5 ps-8 space-y-5 font-bold  sm:w-auto sm:self-center top-0 left-44 right-0 bottom-0 bg-[#6c6a6a] text-white rounded-b-lg">
           <div className="flex space-x-2 items-center py-4 border-b-[0.5px] border-b-[#5c5656]">
             <img src={LogoSide} alt="" />
           </div>
