@@ -53,3 +53,78 @@ code {
 .germania-one {
   font-family: "Germania One", serif;
 }
+
+/* for radio boxes */
+/* Hide the default radio button */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid grey;
+  border-radius: 50%;
+}
+
+/* Checked style */
+input[type="radio"]:checked {
+  background-color: #475156;
+  border-color: #475156;
+  /* padding: 10px; */
+  /* pa */
+}
+
+/* for input */
+/* input[type="text"], */
+input[type="number"],
+/* input[type="text"]:focus, */
+input[type="number"]:focus,
+/* input[type="text"]:active, */
+input[type="number"]:active {
+  outline: none;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* for input range */
+input[type="range"],
+input[type="range"]::-webkit-slider-thumb,
+input[type="range"]::-moz-range-progress,
+input[type="range"]::-ms-fill,
+input[type="range"]::-webkit-slider-thumb {
+  background-color: #475156;
+  color: #475156;
+  cursor: pointer;
+}
+
+/* for radio boxes ends */
+
+/* for checkboxes */
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1.2rem;
+  height: 1.3rem;
+  border: 2px solid grey;
+  border-radius: 4px;
+}
+
+/* Checked style */
+input[type="checkbox"]:checked {
+  background-color: rgb(33, 28, 28);
+  border-color: transparent;
+}
+
+/* Custom checkmark */
+input[type="checkbox"]:checked::before {
+  content: "\2713"; /* Unicode checkmark */
+  display: block;
+  text-align: center;
+  line-height: 1rem;
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: white;
+}
