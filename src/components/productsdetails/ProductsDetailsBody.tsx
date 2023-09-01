@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
+import { AiFillStar, AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
 import { BiRefresh } from "react-icons/bi";
-import { BsCart, BsFacebook, BsTwitter } from "react-icons/bs";
+import {
+  BsArrowRight,
+  BsCart,
+  BsFacebook,
+  BsHandThumbsDown,
+  BsHandThumbsUp,
+  BsSearch,
+  BsTwitter,
+} from "react-icons/bs";
 import { FaFlag, FaHome, FaPinterestP } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
 import { MdFavoriteBorder, MdMenu } from "react-icons/md";
@@ -113,8 +121,8 @@ const ProductsDetailsBody = () => {
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="">Size</label>
-              <div className="border-2 p-1 rounded-md">
-                <select className="" name="" id="">
+              <div className="border-2 p-1 rounded-md overflow-x-hidden">
+                <select name="" id="">
                   <option className="" value="">
                     14-inch Liquid Retina XDR display
                   </option>
@@ -355,11 +363,146 @@ const ProductsTab4 = () => {
 
 const Reviews = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-4 p-5 w-full md:w-3/5">
       <div className="">Reviews</div>
-      <div className=" flex gap-3">
+      <div className="flex flex-row  gap-5">
         <span>902 reviews for this Gig</span> <Ratings rating={4.6} />
       </div>
+      <div className="flex flex-row items-center">
+        <input
+          className="border-[1px]  p-[0.46rem] border-[#C5C6C9] outline-none rounded-l-md"
+          type="text"
+        />
+        <button className="bg-[#222325] px-3 py-3 text-white -m-2 rounded-r-md">
+          <BsSearch />
+        </button>
+      </div>
+      <div className="flex gap-3 text-[#404145]">
+        Sort By:{" "}
+        <select className="outline-none" name="" id="">
+          <option value="">Search reviews</option>
+        </select>
+      </div>
+      <div className="flex flex-row gap-3 text-[#62646A] items-center">
+        <input type="checkbox" name="" id="" />
+        <label htmlFor="">Delivery images (558)</label>
+      </div>
+      <div className="flex flex-col gap-4 border shadow-md p-5 rounded-md">
+        <div className="border-b-4 text-[#EDB842] border-b-[#EDB842] w-20 whitespace-nowrap text-lg">
+          Write Review
+        </div>
+        <div className="flex flex-row gap-2 text-2xl text-[#DADDE5]">
+          {" "}
+          <AiFillStar />
+          <AiFillStar />
+          <AiFillStar />
+          <AiFillStar />
+          <AiFillStar />
+        </div>
+        <textarea
+          className="border-2 p-3 rounded-md"
+          name="comment"
+          id=""
+          cols={20}
+          rows={5}
+        >
+          Share you thought about this seller...
+        </textarea>
+        <button className="flex flex-row gap-2 justify-between px-4 py-2 items-center text-white bg-[#EDB842] rounded-md max-w-[190px]">
+          <span>publish Review</span>
+          <span>
+            <BsArrowRight />
+          </span>
+        </button>
+      </div>
+      <hr />
+      <div className="flex flex-row gap-4">
+        <div className="">
+          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
+        </div>
+        <div className="flex flex-col gap-2 text-[#62646A]">
+          <div className="text-[#404145]">marvinachi</div>
+          <div className="">United states</div>
+          <div className="flex flex-row gap-4 items-center">
+            <Ratings rating={5} /> <span>1 month ago</span>
+          </div>
+          <div className="">
+            Amazing work. Will def work again with him this was a big project
+            and he knocked it out of the park.
+          </div>
+          <div className="flex gap-3 items-center">
+            {" "}
+            <span>Helpful?</span>
+            <span className="flex items-center">
+              Yes
+              <BsHandThumbsUp />
+            </span>
+            <span className="flex items-center">
+              No
+              <BsHandThumbsDown />
+            </span>
+          </div>
+          {/* Response */}
+          <div className="mt-4 flex flex-row gap-4">
+            <div className="">
+              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
+                M
+              </span>
+            </div>
+            <div className="">
+              <div className="text-[#404145] font-[700]">Seller's Response</div>
+              <div className="text-[#404145] font-[400]">
+                Thank you so much 😊
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div className="flex flex-row gap-4">
+        <div className="">
+          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
+        </div>
+        <div className="flex flex-col gap-2 text-[#62646A]">
+          <div className="text-[#404145]">jcpconsulting</div>
+          <div className="">United states</div>
+          <div className="flex flex-row gap-4 items-center">
+            <Ratings rating={5} /> <span>1 month ago</span>
+          </div>
+          <div className="">
+            Amazing work. Will def work again with him this was a big project
+            and he knocked it out of the park.
+          </div>
+          <div className="flex gap-3 items-center">
+            {" "}
+            <span>Helpful?</span>
+            <span className="flex items-center">
+              Yes
+              <BsHandThumbsUp />
+            </span>
+            <span className="flex items-center">
+              No
+              <BsHandThumbsDown />
+            </span>
+          </div>
+          {/* Response */}
+          <div className="mt-4 flex flex-row gap-4">
+            <div className="">
+              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
+                M
+              </span>
+            </div>
+            <div className="">
+              <div className="text-[#404145] font-[700]">Seller's Response</div>
+              <div className="text-[#404145] font-[400]">
+                Thank you so much 😊
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div className="text-[#EDB842] text-lg font-[700]">+ See More</div>
     </div>
   );
 };

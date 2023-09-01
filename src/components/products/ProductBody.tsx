@@ -1,3 +1,4 @@
+import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
 import { ProductsItemsdata } from "../../data/productsItemsData";
 import { FormatNumber } from "../shareables/FormatNumber";
@@ -89,16 +90,22 @@ const ProductBodyMain = () => {
           );
         })}
       </div>
+      <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
+        <span className="bg-[#EDB84233] p-2 rounded-md">
+          <BiSolidLeftArrow />
+        </span>
+        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
+        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
+        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
+        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
+        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
+        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
+        <span className="bg-[#EDB84233] p-2 rounded-md">
+          <BiSolidRightArrow />
+        </span>
+      </div>
     </div>
   );
 };
-
-// const ProductBodyItems = () => {
-//   return (
-//     <>
-
-//     </>
-//   );
-// };
 
 export default ProductBody;
