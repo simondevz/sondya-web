@@ -1,25 +1,25 @@
 import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { Productsdata } from "../../data/productsData";
+import { Servicesdata } from "../../data/servicesData";
 
-export const ProductNav = () => {
-  const [openProducts, setOpenProducts] = useState(true);
-  const ClickOpenProducts = () => setOpenProducts((prev) => !prev);
+export const ServicesNav = () => {
+  const [openServices, setOpenServices] = useState(true);
+  const ClickOpenServices = () => setOpenServices((prev) => !prev);
   return (
     <div className="flex flex-col border-b-[2px] py-5 gap-2">
       <button
         className="flex gap-2 items-center p-2 rounded-md font-[700] text-[#191C1F]"
-        onClick={ClickOpenProducts}
+        onClick={ClickOpenServices}
       >
-        Products {openProducts ? <IoIosArrowDown /> : <IoIosArrowUp />}
+        Services {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </button>
-      {openProducts && (
+      {openServices && (
         <div>
-          {Productsdata.slice(0, 5).map((t, i) => {
+          {Servicesdata.slice(0, 5).map((t, i) => {
             return (
               <div className="flex flex-row gap-2 text-[#475156] items-center">
                 <input name="product" type="radio" />
-                {t.product}
+                {t.service}
               </div>
             );
           })}
@@ -29,18 +29,18 @@ export const ProductNav = () => {
   );
 };
 
-export const ProductPriceRange = () => {
-  const [openProducts, setOpenProducts] = useState(true);
-  const ClickOpenProducts = () => setOpenProducts((prev) => !prev);
+export const ServicesPriceRange = () => {
+  const [openServices, setOpenServices] = useState(true);
+  const ClickOpenServices = () => setOpenServices((prev) => !prev);
   return (
     <div className="flex flex-col border-b-[2px] py-5 gap-2">
       <button
         className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
-        onClick={ClickOpenProducts}
+        onClick={ClickOpenServices}
       >
-        Price Range {openProducts ? <IoIosArrowDown /> : <IoIosArrowUp />}
+        Price Range {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </button>
-      {openProducts && (
+      {openServices && (
         <div className="flex flex-col gap-2 ">
           <div className="flex flex-row gap-2">
             <input type="range" min="0" max="100" value="50" />
@@ -91,18 +91,18 @@ export const ProductPriceRange = () => {
   );
 };
 
-export const ProductPopularBrands = () => {
-  const [openProducts, setOpenProducts] = useState(false);
-  const ClickOpenProducts = () => setOpenProducts((prev) => !prev);
+export const ServicesPopularBrands = () => {
+  const [openServices, setOpenServices] = useState(true);
+  const ClickOpenServices = () => setOpenServices((prev) => !prev);
   return (
     <div className="flex flex-col border-b-[2px] py-5 gap-2">
       <button
         className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
-        onClick={ClickOpenProducts}
+        onClick={ClickOpenServices}
       >
-        popular Brands {openProducts ? <IoIosArrowDown /> : <IoIosArrowUp />}
+        popular Brands {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </button>
-      {openProducts && (
+      {openServices && (
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-row gap-2 text-[#475156] items-center">
             <input type="checkbox" checked />
@@ -158,18 +158,18 @@ export const ProductPopularBrands = () => {
   );
 };
 
-export const ProductPopularTags = () => {
-  const [openProducts, setOpenProducts] = useState(false);
-  const ClickOpenProducts = () => setOpenProducts((prev) => !prev);
+export const ServicesPopularTags = () => {
+  const [openServices, setOpenServices] = useState(true);
+  const ClickOpenServices = () => setOpenServices((prev) => !prev);
   return (
     <div className="flex flex-col border-b-[2px] py-5 gap-2">
       <button
         className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
-        onClick={ClickOpenProducts}
+        onClick={ClickOpenServices}
       >
-        popular Brands {openProducts ? <IoIosArrowDown /> : <IoIosArrowUp />}
+        popular Brands {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </button>
-      {openProducts && (
+      {openServices && (
         <div className="flex flex-wrap gap-2 text-[#191C1F]">
           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
             Game

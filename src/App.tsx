@@ -9,6 +9,8 @@ import {
   ServiceDetails,
   Services,
 } from "./screens";
+import Cart from "./screens/Cart";
+import WishList from "./screens/WishList";
 
 const App = createBrowserRouter([
   {
@@ -44,6 +46,16 @@ const App = createBrowserRouter([
   {
     path: "/product-details",
     element: <ProductDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/wishlist",
+    element: <WishList />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/cart",
+    element: <Cart />,
     errorElement: <ErrorPage />,
   },
 ]);
