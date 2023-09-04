@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import {
   AboutUs,
+  Cart,
+  Checkout,
   ContactUs,
   ErrorPage,
   Home,
@@ -8,9 +10,30 @@ import {
   Products,
   ServiceDetails,
   Services,
+  WishList,
 } from "./screens";
-import Cart from "./screens/Cart";
-import WishList from "./screens/WishList";
+// Auth Import
+import {
+  AuthError,
+  AuthSuccess,
+  EmailVerification,
+  ForgotPassword,
+  ResetPassword,
+  SignIn,
+  SignUp,
+} from "./screens/auth";
+// dashboard Import
+import {
+  BrowseHistory,
+  Dashboard,
+  DashboardSettings,
+  Inbox,
+  OrderConfirmation,
+  OrderHistory,
+  Payment,
+  TrackDetails,
+  TrackOrder,
+} from "./screens/dashboard";
 
 const App = createBrowserRouter([
   {
@@ -56,6 +79,95 @@ const App = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />,
+    errorElement: <ErrorPage />,
+  },
+
+  // Authentication
+  {
+    path: "/auth-error",
+    element: <AuthError />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/auth-success",
+    element: <AuthSuccess />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/email-verification",
+    element: <EmailVerification />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <SignIn />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/register",
+    element: <SignUp />,
+    errorElement: <ErrorPage />,
+  },
+
+  // User DasboardRoutes
+  {
+    path: "/browse-history",
+    element: <BrowseHistory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/dashboard-settings",
+    element: <DashboardSettings />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/inbox",
+    element: <Inbox />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/order-confirmation",
+    element: <OrderConfirmation />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/order-history",
+    element: <OrderHistory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/track-details",
+    element: <TrackDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/track-order",
+    element: <TrackOrder />,
     errorElement: <ErrorPage />,
   },
 ]);
