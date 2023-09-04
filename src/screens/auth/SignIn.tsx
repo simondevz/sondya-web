@@ -1,10 +1,11 @@
 import { LoginBody } from "../../components/authcomponents/login";
-import { Footer, Nav } from "../../components/layout";
+import { Footer } from "../../components/layout";
+import AuthNav from "../../components/layout/AuthNav";
 
 const SignIn = () => {
   return (
     <div>
-      <Nav />
+      <AuthNav />
       <LoginBody />
       <Footer />
     </div>

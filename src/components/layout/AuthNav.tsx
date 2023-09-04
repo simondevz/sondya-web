@@ -14,7 +14,7 @@ import { Category } from "../../data/CategoryData";
 import { LogoSide } from "../../images/logo";
 import { Dropdown } from "../shareables/Dropdown";
 
-const Nav = () => {
+const AuthNav = () => {
   // for the on change scrollable navbar
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -133,24 +133,6 @@ const Nav = () => {
           </button>
         </div>
       </div>
-      <div className="flex bg-[#000000] p-3 text-white justify-center gap-5 playfair-display">
-        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">Home</div>
-        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">Category</div>
-        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">Contact</div>
-        <div className="px-5">About Us</div>
-      </div>
-      <div className="flex flex-row justify-around text-[#1C1C1C] playfair-display p-2">
-        <div className="flex flex-row gap-2">
-          <div className="">All category</div>
-          <div className="">Hot offers</div>
-          <div className="">Hot offers</div>
-          <div className="">Affiliate</div>
-        </div>
-        <div className="flex flex-row gap-2">
-          <div className="">English,USD</div>
-          <div className="">Ship to</div>
-        </div>
-      </div>
       <div
         ref={flexRef}
         className={`hidden md:hidden`}
@@ -206,4 +188,4 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default AuthNav;

@@ -1,10 +1,11 @@
 import { AuthErrorBody } from "../../components/authcomponents/autherror";
-import { Footer, Nav } from "../../components/layout";
+import { Footer } from "../../components/layout";
+import AuthNav from "../../components/layout/AuthNav";
 
 const AuthError = () => {
   return (
     <div>
-      <Nav />
+      <AuthNav />
       <AuthErrorBody />
       <Footer />
     </div>
