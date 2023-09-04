@@ -1,10 +1,11 @@
 import { ForgotPasswordBody } from "../../components/authcomponents/forgotpassword";
-import { Footer, Nav } from "../../components/layout";
+import { Footer } from "../../components/layout";
+import AuthNav from "../../components/layout/AuthNav";
 
 const ForgotPassword = () => {
   return (
     <div>
-      <Nav />
+      <AuthNav />
       <ForgotPasswordBody />
       <Footer />
     </div>

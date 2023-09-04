@@ -1,10 +1,11 @@
 import { EmailVerficationBody } from "../../components/authcomponents/emailverification";
-import { Footer, Nav } from "../../components/layout";
+import { Footer } from "../../components/layout";
+import AuthNav from "../../components/layout/AuthNav";
 
 const EmailVerification = () => {
   return (
     <div>
-      <Nav />
+      <AuthNav />
       <EmailVerficationBody />
       <Footer />
     </div>
