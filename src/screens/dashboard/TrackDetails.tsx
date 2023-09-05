@@ -1,5 +1,12 @@
+import { Footer, Nav } from "../../components/layout";
+
 const TrackDetails = () => {
-  return <div>TrackDetails</div>;
+  return (
+    <div className="">
+      <Nav />
+      <Footer />
+    </div>
+  );
 };
 
 export default TrackDetails;
