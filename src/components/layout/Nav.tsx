@@ -11,7 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import "../../css/Nav.css";
 import { Category } from "../../data/CategoryData";
-import { LogoSide } from "../../images/logo";
+import { LogoSide, LogoSideBlack } from "../../images/logo";
 import { Dropdown } from "../shareables/Dropdown";
 
 const Nav = () => {
@@ -87,8 +87,8 @@ const Nav = () => {
       </div>
       <div
         className={`${
-          isScrolled ? "fixed py-6 bg-[#F8F9FA]" : "bg-white py-2"
-        } flex flex-wrap justify-evenly items-center playfair-display  w-full z-20 gap-3 px-5`}
+          isScrolled ? "fixed py-2 bg-[#F8F9FA]" : "bg-white py-2"
+        } flex flex-wrap justify-evenly items-center playfair-display  w-full z-20 gap-2 px-5`}
       >
         <button
           onClick={skrill}
@@ -109,18 +109,25 @@ const Nav = () => {
           </button>
         </div>
         <div className="flex p-2 gap-2 ms-auto">
-          <div className="flex gap-2 items-center">
-            <span className="text-[#EDB842] text-2xl">
-              <MdPersonOutline />
-            </span>
-            Login
-          </div>
-          <div className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2">
+          <Link to={"/login"}>
+            <div className="flex gap-2 items-center">
+              <span className="text-[#EDB842] text-2xl">
+                <MdPersonOutline />
+              </span>
+              Login
+            </div>
+          </Link>
+          {/* <div className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2"> */}
+          <Link
+            className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2"
+            to={"/cart"}
+          >
             <span className="text-[#EDB842] text-2xl">
               <AiOutlineShoppingCart />
             </span>
             Cart
-          </div>
+          </Link>
+          {/* </div> */}
         </div>
         <div className="flex flex-row md:hidden border-[2px] border-[#EDB842] rounded-md w-full">
           <input
@@ -133,11 +140,19 @@ const Nav = () => {
           </button>
         </div>
       </div>
-      <div className="flex bg-[#000000] p-3 text-white justify-center gap-5 playfair-display">
-        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">Home</div>
-        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">Category</div>
-        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">Contact</div>
-        <div className="px-5">About Us</div>
+      <div className="hidden md:flex bg-[#000000] p-3 text-white justify-center gap-5 playfair-display">
+        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
+          <Link to={"/"}>Home</Link>
+        </div>
+        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
+          <Link to={"/product"}>Category</Link>
+        </div>
+        <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
+          <Link to={"/contact-us"}>Contact</Link>
+        </div>
+        <div className="px-5">
+          <Link to={"/about-us"}>About Us</Link>
+        </div>
       </div>
       <div className="flex flex-row justify-around text-[#1C1C1C] playfair-display p-2">
         <div className="flex flex-row gap-2">
@@ -156,12 +171,12 @@ const Nav = () => {
         className={`hidden md:hidden`}
         // style={{ display: isScrolled ? "hidden !important" : "visible" }}
       >
-        <div className="fixed animate__animated animate__slideInRight z-20 flex flex-col items-start pt-5 ps-8 space-y-5 font-bold  sm:w-auto sm:self-center top-0 left-44 right-0 bottom-0 bg-[#6c6a6a] text-white rounded-b-lg">
-          <div className="flex space-x-2 items-center py-4 border-b-[0.5px] border-b-[#5c5656]">
-            <img src={LogoSide} alt="" />
+        <div className="fixed animate__animated animate__slideInRight z-20 flex flex-col items-start pt-5 space-y-12 font-bold  sm:w-auto sm:self-center top-0 left-44 right-0 bottom-0 bg-[#000000] text-white rounded-b-lg">
+          <div className="flex space-x-2 items-center py-4 border-b-[0.5px] ps-8">
+            <img className="w-44 object-contain" src={LogoSideBlack} alt="" />
           </div>
           <Link
-            className="text-xl flex space-x-3 items-center"
+            className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
             to={"/"}
           >
@@ -171,35 +186,45 @@ const Nav = () => {
             <span>Home</span>
           </Link>
           <Link
-            className="text-xl flex space-x-3 items-center"
+            className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
             to={"/products"}
           >
             <span>
               <BsBoxSeam />
             </span>
-            <span>Products</span>
+            <span>Category</span>
           </Link>
           <Link
-            className="text-xl flex space-x-3 items-center"
+            className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
-            to={"/services"}
+            to={"/about-us"}
           >
             <span>
               <MdFavoriteBorder />
             </span>
-            <span>Services</span>
+            <span>About Us</span>
           </Link>
           <Link
-            className="text-xl flex space-x-3 items-center"
+            className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
-            to={"/wishlist"}
+            to={"/contact-us"}
           >
             <span>
               <MdFavoriteBorder />
             </span>
-            <span>WishList</span>
+            <span>Contact Us</span>
           </Link>
+          <div className=" border-y-2  border-[#5F6C72] flex flex-row w-full justify-around">
+            <Link to={"/register"}>
+              <div className="py-4">Sign Up</div>
+            </Link>
+            <Link to={"/login"}>
+              <div className="border-l-2 border-[#5F6C72] py-4 ps-14">
+                Login
+              </div>
+            </Link>{" "}
+          </div>
         </div>
       </div>
     </div>

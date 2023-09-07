@@ -29,6 +29,7 @@ import {
   DashboardSettings,
   Inbox,
   OrderConfirmation,
+  OrderDetails,
   OrderHistory,
   Payment,
   TrackDetails,
@@ -153,6 +154,11 @@ const App = createBrowserRouter([
   {
     path: "/order-history",
     element: <OrderHistory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/order-details",
+    element: <OrderDetails />,
     errorElement: <ErrorPage />,
   },
   {
