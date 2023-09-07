@@ -1,0 +1,9 @@
+export { default as Alipay } from "./Alipay.png";
+export { default as Amex } from "./Amex.png";
+export { default as ApplePay } from "./ApplePay.png";
+export { default as DinersClub } from "./DinersClub.png";
+export { default as GooglePay } from "./GooglePay.png";
+export { default as Mastercard } from "./Mastercard.png";
+export { default as PayPal } from "./PayPal.png";
+export { default as ShopPay } from "./ShopPay.png";
+export { default as Visa } from "./Visa.png";

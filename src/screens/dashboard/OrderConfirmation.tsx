@@ -1,9 +1,11 @@
+import { OrderConfirmationBody } from "../../components/dashboardcomponents/orderconfirmation";
 import { Footer, Nav } from "../../components/layout";
 
 const OrderConfirmation = () => {
   return (
     <div className="">
       <Nav />
+      <OrderConfirmationBody />
       <Footer />
     </div>
   );

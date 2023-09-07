@@ -7,5 +7,8 @@ export { default as cartEmpty } from "./cart-empty.png";
 export { default as familyImage } from "./family.png";
 export { default as LeftWind } from "./left-wind.png";
 export { default as notFound } from "./not-found.png";
+export { default as orderConfirm1 } from "./order-confirm-1.png";
+export { default as orderConfirm2 } from "./order-confirm-2.png";
+export { default as PaymentPics } from "./payment-pics.png";
 export { default as RightWind } from "./right-wind.png";
 export { default as wishListEmpty } from "./wishlist-empty.png";

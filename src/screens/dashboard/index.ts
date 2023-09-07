@@ -3,6 +3,7 @@ export { default as Dashboard } from "./Dashboard";
 export { default as DashboardSettings } from "./DashboardSettings";
 export { default as Inbox } from "./Inbox";
 export { default as OrderConfirmation } from "./OrderConfirmation";
+export { default as OrderDetails } from "./OrderDetails";
 export { default as OrderHistory } from "./OrderHistory";
 export { default as Payment } from "./Payment";
 export { default as TrackDetails } from "./TrackDetails";
