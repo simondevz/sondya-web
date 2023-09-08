@@ -8,13 +8,18 @@ import {
   MdLocationPin,
   MdPersonOutline,
 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../css/Nav.css";
 import { Category } from "../../data/CategoryData";
 import { LogoSide, LogoSideBlack } from "../../images/logo";
-import { Dropdown } from "../shareables/Dropdown";
+import {
+  Dropdown,
+  DropdownMenuBar,
+  DropdownMenuForLargeScreen,
+} from "../shareables/Dropdown";
 
 const Nav = () => {
+  const navigate = useNavigate();
   // for the on change scrollable navbar
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -100,7 +105,12 @@ const Nav = () => {
           <span className="hamburger-middle"></span>
           <span className="hamburger-bottom"></span>
         </button>
-        <img className="object-cover w-32 me-auto" src={LogoSide} alt="" />
+        <img
+          onClick={() => navigate("/")}
+          className="object-cover w-32 me-auto"
+          src={LogoSide}
+          alt=""
+        />
         <div className="hidden md:flex border-[2px] border-[#EDB842] rounded-md">
           <input className="border-0 p-2 outline-none font-[600]" type="text" />
           <Dropdown options={Category} />
@@ -140,12 +150,13 @@ const Nav = () => {
           </button>
         </div>
       </div>
-      <div className="hidden md:flex bg-[#000000] p-3 text-white justify-center gap-5 playfair-display">
+      <div className="hidden md:flex bg-[#000000] p-3 text-white justify-center gap-5 playfair-display items-center">
         <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
           <Link to={"/"}>Home</Link>
         </div>
         <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
-          <Link to={"/product"}>Category</Link>
+          {/* <Link to={"/product"}>Category</Link> */}
+          <DropdownMenuForLargeScreen />
         </div>
         <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
           <Link to={"/contact-us"}>Contact</Link>
@@ -185,16 +196,12 @@ const Nav = () => {
             </span>
             <span>Home</span>
           </Link>
-          <Link
-            className="text-xl flex space-x-3 items-center ps-8"
-            onClick={skrill}
-            to={"/products"}
-          >
-            <span>
+          <div className="text-xl flex space-x-2 ps-8">
+            <span className="mt-3">
               <BsBoxSeam />
             </span>
-            <span>Category</span>
-          </Link>
+            <DropdownMenuBar command={skrill} />
+          </div>
           <Link
             className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}

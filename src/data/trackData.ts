@@ -1,4 +1,4 @@
-import { trackIpad, trackMacbook } from "../images/cart";
+import { trackAirpods, trackIpad, trackMacbook } from "../images/cart";
 
 export type trackDataType = {
   image: string;
@@ -30,8 +30,8 @@ export const trackDataItem: Array<trackDataType> = [
     diskSize: "1TB",
   },
   {
-    image: trackIpad,
-    name: "iPad Pro 12.9",
+    image: trackAirpods,
+    name: "AirPods Max",
     price: 2599.0,
     quantity: 1,
     color: "Space Gray",

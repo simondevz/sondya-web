@@ -8,4 +8,4 @@ export { default as Products } from "./Products";
 export { default as ProductDetails } from "./ProductsDetails";
 export { default as Services } from "./Services";
 export { default as ServiceDetails } from "./ServicesDetails";
-export { default as WishList } from "./WishList";
+export { default as WishList } from "./dashboard/WishList";

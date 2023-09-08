@@ -1,6 +1,6 @@
-import { wishListEmpty } from "../../images";
+import { wishListEmpty } from "../../../images";
 
-const WishlistBody = () => {
+const EmptyWishlisBody = () => {
   return (
     <section className="w-full h-[90vh] flex flex-col items-center p-4">
       <div className="flex flex-col gap-3 m-auto w-full text-center justify-center items-center border shadow-lg p-4 md:w-1/2 xl:w-1/3 max-w-[450px] rounded-md">
@@ -22,4 +22,4 @@ const WishlistBody = () => {
   );
 };
 
-export default WishlistBody;
+export default EmptyWishlisBody;
