@@ -8,6 +8,7 @@ import {
   PiSignOutFill,
   PiStackBold,
 } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 export const UserDashboardNav = () => {
   const [index, setIndex] = useState<string>("dashboard");
@@ -65,8 +66,10 @@ export const UserDashboardNav = () => {
       >
         <span>
           <BiMap />
-        </span>{" "}
-        <span className="whitespace-nowrap">Track Order</span>
+        </span>
+        <Link to={"/track-0rder"}>
+          <span className="whitespace-nowrap">Track Order</span>
+        </Link>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

@@ -8,15 +8,16 @@ import {
   MdLocationPin,
   MdPersonOutline,
 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../css/Nav.css";
 import { Category } from "../../data/CategoryData";
 import { LogoSide, LogoSideBlack } from "../../images/logo";
-import { Dropdown } from "../shareables/Dropdown";
+import { Dropdown, DropdownMenuBar } from "../shareables/Dropdown";
 
 const AuthNav = () => {
   // for the on change scrollable navbar
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +76,9 @@ const AuthNav = () => {
             <span className="text-white">
               <BsTruck />
             </span>
-            <span className="text-[#666666]">Track your order</span>
+            <Link to={"/track-order"}>
+              <span className="text-[#666666]">Track your order</span>
+            </Link>
           </div>
           <div className="flex items-center space-x-1">
             <span className="text-white">
@@ -100,7 +103,12 @@ const AuthNav = () => {
           <span className="hamburger-middle"></span>
           <span className="hamburger-bottom"></span>
         </button>
-        <img className="object-cover w-32 me-auto" src={LogoSide} alt="" />
+        <img
+          onClick={() => navigate("/")}
+          className="object-cover w-32 me-auto"
+          src={LogoSide}
+          alt=""
+        />
         <div className="hidden md:flex border-[2px] border-[#EDB842] rounded-md">
           <input className="border-0 p-2 outline-none font-[600]" type="text" />
           <Dropdown options={Category} />
@@ -115,12 +123,14 @@ const AuthNav = () => {
             </span>
             Login
           </div>
-          <div className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2">
-            <span className="text-[#EDB842] text-2xl">
-              <AiOutlineShoppingCart />
-            </span>
-            Cart
-          </div>
+          <Link to={"/cart"}>
+            <div className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2">
+              <span className="text-[#EDB842] text-2xl">
+                <AiOutlineShoppingCart />
+              </span>
+              Cart
+            </div>
+          </Link>
         </div>
         <div className="flex flex-row md:hidden border-[2px] border-[#EDB842] rounded-md w-full">
           <input
@@ -152,16 +162,12 @@ const AuthNav = () => {
             </span>
             <span>Home</span>
           </Link>
-          <Link
-            className="text-xl flex space-x-3 items-center ps-8"
-            onClick={skrill}
-            to={"/products"}
-          >
-            <span>
+          <div className="text-xl flex space-x-2 ps-8">
+            <span className="mt-3">
               <BsBoxSeam />
             </span>
-            <span>Category</span>
-          </Link>
+            <DropdownMenuBar command={skrill} />
+          </div>
           <Link
             className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
@@ -170,7 +176,9 @@ const AuthNav = () => {
             <span>
               <MdFavoriteBorder />
             </span>
-            <span>About Us</span>
+            <Link to={"/about-us"}>
+              <span>About Us</span>
+            </Link>
           </Link>
           <Link
             className="text-xl flex space-x-3 items-center ps-8"
@@ -180,6 +188,7 @@ const AuthNav = () => {
             <span>
               <MdFavoriteBorder />
             </span>
+            <Link to={"/contact-us"}></Link>
             <span>Contact Us</span>
           </Link>
           <div className=" border-y-2  border-[#5F6C72] flex flex-row w-full justify-around">
