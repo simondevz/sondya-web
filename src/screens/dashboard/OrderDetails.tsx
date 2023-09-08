@@ -9,7 +9,7 @@ const OrderDetails = () => {
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <UserDashboardNav />
-        <div className="overflow-x-hidden flex flex-col gap-5">
+        <div className="overflow-x-hidden flex flex-col gap-5 w-full p-5">
           <OrderDetailsBody />
         </div>
       </div>
