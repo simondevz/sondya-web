@@ -125,3 +125,11 @@ input[type="checkbox"]:checked::before {
   font-weight: 900;
   color: white;
 }
+
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+} */
+
+/* #datemil::-webkit-calendar-picker-indicator {
+  display: none;
+} */

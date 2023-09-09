@@ -1,8 +1,8 @@
-import { BrowseHistoryBody } from "../../components/dashboardcomponents/browsehistory";
+import { UserTestimonyBody } from "../../components/dashboardcomponents/usertestimony";
 import { DashboardLocation, Footer, Nav } from "../../components/layout";
 import { UserDashboardNav } from "../../components/layout/DashboardNav";
 
-const BrowseHistory = () => {
+const UserTestimony = () => {
   return (
     <div className="">
       <Nav />
@@ -10,7 +10,7 @@ const BrowseHistory = () => {
       <div className="flex flex-row p-4 gap-5">
         <UserDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5 w-full">
-          <BrowseHistoryBody />
+          <UserTestimonyBody />
         </div>
       </div>
       <Footer />
@@ -18,4 +18,4 @@ const BrowseHistory = () => {
   );
 };
 
-export default BrowseHistory;
+export default UserTestimony;

@@ -35,6 +35,7 @@ import {
   TrackDetails,
   TrackOrder,
 } from "./screens/dashboard";
+import UserTestimony from "./screens/dashboard/UserTestimony";
 
 const App = createBrowserRouter([
   {
@@ -174,6 +175,11 @@ const App = createBrowserRouter([
   {
     path: "/track-order",
     element: <TrackOrder />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/user-testimony",
+    element: <UserTestimony />,
     errorElement: <ErrorPage />,
   },
 ]);
