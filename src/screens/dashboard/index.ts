@@ -8,3 +8,4 @@ export { default as OrderHistory } from "./OrderHistory";
 export { default as Payment } from "./Payment";
 export { default as TrackDetails } from "./TrackDetails";
 export { default as TrackOrder } from "./TrackOrder";
+export { default as UserTestimony } from "./UserTestimony";

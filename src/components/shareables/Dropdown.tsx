@@ -96,7 +96,6 @@ export const DropdownProducts = ({ options }: DropdownProps<productType>) => {
 export const DropdownServices = ({ options }: DropdownProps<serviceType>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
@@ -137,10 +136,8 @@ export const DropdownServices = ({ options }: DropdownProps<serviceType>) => {
 
 export const DropdownMenuBar = ({ command }: any) => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const navigate = useNavigate();
   const handleOptionClick = (link1: string) => {
-    // setSelectedOption(option);
     navigate(link1);
     command();
     setIsOpen(false);
@@ -183,12 +180,9 @@ export const DropdownMenuBar = ({ command }: any) => {
 
 export const DropdownMenuForLargeScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const navigate = useNavigate();
   const handleOptionClick = (link1: string) => {
-    // setSelectedOption(option);
     navigate(link1);
-    // command();
     setIsOpen(false);
   };
   return (
