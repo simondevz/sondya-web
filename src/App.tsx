@@ -24,6 +24,24 @@ import {
 } from "./screens/auth";
 // dashboard Import
 import {
+  AdminAddCategory,
+  AdminAddProduct,
+  AdminAddService,
+  AdminCategory,
+  AdminDashboard,
+  AdminEditCategory,
+  AdminEditProduct,
+  AdminEditService,
+  AdminEditUser,
+  AdminOrderDetails,
+  AdminOrders,
+  AdminProducts,
+  AdminSalesAnalytics,
+  AdminServices,
+  AdminUserDetails,
+  AdminUserManagement,
+} from "./screens/admin";
+import {
   BrowseHistory,
   Dashboard,
   DashboardSettings,
@@ -36,6 +54,17 @@ import {
   TrackOrder,
 } from "./screens/dashboard";
 import UserTestimony from "./screens/dashboard/UserTestimony";
+import {
+  SellerBusinessAnalytics,
+  SellerDashboard,
+  SellerInbox,
+  SellerOrder,
+  SellerOrderDetails,
+  SellerPostProducts,
+  SellerProducts,
+  SellerSettings,
+  SellerWithdrawal,
+} from "./screens/seller";
 
 const App = createBrowserRouter([
   {
@@ -91,12 +120,12 @@ const App = createBrowserRouter([
 
   // Authentication
   {
-    path: "/auth-error",
+    path: "/auth/error",
     element: <AuthError />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/auth-success",
+    path: "/auth/success",
     element: <AuthSuccess />,
     errorElement: <ErrorPage />,
   },
@@ -143,43 +172,174 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/inbox",
+    path: "/user/inbox",
     element: <Inbox />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/order-confirmation",
+    path: "/user/order-confirmation",
     element: <OrderConfirmation />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/order-history",
+    path: "/user/order-history",
     element: <OrderHistory />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/order-details",
+    path: "/user/order-details",
     element: <OrderDetails />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/payment",
+    path: "/user/payment",
     element: <Payment />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/track-details",
+    path: "/user/track-details",
     element: <TrackDetails />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/track-order",
+    path: "/user/track-order",
     element: <TrackOrder />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/user-testimony",
+    path: "/user/testimony",
     element: <UserTestimony />,
+    errorElement: <ErrorPage />,
+  },
+
+  // Seller dashboard routes
+  {
+    path: "/seller/dashboard",
+    element: <SellerDashboard />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/analytics",
+    element: <SellerBusinessAnalytics />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/inbox",
+    element: <SellerInbox />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/order",
+    element: <SellerOrder />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/order/details",
+    element: <SellerOrderDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/products/post",
+    element: <SellerPostProducts />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/products",
+    element: <SellerProducts />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/settings",
+    element: <SellerSettings />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/withdrawal",
+    element: <SellerWithdrawal />,
+    errorElement: <ErrorPage />,
+  },
+
+  // Admin dashboard routes
+  {
+    path: "/admin/dashboard",
+    element: <AdminDashboard />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/analytics",
+    element: <AdminSalesAnalytics />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/category",
+    element: <AdminCategory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/category/add",
+    element: <AdminAddCategory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/category/edit",
+    element: <AdminEditCategory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/products",
+    element: <AdminProducts />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/product/add",
+    element: <AdminAddProduct />,
+    errorElement: <ErrorPage />,
+  },
+
+  {
+    path: "/admin/product/edit",
+    element: <AdminEditProduct />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/services",
+    element: <AdminServices />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/service/add",
+    element: <AdminAddService />,
+    errorElement: <ErrorPage />,
+  },
+
+  {
+    path: "/admin/service/edit",
+    element: <AdminEditService />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/users",
+    element: <AdminUserManagement />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/user/edit",
+    element: <AdminEditUser />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/user/details",
+    element: <AdminUserDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/orders",
+    element: <AdminOrders />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/order/details",
+    element: <AdminOrderDetails />,
     errorElement: <ErrorPage />,
   },
 ]);
