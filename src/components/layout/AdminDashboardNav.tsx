@@ -5,15 +5,15 @@ import { MdPayment, MdStorefront } from "react-icons/md";
 import { PiClockClockwiseLight, PiStackBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
-const SellerDashboardNav = () => {
+const AdminDashboardNav = () => {
   const [index, setIndex] = useState<string>("seller-dashboard");
   return (
     <div className="text-[#5F6C72] hidden md:flex flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[17rem]">
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-dashboard" && "bg-[#EDB842] text-white"
+          index === "admin-dashboard" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("seller-dashboard")}
+        onClick={() => setIndex("admin-dashboard")}
       >
         <span>
           <PiStackBold />
@@ -22,9 +22,9 @@ const SellerDashboardNav = () => {
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-business-analytics" && "bg-[#EDB842] text-white"
+          index === "admin-business-analytics" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("seller-business-analytics")}
+        onClick={() => setIndex("admin-business-analytics")}
       >
         <span>
           <BsCart />
@@ -33,49 +33,60 @@ const SellerDashboardNav = () => {
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-orders" && "bg-[#EDB842] text-white"
+          index === "admin-products" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("seller-orders")}
+        onClick={() => setIndex("admin-products")}
       >
         <span>
           <MdPayment />
         </span>{" "}
-        <span className="whitespace-nowrap">Orders</span>
+        <span className="whitespace-nowrap">Product</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-products" && "bg-[#EDB842] text-white"
+          index === "admin-categories" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("seller-products")}
+        onClick={() => setIndex("admin-categories")}
       >
         <span>
           <MdStorefront />
         </span>{" "}
-        <span className="whitespace-nowrap">Products</span>
+        <span className="whitespace-nowrap">Categories</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "inbox" && "bg-[#EDB842] text-white"
+          index === "admin-orders" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("inbox")}
+        onClick={() => setIndex("admin-orders")}
       >
         <span>
           <BiMap />
         </span>
         <Link to={"/track-Order"}>
-          <span className="whitespace-nowrap">Inbox </span>
+          <span className="whitespace-nowrap">Orders</span>
         </Link>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-settings" && "bg-[#EDB842] text-white"
+          index === "admin-users" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("seller-settings")}
+        onClick={() => setIndex("admin-users")}
       >
         <span>
           <PiClockClockwiseLight />
         </span>{" "}
-        <span className="whitespace-nowrap">Settings</span>
+        <span className="whitespace-nowrap">Users</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-testimonial" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => setIndex("admin-testimonial")}
+      >
+        <span>
+          <PiClockClockwiseLight />
+        </span>{" "}
+        <span className="whitespace-nowrap">Testimonial</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
@@ -92,4 +103,4 @@ const SellerDashboardNav = () => {
   );
 };
 
-export default SellerDashboardNav;
+export default AdminDashboardNav;
