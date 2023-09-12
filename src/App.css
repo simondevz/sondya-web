@@ -85,7 +85,7 @@ input[type="number"]:active {
 }  */
 
 /* for input range */
-input[type="range"],
+/* input[type="range"],
 input[type="range"]::-webkit-slider-thumb,
 input[type="range"]::-moz-range-progress,
 input[type="range"]::-ms-fill,
@@ -93,7 +93,7 @@ input[type="range"]::-webkit-slider-thumb {
   background-color: #475156;
   color: #475156;
   cursor: pointer;
-}
+} */
 
 /* for radio boxes ends */
 
