@@ -28,6 +28,8 @@ export type productItemsType = {
   rating?: number;
   totalrating?: number;
   like?: boolean;
+  date?: string;
+  status?: string;
 };
 
 export const ProductsItemsdata: Array<productItemsType> = [
@@ -42,6 +44,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     rating: 5,
     totalrating: 52677,
     like: true,
+    date: "Jul 13, 2021",
+    status: "IN STOCK",
   },
   {
     image: productImage2,
@@ -51,6 +55,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     rating: 4,
     totalrating: 52677,
     like: true,
+    date: "Jul 13, 2021",
+    status: "EXPIRE",
   },
   {
     image: productImage3,
@@ -59,6 +65,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: true,
     rating: 3.4,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "IN STOCK",
   },
   {
     image: productImage4,
@@ -69,6 +77,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: false,
     rating: 5,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "IN STOCK",
   },
   {
     image: productImage5,
@@ -77,6 +87,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: true,
     rating: 5,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "EXPIRE",
   },
   {
     image: productImage6,
@@ -85,6 +97,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: false,
     rating: 5,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "EXPIRE",
   },
   {
     image: productImage7,
@@ -94,6 +108,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: false,
     rating: 5,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "IN STOCK",
   },
   {
     image: productImage8,
@@ -103,6 +119,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: false,
     rating: 5,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "IN STOCK",
   },
   {
     image: productImage9,
@@ -113,6 +131,8 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: false,
     rating: 5,
     totalrating: 52677,
+    date: "Jul 13, 2021",
+    status: "EXPIRE",
   },
 ];
 
