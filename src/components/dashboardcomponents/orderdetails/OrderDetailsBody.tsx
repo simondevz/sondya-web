@@ -125,6 +125,7 @@ const OrderDetailsBody = () => {
               <span>909 427 2910</span>
             </div>
           </div>
+          {/* address part */}
           <div className="flex flex-col gap-3 shadow-md p-4 rounded-md max-w-[20rem]">
             <div className="font-[600]">Address</div>
             <div className="flex flex-row w-full justify-between gap-3 items-center">
@@ -158,6 +159,7 @@ const OrderDetailsBody = () => {
       </section>
       <section className="w-full">
         <div className="flex flex-row justify-start md:justify-end">
+          {/* order status starts here */}
           <div className="flex flex-col gap-3 shadow-md p-4 rounded-md w-[20rem] max-w-[20rem]">
             <div className="font-[600]">Order Status</div>
             <div className="flex flex-col w-full gap-0 p-2">
