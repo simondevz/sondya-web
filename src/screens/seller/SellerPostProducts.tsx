@@ -4,6 +4,7 @@ import {
   Nav,
   SellerDashboardNav,
 } from "../../components/layout";
+import { SellerPostProductBody } from "../../components/sellersdashboardcomponents/sellerpostproducts";
 
 const SellerPostProducts = () => {
   return (
@@ -12,7 +13,9 @@ const SellerPostProducts = () => {
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <SellerDashboardNav />
-        <div className="overflow-x-hidden flex flex-col gap-5 w-full"></div>
+        <div className="overflow-x-hidden flex flex-col gap-5 w-full">
+          <SellerPostProductBody />
+        </div>
       </div>
       <Footer />
     </div>
