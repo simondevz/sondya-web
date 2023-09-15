@@ -12,11 +12,20 @@ import {
   Whatsapp,
   userImage,
 } from "../../../images/dashboard";
+import ChangePasswordModal from "./ChangePasswordModal";
+import EditAccountInfoModal from "./EditAccountInfoModal";
+import EditCompanyDetailsModal from "./EditCompanyDetailsModal";
+import EditSocialMediaModal from "./EditSocialMediaModal";
 
 const SellerSettingsBody = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // React state to control Modal visibility
+  const [EditAccounInfo, setEditAccounInfo] = useState(false);
+  const [EditCompanyDetails, setEditCompanyDetails] = useState(false);
+  const [EditSocialMedia, setEditSocialMedia] = useState(false);
+  const [EditPassword, setEditPassword] = useState(false);
+
   return (
-    <section className="flex flex-col gap-3">
+    <section className="flex flex-col gap-3 overflow-hidden">
       <div className="flex flex-wrap gap-3 justify-start w-full">
         <div className="flex flex-col border max-w-[20rem]">
           <div className="p-3 border text-[#191C1F] font-[700] playfair-display">
@@ -60,7 +69,10 @@ const SellerSettingsBody = () => {
               <span className="text-[#191C1F]">Zip Code:</span>
               <span className="text-[#5F6C72]">+234 1234 567 890</span>
             </div>
-            <button className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-center px-4 my-3">
+            <button
+              onClick={() => setEditAccounInfo(true)}
+              className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-center px-4 my-3"
+            >
               Edit Account
             </button>
           </div>
@@ -97,7 +109,10 @@ const SellerSettingsBody = () => {
               <span className="text-[#191C1F]">Designation:</span>
               <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
             </div>
-            <button className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-center px-4 my-3">
+            <button
+              onClick={() => setEditCompanyDetails(true)}
+              className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-center px-4 my-3"
+            >
               Edit Account
             </button>
           </div>
@@ -117,7 +132,10 @@ const SellerSettingsBody = () => {
           <img className="object-cover w-8 h-8" src={Whatsapp} alt="" />
           <img className="object-cover w-8 h-8" src={Pinterest} alt="" />
         </div>
-        <button className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3">
+        <button
+          onClick={() => setEditSocialMedia(true)}
+          className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3"
+        >
           Edit Account
         </button>
       </div>
@@ -149,7 +167,10 @@ const SellerSettingsBody = () => {
           felis nunc, ut sagittis augue imperdiet quis. Vestibulum bibendum
           ultricies ipsum.
         </div>
-        <button className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3">
+        <button
+          onClick={() => setEditPassword(true)}
+          className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3"
+        >
           Verify Now
         </button>
       </div>
@@ -166,29 +187,130 @@ const SellerSettingsBody = () => {
           <span>Delete Account</span>
         </button>
       </div>
-      <button onClick={() => setIsModalOpen(!isModalOpen)}>Open Modal</button>
-      <AccountSettingsModal
-        isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
-      />
+      <div className="overflow-y-scroll">
+        <EditAccountInfoModal
+          showModal={EditAccounInfo}
+          handleClose={() => setEditAccounInfo(false)}
+        />
+        {/* <ScrollableModal
+          isOpen={EditAccounInfo}
+          closeModal={() => setEditAccounInfo(false)}
+        /> */}
+        <ChangePasswordModal
+          showModal={EditPassword}
+          handleClose={() => setEditPassword(false)}
+        />
+        <EditCompanyDetailsModal
+          showModal={EditCompanyDetails}
+          handleClose={() => setEditCompanyDetails(false)}
+        />
+        <EditSocialMediaModal
+          showModal={EditSocialMedia}
+          handleClose={() => setEditSocialMedia(false)}
+        />
+      </div>
     </section>
   );
 };
 
-const AccountSettingsModal = ({ isOpen, closeModal }: any) => {
-  // if (!isOpen) return null;
-  if (!isOpen) return null;
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={closeModal}>
-          &times;
-        </span>
-        <h2>Modal Title</h2>
-        <p>Modal Content Goes Here</p>
-      </div>
-    </div>
-  );
-};
+// interface ScrollableModalProps {
+//   isOpen: boolean;
+//   closeModal: () => void;
+// }
+
+// const ScrollableModal: React.FC<ScrollableModalProps> = ({
+//   isOpen,
+//   closeModal,
+// }) => {
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center z-50">
+//       <div className="modal">
+//         <div className="modal-content">
+//           <button
+//             onClick={closeModal}
+//             className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+//           >
+//             &times;
+//           </button>
+//           <h2 className="text-xl font-semibold">Modal Title</h2>
+//           <div className="modal-body max-h-[300px] overflow-y-auto">
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+//             <div>hsuusu</div>
+//             <br />
+
+//             {/* Your modal content */}
+//             {/* Add more content here */}
+//             {/* If the content exceeds the modal's height, it will become scrollable */}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default SellerSettingsBody;
