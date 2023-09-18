@@ -1,9 +1,15 @@
+import { useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { MdOutlineAdd } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { gtBankPics } from "../../../images/withdrawal";
+import AddAccountModal from "./AddAccountModal";
+import RequestWithdrawalModal from "./RequestWithdrawalModal";
 
 const SellerWithdrawalHero = () => {
+  // React state to control Modal visibility
+  const [AddAccount, setAddAccount] = useState(false);
+  const [RequestWithdrawal, setRequestWithdrawal] = useState(false);
   return (
     <section>
       <div className="flex flex-col gap-5">
@@ -16,13 +22,19 @@ const SellerWithdrawalHero = () => {
             to send to your persoanl account
           </div>
           <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2">
+            <button
+              onClick={() => setAddAccount(true)}
+              className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2"
+            >
               <span className="text-[#EDB842]">
                 <MdOutlineAdd />
               </span>
               <span className="whitespace-nowrap">Add account</span>
             </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
+            <button
+              onClick={() => setRequestWithdrawal(true)}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
               <span>
                 <BsSend />
               </span>
@@ -48,6 +60,16 @@ const SellerWithdrawalHero = () => {
           <SellerWithdrawalBanks />
           <SellerWithdrawalBanks />
           <SellerWithdrawalBanks />
+        </div>
+        <div className="">
+          <AddAccountModal
+            showModal={AddAccount}
+            handleClose={() => setAddAccount(false)}
+          />
+          <RequestWithdrawalModal
+            showModal={RequestWithdrawal}
+            handleClose={() => setRequestWithdrawal(false)}
+          />
         </div>
       </div>
     </section>
