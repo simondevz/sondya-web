@@ -1,3 +1,4 @@
+import { AdminAddProductsBody } from "../../components/admincomponents/adminaddproduct";
 import {
   AdminDashboardNav,
   DashboardLocation,
@@ -12,7 +13,9 @@ const AdminAddProduct = () => {
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
-        <div className="overflow-x-hidden flex flex-col gap-5 w-full"></div>
+        <div className="overflow-x-hidden flex flex-col gap-5 w-full">
+          <AdminAddProductsBody />
+        </div>
       </div>
       <Footer />
     </div>

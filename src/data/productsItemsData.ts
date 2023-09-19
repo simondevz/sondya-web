@@ -30,6 +30,11 @@ export type productItemsType = {
   like?: boolean;
   date?: string;
   status?: string;
+  sku?: number;
+  variants?: number;
+  stock?: number;
+  availablestatus?: string;
+  category?: string;
 };
 
 export const ProductsItemsdata: Array<productItemsType> = [
@@ -46,6 +51,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: true,
     date: "Jul 13, 2021",
     status: "IN STOCK",
+    sku: 302012,
+    variants: 3,
+    stock: 80,
+    availablestatus: "Published",
+    category: "Audio",
   },
   {
     image: productImage2,
@@ -57,6 +67,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     like: true,
     date: "Jul 13, 2021",
     status: "EXPIRE",
+    sku: 302014,
+    variants: 1,
+    stock: 13,
+    availablestatus: "Published",
+    category: "Audio",
   },
   {
     image: productImage3,
@@ -67,6 +82,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "IN STOCK",
+    sku: 302015,
+    variants: 3,
+    stock: 9,
+    availablestatus: "Low Stock",
+    category: "Audio",
   },
   {
     image: productImage4,
@@ -79,6 +99,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "IN STOCK",
+    sku: 302016,
+    variants: 5,
+    stock: 6,
+    availablestatus: "Out of Stock",
+    category: "Watch",
   },
   {
     image: productImage5,
@@ -89,6 +114,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "EXPIRE",
+    sku: 302017,
+    variants: 4,
+    stock: 4,
+    availablestatus: "Published",
+    category: "Smartphone",
   },
   {
     image: productImage6,
@@ -99,6 +129,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "EXPIRE",
+    sku: 302018,
+    variants: 4,
+    stock: 16,
+    availablestatus: "Draft",
+    category: "Audio",
   },
   {
     image: productImage7,
@@ -110,6 +145,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "IN STOCK",
+    sku: 302019,
+    variants: 9,
+    stock: 38,
+    availablestatus: "Low Stock",
+    category: "Smartphone",
   },
   {
     image: productImage8,
@@ -121,6 +161,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "IN STOCK",
+    sku: 302020,
+    variants: 1,
+    stock: 18,
+    availablestatus: "Draft",
+    category: "Shoes",
   },
   {
     image: productImage9,
@@ -133,6 +178,11 @@ export const ProductsItemsdata: Array<productItemsType> = [
     totalrating: 52677,
     date: "Jul 13, 2021",
     status: "EXPIRE",
+    sku: 302021,
+    variants: 3,
+    stock: 8,
+    availablestatus: "Low Stock",
+    category: "Shoes",
   },
 ];
 
