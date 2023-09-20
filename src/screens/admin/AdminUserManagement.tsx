@@ -1,3 +1,4 @@
+import { AdminUsersBody } from "../../components/admincomponents/adminusers";
 import {
   AdminDashboardNav,
   DashboardLocation,
@@ -12,7 +13,9 @@ const AdminUserManagement = () => {
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
-        <div className="overflow-x-hidden flex flex-col gap-5 w-full"></div>
+        <div className="overflow-x-hidden flex flex-col gap-5 w-full">
+          <AdminUsersBody />
+        </div>
       </div>
       <Footer />
     </div>
