@@ -1,4 +1,4 @@
-import { BiExport } from "react-icons/bi";
+import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
@@ -101,6 +101,23 @@ const AdminProductsBody = () => {
               })}
             </tbody>
           </table>
+        </div>
+        <div className="flex flex-row justify-between items-center">
+          <div className="text-[#667085]">Showing 1-10 from 100</div>
+          <div className="flex flex-row gap-2 items-center text-[#EDB842] my-5">
+            <span className="bg-[#EDB84233] p-2 rounded-md">
+              <BiSolidLeftArrow />
+            </span>
+            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
+            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
+            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
+            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
+            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
+            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
+            <span className="bg-[#EDB84233] p-2 rounded-md">
+              <BiSolidRightArrow />
+            </span>
+          </div>
         </div>
       </div>
     </section>
