@@ -38,6 +38,8 @@ import {
   AdminProducts,
   AdminSalesAnalytics,
   AdminServices,
+  AdminTestimonial,
+  AdminUpdateTestimonial,
   AdminUserDetails,
   AdminUserManagement,
 } from "./screens/admin";
@@ -340,6 +342,16 @@ const App = createBrowserRouter([
   {
     path: "/admin/order/details",
     element: <AdminOrderDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/testimonial",
+    element: <AdminTestimonial />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/testimonial/edit",
+    element: <AdminUpdateTestimonial />,
     errorElement: <ErrorPage />,
   },
 ]);

@@ -2,8 +2,6 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { Modal } from "react-overlays";
 import { userImage } from "../../../images/dashboard";
 
-// let rand = () => Math.floor(Math.random() * 20) - 10;
-
 const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
   // Backdrop JSX code
   const renderBackdrop = (props: any) => (

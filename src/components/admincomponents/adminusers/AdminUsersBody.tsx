@@ -6,10 +6,14 @@ import { MdOutlineAdd, MdOutlineMoreVert } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { userDataItem } from "../../../data/users";
 import { FormatNumber } from "../../shareables/FormatNumber";
+import AdminCreateUserModal from "./AdminCreateUserModal";
 
 const AdminUsersBody = () => {
   const [whichTab, setwhichTab] = useState<string>("#1");
   const [click, setClick] = useState<number | null>();
+
+  // React state to control Modal visibility
+  const [CreateAccountModal, setCreateAccountModal] = useState(false);
   return (
     <section>
       <div className="flex flex-col gap-5">
@@ -22,7 +26,10 @@ const AdminUsersBody = () => {
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
             </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
+            <button
+              onClick={() => setCreateAccountModal(true)}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
               <span className="text-2xl">
                 <MdOutlineAdd />
               </span>
@@ -160,6 +167,12 @@ const AdminUsersBody = () => {
               <BiSolidRightArrow />
             </span>
           </div>
+        </div>
+        <div className="overflow-y-scroll">
+          <AdminCreateUserModal
+            showModal={CreateAccountModal}
+            handleClose={() => setCreateAccountModal(false)}
+          />
         </div>
       </div>
     </section>
