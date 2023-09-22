@@ -12,5 +12,7 @@ export { default as AdminOrders } from "./AdminOrders";
 export { default as AdminProducts } from "./AdminProducts";
 export { default as AdminSalesAnalytics } from "./AdminSalesAnalytics";
 export { default as AdminServices } from "./AdminServices";
+export { default as AdminTestimonial } from "./AdminTestimonial";
+export { default as AdminUpdateTestimonial } from "./AdminUpdateTestimonial";
 export { default as AdminUserDetails } from "./AdminUserDetails";
 export { default as AdminUserManagement } from "./AdminUserManagement";
