@@ -5,6 +5,7 @@ export { default as arrowRight } from "./arrow-right.png";
 export { default as AuthImage } from "./auth-image.png";
 export { default as carouselImage } from "./carousel-image.png";
 export { default as cartEmpty } from "./cart-empty.png";
+export { default as circleWavyFailure } from "./circle-wavy-failure.png";
 export { default as circleWavy } from "./circle-wavy.png";
 export { default as familyImage } from "./family.png";
 export { default as ImgExample } from "./img-example.png";

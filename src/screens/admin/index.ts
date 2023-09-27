@@ -1,3 +1,4 @@
+export { default as AdminAccountPayment } from "./AdminAccountPayment";
 export { default as AdminAddCategory } from "./AdminAddCategory";
 export { default as AdminAddProduct } from "./AdminAddProduct";
 export { default as AdminAddService } from "./AdminAddService";
@@ -16,3 +17,4 @@ export { default as AdminTestimonial } from "./AdminTestimonial";
 export { default as AdminUpdateTestimonial } from "./AdminUpdateTestimonial";
 export { default as AdminUserDetails } from "./AdminUserDetails";
 export { default as AdminUserManagement } from "./AdminUserManagement";
+export { default as AdminWithdrawalOrders } from "./AdminWithdrawalOrders";
