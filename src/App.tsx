@@ -24,6 +24,7 @@ import {
 } from "./screens/auth";
 // dashboard Import
 import {
+  AdminAccountPayment,
   AdminAddCategory,
   AdminAddProduct,
   AdminAddService,
@@ -42,6 +43,7 @@ import {
   AdminUpdateTestimonial,
   AdminUserDetails,
   AdminUserManagement,
+  AdminWithdrawalOrders,
 } from "./screens/admin";
 import {
   BrowseHistory,
@@ -352,6 +354,16 @@ const App = createBrowserRouter([
   {
     path: "/admin/testimonial/edit",
     element: <AdminUpdateTestimonial />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/payments",
+    element: <AdminAccountPayment />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/withdrawal/orders",
+    element: <AdminWithdrawalOrders />,
     errorElement: <ErrorPage />,
   },
 ]);
