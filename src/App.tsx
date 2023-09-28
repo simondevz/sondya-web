@@ -36,8 +36,10 @@ import {
   AdminEditUser,
   AdminOrderDetails,
   AdminOrders,
+  AdminProductDetails,
   AdminProducts,
   AdminSalesAnalytics,
+  AdminServiceDetails,
   AdminServices,
   AdminTestimonial,
   AdminUpdateTestimonial,
@@ -299,10 +301,14 @@ const App = createBrowserRouter([
     element: <AdminAddProduct />,
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/admin/product/edit",
     element: <AdminEditProduct />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/product/details",
+    element: <AdminProductDetails />,
     errorElement: <ErrorPage />,
   },
   {
@@ -315,10 +321,14 @@ const App = createBrowserRouter([
     element: <AdminAddService />,
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/admin/service/edit",
     element: <AdminEditService />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/service/details",
+    element: <AdminServiceDetails />,
     errorElement: <ErrorPage />,
   },
   {

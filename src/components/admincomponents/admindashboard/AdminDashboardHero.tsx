@@ -180,7 +180,10 @@ const AdminDashboardHero = () => {
             </div>
             {ProductsItemsdata.slice(0, 8).map((t, i) => {
               return (
-                <div className="text-sm flex flex-row justify-between gap-2 items-center">
+                <div
+                  key={i}
+                  className="text-sm flex flex-row justify-between gap-2 items-center"
+                >
                   <div className="flex flex-row gap-3">
                     <div className="bg-[#E0E2E7] w-8 h-8 border border-[#E0E2E7] rounded-md">
                       <img
@@ -276,7 +279,7 @@ const FullDoughnutSalesSource = () => {
   );
 };
 
-const SellerLineChartTraffic = () => {
+export const SellerLineChartTraffic = () => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -458,7 +461,7 @@ const HalfDoughnut = () => {
   );
 };
 
-const SellerLineChart = ({ colors, dataArray }: any) => {
+export const SellerLineChart = ({ colors, dataArray }: any) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
