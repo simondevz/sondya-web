@@ -1,15 +1,12 @@
-import {
-  AdminBestSellers,
-  AdminSalesHero,
-  AdminSalesLatestOrder,
-} from "../../components/admincomponents/adminsalesanalytics";
+import { AdminServicesDetailsBody } from "../../components/admincomponents/adminservicedetails";
 import {
   AdminDashboardNav,
   DashboardLocation,
   Footer,
   Nav,
 } from "../../components/layout";
-const AdminSalesAnalytics = () => {
+
+const AdminServiceDetails = () => {
   return (
     <div>
       <Nav />
@@ -17,9 +14,7 @@ const AdminSalesAnalytics = () => {
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5 w-full">
-          <AdminSalesHero />
-          <AdminBestSellers />
-          <AdminSalesLatestOrder />
+          <AdminServicesDetailsBody />
         </div>
       </div>
       <Footer />
@@ -27,4 +22,4 @@ const AdminSalesAnalytics = () => {
   );
 };
 
-export default AdminSalesAnalytics;
+export default AdminServiceDetails;

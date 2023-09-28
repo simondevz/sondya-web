@@ -1,22 +1,9 @@
 import { useState } from "react";
-import { AiFillStar, AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
-import { BiRefresh } from "react-icons/bi";
-import {
-  BsArrowRight,
-  BsCart,
-  BsFacebook,
-  BsHandThumbsDown,
-  BsHandThumbsUp,
-  BsSearch,
-  BsTwitter,
-} from "react-icons/bs";
-import { FaFlag, FaHome, FaPinterestP } from "react-icons/fa";
-import { FiCopy } from "react-icons/fi";
-import { MdFavoriteBorder, MdMenu } from "react-icons/md";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { BsCart } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
-import { mayLike } from "../../data/maylikeData";
 import {
-  PaymentMethod,
   ProductdetailImage1,
   ProductdetailImage2,
   ProductdetailImage3,
@@ -24,35 +11,34 @@ import {
   ProductdetailImage5,
   ProductdetailImage6,
   ProductdetailImageMain,
-} from "../../images/productdetails";
-import { bgWhoAreWe } from "../../images/whoarewe";
-import { Ratings } from "../shareables/Ratings";
+} from "../../../images/productdetails";
+import { user2 } from "../../../images/users";
+import { bgWhoAreWe } from "../../../images/whoarewe";
+import { Ratings } from "../../shareables/Ratings";
 
-const ProductsDetailsBody = () => {
+const AdminProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
   return (
     <section className="p-3 flex flex-col gap-4">
-      <div className="text-[#5F6C72] flex flex-row justify-between">
-        <div className="hidden md:flex flex-row items-center gap-1">
-          <FaHome /> <span>Home</span> <AiOutlineRight /> <span>Category</span>{" "}
-          <AiOutlineRight /> <span>Product</span> <AiOutlineRight />{" "}
-          <span>Electronics Devices</span>
-          <AiOutlineRight /> <span>Macbook Pro</span>{" "}
+      <div className="flex flex-row justify-between">
+        <div className="flex items-center gap-3">
+          <AiOutlineArrowLeft />
+          <div className="text-lg text-[#1D1F2C] font-[600]">
+            Product Details
+          </div>
         </div>
-        <div className="flex flex-row items-center gap-3 ms-auto">
-          <MdMenu />
-          <MdFavoriteBorder />
-          <span className="border border-[#DADBDD] p-1 rounded-md">2,767</span>
-          <span className="border border-[#DADBDD] p-2 rounded-md">
-            <FaFlag />
-          </span>
-          <span className="border border-[#DADBDD] p-2 rounded-md text-[#EDB842]">
+        <div className="flex gap-4">
+          <button className="bg-[#EDB84233] rounded-md p-2 text-[#EDB842]">
+            Edit
+          </button>
+          <button className="flex items-center gap-2 bg-[#E52626B2] text-white p-2 rounded-md">
             {" "}
-            <AiOutlineShareAlt />
-          </span>
+            <MdDelete />
+            <span>Delete Product</span>
+          </button>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col items-center">
         <div className="flex flex-col gap-2">
           <img src={ProductdetailImageMain} alt="" />
           <div className="flex flex-row gap-2 overflow-x-scroll">
@@ -164,44 +150,88 @@ const ProductsDetailsBody = () => {
               Buy now
             </button>
           </div>
-          <button className="p-2 border-2 border-[#62646A] text-[#62646A] rounded-md w-6/12 mx-auto">
-            Contact Seller
-          </button>
-          <div className="flex flex-row gap-3 py-2 text-[#475156] items-center">
-            <span className="flex flex-wrap gap-2 items-center">
-              <span className="text-3xl">
-                <MdFavoriteBorder />
-              </span>
-              Add to Wishlist
-            </span>
-            <span className="flex flex-wrap gap-2 items-center">
-              <span className="text-3xl">
-                <BiRefresh />
-              </span>
-              Add to Compare
-            </span>
-            <span className="flex gap-2 ms-auto whitespace-nowrap">
-              Share product: <FiCopy /> <BsFacebook /> <BsTwitter />
-              <FaPinterestP />
-            </span>
-          </div>
-          <div className="flex flex-col text-[#191C1F] gap-2 border p-3 rounded-sm">
-            <div className="">100% Guarantee Safe Checkout</div>
-            <img className="object-cover w-1/2" src={PaymentMethod} alt="" />
-          </div>
         </div>
       </div>
-      <ProductsDetailsTab />
-      <Reviews />
+      <AdminProductsDetailsTab />
+      <AdminAboutSeller />
     </section>
   );
 };
 
-export const ProductsDetailsTab = () => {
+const AdminAboutSeller = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="font-[700] text-2xl">About The Seller</div>
+      <div className="flex flex-row gap-4 items-center md:w-2/3 max-w-[60rem]">
+        <div className="">
+          <img src={user2} alt="" />
+        </div>
+        <div className="flex flex-col gap-1">
+          <div className="text-lg font-[700] text-[#0E0E0F]">
+            Marjorie Asturias
+          </div>
+          <div className="font-[400] text-[#95979D] ">
+            WordPress expert with 10+ years working with business owners,
+            influencers and bloggers to expand their online audience.
+          </div>
+          <div className="flex items-center gap-3 text-[#95979D]">
+            <Ratings rating={4} />
+            (974)
+          </div>
+        </div>
+      </div>
+      <div className="border p-5 rounded-md text-[#62646A] font-[400] text-sm md:w-2/3 max-w-[60rem]">
+        <div className="flex flex-row gap-3 justify-between py-3">
+          <div className="flex flex-col gap-3">
+            <div className="">
+              <div className="text-[#74767E] font-[400]">From</div>
+              <div className="text-[#62646A] font-[600]">Sri Lanka</div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">
+                Avg. response time
+              </div>
+              <div className="text-[#62646A] font-[600]">1 hour</div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">Languages</div>
+              <div className="text-[#62646A] font-[600]">English</div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <div className="">
+              <div className="text-[#74767E] font-[400]">Member since</div>
+              <div className="text-[#62646A] font-[600]">Aug 2019</div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">Aug 2019</div>
+              <div className="text-[#62646A] font-[600]">about 3 hours</div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div className="py-3">
+          At Airbluesoft Premium Digital Studio we create all kinds of creative
+          videos, specializing in Creating Promos( Website, Apps, Fashion, Real
+          Estate, Youtube, NFT) and all other promos and all instructional
+          videos.
+          <br />
+          <br />
+          We Create Basic To High-End Videos.
+          <br />
+          <br />
+          Creativity Beyond the Limits. -Airbluesoft Premium Digital Studio-
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const AdminProductsDetailsTab = () => {
   const [TabItem, setTabItem] = useState<string>("item1");
   return (
     <div className="flex flex-row gap-2 p-3 justify-evenly">
-      <div className="flex flex-col gap-2 w-full md:w-3/5">
+      <div className="flex flex-col gap-2 w-full lg:w-3/5">
         <div className="flex gap-2 border-b-2 px-2">
           <button
             className={`p-2 ${
@@ -255,24 +285,6 @@ export const ProductsDetailsTab = () => {
             <ProductsTab4 />
           )}
         </div>
-      </div>
-      <div className="hidden border bg-white rounded-md p-4 space-y-4 md:flex md:flex-col md:w-1/3 lg:w-2/5 max-w-[280px]">
-        <div className="font-[600] text-[#1C1C1C] text-xl">You may like</div>
-        {mayLike.map((value, i) => {
-          return (
-            <div className="flex flex-row space-x-2 w-full">
-              <img
-                className="border rounded-md object-cover"
-                src={value.image}
-                alt=""
-              />
-              <div className="flex flex-col">
-                <div className="text-[#1C1C1C] text-md">{value.name}</div>
-                <div className="text-[#8B96A5] text-sm">{value.price}</div>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );
@@ -361,150 +373,4 @@ const ProductsTab4 = () => {
   return <div>Tab 4</div>;
 };
 
-const Reviews = () => {
-  return (
-    <div className="flex flex-col gap-4 p-5 w-full md:w-3/5">
-      <div className="">Reviews</div>
-      <div className="flex flex-row  gap-5">
-        <span>902 reviews for this Gig</span> <Ratings rating={4.6} />
-      </div>
-      <div className="flex flex-row items-center">
-        <input
-          className="border-[1px]  p-[0.46rem] border-[#C5C6C9] outline-none rounded-l-md"
-          type="text"
-        />
-        <button className="bg-[#222325] px-3 py-3 text-white -m-2 rounded-r-md">
-          <BsSearch />
-        </button>
-      </div>
-      <div className="flex gap-3 text-[#404145]">
-        Sort By:{" "}
-        <select className="outline-none" name="" id="">
-          <option value="">Search reviews</option>
-        </select>
-      </div>
-      <div className="flex flex-row gap-3 text-[#62646A] items-center">
-        <input type="checkbox" name="" id="" />
-        <label htmlFor="">Delivery images (558)</label>
-      </div>
-      <div className="flex flex-col gap-4 border shadow-md p-5 rounded-md">
-        <div className="border-b-4 text-[#EDB842] border-b-[#EDB842] w-20 whitespace-nowrap text-lg">
-          Write Review
-        </div>
-        <div className="flex flex-row gap-2 text-2xl text-[#DADDE5]">
-          {" "}
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-        </div>
-        <textarea
-          className="border-2 p-3 rounded-md"
-          name="comment"
-          id=""
-          cols={20}
-          rows={5}
-        >
-          Share you thought about this seller...
-        </textarea>
-        <button className="flex flex-row gap-2 justify-between px-4 py-2 items-center text-white bg-[#EDB842] rounded-md max-w-[190px]">
-          <span>publish Review</span>
-          <span>
-            <BsArrowRight />
-          </span>
-        </button>
-      </div>
-      <hr />
-      <div className="flex flex-row gap-4">
-        <div className="">
-          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
-        </div>
-        <div className="flex flex-col gap-2 text-[#62646A]">
-          <div className="text-[#404145]">marvinachi</div>
-          <div className="">United states</div>
-          <div className="flex flex-row gap-4 items-center">
-            <Ratings rating={5} /> <span>1 month ago</span>
-          </div>
-          <div className="">
-            Amazing work. Will def work again with him this was a big project
-            and he knocked it out of the park.
-          </div>
-          <div className="flex gap-3 items-center">
-            {" "}
-            <span>Helpful?</span>
-            <span className="flex items-center">
-              Yes
-              <BsHandThumbsUp />
-            </span>
-            <span className="flex items-center">
-              No
-              <BsHandThumbsDown />
-            </span>
-          </div>
-          {/* Response */}
-          <div className="mt-4 flex flex-row gap-4">
-            <div className="">
-              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
-                M
-              </span>
-            </div>
-            <div className="">
-              <div className="text-[#404145] font-[700]">Seller's Response</div>
-              <div className="text-[#404145] font-[400]">
-                Thank you so much 😊
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="flex flex-row gap-4">
-        <div className="">
-          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
-        </div>
-        <div className="flex flex-col gap-2 text-[#62646A]">
-          <div className="text-[#404145]">jcpconsulting</div>
-          <div className="">United states</div>
-          <div className="flex flex-row gap-4 items-center">
-            <Ratings rating={5} /> <span>1 month ago</span>
-          </div>
-          <div className="">
-            Amazing work. Will def work again with him this was a big project
-            and he knocked it out of the park.
-          </div>
-          <div className="flex gap-3 items-center">
-            {" "}
-            <span>Helpful?</span>
-            <span className="flex items-center">
-              Yes
-              <BsHandThumbsUp />
-            </span>
-            <span className="flex items-center">
-              No
-              <BsHandThumbsDown />
-            </span>
-          </div>
-          {/* Response */}
-          <div className="mt-4 flex flex-row gap-4">
-            <div className="">
-              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
-                M
-              </span>
-            </div>
-            <div className="">
-              <div className="text-[#404145] font-[700]">Seller's Response</div>
-              <div className="text-[#404145] font-[400]">
-                Thank you so much 😊
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="text-[#EDB842] text-lg font-[700]">+ See More</div>
-    </div>
-  );
-};
-
-export default ProductsDetailsBody;
+export default AdminProductsDetailsBody;
