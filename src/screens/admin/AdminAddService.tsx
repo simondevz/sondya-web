@@ -1,3 +1,4 @@
+import { AdminAddServiceBody } from "../../components/admincomponents/adminaddservice";
 import {
   AdminDashboardNav,
   DashboardLocation,
@@ -12,7 +13,9 @@ const AdminAddService = () => {
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
-        <div className="overflow-x-hidden flex flex-col gap-5 w-full"></div>
+        <div className="overflow-x-hidden flex flex-col gap-5 w-full">
+          <AdminAddServiceBody />
+        </div>
       </div>
       <Footer />
     </div>

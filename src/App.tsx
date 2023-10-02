@@ -23,6 +23,9 @@ import {
   SignUp,
 } from "./screens/auth";
 // dashboard Import
+import GroupChat from "./screens/GroupChat";
+import GroupChatDetails from "./screens/GroupChatDetails";
+import GroupChatList from "./screens/GroupChatList";
 import {
   AdminAccountPayment,
   AdminAddCategory,
@@ -121,6 +124,21 @@ const App = createBrowserRouter([
   {
     path: "/checkout",
     element: <Checkout />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/groupchats",
+    element: <GroupChat />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/groupchat/list",
+    element: <GroupChatList />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/groupchat/details",
+    element: <GroupChatDetails />,
     errorElement: <ErrorPage />,
   },
 
