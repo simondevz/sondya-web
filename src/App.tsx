@@ -26,9 +26,12 @@ import {
   SignUp,
 } from "./screens/auth";
 // dashboard Import
+import Acknowledgement from "./screens/Acknowledgement";
 import GroupChat from "./screens/GroupChat";
 import GroupChatDetails from "./screens/GroupChatDetails";
 import GroupChatList from "./screens/GroupChatList";
+import PrivacyPolicy from "./screens/PrivacyPolicy";
+import TermsAndServices from "./screens/TermsAndServices";
 import {
   AdminAccountPayment,
   AdminAddCategory,
@@ -157,6 +160,21 @@ const App = createBrowserRouter([
   {
     path: "/hotoffers",
     element: <HotOffers />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/acknowledgement",
+    element: <Acknowledgement />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/terms",
+    element: <TermsAndServices />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/privacy",
+    element: <PrivacyPolicy />,
     errorElement: <ErrorPage />,
   },
 
