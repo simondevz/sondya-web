@@ -5,9 +5,12 @@ import {
   Checkout,
   ContactUs,
   ErrorPage,
+  GiftBoxes,
   Home,
+  HotOffers,
   ProductDetails,
   Products,
+  Referal,
   ServiceDetails,
   Services,
   WishList,
@@ -102,12 +105,12 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/service-details",
+    path: "/service/details",
     element: <ServiceDetails />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/product-details",
+    path: "/product/details",
     element: <ProductDetails />,
     errorElement: <ErrorPage />,
   },
@@ -139,6 +142,21 @@ const App = createBrowserRouter([
   {
     path: "/groupchat/details",
     element: <GroupChatDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/referal",
+    element: <Referal />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/giftboxes",
+    element: <GiftBoxes />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/hotoffers",
+    element: <HotOffers />,
     errorElement: <ErrorPage />,
   },
 
