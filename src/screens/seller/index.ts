@@ -5,5 +5,6 @@ export { default as SellerOrder } from "./SellerOrder";
 export { default as SellerOrderDetails } from "./SellerOrderDetails";
 export { default as SellerPostProducts } from "./SellerPostProducts";
 export { default as SellerProducts } from "./SellerProducts";
+export { default as SellerServiceOrderDetails } from "./SellerServiceOrderDetails";
 export { default as SellerSettings } from "./SellerSettings";
 export { default as SellerWithdrawal } from "./SellerWithdrawal";

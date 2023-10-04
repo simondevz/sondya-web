@@ -70,6 +70,7 @@ import {
   TrackDetails,
   TrackOrder,
 } from "./screens/dashboard";
+import Notifications from "./screens/dashboard/Notifications";
 import UserTestimony from "./screens/dashboard/UserTestimony";
 import {
   SellerBusinessAnalytics,
@@ -79,9 +80,12 @@ import {
   SellerOrderDetails,
   SellerPostProducts,
   SellerProducts,
+  SellerServiceOrderDetails,
   SellerSettings,
   SellerWithdrawal,
 } from "./screens/seller";
+import SellerEditProducts from "./screens/seller/SellerEditProducts";
+import SellerProductDetails from "./screens/seller/SellerProductDetails";
 
 const App = createBrowserRouter([
   {
@@ -282,6 +286,11 @@ const App = createBrowserRouter([
     element: <UserTestimony />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/user/notifications",
+    element: <Notifications />,
+    errorElement: <ErrorPage />,
+  },
 
   // Seller dashboard routes
   {
@@ -310,8 +319,23 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "/seller/service/order/details",
+    element: <SellerServiceOrderDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/seller/products/post",
     element: <SellerPostProducts />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/products/edit",
+    element: <SellerEditProducts />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/products/details",
+    element: <SellerProductDetails />,
     errorElement: <ErrorPage />,
   },
   {

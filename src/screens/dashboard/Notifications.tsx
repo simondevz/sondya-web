@@ -1,8 +1,8 @@
-import { DashboardSettingsBody } from "../../components/dashboardcomponents/dashboardsettings";
+import { NotificationsBody } from "../../components/dashboardcomponents/notifications";
 import { DashboardLocation, Footer, Nav } from "../../components/layout";
 import { UserDashboardNav } from "../../components/layout/DashboardNav";
 
-const DashboardSettings = () => {
+const Notifications = () => {
   return (
     <div className="">
       <Nav />
@@ -10,7 +10,7 @@ const DashboardSettings = () => {
       <div className="flex flex-row p-4 gap-5">
         <UserDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5 w-full">
-          <DashboardSettingsBody />
+          <NotificationsBody />
         </div>
       </div>
       <Footer />
@@ -18,4 +18,4 @@ const DashboardSettings = () => {
   );
 };
 
-export default DashboardSettings;
+export default Notifications;
