@@ -7,7 +7,7 @@ import { ImgExample } from "../../../images";
 import { trackRod1 } from "../../../images/cart";
 import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
 
-const ServiceOrderDetailsBody = () => {
+const SellerServiceOrderDetailsBody = () => {
   return (
     <section className="flex flex-col gap-6 w-full p-3">
       <div className="flex flex-row gap-3">
@@ -185,4 +185,4 @@ const ServiceOrderDetailsBody = () => {
   );
 };
 
-export default ServiceOrderDetailsBody;
+export default SellerServiceOrderDetailsBody;
