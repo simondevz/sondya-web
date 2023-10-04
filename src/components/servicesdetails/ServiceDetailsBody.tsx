@@ -167,7 +167,7 @@ const ServiceDetailsBody = () => {
   );
 };
 
-const ServiceDetailsChat = () => {
+export const ServiceDetailsChat = () => {
   return (
     <div className="p-3 max-w-[50rem] flex flex-col gap-4 border-2 rounded-md shadow-md">
       <div className="p-2 shadow-md">Away. Avg. response time:1 Hour</div>
