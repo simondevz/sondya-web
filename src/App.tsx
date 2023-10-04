@@ -31,6 +31,7 @@ import GroupChat from "./screens/GroupChat";
 import GroupChatDetails from "./screens/GroupChatDetails";
 import GroupChatList from "./screens/GroupChatList";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
+import ServiceCheckout from "./screens/ServiceCheckout";
 import TermsAndServices from "./screens/TermsAndServices";
 import {
   AdminAccountPayment,
@@ -65,6 +66,7 @@ import {
   OrderDetails,
   OrderHistory,
   Payment,
+  ServiceOrderDetails,
   TrackDetails,
   TrackOrder,
 } from "./screens/dashboard";
@@ -177,7 +179,11 @@ const App = createBrowserRouter([
     element: <PrivacyPolicy />,
     errorElement: <ErrorPage />,
   },
-
+  {
+    path: "/service/checkout",
+    element: <ServiceCheckout />,
+    errorElement: <ErrorPage />,
+  },
   // Authentication
   {
     path: "/auth/error",
@@ -227,7 +233,7 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/dashboard-settings",
+    path: "/dashboard/settings",
     element: <DashboardSettings />,
     errorElement: <ErrorPage />,
   },
@@ -237,18 +243,23 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/user/order-confirmation",
+    path: "/user/order/confirmation",
     element: <OrderConfirmation />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/user/order-history",
+    path: "/user/order/history",
     element: <OrderHistory />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/user/order-details",
+    path: "/user/order/details",
     element: <OrderDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/user/order/service/details",
+    element: <ServiceOrderDetails />,
     errorElement: <ErrorPage />,
   },
   {
