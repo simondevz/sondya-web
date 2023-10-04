@@ -75,12 +75,16 @@ import UserTestimony from "./screens/dashboard/UserTestimony";
 import {
   SellerBusinessAnalytics,
   SellerDashboard,
+  SellerEditService,
   SellerInbox,
   SellerOrder,
   SellerOrderDetails,
   SellerPostProducts,
+  SellerPostService,
   SellerProducts,
+  SellerServiceDetails,
   SellerServiceOrderDetails,
+  SellerServices,
   SellerSettings,
   SellerWithdrawal,
 } from "./screens/seller";
@@ -351,6 +355,26 @@ const App = createBrowserRouter([
   {
     path: "/seller/withdrawal",
     element: <SellerWithdrawal />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/services",
+    element: <SellerServices />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/service/post",
+    element: <SellerPostService />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/service/edit",
+    element: <SellerEditService />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/seller/service/details",
+    element: <SellerServiceDetails />,
     errorElement: <ErrorPage />,
   },
 

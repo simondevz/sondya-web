@@ -1,10 +1,14 @@
 export { default as SellerBusinessAnalytics } from "./SellerBusinessAnalytics";
 export { default as SellerDashboard } from "./SellerDashboard";
+export { default as SellerEditService } from "./SellerEditService";
 export { default as SellerInbox } from "./SellerInbox";
 export { default as SellerOrder } from "./SellerOrder";
 export { default as SellerOrderDetails } from "./SellerOrderDetails";
 export { default as SellerPostProducts } from "./SellerPostProducts";
+export { default as SellerPostService } from "./SellerPostService";
 export { default as SellerProducts } from "./SellerProducts";
+export { default as SellerServiceDetails } from "./SellerServiceDetails";
 export { default as SellerServiceOrderDetails } from "./SellerServiceOrderDetails";
+export { default as SellerServices } from "./SellerServices";
 export { default as SellerSettings } from "./SellerSettings";
 export { default as SellerWithdrawal } from "./SellerWithdrawal";
