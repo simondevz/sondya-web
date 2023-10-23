@@ -9,7 +9,7 @@ const TransferPaymentModal = ({ showModal, handleClose }: any) => {
     <div className="backdrop" {...props} />
   );
 
-  const [status, setStatus] = useState<string>("main");
+  const [status] = useState<string>("main");
   return (
     <Modal
       className="modal top-[30%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"

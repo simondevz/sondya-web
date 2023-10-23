@@ -1,10 +1,12 @@
 import "animate.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import App from "./App";
 import "./App.css";
 import "./index.css";
+import { store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
@@ -12,7 +14,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={App} />
+    <Provider store={store}>
+      <RouterProvider router={App} />
+    </Provider>
   </React.StrictMode>
 );
 
