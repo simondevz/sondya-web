@@ -14,9 +14,9 @@ export const API_ROUTES = {
   //Admin
   adminUsers: {
     create: BASE + "/admin/user/create", // POST
-    update: BASE + "/admin/user/update/:id", // PUT
-    delete: BASE + "/admin/user/delete/:id", // DELETE
-    getByID: BASE + "/admin/user/get/:id", // GET
+    update: BASE + "/admin/user/update/", // PUT :id
+    delete: BASE + "/admin/user/delete/", // DELETE :id
+    getByID: BASE + "/admin/user/get/", // GET :id
     getAll: BASE + "/admin/users", // GET
   },
 };

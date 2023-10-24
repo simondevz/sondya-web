@@ -12,4 +12,11 @@ export type adminUpdateUserType = {
   username: string;
   email: string;
   password: string;
+
+  // for route
+  id: string;
+};
+
+export type adminUsersId = {
+  id: string;
 };
