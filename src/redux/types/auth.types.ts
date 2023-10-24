@@ -1,3 +1,9 @@
+export type LoginResponseType = {
+  accessToken: string;
+  username: string;
+  userType: "admin" | "user";
+};
+
 export type RegisterType = {
   first_name: string;
   last_name: string;

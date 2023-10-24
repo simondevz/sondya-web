@@ -4,25 +4,48 @@ import {
   ADMIN_CREATE_USER_FAIL,
   ADMIN_CREATE_USER_REQUEST,
   ADMIN_CREATE_USER_SUCCESS,
+  ADMIN_DELETE_USER_FAIL,
+  ADMIN_DELETE_USER_REQUEST,
+  ADMIN_DELETE_USER_SUCCESS,
+  ADMIN_GETBYID_USER_FAIL,
+  ADMIN_GETBYID_USER_REQUEST,
+  ADMIN_GETBYID_USER_SUCCESS,
+  ADMIN_GET_ALL_USERS_FAIL,
+  ADMIN_GET_ALL_USERS_REQUEST,
+  ADMIN_GET_ALL_USERS_SUCCESS,
+  ADMIN_UPDATE_USER_FAIL,
+  ADMIN_UPDATE_USER_REQUEST,
+  ADMIN_UPDATE_USER_SUCCESS,
 } from "../../constants/admin/users.constants";
 import { API_ROUTES } from "../../routes";
-import { adminCreateUserType } from "../../types/users.types";
+import { LoginResponseType } from "../../types/auth.types";
+import { ReduxResponseType } from "../../types/general.types";
+import {
+  adminCreateUserType,
+  adminUpdateUserType,
+  adminUsersId,
+} from "../../types/users.types";
 
-export const registerAction =
+export const adminCreateUserAction =
   ({ first_name, last_name, email, password, username }: adminCreateUserType) =>
-  async (dispatch: Dispatch) => {
+  async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_CREATE_USER_REQUEST,
       });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
       const config = {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
         },
       };
 
       const { data } = await axios.post(
-        API_ROUTES?.auth?.register,
+        API_ROUTES?.adminUsers?.create,
         { first_name, last_name, email, username, password },
         config
       );
@@ -33,6 +56,158 @@ export const registerAction =
     } catch (error: any) {
       dispatch({
         type: ADMIN_CREATE_USER_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminUpdateUserAction =
+  ({
+    first_name,
+    last_name,
+    email,
+    password,
+    username,
+    id,
+  }: adminUpdateUserType) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_UPDATE_USER_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        API_ROUTES?.adminUsers?.update + id,
+        { first_name, last_name, email, username, password },
+        config
+      );
+      dispatch({
+        type: ADMIN_UPDATE_USER_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_UPDATE_USER_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminDeleteUserAction =
+  ({ id }: adminUsersId) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_DELETE_USER_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+        },
+      };
+
+      const { data } = await axios.delete(
+        API_ROUTES?.adminUsers?.delete + id,
+        config
+      );
+      dispatch({
+        type: ADMIN_DELETE_USER_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_DELETE_USER_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminGetUserByIdAction =
+  ({ id }: adminUsersId) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_GETBYID_USER_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.adminUsers?.getByID + id,
+        config
+      );
+      dispatch({
+        type: ADMIN_GETBYID_USER_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_GETBYID_USER_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminGetUsersAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_GET_ALL_USERS_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+        },
+      };
+
+      const { data } = await axios.get(API_ROUTES?.adminUsers?.getByID, config);
+      dispatch({
+        type: ADMIN_GET_ALL_USERS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_GET_ALL_USERS_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
