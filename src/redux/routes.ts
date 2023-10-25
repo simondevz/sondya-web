@@ -1,4 +1,5 @@
-const BASE = process.env.NEXT_PUBLIC_SERVER_API;
+// const BASE = process.env.PUBLIC_SERVER_API;
+const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
 
 export const API_ROUTES = {
   // Authentication
