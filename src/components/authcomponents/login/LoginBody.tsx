@@ -5,6 +5,7 @@ import {
   AiOutlineRight,
 } from "react-icons/ai";
 import { FaHome } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { AuthImage } from "../../../images";
 
 const LoginBody = () => {
@@ -65,7 +66,7 @@ const LoginBody = () => {
               <div className="text-[#DB4444]">Wrong Email or Password</div>
               <div className="flex flex-row items-center justify-between w-2/3 self-center md:self-start">
                 <button className="p-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap">
-                  Create Account
+                  <Link to={"/register"}>Create Account</Link>
                 </button>
                 <span className="text-[#DB4444]">Forget Password?</span>
               </div>
