@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
@@ -8,10 +8,41 @@ import {
   PiSignOutFill,
   PiStackBold,
 } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { LOGIN_SESSION } from "../../extraStorage/storageStore";
+import { ReducersType } from "../../redux/store";
+import { LoginResponseType } from "../../redux/types/auth.types";
+import { ReduxResponseType } from "../../redux/types/general.types";
 
 export const UserDashboardNav = () => {
   const [index, setIndex] = useState<string>("dashboard");
+
+  // for logout
+  const navigate = useNavigate();
+  const [loginRedux, setLoginRedux] =
+    useState<ReduxResponseType<LoginResponseType>>();
+
+  const _loginRedux = useSelector(
+    (state: ReducersType) => state?.login
+  ) as ReduxResponseType<LoginResponseType>;
+
+  const logoutHandler = () => {
+    console.log(_loginRedux);
+    // dispatch(logoutAction() as any);
+    if (typeof window !== "undefined") {
+      // window.location.href = window.location.origin;
+      window.localStorage.removeItem(LOGIN_SESSION);
+    }
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (_loginRedux?.serverResponse?.success) {
+      setLoginRedux(_loginRedux);
+    }
+  }, [_loginRedux]);
+
   return (
     <div className="text-[#5F6C72] hidden md:flex flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[17rem]">
       <div
@@ -130,7 +161,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "log-out" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("log-out")}
+        onClick={() => {
+          logoutHandler();
+          setIndex("log-out");
+        }}
       >
         <span>
           <PiSignOutFill />
@@ -140,3 +174,6 @@ export const UserDashboardNav = () => {
     </div>
   );
 };
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.");
+}
