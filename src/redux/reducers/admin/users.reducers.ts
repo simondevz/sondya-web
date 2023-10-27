@@ -21,8 +21,9 @@ import {
   ADMIN_UPDATE_USER_SUCCESS,
 } from "../../constants/admin/users.constants";
 import { LOGIN_RESET } from "../../constants/auth.constants";
+import { initialState } from "../../initial.state";
 import { ActionType, ReduxResponseType } from "../../types/general.types";
-import { initialState } from "../auth.reducers";
+// import { initialState } from "../auth.reducers";
 
 export const adminCreateUserReducer = (
   state: ReduxResponseType = initialState,

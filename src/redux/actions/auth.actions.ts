@@ -114,6 +114,7 @@ export const loginAction =
         { password, email, webType: "dashboard" },
         config
       );
+      // console.log(data);
 
       dispatch({
         type: LOGIN_SUCCESS,

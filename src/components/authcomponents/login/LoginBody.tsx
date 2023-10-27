@@ -50,7 +50,20 @@ const LoginBody = () => {
       dispatch(loginAction(formData) as any);
     }
   };
-  console.log(loginRedux?.serverResponse?.data);
+
+  // // To get an item from localStorage, use the getItem method.
+  // const storedData = localStorage.getItem(LOGIN_SESSION);
+
+  // // Check if the item exists in localStorage.
+  // if (storedData) {
+  //   // Parse the stored data (if it's a JSON string, for example).
+  //   const parsedData = JSON.parse(storedData);
+
+  //   // Now you can use the parsed data in your component.
+  //   console.log("Data from localStorage:", parsedData);
+  // } else {
+  //   console.log("Item not found in localStorage");
+  // }
 
   useEffect(() => {
     // loginRedux?.error &&
@@ -64,18 +77,18 @@ const LoginBody = () => {
       Swal.fire({
         icon: "success",
         title: "Successful",
-        timer: 5000,
+        timer: 3000,
         text: loginRedux?.serverResponse?.message,
       });
     if (loginRedux?.success) {
       setTimeout(function () {
-        if (loginRedux?.serverResponse?.data[0]?.type === "user") {
+        if (loginRedux?.serverResponse?.data?.type === "user") {
           navigate("/dashboard");
-        } else {
+        } else if (loginRedux?.serverResponse?.data?.type === "admin") {
           navigate("/admin/dashboard");
         }
         dispatch({ type: LOGIN_RESET });
-      }, 6000);
+      }, 4000);
     }
   }, [navigate, loginRedux, dispatch]);
 
@@ -123,7 +136,7 @@ const LoginBody = () => {
                   />
                   <button
                     className="text-xl p-1 m-0"
-                    type="submit"
+                    type="button"
                     onClick={togglePasswordVisibility}
                   >
                     {showPassword ? (
