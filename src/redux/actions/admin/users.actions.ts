@@ -40,7 +40,7 @@ export const adminCreateUserAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.type}`,
         },
       };
 
@@ -85,7 +85,7 @@ export const adminUpdateUserAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -123,7 +123,7 @@ export const adminDeleteUserAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -160,7 +160,7 @@ export const adminGetUserByIdAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -196,7 +196,7 @@ export const adminGetUsersAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data[0]?.accessToken}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 

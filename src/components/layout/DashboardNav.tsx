@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
+import { logoutAction } from "../../redux/actions/auth.actions";
 import { ReducersType } from "../../redux/store";
 import { LoginResponseType } from "../../redux/types/auth.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
@@ -28,10 +29,8 @@ export const UserDashboardNav = () => {
   ) as ReduxResponseType<LoginResponseType>;
 
   const logoutHandler = () => {
-    console.log(_loginRedux);
-    // dispatch(logoutAction() as any);
+    logoutAction();
     if (typeof window !== "undefined") {
-      // window.location.href = window.location.origin;
       window.localStorage.removeItem(LOGIN_SESSION);
     }
     navigate("/");
@@ -174,6 +173,3 @@ export const UserDashboardNav = () => {
     </div>
   );
 };
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}

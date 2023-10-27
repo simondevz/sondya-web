@@ -1,3 +1,4 @@
+import { jwtDecode as jwtDecode2 } from "jwt-decode";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
 import {
   FORGOT_PASSWORD_FAIL,
@@ -22,6 +23,7 @@ import {
   VERIFY_EMAIL_SUCCESS,
 } from "../constants/auth.constants";
 import { initialState } from "../initial.state";
+import { LoginResponseType } from "../types/auth.types";
 import { ActionType, ReduxResponseType } from "../types/general.types";
 
 export const registerReducer = (
@@ -70,8 +72,15 @@ export const loginReducer = (
         serverResponse: action.payload,
       };
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem(LOGIN_SESSION, JSON.stringify(login));
+      if (login.serverResponse?.data?.token !== "") {
+        // Decode the token
+        const decodedToken = jwtDecode2<LoginResponseType>(
+          login.serverResponse?.data?.token
+        );
+        decodedToken.token = login.serverResponse?.data?.token;
+        if (typeof window !== "undefined") {
+          localStorage.setItem(LOGIN_SESSION, JSON.stringify(decodedToken));
+        }
       }
 
       return login;
@@ -179,4 +188,8 @@ export const resetPasswordReducer = (
       return state;
   }
 };
-export { initialState };
+
+// export { initialState };
+// function jwtDecode<T>(token: any) {
+//   throw new Error("Function not implemented.");
+// }

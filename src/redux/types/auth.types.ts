@@ -1,7 +1,9 @@
 export type LoginResponseType = {
-  accessToken: string;
-  username: string;
-  userType: "admin" | "user";
+  id: string;
+  email: string;
+  username?: string;
+  token: string;
+  type: "admin" | "user";
 };
 
 export type RegisterType = {
