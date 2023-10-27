@@ -62,7 +62,7 @@ export const registerAction =
   };
 
 export const verifyEmailAction =
-  ({ code }: VerifyEmailType) =>
+  ({ email, code }: VerifyEmailType) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({
@@ -76,7 +76,7 @@ export const verifyEmailAction =
       };
 
       const { data } = await axios.post(
-        API_ROUTES?.auth?.verifyEmail,
+        API_ROUTES?.auth?.verifyEmail + email,
         { code },
         config
       );
@@ -170,7 +170,7 @@ export const forgotPasswordAction =
   };
 
 export const resetPasswordAction =
-  ({ password, confirm_password }: ResetPasswordType) =>
+  ({ email, password, confirm_password }: ResetPasswordType) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({
@@ -184,7 +184,7 @@ export const resetPasswordAction =
       };
 
       const { data } = await axios.post(
-        API_ROUTES?.auth?.resetPassword,
+        API_ROUTES?.auth?.resetPassword + email,
         { password, confirm_password },
         config
       );

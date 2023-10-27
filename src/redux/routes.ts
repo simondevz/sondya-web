@@ -8,8 +8,8 @@ export const API_ROUTES = {
     register: BASE + "/register", // POST
     login: BASE + "/login", // POST
     forgotPassword: BASE + "/forgot-password", // POST
-    verifyEmail: BASE + "/verify-email/:email", // POST
-    resetPassword: BASE + "/reset-password/:email", // POST
+    verifyEmail: BASE + "/verify-email/", // POST :email
+    resetPassword: BASE + "/reset-password/", // POST :email
   },
 
   //Admin

@@ -22,10 +22,12 @@ export type ForgotPasswordType = {
 };
 
 export type VerifyEmailType = {
+  email: string | undefined;
   code: string;
 };
 
 export type ResetPasswordType = {
+  email: string | undefined;
   password: string;
   confirm_password: string;
 };

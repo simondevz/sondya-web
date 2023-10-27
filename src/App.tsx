@@ -204,7 +204,7 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/email-verification",
+    path: "/email-verification/:email",
     element: <EmailVerification />,
     errorElement: <ErrorPage />,
   },
@@ -214,7 +214,7 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/reset-password",
+    path: "/reset-password/:email",
     element: <ResetPassword />,
     errorElement: <ErrorPage />,
   },
