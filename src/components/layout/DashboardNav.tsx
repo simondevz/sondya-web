@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
@@ -8,26 +8,16 @@ import {
   PiSignOutFill,
   PiStackBold,
 } from "react-icons/pi";
-import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
 import { logoutAction } from "../../redux/actions/auth.actions";
-import { ReducersType } from "../../redux/store";
-import { LoginResponseType } from "../../redux/types/auth.types";
-import { ReduxResponseType } from "../../redux/types/general.types";
 
 export const UserDashboardNav = () => {
   const [index, setIndex] = useState<string>("dashboard");
 
-  // for logout
   const navigate = useNavigate();
-  const [loginRedux, setLoginRedux] =
-    useState<ReduxResponseType<LoginResponseType>>();
 
-  const _loginRedux = useSelector(
-    (state: ReducersType) => state?.login
-  ) as ReduxResponseType<LoginResponseType>;
-
+  // for logout
   const logoutHandler = () => {
     logoutAction();
     if (typeof window !== "undefined") {
@@ -36,19 +26,16 @@ export const UserDashboardNav = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    if (_loginRedux?.serverResponse?.success) {
-      setLoginRedux(_loginRedux);
-    }
-  }, [_loginRedux]);
-
   return (
     <div className="text-[#5F6C72] hidden md:flex flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[17rem]">
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "dashboard" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("dashboard")}
+        onClick={() => {
+          setIndex("dashboard");
+          navigate("/dashboard");
+        }}
       >
         <span>
           <PiStackBold />
@@ -59,7 +46,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "cart" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("cart")}
+        onClick={() => {
+          setIndex("cart");
+          navigate("/cart");
+        }}
       >
         <span>
           <BsCart />
@@ -70,7 +60,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "payment" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("payment")}
+        onClick={() => {
+          setIndex("payment");
+          navigate("/user/payment");
+        }}
       >
         <span>
           <MdPayment />
@@ -81,7 +74,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "history" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("history")}
+        onClick={() => {
+          setIndex("history");
+          navigate("/user/order/history");
+        }}
       >
         <span>
           <MdStorefront />
@@ -105,7 +101,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "wishlist" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("wishlist")}
+        onClick={() => {
+          setIndex("wishlist");
+          navigate("/wishlist");
+        }}
       >
         <span>
           <AiOutlineHeart />
@@ -116,7 +115,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "inbox" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("inbox")}
+        onClick={() => {
+          setIndex("inbox");
+          navigate("/user/inbox");
+        }}
       >
         <span>
           <BsChat />
@@ -127,7 +129,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "browse" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("browse")}
+        onClick={() => {
+          setIndex("browse");
+          navigate("/browse-history");
+        }}
       >
         <span>
           <PiClockClockwiseLight />
@@ -138,7 +143,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "testimony" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("testimony")}
+        onClick={() => {
+          setIndex("testimony");
+          navigate("/user/testimony");
+        }}
       >
         <span>
           <PiClockClockwiseLight />
@@ -149,7 +157,10 @@ export const UserDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "setting" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("setting")}
+        onClick={() => {
+          setIndex("setting");
+          navigate("/dashboard/settings");
+        }}
       >
         <span>
           <BsGear />
