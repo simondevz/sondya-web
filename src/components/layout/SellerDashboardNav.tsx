@@ -3,10 +3,23 @@ import { BiMap } from "react-icons/bi";
 import { BsCart } from "react-icons/bs";
 import { MdPayment, MdStorefront } from "react-icons/md";
 import { PiClockClockwiseLight, PiStackBold } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { LOGIN_SESSION } from "../../extraStorage/storageStore";
+import { logoutAction } from "../../redux/actions/auth.actions";
 
 const SellerDashboardNav = () => {
   const [index, setIndex] = useState<string>("seller-dashboard");
+
+  // for logout
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    logoutAction();
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(LOGIN_SESSION);
+    }
+    navigate("/");
+  };
   return (
     <div className="text-[#5F6C72] hidden md:flex flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[17rem]">
       <div
@@ -81,7 +94,10 @@ const SellerDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "log-out" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("log-out")}
+        onClick={() => {
+          setIndex("log-out");
+          logoutHandler();
+        }}
       >
         <span>
           <PiClockClockwiseLight />
