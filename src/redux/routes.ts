@@ -20,4 +20,31 @@ export const API_ROUTES = {
     getByID: BASE + "/admin/user/get/", // GET :id
     getAll: BASE + "/admin/users", // GET
   },
+
+  //Admin
+  adminCategories: {
+    create: BASE + "/admin/category/create", // POST
+    update: BASE + "/admin/category/update/", // PUT :id
+    delete: BASE + "/admin/category/", // DELETE :id
+    getByID: BASE + "/admin/category/", // GET :id
+    getAll: BASE + "/admin/categories", // GET
+  },
+
+  //Admin
+  adminProducts: {
+    create: BASE + "/admin/product/create", // POST
+    update: BASE + "/admin/product/update/", // PUT :id
+    delete: BASE + "/admin/product/", // DELETE :id
+    getByID: BASE + "/admin/product/", // GET :id
+    getAll: BASE + "/admin/products", // GET
+  },
+
+  //Admin
+  adminServices: {
+    create: BASE + "/admin/service/create", // POST
+    update: BASE + "/admin/service/update/", // PUT :id
+    delete: BASE + "/admin/service/", // DELETE :id
+    getByID: BASE + "/admin/service/", // GET :id
+    getAll: BASE + "/admin/services", // GET
+  },
 };
