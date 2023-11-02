@@ -154,7 +154,7 @@ const RegisterBody = () => {
                   />
                   <button
                     className="text-xl p-1 m-0"
-                    type="submit"
+                    type="button"
                     onClick={togglePasswordVisibility}
                   >
                     {showPassword ? (

@@ -27,7 +27,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-dashboard" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-dashboard")}
+        onClick={() => {
+          navigate("/admin/dashboard");
+          setIndex("admin-dashboard");
+        }}
       >
         <span>
           <PiStackBold />
@@ -38,7 +41,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-business-analytics" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-business-analytics")}
+        onClick={() => {
+          navigate("/admin/analytics");
+          setIndex("admin-business-analytics");
+        }}
       >
         <span>
           <BsCart />
@@ -49,7 +55,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-products" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-products")}
+        onClick={() => {
+          setIndex("admin-products");
+          navigate("/admin/products");
+        }}
       >
         <span>
           <MdPayment />
@@ -60,7 +69,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-categories" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-categories")}
+        onClick={() => {
+          setIndex("admin-categories");
+          navigate("/admin/category");
+        }}
       >
         <span>
           <MdStorefront />
@@ -71,7 +83,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-orders" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-orders")}
+        onClick={() => {
+          setIndex("admin-orders");
+          navigate("/admin/orders");
+        }}
       >
         <span>
           <BiMap />
@@ -84,7 +99,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-users" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-users")}
+        onClick={() => {
+          setIndex("admin-users");
+          navigate("/admin/users");
+        }}
       >
         <span>
           <PiClockClockwiseLight />
@@ -95,7 +113,10 @@ const AdminDashboardNav = () => {
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-testimonial" && "bg-[#EDB842] text-white"
         }`}
-        onClick={() => setIndex("admin-testimonial")}
+        onClick={() => {
+          setIndex("admin-testimonial");
+          navigate("/admin/testimonial");
+        }}
       >
         <span>
           <PiClockClockwiseLight />
