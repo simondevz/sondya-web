@@ -19,7 +19,6 @@ import {
 } from "../../constants/admin/users.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
-import { ReduxResponseType } from "../../types/general.types";
 import {
   adminCreateUserType,
   adminUpdateUserType,
@@ -35,12 +34,12 @@ export const adminCreateUserAction =
       });
 
       const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const login: LoginResponseType = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data?.type}`,
+          Authorization: `Bearer ${login?.token}`,
         },
       };
 
@@ -80,12 +79,12 @@ export const adminUpdateUserAction =
       });
 
       const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const login: LoginResponseType = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+          Authorization: `Bearer ${login?.token}`,
         },
       };
 
@@ -118,12 +117,12 @@ export const adminDeleteUserAction =
       });
 
       const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const login: LoginResponseType = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+          Authorization: `Bearer ${login?.token}`,
         },
       };
 
@@ -155,12 +154,12 @@ export const adminGetUserByIdAction =
       });
 
       const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const login: LoginResponseType = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+          Authorization: `Bearer ${login?.token}`,
         },
       };
 
@@ -191,12 +190,12 @@ export const adminGetUsersAction =
       });
 
       const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const login: LoginResponseType = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+          Authorization: `Bearer ${login?.token}`,
         },
       };
 
