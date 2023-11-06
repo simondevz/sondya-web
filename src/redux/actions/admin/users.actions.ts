@@ -67,9 +67,26 @@ export const adminUpdateUserAction =
   ({
     first_name,
     last_name,
+    username,
     email,
     password,
-    username,
+    type,
+    phone_number,
+    address,
+    state,
+    country,
+    zip_code,
+    status,
+
+    // social media
+    facebook_url,
+    linkedin_url,
+    youtube_url,
+    instagram_url,
+    twitter_url,
+    tiktok_url,
+
+    // id for query
     id,
   }: adminUpdateUserType) =>
   async (dispatch: Dispatch, getState: any) => {
@@ -78,8 +95,8 @@ export const adminUpdateUserAction =
         type: ADMIN_UPDATE_USER_REQUEST,
       });
 
-      const state = getState();
-      const login: LoginResponseType = state?.login;
+      const state1 = getState();
+      const login: LoginResponseType = state1?.login;
 
       const config = {
         headers: {
@@ -90,7 +107,28 @@ export const adminUpdateUserAction =
 
       const { data } = await axios.put(
         API_ROUTES?.adminUsers?.update + id,
-        { first_name, last_name, email, username, password },
+        {
+          first_name,
+          last_name,
+          username,
+          email,
+          password,
+          type,
+          phone_number,
+          address,
+          state,
+          country,
+          zip_code,
+          status,
+
+          // social media
+          facebook_url,
+          linkedin_url,
+          youtube_url,
+          instagram_url,
+          twitter_url,
+          tiktok_url,
+        },
         config
       );
       dispatch({
@@ -146,8 +184,7 @@ export const adminDeleteUserAction =
   };
 
 export const adminGetUserByIdAction =
-  ({ id }: adminUsersId) =>
-  async (dispatch: Dispatch, getState: any) => {
+  (id: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_GETBYID_USER_REQUEST,
@@ -199,7 +236,8 @@ export const adminGetUsersAction =
         },
       };
 
-      const { data } = await axios.get(API_ROUTES?.adminUsers?.getByID, config);
+      const { data } = await axios.get(API_ROUTES?.adminUsers?.getAll, config);
+
       dispatch({
         type: ADMIN_GET_ALL_USERS_SUCCESS,
         payload: data,

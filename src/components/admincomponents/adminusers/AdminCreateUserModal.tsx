@@ -80,7 +80,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
     >
       <form onSubmit={handleSubmit}>
         <div className="border-b flex justify-between p-2">
-          <div className="font-[600] text-lg">Create Account</div>
+          <div className="font-[600] text-lg">Create User</div>
           <div>
             <span className="text-[1.5rem]" onClick={handleClose}>
               <AiOutlineCloseCircle />
@@ -99,6 +99,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
               placeholder="First Name"
               autoFocus={true}
               onChange={onChange}
+              autoComplete="off"
               required
             />
           </div>
@@ -112,6 +113,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
               type="text"
               placeholder="Last Name"
               onChange={onChange}
+              autoComplete="off"
               required
             />
           </div>
@@ -125,6 +127,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
               type="email"
               placeholder="Email"
               onChange={onChange}
+              autoComplete="off"
               required
             />
           </div>
@@ -136,8 +139,9 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
               name="username"
               className="border p-2 rounded-md bg-[#D9D9D970]"
               type="text"
-              placeholder="Email"
+              placeholder="Username"
               onChange={onChange}
+              autoComplete="off"
               required
             />
           </div>
@@ -151,12 +155,14 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
               type="text"
               placeholder="Password"
               onChange={onChange}
+              autoComplete="off"
               required
             />
           </div>
         </div>
         <div className="border-t flex justify-end gap-3 p-3">
           <button
+            type="button"
             className="p-2 border text-white bg-[#6f442b] rounded-md"
             onClick={handleClose}
           >

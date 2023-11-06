@@ -192,7 +192,7 @@ export const adminGetCategoriesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminCategories?.getByID,
+        API_ROUTES?.adminCategories?.getAll,
         config
       );
       dispatch({

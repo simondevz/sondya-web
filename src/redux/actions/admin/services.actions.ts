@@ -229,7 +229,7 @@ export const adminGetServicesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminServices?.getByID,
+        API_ROUTES?.adminServices?.getAll,
         config
       );
       dispatch({

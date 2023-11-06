@@ -111,7 +111,7 @@ export const loginAction =
 
       const { data } = await axios.post(
         API_ROUTES?.auth?.login,
-        { password, email, webType: "dashboard" },
+        { password, email },
         config
       );
       // console.log(data);

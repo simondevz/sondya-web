@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BiExport,
   BiSolidLeftArrow,
@@ -19,13 +19,33 @@ import {
   MdOutlineAdd,
   MdSmartphone,
 } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { ProductsItemsdata } from "../../../data/productsItemsData";
 import { user4, userBackground } from "../../../images/users";
+import { adminGetUserByIdAction } from "../../../redux/actions/admin/users.actions";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { adminUGetUserType } from "../../../redux/types/users.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const AdminUserDetailsBody = () => {
   const [whichTab, setwhichTab] = useState<string>("#1");
   const [status] = useState<string>("Active");
+
+  // fetch data
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const adminGetUsersRedux = useSelector(
+    (state: ReducersType) => state?.adminGetByIdUser
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  useEffect(() => {
+    dispatch(adminGetUserByIdAction(id as string) as any);
+  }, [dispatch, id]);
+  const userDetail = adminGetUsersRedux.serverResponse.data;
+
   return (
     <section>
       <div className="flex flex-col gap-5">
@@ -96,11 +116,21 @@ const AdminUserDetailsBody = () => {
                 src={userBackground}
                 alt=""
               />
-              <img className="object-cover mx-auto -m-10" src={user4} alt="" />
+              <img
+                className="object-cover mx-auto -m-10"
+                src={
+                  userDetail && userDetail.image && userDetail.image.length > 0
+                    ? userDetail?.image[0].url
+                    : user4
+                }
+                alt=""
+              />
             </div>
             <br />
             <div className="flex flex-col justify-center items-center gap-2">
-              <div className="font-[600] text-lg">Linda Blair</div>
+              <div className="font-[600] text-lg">
+                {userDetail.first_name + " " + userDetail.last_name}
+              </div>
               <div
                 className={`${
                   status === "Active"
@@ -133,7 +163,7 @@ const AdminUserDetailsBody = () => {
                     E-mail
                   </div>
                   <div className="text-[#1D1F2C] font-[600]">
-                    lindablair@mail.com
+                    {userDetail?.email}
                   </div>
                 </div>
               </div>
