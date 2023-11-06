@@ -45,12 +45,13 @@ export const dashboardCheck = async () => {
       }
       return redirect("/login");
     }
-  } else if (checkExpiredToken()) {
-    logoutAction();
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(LOGIN_SESSION);
+    if (checkExpiredToken()) {
+      logoutAction();
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem(LOGIN_SESSION);
+      }
+      return redirect("/login");
     }
-    return redirect("/login");
   }
   return null;
 };
@@ -67,12 +68,13 @@ export const sellerDashboardCheck = async () => {
       }
       return redirect("/login");
     }
-  } else if (checkExpiredToken()) {
-    logoutAction();
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(LOGIN_SESSION);
+    if (checkExpiredToken()) {
+      logoutAction();
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem(LOGIN_SESSION);
+      }
+      return redirect("/login");
     }
-    return redirect("/login");
   }
   return null;
 };
@@ -89,12 +91,13 @@ export const adminDashboardCheck = async () => {
       }
       return redirect("/login");
     }
-  } else if (checkExpiredToken()) {
-    logoutAction();
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(LOGIN_SESSION);
+    if (checkExpiredToken()) {
+      logoutAction();
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem(LOGIN_SESSION);
+      }
+      return redirect("/login");
     }
-    return redirect("/login");
   }
   return null;
 };

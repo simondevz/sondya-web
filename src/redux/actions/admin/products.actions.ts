@@ -233,7 +233,7 @@ export const adminGetProductsAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminProducts?.getByID,
+        API_ROUTES?.adminProducts?.getAll,
         config
       );
       dispatch({
