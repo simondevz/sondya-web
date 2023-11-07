@@ -1,10 +1,73 @@
+import { useEffect, useState } from "react";
 import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { BsFillEyeFill } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
-import { Productsdata } from "../../../data/productsData";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import DotLoader from "react-spinners/DotLoader";
+import Swal from "sweetalert2";
+import {
+  adminDeleteCategoryAction,
+  adminGetCategoriesAction,
+} from "../../../redux/actions/admin/categories.actions";
+import { ReducersType } from "../../../redux/store";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
 
 const AdminCategory = () => {
+  // fetch categories
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [categories, setCategories] = useState<AdminGetCategoryType[]>([]);
+  const adminGetCategoriesRedux = useSelector(
+    (state: ReducersType) => state?.adminGetAllCategory
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+
+  useEffect(() => {
+    dispatch(adminGetCategoriesAction() as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (adminGetCategoriesRedux?.serverResponse.data) {
+      setCategories(adminGetCategoriesRedux?.serverResponse?.data);
+    }
+  }, [adminGetCategoriesRedux?.serverResponse, dispatch]);
+
+  // delete category
+  const adminDeleteCategoryByIDRedux = useSelector(
+    (state: ReducersType) => state?.adminDeleteUser
+  ) as ReduxResponseType<AdminGetCategoryType>;
+
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(adminDeleteCategoryAction({ id }) as any);
+
+        if (!adminDeleteCategoryByIDRedux.error) {
+          Swal.fire(
+            "Deleted!",
+            adminDeleteCategoryByIDRedux.serverResponse.message,
+            "success"
+          );
+          setTimeout(() => {
+            dispatch(adminGetCategoriesAction() as any);
+          }, 1000);
+        } else {
+          Swal.fire("Deleted!", adminDeleteCategoryByIDRedux?.error, "error");
+        }
+      }
+    });
+  };
   return (
     <section>
       <div className="flex flex-col gap-3">
@@ -19,7 +82,10 @@ const AdminCategory = () => {
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
             </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
+            <button
+              onClick={() => navigate("/admin/category/add")}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
               <span className="text-2xl">
                 <MdOutlineAdd />
               </span>
@@ -28,6 +94,15 @@ const AdminCategory = () => {
           </div>
         </div>
         <div className="">
+          <div className="mx-auto w-fit">
+            {!adminGetCategoriesRedux.success && (
+              <DotLoader
+                cssOverride={{ margin: "30px" }}
+                size={100}
+                color="#EDB842"
+              />
+            )}
+          </div>
           <table className="table-auto w-full">
             <thead>
               <tr className="border-y">
@@ -37,20 +112,21 @@ const AdminCategory = () => {
               </tr>
             </thead>
             <tbody>
-              {Productsdata.map((t, i) => {
+              {categories.map((t, i) => {
                 return (
-                  <tr className="border-b">
-                    <td className="p-3 text-[#1D1F2C]">{t.product}</td>
-                    <td className="p-3 text-[#667085]">{t.date}</td>
+                  <tr className="border-b" key={i}>
+                    <td className="p-3 text-[#1D1F2C]">{t.name}</td>
+                    <td className="p-3 text-[#667085]">{t.name}</td>
                     <td className="p-3 text-[#667085]">
                       <div className="flex flex-row gap-2 items-center text-[#A3A9B6]">
-                        <button>
+                        <button
+                          onClick={() =>
+                            navigate(`/admin/category/edit/${t._id}`)
+                          }
+                        >
                           <FiEdit2 />
                         </button>
-                        <button>
-                          <BsFillEyeFill />
-                        </button>
-                        <button>
+                        <button onClick={() => handleDelete(t._id)}>
                           <MdDelete />
                         </button>
                       </div>

@@ -2,23 +2,34 @@ import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { ProductsItemsdata } from "../../../data/productsItemsData";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const AdminProductsBody = () => {
+  // fetch categories
+  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+
   return (
     <section>
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Product</div>
           <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2">
+            <button
+              onClick={() => navigate("/admin/product/add")}
+              className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2"
+            >
               <span className="text-[#EDB842]">
                 <BiExport />
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
             </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
+            <button
+              onClick={() => navigate("/admin/product/add")}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
               <span className="text-2xl">
                 <MdOutlineAdd />
               </span>

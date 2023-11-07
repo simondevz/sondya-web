@@ -8,6 +8,10 @@ export type AdminCreateProduct = {
   model: string;
   current_price: number;
   product_status: string;
+  old_price: number;
+  discount_percentage: number;
+  vat_percentage: number;
+  total_variants: number;
 };
 
 export type AdminUpdateProduct = {
@@ -20,6 +24,10 @@ export type AdminUpdateProduct = {
   model: string;
   current_price: number;
   product_status: string;
+  old_price: number;
+  discount_percentage: number;
+  vat_percentage: number;
+  total_variants: number;
 
   id: string;
 };

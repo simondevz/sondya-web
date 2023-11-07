@@ -47,12 +47,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
     if (first_name && last_name && email && username && password) {
       dispatch(adminCreateUserAction(formData) as any);
     }
-    // handleReset();
   };
-
-  // const handleReset = () => {
-  //
-  // };
 
   useEffect(() => {
     adminCreateUserRedux?.error &&

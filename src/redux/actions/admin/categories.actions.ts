@@ -154,6 +154,7 @@ export const adminGetCategoryByIdAction =
           Authorization: `Bearer ${login?.token}`,
         },
       };
+      // console.log(API_ROUTES?.adminCategories?.getByID + id);
 
       const { data } = await axios.get(
         API_ROUTES?.adminCategories?.getByID + id,
