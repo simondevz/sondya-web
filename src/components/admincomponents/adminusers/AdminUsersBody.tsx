@@ -7,8 +7,12 @@ import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
+import Swal from "sweetalert2";
 import { defaultUser } from "../../../images";
-import { adminGetUsersAction } from "../../../redux/actions/admin/users.actions";
+import {
+  adminDeleteUserAction,
+  adminGetUsersAction,
+} from "../../../redux/actions/admin/users.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { adminUGetUserType } from "../../../redux/types/users.types";
@@ -19,9 +23,11 @@ const AdminUsersBody = () => {
   const [whichTab, setwhichTab] = useState<string>("#1");
   const [click, setClick] = useState<number | null>();
 
-  // fetch data
+  // fetch data for user details
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [users, setUsers] = useState<adminUGetUserType[]>([]);
 
   const adminGetUsersRedux = useSelector(
     (state: ReducersType) => state?.adminGetAllUser
@@ -29,10 +35,51 @@ const AdminUsersBody = () => {
 
   useEffect(() => {
     dispatch(adminGetUsersAction() as any);
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (adminGetUsersRedux?.serverResponse.data) {
+      setUsers(adminGetUsersRedux?.serverResponse?.data);
+    }
+  }, [adminGetUsersRedux?.serverResponse, dispatch]);
+
+  // delete user
+  const adminDeleteUserByIDRedux = useSelector(
+    (state: ReducersType) => state?.adminDeleteUser
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  const handleDelete = (id: string) => {
+    // console.log(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(adminDeleteUserAction({ id }) as any);
+
+        if (!adminDeleteUserByIDRedux.error) {
+          Swal.fire(
+            "Deleted!",
+            adminDeleteUserByIDRedux.serverResponse.message,
+            "success"
+          );
+          dispatch(adminGetUsersAction() as any);
+        } else {
+          Swal.fire("Deleted!", adminDeleteUserByIDRedux?.error, "error");
+        }
+      }
+    });
+  };
 
   // React state to control Modal visibility
   const [CreateAccountModal, setCreateAccountModal] = useState(false);
+
   return (
     <section>
       <div className="flex flex-col gap-5">
@@ -49,6 +96,7 @@ const AdminUsersBody = () => {
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
             </button>
             <button
+              type="button"
               onClick={() => setCreateAccountModal(true)}
               className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
             >
@@ -109,11 +157,13 @@ const AdminUsersBody = () => {
         </div>
         <div className="">{adminGetUsersRedux.error}</div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-          {adminGetUsersRedux.serverResponse.data.map((t, i) => {
+          {users.map((t, i) => {
             return (
               <div
                 className="flex flex-col gap-2 text-center shadow-md rounded-md p-3 hover:border border-[#EDB842]"
                 key={i}
+                onDoubleClick={() => navigate(`/admin/user/details/${t._id}`)}
+                onClick={() => click === i && setClick(null)}
               >
                 <div className="flex flex-row gap-2 justify-between">
                   <input type="checkbox" name="" id="" />
@@ -145,7 +195,7 @@ const AdminUsersBody = () => {
                           </span>
                         </div>
                         <div
-                          className="flex gap-4 items-center text-[#27C200]"
+                          className="flex gap-4 items-center"
                           onClick={() => navigate(`/admin/user/edit/${t._id}`)}
                         >
                           <MdEdit />{" "}
@@ -159,7 +209,10 @@ const AdminUsersBody = () => {
                           <BsXCircle />{" "}
                           <span className="whitespace-nowrap">pending</span>
                         </div>
-                        <div className="flex gap-4 items-center">
+                        <div
+                          className="flex gap-4 items-center"
+                          onClick={() => handleDelete(t._id)}
+                        >
                           <AiOutlineEye />{" "}
                           <span className="whitespace-nowrap">Delete User</span>
                         </div>
