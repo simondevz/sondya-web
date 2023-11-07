@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
 import { adminCreateUserAction } from "../../../redux/actions/admin/users.actions";
+import { ADMIN_CREATE_USER_RESET } from "../../../redux/constants/admin/users.constants";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { adminCreateUserType } from "../../../redux/types/users.types";
@@ -37,7 +38,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
     }));
   };
 
-  const adminCreateUserRedux = useSelector(
+  let adminCreateUserRedux = useSelector(
     (state: ReducersType) => state?.adminCreateUser
   ) as ReduxResponseType;
 
@@ -46,7 +47,12 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
     if (first_name && last_name && email && username && password) {
       dispatch(adminCreateUserAction(formData) as any);
     }
+    // handleReset();
   };
+
+  // const handleReset = () => {
+  //
+  // };
 
   useEffect(() => {
     adminCreateUserRedux?.error &&
@@ -69,7 +75,12 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
         handleClose();
       }, 6000);
     }
-  }, [navigate, adminCreateUserRedux, handleClose]);
+
+    setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      dispatch({ type: ADMIN_CREATE_USER_RESET });
+    }, 2000);
+  }, [navigate, adminCreateUserRedux, handleClose, dispatch]);
 
   return (
     <Modal
