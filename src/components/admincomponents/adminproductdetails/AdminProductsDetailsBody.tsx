@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { BsCart } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   ProductdetailImage1,
   ProductdetailImage2,
@@ -14,21 +16,56 @@ import {
 } from "../../../images/productdetails";
 import { user2 } from "../../../images/users";
 import { bgWhoAreWe } from "../../../images/whoarewe";
+import { adminGetProductByIdAction } from "../../../redux/actions/admin/products.actions";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { AdminGetProductType } from "../../../redux/types/products.types";
 import { Ratings } from "../../shareables/Ratings";
 
 const AdminProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
+
+  // fetch data
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [products, setProducts] = useState<AdminGetProductType | null>(null);
+  const adminGetProductByIdRedux = useSelector(
+    (state: ReducersType) => state?.adminGetByIdProduct
+  ) as ReduxResponseType<AdminGetProductType>;
+
+  useEffect(() => {
+    dispatch(adminGetProductByIdAction({ id }) as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (adminGetProductByIdRedux?.serverResponse.data) {
+      setProducts({
+        ...adminGetProductByIdRedux?.serverResponse?.data,
+      });
+    }
+  }, [adminGetProductByIdRedux?.serverResponse, dispatch, id]);
+
+  console.log(products);
   return (
     <section className="p-3 flex flex-col gap-4">
       <div className="flex flex-row justify-between">
-        <div className="flex items-center gap-3">
+        <button
+          onClick={() => navigate("/admin/products")}
+          className="flex items-center gap-3"
+        >
           <AiOutlineArrowLeft />
           <div className="text-lg text-[#1D1F2C] font-[600]">
             Product Details
           </div>
-        </div>
+        </button>
         <div className="flex gap-4">
-          <button className="bg-[#EDB84233] rounded-md p-2 text-[#EDB842]">
+          <button
+            onClick={() => navigate(`/admin/product/edit/${products?._id}`)}
+            className="bg-[#EDB84233] rounded-md p-2 text-[#EDB842]"
+          >
             Edit
           </button>
           <button className="flex items-center gap-2 bg-[#E52626B2] text-white p-2 rounded-md">
@@ -69,32 +106,35 @@ const AdminProductsDetailsBody = () => {
             <span className="text-[#191C1F]">4.7 Star Rating</span>
             <span className="text-[#5F6C72]">(21,671 User feedback)</span>
           </div>
-          <div className="">
-            2020 Apple MacBook Pro with Apple M1 Chip (13-inch, 8GB RAM, 256GB
-            SSD Storage) - Space Gray
-          </div>
+          <div className="">{products?.name}</div>
           <div className="grid grid-cols-2 gap-2">
             <div className="">
-              <span className="text-[#5F6C72]">Sku:</span>
-              <span className="text-[#191C1F]">A264671</span>
+              <span className="text-[#5F6C72]">Model:</span>
+              <span className="text-[#191C1F]">{products?.model}</span>
             </div>
             <div className="">
               <span className="text-[#5F6C72]">Availability:</span>
-              <span className="text-[#EDB842]">In Stock</span>
+              <span className="text-[#EDB842]">{products?.product_status}</span>
             </div>
             <div className="">
               <span className="text-[#5F6C72]">Brand:</span>
-              <span className="text-[#191C1F]">Apple</span>
+              <span className="text-[#191C1F]">{products?.brand}</span>
             </div>
             <div className="">
               <span className="text-[#5F6C72]">Category:</span>
-              <span className="text-[#191C1F]">Electronics Devices</span>
+              <span className="text-[#191C1F]">{products?.category}</span>
             </div>
           </div>
           <div className="flex flex-row gap-4 items-baseline">
-            <span className="text-[#EDB842] font-[600]">$1699</span>
-            <span className="text-[#5F6C72] font-[400]">$1999.00</span>
-            <button className="p-2 bg-[#EDB842] rounded-md">21% OFF</button>
+            <span className="text-[#EDB842] font-[600]">
+              ${products?.current_price}
+            </span>
+            <span className="text-[#5F6C72] font-[400]">
+              ${products?.old_price}
+            </span>
+            <button className="p-2 bg-[#EDB842] rounded-md">
+              {products?.discount_percentage}% OFF
+            </button>
           </div>
           <hr />
           <div className="grid grid-cols-2 gap-2 text-[#475156]">

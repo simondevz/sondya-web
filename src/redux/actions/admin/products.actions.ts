@@ -35,6 +35,11 @@ export const adminCreateProductAction =
     model,
     current_price,
     product_status,
+
+    old_price,
+    discount_percentage,
+    vat_percentage,
+    total_variants,
   }: AdminCreateProduct) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -64,6 +69,11 @@ export const adminCreateProductAction =
           model,
           current_price,
           product_status,
+
+          old_price,
+          discount_percentage,
+          vat_percentage,
+          total_variants,
         },
         config
       );
@@ -93,6 +103,12 @@ export const adminUpdateProductAction =
     model,
     current_price,
     product_status,
+
+    old_price,
+    discount_percentage,
+    vat_percentage,
+    total_variants,
+
     id,
   }: AdminUpdateProduct) =>
   async (dispatch: Dispatch, getState: any) => {
@@ -123,6 +139,11 @@ export const adminUpdateProductAction =
           model,
           current_price,
           product_status,
+
+          old_price,
+          discount_percentage,
+          vat_percentage,
+          total_variants,
         },
         config
       );
