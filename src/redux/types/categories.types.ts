@@ -7,5 +7,11 @@ export type AdminUpdateCategory = {
   name: string;
   description: string;
 
-  id: string;
+  id?: string;
+};
+
+export type AdminGetCategoryType = {
+  _id: string;
+  name: string;
+  description: string;
 };

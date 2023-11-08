@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
-import { MdOutlineAdd } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import PulseLoader from "react-spinners/PulseLoader";
+import Swal from "sweetalert2";
+import { adminCreateCategoryAction } from "../../../redux/actions/admin/categories.actions";
+import { ADMIN_CREATE_CATEGORY_RESET } from "../../../redux/constants/admin/categories.constants";
+import { ReducersType } from "../../../redux/store";
+import { AdminCreateCategory } from "../../../redux/types/categories.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
 
 const AdminAddCategoryBody = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -24,23 +32,88 @@ const AdminAddCategoryBody = () => {
       setSelectedFile(file);
     }
   };
+
+  // create category
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<AdminCreateCategory>({
+    name: "",
+    description: "",
+  });
+
+  const { name, description } = formData;
+
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  let adminCreateCategoryRedux = useSelector(
+    (state: ReducersType) => state?.adminCreateCategory
+  ) as ReduxResponseType;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (name && description) {
+      dispatch(adminCreateCategoryAction(formData) as any);
+    }
+  };
+
+  useEffect(() => {
+    adminCreateCategoryRedux?.error &&
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        timer: 5000,
+        text: adminCreateCategoryRedux?.error,
+      });
+    adminCreateCategoryRedux?.success &&
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        timer: 5000,
+        text: adminCreateCategoryRedux?.serverResponse?.message,
+      });
+    if (adminCreateCategoryRedux?.success) {
+      setTimeout(function () {
+        // navigate("/auth/success");
+        navigate("/admin/category");
+        // handleClose();
+      }, 4000);
+    }
+
+    setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      dispatch({ type: ADMIN_CREATE_CATEGORY_RESET });
+    }, 2000);
+  }, [adminCreateCategoryRedux, dispatch, navigate]);
+
   return (
     <section>
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Categories</div>
           <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2">
+            <button
+              onClick={() => navigate("/admin/category")}
+              className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2"
+            >
               <span className="text-[#EDB842]">
                 <FaTimes />
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Cancel</span>
             </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
-              <span>
-                <MdOutlineAdd />
-              </span>
-              <span className="whitespace-nowrap">Add Category</span>
+            <button
+              onClick={() => navigate("/admin/category")}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
+              <span className="whitespace-nowrap">Categories</span>
             </button>
           </div>
         </div>
@@ -90,7 +163,10 @@ const AdminAddCategoryBody = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col w-full md:w-3/4 lg:w-4/5 shadow-sm rounded-md p-3 gap-3">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col w-full md:w-3/4 lg:w-4/5 shadow-sm rounded-md p-3 gap-3"
+          >
             <div className="font-[600] text-lg text-[#1D1F2C]">
               General Information
             </div>
@@ -100,19 +176,39 @@ const AdminAddCategoryBody = () => {
                 className="border p-2 rounded-md bg-[#F9F9FC]"
                 type="text"
                 placeholder="Type category name here. . ."
+                onChange={onChange}
+                autoFocus={true}
+                name="name"
+                autoComplete="off"
+                required
               />
             </div>
             <div className="text-[#777980] flex flex-col gap-2 text-sm">
               <label htmlFor="">Description</label>
               <textarea
                 className="border p-2 rounded-md bg-[#F9F9FC]"
-                name=""
+                name="description"
                 id=""
                 cols={30}
                 rows={6}
+                onChange={onChange}
+                autoComplete="off"
+                required
               ></textarea>
             </div>
-          </div>
+            <button
+              type="submit"
+              className="p-2 border text-white bg-[#EDB842] rounded-md"
+            >
+              {adminCreateCategoryRedux?.loading ? (
+                <div className="" style={{ height: "25px" }}>
+                  <PulseLoader color="#ffffff" />
+                </div>
+              ) : (
+                "Save Changes"
+              )}
+            </button>
+          </form>
         </div>
       </div>
     </section>

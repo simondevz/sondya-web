@@ -467,7 +467,7 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/category/edit",
+    path: "/admin/category/edit/:id",
     element: <AdminEditCategory />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
@@ -485,13 +485,13 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/product/edit",
+    path: "/admin/product/edit/:id",
     element: <AdminEditProduct />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/product/details",
+    path: "/admin/product/details/:id",
     element: <AdminProductDetails />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
