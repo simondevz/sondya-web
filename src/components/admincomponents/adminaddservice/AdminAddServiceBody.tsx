@@ -1,15 +1,115 @@
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import PulseLoader from "react-spinners/PulseLoader";
+import Swal from "sweetalert2";
+import { adminCreateServiceAction } from "../../../redux/actions/admin/services.actions";
+import { ADMIN_CREATE_SERVICE_RESET } from "../../../redux/constants/admin/services.constants";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { AdminCreateService } from "../../../redux/types/services.types";
 import { DropImages } from "../adminaddproduct/AdminAddProductsBody";
 
 const AdminAddServiceBody = () => {
+  // fetch data for service details
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState<AdminCreateService>({
+    name: "",
+    owner: {
+      id: "",
+      username: "",
+      country: "",
+      email: "",
+    },
+    category: "",
+    brief_description: "",
+    description: "",
+    service_status: "",
+    currency: "",
+    old_price: 0,
+    current_price: 0,
+    percentage_price_off: 0,
+    duration: "",
+
+    location_description: "",
+    phone_number: "",
+    phone_number_backup: "",
+    email: "",
+    website_link: "",
+    country: "",
+    state: "",
+    city: "",
+    map_location_link: "",
+  });
+
+  const { name, description } = formData;
+
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  let adminCreateServiceRedux = useSelector(
+    (state: ReducersType) => state?.adminCreateService
+  ) as ReduxResponseType;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (name && description) {
+      dispatch(adminCreateServiceAction(formData) as any);
+    }
+  };
+
+  useEffect(() => {
+    adminCreateServiceRedux?.error &&
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        timer: 5000,
+        text: adminCreateServiceRedux?.error,
+      });
+    adminCreateServiceRedux?.success &&
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        timer: 5000,
+        text: adminCreateServiceRedux?.serverResponse?.message,
+      });
+    if (adminCreateServiceRedux?.success) {
+      setTimeout(function () {
+        // navigate("/auth/success");
+        navigate("/admin/services");
+        // handleClose();
+      }, 4000);
+    }
+
+    setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      dispatch({ type: ADMIN_CREATE_SERVICE_RESET });
+    }, 2000);
+  }, [adminCreateServiceRedux, dispatch, navigate]);
+
   return (
     <section>
-      <div className="flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Edit Service</div>
           <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2">
+            <button
+              onClick={() => navigate("/admin/services")}
+              type="button"
+              className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2"
+            >
               <span className="text-[#EDB842]">
                 <FaTimes />
               </span>
@@ -30,36 +130,38 @@ const AdminAddServiceBody = () => {
                     className="border p-2 rounded-md bg-[#F9F9FC]"
                     type="text"
                     placeholder="Type service name here. . ."
-                    value="I will create an amazing website or app promo video"
+                    onChange={onChange}
+                    name="name"
+                    autoFocus={true}
+                    autoComplete="off"
+                    required
                   />
+                </div>
+                <div className="text-[#777980] flex flex-col gap-2 text-sm">
+                  <label htmlFor="">Brief Description</label>
+                  <textarea
+                    className="border p-2 rounded-md bg-[#F9F9FC]"
+                    name="brief_description"
+                    id=""
+                    cols={30}
+                    rows={3}
+                    onChange={onChange}
+                    autoComplete="off"
+                    required
+                  ></textarea>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm">
                   <label htmlFor="">Description</label>
                   <textarea
                     className="border p-2 rounded-md bg-[#F9F9FC]"
-                    name=""
+                    name="description"
                     id=""
                     cols={30}
                     rows={6}
-                  >
-                    Currently, WordPress powers 35% of the internet and has over
-                    400 million people visiting their sites every month. With a
-                    diverse set of features, WordPress is well suited to a wide
-                    range of users including personal sites, blogs, e-commerce
-                    and business sites that have advanced requirements. Filled
-                    with resources and downloads, this course covers everything
-                    you need to know to start using wordPress like a pro. You'll
-                    learn how to set up your website, add content including
-                    pages and blog posts, select and customize a theme, add
-                    widgets and plugins to expand your site's features, connect
-                    it to your social networks and upload media including videos
-                    and images - all without having to code! If you don’t
-                    already have a WordPress account, all you need is an email
-                    address. Being so simple, there’s no reason why you
-                    shouldn’t enroll now, taking advantage of the 25% Fiverr
-                    User discount on WordPress, to get your website started
-                    today.
-                  </textarea>
+                    onChange={onChange}
+                    autoComplete="off"
+                    required
+                  ></textarea>
                 </div>
               </div>
               <div className="flex flex-col shadow-md rounded-md p-3 gap-3">
@@ -76,20 +178,27 @@ const AdminAddServiceBody = () => {
                   <label htmlFor="">Service Category</label>
                   <select
                     className="border p-2 rounded-md bg-[#F9F9FC]"
-                    name=""
+                    name="category"
                     id=""
+                    onChange={onChange}
                   >
                     <option value="">Select a category</option>
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">
-                  <label htmlFor="">Service Tags</label>
+                  <label htmlFor="">Service Status</label>
                   <select
                     className="border p-2 rounded-md bg-[#F9F9FC]"
-                    name=""
+                    name="service_status"
                     id=""
+                    onChange={onChange}
+                    required
                   >
                     <option value="">Select tags</option>
+                    <option value="draft">Draft</option>
+                    <option value="available">available</option>
+                    <option value="suspended">Suspended</option>
+                    <option value="closed">Closed</option>
                   </select>
                 </div>
               </div>
@@ -97,43 +206,56 @@ const AdminAddServiceBody = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3 shadow-md p-3 rounded-md">
-          <div className="">About Seller</div>
-          <div className="flex flex-col gap-2">
-            <div className="font-[600]">Ade Scoba</div>
-            <textarea
-              className="border rounded-md text-[#939AAD] p-2"
-              name=""
-              id=""
-              cols={30}
-              rows={4}
-              placeholder="Write about you"
-            >
-              service description
-            </textarea>
+          <div className="font-[600]">Pricing & Duration</div>
+          <div className="flex flex-col gap-2 w-full">
+            <div className="font-[400]">Service Prices (USD)</div>
+            <input
+              className="border p-2 rounded-md "
+              name="current_price"
+              type="text"
+              placeholder="Pick a good price - what you would pay?"
+              onChange={onChange}
+            />
           </div>
           <div className="flex flex-row gap-3">
             <div className="flex flex-col gap-2 w-1/2">
-              <div className="font-[400]">From</div>
+              <div className="font-[400]">Currency</div>
               <select
                 className="border p-2 rounded-md text-[#939AAD]"
-                name=""
+                name="currency"
                 id=""
+                onChange={onChange}
+                required
               >
                 <option value="">Select...</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Nigeria">Sudan</option>
               </select>
             </div>
             <div className="flex flex-col gap-2 w-1/2">
-              <div className="font-[400]">Member since</div>
+              <div className="font-[400]">Old price</div>
               <input
+                name="old_price"
                 className="border p-2 rounded-md "
-                type="text"
-                placeholder="Date"
+                type="number"
+                placeholder="Old price"
+                onChange={onChange}
               />
             </div>
           </div>
           <div className="flex flex-row gap-3 whitespace-nowrap">
             <div className="flex flex-col gap-2 w-1/3">
-              <div className="font-[400]">Language</div>
+              <div className="font-[400]">Service Duration</div>
+              <input
+                name="duration"
+                className="border p-2 rounded-md "
+                type="text"
+                placeholder="Duration 1day 2days etc "
+                onChange={onChange}
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-1/3">
+              <div className="font-[400]">Avg. response time Pending...</div>
               <select
                 className="border p-2 rounded-md text-[#939AAD]"
                 name=""
@@ -143,17 +265,7 @@ const AdminAddServiceBody = () => {
               </select>
             </div>
             <div className="flex flex-col gap-2 w-1/3">
-              <div className="font-[400]">Avg. response time</div>
-              <select
-                className="border p-2 rounded-md text-[#939AAD]"
-                name=""
-                id=""
-              >
-                <option value="">Select...</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-2 w-1/3">
-              <div className="font-[400]">Last delivery</div>
+              <div className="font-[400]">Last delivery Pending...</div>
               <select
                 className="border p-2 rounded-md text-[#939AAD]"
                 name=""
@@ -165,16 +277,8 @@ const AdminAddServiceBody = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 shadow-md p-3 rounded-md">
-          <div className="flex flex-col gap-2 w-full">
-            <div className="font-[400]">Service Prices (USD)</div>
-            <input
-              className="border p-2 rounded-md "
-              type="text"
-              placeholder="Pick a good price - what you would pay?"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-3 shadow-md p-3 rounded-md"> */}
+        {/* <div className="flex flex-col gap-2">
             <div className="font-[400]">Feature (optional)</div>
             <textarea
               className="border rounded-md text-[#939AAD] p-2"
@@ -185,8 +289,8 @@ const AdminAddServiceBody = () => {
             >
               Write a feature in each line eg. Feature 1 Feature 2
             </textarea>
-          </div>
-          <div className="flex flex-col gap-2 w-1/2">
+          </div> */}
+        {/* <div className="flex flex-col gap-2 w-1/2">
             <div className="font-[400]">Estimated Date of Delivery</div>
             <select
               className="border p-2 rounded-md text-[#939AAD]"
@@ -195,17 +299,31 @@ const AdminAddServiceBody = () => {
             >
               <option value="">Select...</option>
             </select>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
         {/* last one */}
         <div className="flex flex-col gap-3 shadow-md p-3">
+          <div className="flex flex-col gap-2">
+            <div className="font-[400]">Location description for service</div>
+            <textarea
+              className="border rounded-md text-[#939AAD] p-2"
+              name="location_description"
+              id=""
+              cols={30}
+              rows={4}
+              placeholder="Write about location for your service you"
+              onChange={onChange}
+            ></textarea>
+          </div>
           <div className="flex flex-row gap-3">
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Phone Number</div>
               <input
+                name="phone_number"
                 className="border p-2 rounded-md "
                 type="text"
                 placeholder="Phone Number"
+                onChange={onChange}
               />
             </div>
             <div className="flex flex-col gap-2 w-1/2">
@@ -213,9 +331,11 @@ const AdminAddServiceBody = () => {
                 Backup Phone Number (Optional)
               </div>
               <input
+                name="phone_number_backup"
                 className="border p-2 rounded-md "
                 type="text"
                 placeholder="Phone Number"
+                onChange={onChange}
               />
             </div>
           </div>
@@ -223,17 +343,21 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Email Address</div>
               <input
+                name="email"
                 className="border p-2 rounded-md "
                 type="text"
                 placeholder="Email address"
+                onChange={onChange}
               />
             </div>
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Website Link (Optional)</div>
               <input
+                name="website_link"
                 className="border p-2 rounded-md "
                 type="text"
                 placeholder="your website url"
+                onChange={onChange}
               />
             </div>
           </div>
@@ -242,67 +366,62 @@ const AdminAddServiceBody = () => {
               <div className="font-[400]">Country</div>
               <select
                 className="border p-2 rounded-md text-[#939AAD]"
-                name=""
+                name="country"
                 id=""
+                onChange={onChange}
               >
                 <option value="">Select...</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Sudan">Sudan</option>
               </select>
             </div>
-            <div className="flex flex-row gap-3 w-1/2">
-              <div className="flex flex-col gap-2 w-1/2">
-                <div className="font-[400]">City</div>
-                <select
-                  className="border p-2 rounded-md text-[#939AAD]"
-                  name=""
-                  id=""
-                >
-                  <option value="">Select...</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-2 w-1/2">
-                <div className="font-[400] overflow-x-hidden">
-                  State(Optional)
-                </div>
-                <select
-                  className="border p-2 rounded-md text-[#939AAD]"
-                  name=""
-                  id=""
-                >
-                  <option value="">Select...</option>
-                </select>
-              </div>
+            <div className="flex flex-col gap-2 w-1/2">
+              <div className="font-[400]">State</div>
+              <input
+                name="state"
+                className="border p-2 rounded-md "
+                type="text"
+                placeholder="Your State"
+                onChange={onChange}
+              />
             </div>
           </div>
           <div className="flex flex-row gap-3">
             <div className="flex flex-col gap-2 w-1/2">
-              <div className="font-[400]">Location</div>
+              <div className="font-[400]">City</div>
               <input
+                name="city"
                 className="border p-2 rounded-md "
                 type="text"
-                placeholder="Your location"
+                placeholder="Your city"
+                onChange={onChange}
               />
             </div>
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Map Location (Optional)</div>
               <input
+                name="map_location_link"
                 className="border p-2 rounded-md "
                 type="text"
                 placeholder="Map location"
+                onChange={onChange}
               />
             </div>
           </div>
-          <div className="flex w-full justify-center gap-3">
-            <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
-              Back
-            </button>
-            <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
-              {" "}
-              <span>Edit</span>
-              <AiOutlineArrowRight />
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="p-2 border text-white bg-[#EDB842] rounded-md"
+          >
+            {adminCreateServiceRedux?.loading ? (
+              <div className="" style={{ height: "25px" }}>
+                <PulseLoader color="#ffffff" />
+              </div>
+            ) : (
+              "Save Changes"
+            )}
+          </button>
         </div>
-      </div>
+      </form>
     </section>
   );
 };

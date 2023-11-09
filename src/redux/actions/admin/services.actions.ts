@@ -27,13 +27,26 @@ import {
 export const adminCreateServiceAction =
   ({
     name,
-    user,
+    owner,
     category,
     brief_description,
     description,
-    tag,
-    current_price,
     service_status,
+    currency,
+    old_price,
+    current_price,
+    percentage_price_off,
+    duration,
+
+    location_description,
+    phone_number,
+    phone_number_backup,
+    email,
+    website_link,
+    country,
+    state,
+    city,
+    map_location_link,
   }: AdminCreateService) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -41,8 +54,8 @@ export const adminCreateServiceAction =
         type: ADMIN_CREATE_SERVICE_REQUEST,
       });
 
-      const state = getState();
-      const login: LoginResponseType = state?.login;
+      const state1 = getState();
+      const login: LoginResponseType = state1?.login;
 
       const config = {
         headers: {
@@ -55,13 +68,26 @@ export const adminCreateServiceAction =
         API_ROUTES?.adminServices?.create,
         {
           name,
-          user,
+          owner,
           category,
           brief_description,
           description,
-          tag,
-          current_price,
           service_status,
+          currency,
+          old_price,
+          current_price,
+          percentage_price_off,
+          duration,
+
+          location_description,
+          phone_number,
+          phone_number_backup,
+          email,
+          website_link,
+          country,
+          state,
+          city,
+          map_location_link,
         },
         config
       );
@@ -83,13 +109,27 @@ export const adminCreateServiceAction =
 export const adminUpdateServiceAction =
   ({
     name,
-    user,
+    owner,
     category,
     brief_description,
     description,
-    tag,
-    current_price,
     service_status,
+    currency,
+    old_price,
+    current_price,
+    percentage_price_off,
+    duration,
+
+    location_description,
+    phone_number,
+    phone_number_backup,
+    email,
+    website_link,
+    country,
+    state,
+    city,
+    map_location_link,
+
     id,
   }: AdminUpdateService) =>
   async (dispatch: Dispatch, getState: any) => {
@@ -98,8 +138,8 @@ export const adminUpdateServiceAction =
         type: ADMIN_UPDATE_SERVICE_REQUEST,
       });
 
-      const state = getState();
-      const login: LoginResponseType = state?.login;
+      const state1 = getState();
+      const login: LoginResponseType = state1?.login;
 
       const config = {
         headers: {
@@ -112,13 +152,26 @@ export const adminUpdateServiceAction =
         API_ROUTES?.adminServices?.update + id,
         {
           name,
-          user,
+          owner,
           category,
           brief_description,
           description,
-          tag,
-          current_price,
           service_status,
+          currency,
+          old_price,
+          current_price,
+          percentage_price_off,
+          duration,
+
+          location_description,
+          phone_number,
+          phone_number_backup,
+          email,
+          website_link,
+          country,
+          state,
+          city,
+          map_location_link,
         },
         config
       );

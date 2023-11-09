@@ -177,8 +177,8 @@ const AdminAddCategoryBody = () => {
                 type="text"
                 placeholder="Type category name here. . ."
                 onChange={onChange}
-                autoFocus={true}
                 name="name"
+                autoFocus={true}
                 autoComplete="off"
                 required
               />

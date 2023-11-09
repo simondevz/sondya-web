@@ -37,7 +37,7 @@ const AdminCategory = () => {
 
   // delete category
   const adminDeleteCategoryByIDRedux = useSelector(
-    (state: ReducersType) => state?.adminDeleteUser
+    (state: ReducersType) => state?.adminDeleteCategory
   ) as ReduxResponseType<AdminGetCategoryType>;
 
   const handleDelete = (id: string) => {

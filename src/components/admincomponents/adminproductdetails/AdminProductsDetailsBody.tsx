@@ -48,7 +48,7 @@ const AdminProductsDetailsBody = () => {
     }
   }, [adminGetProductByIdRedux?.serverResponse, dispatch, id]);
 
-  console.log(products);
+  // console.log(products);
   return (
     <section className="p-3 flex flex-col gap-4">
       <div className="flex flex-row justify-between">

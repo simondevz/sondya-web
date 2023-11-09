@@ -1,3 +1,5 @@
+import { Owner } from "./services.types";
+
 export type AdminCreateProduct = {
   name: string;
   category: string;
@@ -12,6 +14,8 @@ export type AdminCreateProduct = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
+
+  owner?: Owner;
 };
 
 export type AdminUpdateProduct = {
@@ -29,6 +33,9 @@ export type AdminUpdateProduct = {
   vat_percentage: number;
   total_variants: number;
 
+  owner?: Owner;
+
+  // product id
   id: string;
 };
 
@@ -47,4 +54,6 @@ export type AdminGetProductType = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
+
+  owner?: Owner;
 };
