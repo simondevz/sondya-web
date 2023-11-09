@@ -509,13 +509,13 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/service/edit",
+    path: "/admin/service/edit/:id",
     element: <AdminEditService />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/service/details",
+    path: "/admin/service/details/:id",
     element: <AdminServiceDetails />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,

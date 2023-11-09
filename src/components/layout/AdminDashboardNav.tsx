@@ -1,8 +1,14 @@
 import { useState } from "react";
-import { BiMap } from "react-icons/bi";
-import { BsCart } from "react-icons/bs";
-import { MdPayment, MdStorefront } from "react-icons/md";
-import { PiClockClockwiseLight, PiStackBold } from "react-icons/pi";
+import { BiSolidBadgeCheck } from "react-icons/bi";
+import { BsBookmarkCheck, BsCart } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import {
+  MdLogout,
+  MdOutlineCategory,
+  MdOutlineMiscellaneousServices,
+  MdProductionQuantityLimits,
+} from "react-icons/md";
+import { PiStackBold } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
 import { logoutAction } from "../../redux/actions/auth.actions";
@@ -61,9 +67,23 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <MdPayment />
+          <MdProductionQuantityLimits />
         </span>{" "}
         <span className="whitespace-nowrap">Product</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-services" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("admin-services");
+          navigate("/admin/services");
+        }}
+      >
+        <span>
+          <MdOutlineMiscellaneousServices />
+        </span>{" "}
+        <span className="whitespace-nowrap">Services</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
@@ -75,7 +95,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <MdStorefront />
+          <MdOutlineCategory />
         </span>{" "}
         <span className="whitespace-nowrap">Categories</span>
       </div>
@@ -89,7 +109,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BiMap />
+          <BsBookmarkCheck />
         </span>
         <Link to={"/track-Order"}>
           <span className="whitespace-nowrap">Orders</span>
@@ -105,7 +125,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <PiClockClockwiseLight />
+          <FaUsers />
         </span>{" "}
         <span className="whitespace-nowrap">Users</span>
       </div>
@@ -119,7 +139,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <PiClockClockwiseLight />
+          <BiSolidBadgeCheck />
         </span>{" "}
         <span className="whitespace-nowrap">Testimonial</span>
       </div>
@@ -133,7 +153,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <PiClockClockwiseLight />
+          <MdLogout />
         </span>{" "}
         <span className="whitespace-nowrap">Log out</span>
       </div>
