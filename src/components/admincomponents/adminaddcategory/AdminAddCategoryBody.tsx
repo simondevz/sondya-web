@@ -18,6 +18,12 @@ const AdminAddCategoryBody = () => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+
+      setFormData((prevState) => ({
+        ...prevState,
+        image: file,
+        // [e.target.name]: e.target.value,
+      }));
     }
   };
 
@@ -30,6 +36,11 @@ const AdminAddCategoryBody = () => {
     const file = event.dataTransfer.files?.[0];
     if (file) {
       setSelectedFile(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        image: file,
+        // [e.target.name]: e.target.value,
+      }));
     }
   };
 
@@ -40,7 +51,7 @@ const AdminAddCategoryBody = () => {
     name: "",
     description: "",
   });
-
+  console.log(formData);
   const { name, description } = formData;
 
   const onChange = (
@@ -50,6 +61,7 @@ const AdminAddCategoryBody = () => {
   ) => {
     setFormData((prevState) => ({
       ...prevState,
+      // image: selectedFile,
       [e.target.name]: e.target.value,
     }));
   };
@@ -87,7 +99,6 @@ const AdminAddCategoryBody = () => {
         // handleClose();
       }, 4000);
     }
-
     setTimeout(() => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       dispatch({ type: ADMIN_CREATE_CATEGORY_RESET });

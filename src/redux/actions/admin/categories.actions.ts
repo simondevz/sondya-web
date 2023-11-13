@@ -25,7 +25,7 @@ import {
 } from "../../types/categories.types";
 
 export const adminCreateCategoryAction =
-  ({ name, description }: AdminCreateCategory) =>
+  ({ name, description, image }: AdminCreateCategory) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -35,16 +35,23 @@ export const adminCreateCategoryAction =
       const state = getState();
       const login: LoginResponseType = state?.login;
 
+      let FD: FormData = new FormData();
+      FD.append("name", name);
+      FD.append("description", description);
+      FD.append("image", image as File);
+
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.token}`,
         },
       };
 
       const { data } = await axios.post(
         API_ROUTES?.adminCategories?.create,
-        { name, description },
+        // { name, description, image },
+        FD,
         config
       );
       dispatch({
