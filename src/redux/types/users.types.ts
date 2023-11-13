@@ -63,8 +63,8 @@ export type adminUGetUserType = {
 };
 
 export type ImageType = {
-  url: string;
-  public_id: string;
-  folder: string;
-  _id: string;
+  url?: string;
+  public_id?: string;
+  folder?: string;
+  _id?: string;
 };

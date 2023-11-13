@@ -1,4 +1,5 @@
 import { Owner } from "./services.types";
+import { ImageType } from "./users.types";
 
 export type AdminCreateProduct = {
   name: string;
@@ -14,6 +15,7 @@ export type AdminCreateProduct = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
+  image?: File[] | ImageType[];
 
   owner?: Owner;
 };
@@ -32,6 +34,7 @@ export type AdminUpdateProduct = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
+  image?: File[] | ImageType[];
 
   owner?: Owner;
 
@@ -54,6 +57,7 @@ export type AdminGetProductType = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
+  image?: ImageType[];
 
   owner?: Owner;
 };

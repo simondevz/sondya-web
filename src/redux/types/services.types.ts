@@ -7,7 +7,7 @@ export type AdminCreateService = {
   brief_description: string;
   description: string;
   service_status: string;
-  image?: ImageType[];
+  image?: File[] | ImageType[];
   currency: string;
   old_price: number;
   current_price: number;
@@ -33,7 +33,7 @@ export type AdminUpdateService = {
   brief_description: string;
   description: string;
   service_status: string;
-  image?: ImageType[];
+  image?: File[] | ImageType[];
   currency: string;
   old_price: number;
   current_price: number;
