@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { circleWavy } from "../../../images";
 
 const UserTestimonyBody = () => {
-  const [status] = useState(false);
+  const [status] = useState(true);
   return (
     <section className="p-3 w-full">
       <div className="shadow-md w-full flex flex-col justify-center items-center h-[60vh] rounded-md">
