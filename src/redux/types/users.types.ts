@@ -68,3 +68,15 @@ export type ImageType = {
   folder?: string;
   _id?: string;
 };
+
+export type UserTestimonialType = {
+  name: string;
+  title: string;
+  date: string;
+  // For the react quill component
+  content?: string;
+  // for submitting to the api
+  user_id?: string;
+  //  for testimonials from the database
+  // _id?: string
+};

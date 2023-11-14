@@ -38,6 +38,7 @@ import {
   resetPasswordReducer,
   verifyEmailReducer,
 } from "./reducers/auth.reducers";
+import { testimonialReducer } from "./reducers/user.reducers";
 import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
@@ -74,6 +75,9 @@ export type ReducersType = {
   adminDeleteService: ReduxResponseType;
   adminGetByIdService: ReduxResponseType;
   adminGetAllService: ReduxResponseType;
+
+  // user queries
+  testimonial: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -110,6 +114,9 @@ const reducer = combineReducers<ReducersType>({
   adminDeleteService: adminDeleteServiceReducer,
   adminGetByIdService: adminGetServiceByIdReducer,
   adminGetAllService: adminGetServicesReducer,
+
+  // user queries
+  testimonial: testimonialReducer,
 });
 
 const middleware = [thunk];
