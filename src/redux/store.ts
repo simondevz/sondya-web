@@ -39,14 +39,43 @@ import {
   verifyEmailReducer,
 } from "./reducers/auth.reducers";
 import { testimonialReducer } from "./reducers/user.reducers";
+import {
+  sellerCreateProductReducer,
+  sellerDeleteProductReducer,
+  sellerGetProductByIdReducer,
+  sellerGetProductsReducer,
+  sellerUpdateProductReducer,
+} from "./reducers/seller/seller-products.reducers";
+import {
+  sellerCreateServiceReducer,
+  sellerDeleteServiceReducer,
+  sellerGetServiceByIdReducer,
+  sellerGetServicesReducer,
+  sellerUpdateServiceReducer,
+} from "./reducers/seller/seller-services.reducers";
 import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
+  //auth
   register: ReduxResponseType;
   verifyEmail: ReduxResponseType;
   login: ReduxResponseType;
   forgotPassword: ReduxResponseType;
   resetPassword: ReduxResponseType;
+
+  // seller && products
+  sellerCreateProduct: ReduxResponseType;
+  sellerUpdateProduct: ReduxResponseType;
+  sellerDeleteProduct: ReduxResponseType;
+  sellerGetByIdProduct: ReduxResponseType;
+  sellerGetAllProducts: ReduxResponseType;
+
+  //admin && services
+  sellerCreateService: ReduxResponseType;
+  sellerUpdateService: ReduxResponseType;
+  sellerDeleteService: ReduxResponseType;
+  sellerGetByIdService: ReduxResponseType;
+  sellerGetAllService: ReduxResponseType;
 
   //admin && users
   adminCreateUser: ReduxResponseType;
@@ -81,11 +110,26 @@ export type ReducersType = {
 };
 
 const reducer = combineReducers<ReducersType>({
+  // auth
   register: registerReducer,
   verifyEmail: verifyEmailReducer,
   login: loginReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+
+  //seller && products
+  sellerCreateProduct: sellerCreateProductReducer,
+  sellerUpdateProduct: sellerUpdateProductReducer,
+  sellerDeleteProduct: sellerDeleteProductReducer,
+  sellerGetByIdProduct: sellerGetProductByIdReducer,
+  sellerGetAllProducts: sellerGetProductsReducer,
+
+  //seller && services
+  sellerCreateService: sellerCreateServiceReducer,
+  sellerUpdateService: sellerUpdateServiceReducer,
+  sellerDeleteService: sellerDeleteServiceReducer,
+  sellerGetByIdService: sellerGetServiceByIdReducer,
+  sellerGetAllService: sellerGetServicesReducer,
 
   //admin && users
   adminCreateUser: adminCreateUserReducer,

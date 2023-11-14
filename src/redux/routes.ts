@@ -14,6 +14,24 @@ export const API_ROUTES = {
   },
 
   //Admin
+  sellerProducts: {
+    create: BASE + "/seller/product/create", // POST
+    update: BASE + "/seller/product/update/", // PUT :id
+    delete: BASE + "/seller/product/", // DELETE :id
+    getByID: BASE + "/seller/product/", // GET :id
+    getAll: BASE + "/seller/products/", // GET :userId
+  },
+
+  //Admin
+  sellerServices: {
+    create: BASE + "/seller/service/create", // POST
+    update: BASE + "/seller/service/update/", // PUT :id
+    delete: BASE + "/seller/service/", // DELETE :id
+    getByID: BASE + "/seller/service/", // GET :id
+    getAll: BASE + "/seller/services/", // GET :userId
+  },
+
+  //Admin
   adminUsers: {
     create: BASE + "/admin/user/create", // POST
     update: BASE + "/admin/user/update/", // PUT :id
