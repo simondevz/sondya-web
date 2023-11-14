@@ -74,29 +74,6 @@ input[type="radio"]:checked {
   /* pa */
 }
 
-/* for input */
-/* input[type="number"],
-input[type="number"]:focus,
-input[type="number"]:active {
-  outline: none;
-  border: 2px solid grey;
-  border-radius: 5px;
-  padding: 5px;
-}  */
-
-/* for input range */
-/* input[type="range"],
-input[type="range"]::-webkit-slider-thumb,
-input[type="range"]::-moz-range-progress,
-input[type="range"]::-ms-fill,
-input[type="range"]::-webkit-slider-thumb {
-  background-color: #475156;
-  color: #475156;
-  cursor: pointer;
-} */
-
-/* for radio boxes ends */
-
 /* for checkboxes */
 /* Hide the default checkbox */
 input[type="checkbox"] {
@@ -125,11 +102,3 @@ input[type="checkbox"]:checked::before {
   font-weight: 900;
   color: white;
 }
-
-/* input[type="date"]::-webkit-calendar-picker-indicator {
-  display: none;
-} */
-
-/* #datemil::-webkit-calendar-picker-indicator {
-  display: none;
-} */

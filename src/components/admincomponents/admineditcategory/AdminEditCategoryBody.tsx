@@ -117,6 +117,10 @@ const AdminEditCategoryBody = () => {
       }, 2000);
     }
   }, [adminUpdateCategoryRedux, dispatch, id]);
+
+  if (formData.image !== undefined && Array.isArray(formData?.image)) {
+    console.log(formData?.image[0].url);
+  }
   return (
     <section>
       <div className="flex flex-col gap-3">
