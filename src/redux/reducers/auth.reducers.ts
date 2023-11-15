@@ -64,23 +64,17 @@ export const loginReducer = (
     case LOGIN_REQUEST:
       return { ...initialState, loading: true };
     case LOGIN_SUCCESS:
-      // Set response to local storagae
-      const login = {
-        ...initialState,
-        loading: false,
-        success: true,
-        serverResponse: action.payload,
-      };
+      let login: ReduxResponseType<LoginResponseType> = { ...initialState };
 
-      if (login.serverResponse?.data?.token !== "") {
+      if (action.payload?.data?.token !== "") {
         // Decode the token
         const decodedToken = jwtDecode2<LoginResponseType>(
-          login.serverResponse?.data?.token
+          action.payload?.data?.token
         );
-        decodedToken.token = login.serverResponse?.data?.token;
+        decodedToken.token = action.payload?.data?.token;
 
         // add data to it
-        const logindata: ReduxResponseType<LoginResponseType> = {
+        login = {
           loading: false,
           success: true,
           serverResponse: {
@@ -90,10 +84,8 @@ export const loginReducer = (
           },
           error: "",
         };
-
-        console.log(logindata);
         if (typeof window !== "undefined") {
-          localStorage.setItem(LOGIN_SESSION, JSON.stringify(logindata));
+          localStorage.setItem(LOGIN_SESSION, JSON.stringify(login));
         }
       }
 

@@ -11,7 +11,6 @@ import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
 import { AuthImage } from "../../../images";
 import { loginAction } from "../../../redux/actions/auth.actions";
-import { LOGIN_RESET } from "../../../redux/constants/auth.constants";
 import { ReducersType } from "../../../redux/store";
 import { LoginType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
@@ -51,20 +50,6 @@ const LoginBody = () => {
     }
   };
 
-  // // To get an item from localStorage, use the getItem method.
-  // const storedData = localStorage.getItem(LOGIN_SESSION);
-
-  // // Check if the item exists in localStorage.
-  // if (storedData) {
-  //   // Parse the stored data (if it's a JSON string, for example).
-  //   const parsedData = JSON.parse(storedData);
-
-  //   // Now you can use the parsed data in your component.
-  //   console.log("Data from localStorage:", parsedData);
-  // } else {
-  //   console.log("Item not found in localStorage");
-  // }
-
   useEffect(() => {
     // loginRedux?.error &&
     //   Swal.fire({
@@ -87,7 +72,11 @@ const LoginBody = () => {
         } else if (loginRedux?.serverResponse?.data?.type === "admin") {
           navigate("/admin/dashboard");
         }
-        dispatch({ type: LOGIN_RESET });
+        setFormData({
+          email: "",
+          password: "",
+        });
+        // dispatch({ type: LOGIN_RESET });
       }, 4000);
     }
   }, [navigate, loginRedux, dispatch]);
