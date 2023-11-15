@@ -190,10 +190,8 @@ export const adminGetUserByIdAction =
       dispatch({
         type: ADMIN_GETBYID_USER_REQUEST,
       });
-
       const state = getState();
       const login: ReduxResponseType<LoginResponseType> = state?.login;
-
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -205,6 +203,7 @@ export const adminGetUserByIdAction =
         API_ROUTES?.adminUsers?.getByID + id,
         config
       );
+
       dispatch({
         type: ADMIN_GETBYID_USER_SUCCESS,
         payload: data,

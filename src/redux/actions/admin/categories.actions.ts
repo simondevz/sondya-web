@@ -191,7 +191,6 @@ export const adminGetCategoriesAction =
 
       const state = getState();
       const login: ReduxResponseType<LoginResponseType> = state?.login;
-
       const config = {
         headers: {
           "Content-Type": "application/json",
