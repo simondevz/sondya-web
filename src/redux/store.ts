@@ -38,6 +38,7 @@ import {
   resetPasswordReducer,
   verifyEmailReducer,
 } from "./reducers/auth.reducers";
+import { testimonialReducer } from "./reducers/userDashboard/testimonials.reducers";
 import {
   sellerCreateProductReducer,
   sellerDeleteProductReducer,
@@ -115,6 +116,9 @@ export type ReducersType = {
   adminDeleteService: ReduxResponseType;
   adminGetByIdService: ReduxResponseType;
   adminGetAllService: ReduxResponseType;
+
+  // user queries
+  testimonial: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -172,6 +176,9 @@ const reducer = combineReducers<ReducersType>({
   adminDeleteService: adminDeleteServiceReducer,
   adminGetByIdService: adminGetServiceByIdReducer,
   adminGetAllService: adminGetServicesReducer,
+
+  // user queries
+  testimonial: testimonialReducer,
 });
 
 const middleware = [thunk];
