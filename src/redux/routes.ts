@@ -12,6 +12,14 @@ export const API_ROUTES = {
     resetPassword: BASE + "/reset-password/", // POST :email
   },
 
+  //User Profiles
+  profile: {
+    getProfile: BASE + "/profile/get/", // GET :id
+    updateProfile: BASE + "/profile/update/", // PUT :id
+    changePassword: BASE + "/profile/update/password/", // PUT :id
+    updateSocials: BASE + "/profile/update/socials/", // PUT :id
+  },
+
   //Admin
   sellerProducts: {
     create: BASE + "/seller/product/create", // POST
@@ -64,5 +72,9 @@ export const API_ROUTES = {
     delete: BASE + "/admin/service/", // DELETE :id
     getByID: BASE + "/admin/service/", // GET :id
     getAll: BASE + "/admin/services", // GET
+  },
+
+  landingPages: {
+    contactUs: BASE + "/contactus", // POST
   },
 };

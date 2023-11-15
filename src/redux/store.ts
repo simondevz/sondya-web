@@ -52,6 +52,12 @@ import {
   sellerGetServicesReducer,
   sellerUpdateServiceReducer,
 } from "./reducers/seller/seller-services.reducers";
+import {
+  GetUserProfileReducer,
+  UpdatePasswordReducer,
+  UpdateProfileReducer,
+  UpdateSocialsReducer,
+} from "./reducers/user/profile.reducers";
 import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
@@ -61,6 +67,12 @@ export type ReducersType = {
   login: ReduxResponseType;
   forgotPassword: ReduxResponseType;
   resetPassword: ReduxResponseType;
+
+  //user profile
+  getProfile: ReduxResponseType;
+  updateProfile: ReduxResponseType;
+  changePassword: ReduxResponseType;
+  updateSocials: ReduxResponseType;
 
   // seller && products
   sellerCreateProduct: ReduxResponseType;
@@ -112,6 +124,12 @@ const reducer = combineReducers<ReducersType>({
   login: loginReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+
+  //user profile
+  getProfile: GetUserProfileReducer,
+  updateProfile: UpdateProfileReducer,
+  changePassword: UpdatePasswordReducer,
+  updateSocials: UpdateSocialsReducer,
 
   //seller && products
   sellerCreateProduct: sellerCreateProductReducer,

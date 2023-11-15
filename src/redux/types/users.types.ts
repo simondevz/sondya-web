@@ -68,3 +68,40 @@ export type ImageType = {
   folder?: string;
   _id?: string;
 };
+
+export type profileUpdateType = {
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  password?: string;
+  phone_number: string;
+  state: string;
+  country: string;
+  zip_code: string;
+  image?: ImageType[];
+
+  // for route
+  id?: string;
+};
+
+export type passwordUpdateType = {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+
+  // for route
+  id?: string;
+};
+
+export type socialsUpdateType = {
+  facebook_url: string;
+  linkedin_url: string;
+  youtube_url: string;
+  instagram_url: string;
+  twitter_url: string;
+  tiktok_url: string;
+
+  // for route
+  id?: string;
+};
