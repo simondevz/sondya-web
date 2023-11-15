@@ -12,9 +12,9 @@ export const authCheck = async () => {
     return null;
   } else if (storedData) {
     const parsedData = JSON.parse(storedData);
-    if (parsedData?.type === "user") {
+    if (parsedData?.serverResponse?.data?.type === "user") {
       return redirect("/dashboard");
-    } else if (parsedData?.type === "admin") {
+    } else if (parsedData?.serverResponse?.data?.type === "admin") {
       return redirect("/admin/dashboard");
     } else {
       logoutAction();
@@ -38,7 +38,7 @@ export const dashboardCheck = async () => {
     return redirect("/login");
   } else if (storedData) {
     const parsedData = JSON.parse(storedData);
-    if (parsedData?.type !== "user") {
+    if (parsedData?.serverResponse?.data?.type !== "user") {
       logoutAction();
       if (typeof window !== "undefined") {
         window.localStorage.removeItem(LOGIN_SESSION);
@@ -61,7 +61,7 @@ export const sellerDashboardCheck = async () => {
     return redirect("/login");
   } else if (storedData) {
     const parsedData = JSON.parse(storedData);
-    if (parsedData?.type !== "user") {
+    if (parsedData?.serverResponse?.data?.type !== "user") {
       logoutAction();
       if (typeof window !== "undefined") {
         window.localStorage.removeItem(LOGIN_SESSION);
@@ -84,7 +84,7 @@ export const adminDashboardCheck = async () => {
     return redirect("/login");
   } else if (storedData) {
     const parsedData = JSON.parse(storedData);
-    if (parsedData?.type !== "admin") {
+    if (parsedData?.serverResponse?.data?.type !== "admin") {
       logoutAction();
       if (typeof window !== "undefined") {
         window.localStorage.removeItem(LOGIN_SESSION);

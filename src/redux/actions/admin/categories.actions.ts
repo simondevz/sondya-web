@@ -23,6 +23,7 @@ import {
   AdminCreateCategory,
   AdminUpdateCategory,
 } from "../../types/categories.types";
+import { ReduxResponseType } from "../../types/general.types";
 
 export const adminCreateCategoryAction =
   ({ name, description, image }: AdminCreateCategory) =>
@@ -33,7 +34,7 @@ export const adminCreateCategoryAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       let FD: FormData = new FormData();
       FD.append("name", name);
@@ -44,7 +45,7 @@ export const adminCreateCategoryAction =
         headers: {
           // "Content-Type": "application/json",
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -78,12 +79,12 @@ export const adminUpdateCategoryAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -116,12 +117,12 @@ export const adminDeleteCategoryAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -153,12 +154,12 @@ export const adminGetCategoryByIdAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -189,12 +190,12 @@ export const adminGetCategoriesAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 

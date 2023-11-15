@@ -78,8 +78,22 @@ export const loginReducer = (
           login.serverResponse?.data?.token
         );
         decodedToken.token = login.serverResponse?.data?.token;
+
+        // add data to it
+        const logindata: ReduxResponseType<LoginResponseType> = {
+          loading: false,
+          success: true,
+          serverResponse: {
+            data: decodedToken,
+            message: "",
+            success: true,
+          },
+          error: "",
+        };
+
+        console.log(logindata);
         if (typeof window !== "undefined") {
-          localStorage.setItem(LOGIN_SESSION, JSON.stringify(decodedToken));
+          localStorage.setItem(LOGIN_SESSION, JSON.stringify(logindata));
         }
       }
 
