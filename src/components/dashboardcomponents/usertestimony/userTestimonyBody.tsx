@@ -1,20 +1,22 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { circleWavy } from "../../../images";
-import { UserTestimonialType } from "../../../redux/types/users.types";
 import { useDispatch, useSelector } from "react-redux";
-import { ReducersType } from "../../../redux/store";
-import { ReduxResponseType } from "../../../redux/types/general.types";
+import { PulseLoader } from "react-spinners";
+import { circleWavy } from "../../../images";
 import { createTestimonialAction } from "../../../redux/actions/userDashboard/testimonials.actions";
 import { CREATE_TESTIMONIAL_RESET } from "../../../redux/constants/userDashboard/testimonials.constants";
-import { PulseLoader } from "react-spinners";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { UserTestimonialType } from "../../../redux/types/users.types";
 
 const UserTestimonyBody = () => {
   const dispatch = useDispatch();
   const TestimonialRedux = useSelector(
-    (state: ReducersType) => state?.testimonial?.testimonial
-  ) as ReduxResponseType;
+    (state: ReducersType) => state?.testimonial
+  ) as ReduxResponseType<UserTestimonialType>;
+
+  // console.log(TestimonialRedux);
 
   return (
     <section className="p-3 w-full">
@@ -48,8 +50,8 @@ const UserTestimonyBody = () => {
 
 const UserTestimonyBodyMain = () => {
   const TestimonialRedux = useSelector(
-    (state: ReducersType) => state?.testimonial?.testimonial
-  ) as ReduxResponseType;
+    (state: ReducersType) => state?.testimonial
+  ) as ReduxResponseType<UserTestimonialType>;
 
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -57,6 +59,9 @@ const UserTestimonyBodyMain = () => {
     name: "",
     title: "",
   });
+
+  // console.log(formData);
+  console.log(value);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -82,7 +87,6 @@ const UserTestimonyBodyMain = () => {
             type="text"
             name="name"
             placeholder="Ade Tiger"
-            value={formData.name}
             onChange={onChange}
           />
         </div>
@@ -95,7 +99,6 @@ const UserTestimonyBodyMain = () => {
             type="text"
             name="title"
             placeholder="Ade Tiger"
-            value={formData.title}
             onChange={onChange}
           />
         </div>

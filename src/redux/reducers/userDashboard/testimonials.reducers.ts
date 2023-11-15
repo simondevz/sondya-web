@@ -1,3 +1,4 @@
+import { LOGIN_RESET } from "../../constants/auth.constants";
 import {
   CREATE_TESTIMONIAL_FAIL,
   CREATE_TESTIMONIAL_REQUEST,
@@ -13,49 +14,24 @@ export const testimonialReducer = (
 ) => {
   switch (action.type) {
     case CREATE_TESTIMONIAL_REQUEST:
-      return {
-        ...initialState,
-        testimonial: {
-          ...state.testimonial,
-          loading: true,
-          serverResponse: action.payload,
-        },
-      };
-
+      return { ...initialState, loading: true };
     case CREATE_TESTIMONIAL_SUCCESS:
       return {
         ...initialState,
-        testimonial: {
-          ...state.testimonial,
-          loading: false,
-          success: true,
-          error: "",
-          serverResponse: action.payload,
-        },
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
       };
-
     case CREATE_TESTIMONIAL_FAIL:
       return {
         ...initialState,
-        testimonial: {
-          ...state.testimonial,
-          loading: false,
-          success: false,
-          error: action.payload?.message || "Something Went Wrong. Try Again",
-          serverResponse: {},
-        },
+        loading: false,
+        success: false,
+        error: action.payload,
       };
-
     case CREATE_TESTIMONIAL_RESET:
-      return {
-        ...initialState,
-        testimonial: {
-          ...state.testimonial,
-          loading: false,
-          success: false,
-          error: "",
-        },
-      };
+    case LOGIN_RESET:
+      return { ...initialState };
 
     default:
       return state;

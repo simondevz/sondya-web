@@ -19,6 +19,7 @@ import {
 } from "../../constants/seller/seller-products.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
+import { ReduxResponseType } from "../../types/general.types";
 import {
   AdminCreateProduct,
   AdminUpdateProduct,
@@ -48,12 +49,12 @@ export const sellerCreateProductAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -118,12 +119,12 @@ export const sellerUpdateProductAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -171,12 +172,12 @@ export const sellerDeleteProductAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -208,12 +209,12 @@ export const sellerGetProductByIdAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -245,12 +246,12 @@ export const sellerGetProductsAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 

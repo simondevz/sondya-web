@@ -6,7 +6,7 @@ export const checkExpiredToken = (): boolean => {
   if (storedData) {
     // Decode the token
     const parsedData = JSON.parse(storedData);
-    const decodedToken = jwtDecode2(parsedData?.token);
+    const decodedToken = jwtDecode2(parsedData?.serverResponse?.data?.token);
 
     // Check if the token has expired
     const currentTimestamp = Math.floor(Date.now() / 1000);

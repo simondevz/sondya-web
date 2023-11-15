@@ -83,7 +83,6 @@ export type profileUpdateType = {
   last_name: string;
   username: string;
   email: string;
-  password?: string;
   phone_number: string;
   state: string;
   country: string;

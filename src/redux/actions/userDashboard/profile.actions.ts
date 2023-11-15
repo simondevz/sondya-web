@@ -10,6 +10,7 @@ import {
 } from "../../constants/userDashboard/profile.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
+import { ReduxResponseType } from "../../types/general.types";
 import {
   passwordUpdateType,
   profileUpdateType,
@@ -25,12 +26,12 @@ export const GetUserProfileAction =
       });
 
       const state = getState();
-      const login: LoginResponseType = state?.login;
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -59,7 +60,6 @@ export const UpdateProfileAction =
     last_name,
     username,
     email,
-    password,
     phone_number,
     state,
     country,
@@ -74,12 +74,12 @@ export const UpdateProfileAction =
       });
 
       const state1 = getState();
-      const login: LoginResponseType = state1?.login;
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -90,7 +90,6 @@ export const UpdateProfileAction =
           last_name,
           username,
           email,
-          password,
           phone_number,
           state,
           country,
@@ -128,12 +127,12 @@ export const UpdatePasswordAction =
       });
 
       const state1 = getState();
-      const login: LoginResponseType = state1?.login;
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
@@ -179,12 +178,12 @@ export const UpdateSocialsAction =
       });
 
       const state1 = getState();
-      const login: LoginResponseType = state1?.login;
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 

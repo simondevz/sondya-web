@@ -1,20 +1,21 @@
-import { Dispatch } from "redux";
-import { UserTestimonialType } from "../../types/users.types";
 import axios from "axios";
-import { API_ROUTES } from "../../routes";
-import { LoginResponseType } from "../../types/auth.types";
+import { Dispatch } from "redux";
 import {
   CREATE_TESTIMONIAL_FAIL,
   CREATE_TESTIMONIAL_REQUEST,
   CREATE_TESTIMONIAL_SUCCESS,
 } from "../../constants/userDashboard/testimonials.constants";
+import { API_ROUTES } from "../../routes";
+import { LoginResponseType } from "../../types/auth.types";
+import { ReduxResponseType } from "../../types/general.types";
+import { UserTestimonialType } from "../../types/users.types";
 
 export const createTestimonialAction =
   ({ name, title, content }: UserTestimonialType) =>
   async (dispatch: Dispatch, getState: any) => {
     const state = getState();
-    const login: LoginResponseType = state?.login;
-    const user_id = login?.id;
+    const login: ReduxResponseType<LoginResponseType> = state?.login;
+    const user_id = login?.serverResponse.data.id;
 
     if (!user_id) {
       dispatch({
@@ -53,7 +54,7 @@ export const createTestimonialAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${login?.token}`,
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
