@@ -38,7 +38,7 @@ import {
   resetPasswordReducer,
   verifyEmailReducer,
 } from "./reducers/auth.reducers";
-import { testimonialReducer } from "./reducers/user.reducers";
+import { testimonialReducer } from "./reducers/userDashboard/testimonials.reducers";
 import {
   sellerCreateProductReducer,
   sellerDeleteProductReducer,

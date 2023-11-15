@@ -72,7 +72,7 @@ export type ImageType = {
 export type UserTestimonialType = {
   name: string;
   title: string;
-  date: string;
+  date?: string;
   // For the react quill component
   content?: string;
   // for submitting to the api

@@ -6,19 +6,19 @@ import { UserTestimonialType } from "../../../redux/types/users.types";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { createTestimonialAction } from "../../../redux/actions/user.actions";
-import { TESTIMONIAL_SHOW_FORM } from "../../../redux/constants/auth.constants";
+import { createTestimonialAction } from "../../../redux/actions/userDashboard/testimonials.actions";
+import { CREATE_TESTIMONIAL_RESET } from "../../../redux/constants/userDashboard/testimonials.constants";
+import { PulseLoader } from "react-spinners";
 
 const UserTestimonyBody = () => {
   const dispatch = useDispatch();
   const TestimonialRedux = useSelector(
-    (state: ReducersType) => state?.testimonial
+    (state: ReducersType) => state?.testimonial?.testimonial
   ) as ReduxResponseType;
-  console.log(TestimonialRedux);
 
   return (
     <section className="p-3 w-full">
-      {TestimonialRedux.testimonial.success ? (
+      {TestimonialRedux?.success ? (
         <div className="shadow-md w-full flex flex-col justify-center items-center h-[60vh] rounded-md">
           <div className="mx-auto flex-col items-center text-center w-[30rem]">
             <img className="mx-auto" src={circleWavy} alt="" />
@@ -31,7 +31,7 @@ const UserTestimonyBody = () => {
             </div>
             <button
               onClick={() => {
-                dispatch({ type: TESTIMONIAL_SHOW_FORM });
+                dispatch({ type: CREATE_TESTIMONIAL_RESET });
               }}
               className="border-[#EDB842] border text-[#EDB842] font-[600] rounded-md p-2"
             >
@@ -47,12 +47,15 @@ const UserTestimonyBody = () => {
 };
 
 const UserTestimonyBodyMain = () => {
+  const TestimonialRedux = useSelector(
+    (state: ReducersType) => state?.testimonial?.testimonial
+  ) as ReduxResponseType;
+
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
   const [formData, setFormData] = useState<UserTestimonialType>({
     name: "",
     title: "",
-    date: "",
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,9 +66,7 @@ const UserTestimonyBodyMain = () => {
   };
 
   const handleSubmit = () => {
-    if (formData?.name && formData?.date && formData?.title && value) {
-      dispatch(createTestimonialAction({ ...formData, content: value }) as any);
-    }
+    dispatch(createTestimonialAction({ ...formData, content: value }) as any);
   };
 
   return (
@@ -98,7 +99,7 @@ const UserTestimonyBodyMain = () => {
             onChange={onChange}
           />
         </div>
-        <div className="flex flex-col md:flex-row gap-3 justify-around">
+        {/* <div className="flex flex-col md:flex-row gap-3 justify-around">
           <div className="">
             Date <span className="text-[#EF4444]"> *</span>
           </div>
@@ -110,7 +111,7 @@ const UserTestimonyBodyMain = () => {
             value={formData.date}
             onChange={onChange}
           />
-        </div>
+        </div> */}
         <div className="flex flex-col md:flex-row gap-3 justify-around">
           <div className="">
             Content <span className="text-[#EF4444]"> *</span>
@@ -123,12 +124,21 @@ const UserTestimonyBodyMain = () => {
           />
         </div>
       </div>
+      {TestimonialRedux?.error && (
+        <div className="text-[#DB4444] flex p-2">{TestimonialRedux?.error}</div>
+      )}
       <div className="flex w-full justify-end py-6 px-10">
         <button
           onClick={handleSubmit}
           className="border px-6 py-2 flex z-50 bg-[#EDB842] font-semibold text-[#fff] text-[0.875rem] rounded-2xl"
         >
-          Post
+          {TestimonialRedux?.loading ? (
+            <div className="" style={{ height: "20px" }}>
+              <PulseLoader color="#ffffff" />
+            </div>
+          ) : (
+            "Post"
+          )}
         </button>
       </div>
     </>
