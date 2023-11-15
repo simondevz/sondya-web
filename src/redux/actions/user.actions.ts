@@ -8,12 +8,14 @@ import {
   TESTIMONIAL_LOADING,
   TESTIMONIAL_SUCCESS,
 } from "../constants/auth.constants";
+import { LoginResponseType } from "../types/auth.types";
 
 export const createTestimonialAction =
   ({ name, title, date, content }: UserTestimonialType) =>
-  async (dispatch: Dispatch) => {
-    const userString = localStorage.getItem(LOGIN_SESSION) || "{}";
-    const user_id = JSON.parse(userString)?.id;
+  async (dispatch: Dispatch, getState: any) => {
+    const state = getState();
+    const login: LoginResponseType = state?.login;
+    const user_id = login?.id;
 
     if (!user_id) {
       dispatch({
@@ -28,6 +30,7 @@ export const createTestimonialAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.token}`,
         },
       };
 
