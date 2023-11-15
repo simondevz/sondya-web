@@ -16,7 +16,7 @@ import {
   UPDATE_SOCIALS_REQUEST,
   UPDATE_SOCIALS_RESET,
   UPDATE_SOCIALS_SUCCESS,
-} from "../../constants/user/profile.constants";
+} from "../../constants/userDashboard/profile.constants";
 import { initialState } from "../../initial.state";
 import { ActionType, ReduxResponseType } from "../../types/general.types";
 

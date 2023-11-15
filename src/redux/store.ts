@@ -38,7 +38,7 @@ import {
   resetPasswordReducer,
   verifyEmailReducer,
 } from "./reducers/auth.reducers";
-import { testimonialReducer } from "./reducers/userDashboard/testimonials.reducers";
+import { CreateContactUsReducer } from "./reducers/contactus.reducers";
 import {
   sellerCreateProductReducer,
   sellerDeleteProductReducer,
@@ -58,10 +58,13 @@ import {
   UpdatePasswordReducer,
   UpdateProfileReducer,
   UpdateSocialsReducer,
-} from "./reducers/user/profile.reducers";
+} from "./reducers/userDashboard/profile.reducers";
+import { testimonialReducer } from "./reducers/userDashboard/testimonials.reducers";
 import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
+  contactus: ReduxResponseType;
+
   //auth
   register: ReduxResponseType;
   verifyEmail: ReduxResponseType;
@@ -122,6 +125,7 @@ export type ReducersType = {
 };
 
 const reducer = combineReducers<ReducersType>({
+  contactus: CreateContactUsReducer,
   // auth
   register: registerReducer,
   verifyEmail: verifyEmailReducer,
