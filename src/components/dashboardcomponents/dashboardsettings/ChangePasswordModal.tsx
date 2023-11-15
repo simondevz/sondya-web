@@ -6,6 +6,15 @@ const ChangePasswordModal = ({ showModal, handleClose }: any) => {
   const renderBackdrop = (props: any) => (
     <div className="backdrop" {...props} />
   );
+
+  // // change password code
+  // const dispatch = useDispatch();
+  // const [formData, setFormData] = useState<passwordUpdateType>({
+  //   current_password: "",
+  //   new_password: "",
+  //   confirm_password: "",
+  // });
+
   return (
     <Modal
       className="modal top-[30%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"

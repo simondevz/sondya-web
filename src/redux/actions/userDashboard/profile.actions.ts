@@ -7,7 +7,7 @@ import {
   UPDATE_PROFILE_FAIL,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
-} from "../../constants/user/profile.constants";
+} from "../../constants/userDashboard/profile.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
 import {

@@ -1,4 +1,5 @@
-import { MdOutlineAdd } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { user2 } from "../../../images/users";
 
 const AdminTestimonialBody = () => {
@@ -8,12 +9,15 @@ const AdminTestimonialBody = () => {
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Testimonial</div>
           <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
+            <Link
+              to={"/admin/testimonial/edit"}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
               <span className="text-2xl">
-                <MdOutlineAdd />
+                <MdEdit />
               </span>
-              <span className="whitespace-nowrap">Create</span>
-            </button>
+              <span className="whitespace-nowrap">Edit</span>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col gap-3 p-3 md:p-8 justify-center items-center">
