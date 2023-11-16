@@ -4,6 +4,9 @@ import {
   GET_PROFILE_FAIL,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_SUCCESS,
   UPDATE_PROFILE_FAIL,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
@@ -18,8 +21,7 @@ import {
 } from "../../types/users.types";
 
 export const GetUserProfileAction =
-  ({ id }: any) =>
-  async (dispatch: Dispatch, getState: any) => {
+  () => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: GET_PROFILE_REQUEST,
@@ -36,7 +38,7 @@ export const GetUserProfileAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.profile?.getProfile + id,
+        API_ROUTES?.profile?.getProfile + login?.serverResponse?.data?.id,
         config
       );
       dispatch({
@@ -64,8 +66,7 @@ export const UpdateProfileAction =
     state,
     country,
     zip_code,
-
-    id,
+    website_url,
   }: profileUpdateType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -83,8 +84,20 @@ export const UpdateProfileAction =
         },
       };
 
+      console.log({
+        first_name,
+        last_name,
+        username,
+        email,
+        phone_number,
+        state,
+        country,
+        zip_code,
+        website_url,
+      });
+
       const { data } = await axios.put(
-        API_ROUTES?.profile?.updateProfile + id,
+        API_ROUTES?.profile?.updateProfile + login?.serverResponse?.data?.id,
         {
           first_name,
           last_name,
@@ -93,6 +106,7 @@ export const UpdateProfileAction =
           phone_number,
           state,
           country,
+          website_url,
           zip_code,
         },
         config
@@ -113,17 +127,11 @@ export const UpdateProfileAction =
   };
 
 export const UpdatePasswordAction =
-  ({
-    current_password,
-    new_password,
-    confirm_password,
-
-    id,
-  }: passwordUpdateType) =>
+  ({ current_password, new_password, confirm_password }: passwordUpdateType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
-        type: UPDATE_PROFILE_REQUEST,
+        type: UPDATE_PASSWORD_REQUEST,
       });
 
       const state1 = getState();
@@ -135,9 +143,8 @@ export const UpdatePasswordAction =
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
-
       const { data } = await axios.put(
-        API_ROUTES?.profile?.changePassword + id,
+        API_ROUTES?.profile?.changePassword + login?.serverResponse?.data?.id,
         {
           current_password,
           new_password,
@@ -146,12 +153,12 @@ export const UpdatePasswordAction =
         config
       );
       dispatch({
-        type: UPDATE_PROFILE_SUCCESS,
+        type: UPDATE_PASSWORD_SUCCESS,
         payload: data,
       });
     } catch (error: any) {
       dispatch({
-        type: UPDATE_PROFILE_FAIL,
+        type: UPDATE_PASSWORD_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
@@ -168,8 +175,6 @@ export const UpdateSocialsAction =
     instagram_url,
     twitter_url,
     tiktok_url,
-
-    id,
   }: socialsUpdateType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -188,7 +193,7 @@ export const UpdateSocialsAction =
       };
 
       const { data } = await axios.put(
-        API_ROUTES?.profile?.updateSocials + id,
+        API_ROUTES?.profile?.updateSocials + login?.serverResponse?.data?.id,
         {
           facebook_url,
           linkedin_url,

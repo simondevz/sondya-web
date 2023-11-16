@@ -51,7 +51,7 @@ const AdminAddCategoryBody = () => {
     name: "",
     description: "",
   });
-  console.log(formData);
+  // console.log(formData);
   const { name, description } = formData;
 
   const onChange = (

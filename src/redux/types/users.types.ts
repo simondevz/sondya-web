@@ -51,6 +51,7 @@ export type adminUGetUserType = {
   country: string;
   zip_code: string;
   status: string;
+  website_url: string;
   image: ImageType[];
 
   //social media
@@ -87,19 +88,14 @@ export type profileUpdateType = {
   state: string;
   country: string;
   zip_code: string;
+  website_url: string;
   image?: ImageType[];
-
-  // for route
-  id?: string;
 };
 
 export type passwordUpdateType = {
   current_password: string;
   new_password: string;
   confirm_password: string;
-
-  // for route
-  id?: string;
 };
 
 export type socialsUpdateType = {
@@ -109,7 +105,4 @@ export type socialsUpdateType = {
   instagram_url: string;
   twitter_url: string;
   tiktok_url: string;
-
-  // for route
-  id?: string;
 };

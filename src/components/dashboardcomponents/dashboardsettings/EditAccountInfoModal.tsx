@@ -2,32 +2,39 @@ import { useEffect, useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { Modal } from "react-overlays";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import PulseLoader from "react-spinners/PulseLoader";
+import Swal from "sweetalert2";
 import { userImage } from "../../../images/dashboard";
-import { GetUserProfileAction } from "../../../redux/actions/userDashboard/profile.actions";
+import {
+  GetUserProfileAction,
+  UpdateProfileAction,
+} from "../../../redux/actions/userDashboard/profile.actions";
+import { UPDATE_PROFILE_RESET } from "../../../redux/constants/userDashboard/profile.constants";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { profileUpdateType } from "../../../redux/types/users.types";
+import {
+  adminUGetUserType,
+  profileUpdateType,
+} from "../../../redux/types/users.types";
 
-const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
+type editprofileType = {
+  showModal: any;
+  handleClose: any;
+  userData: adminUGetUserType;
+};
+
+const EditAccountInfoModal = ({
+  showModal,
+  handleClose,
+  userData,
+}: editprofileType) => {
   // Backdrop JSX code
   const renderBackdrop = (props: any) => (
     <div className="backdrop" {...props} />
   );
 
-  //edit account details
   // fetch data
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const login = useSelector(
-    (state: ReducersType) => state?.login
-  ) as ReduxResponseType<profileUpdateType>;
-
-  console.log(login);
-
-  // const id = login.serverResponse.data.id;
-  const id = "hi";
 
   const [formData, setFormData] = useState<profileUpdateType>({
     first_name: "",
@@ -37,28 +44,60 @@ const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
     phone_number: "",
     state: "",
     country: "",
+    website_url: "",
     zip_code: "",
-
-    id: "",
   });
 
-  const profileEditRedux = useSelector(
-    (state: ReducersType) => state?.getProfile
-  ) as ReduxResponseType<profileUpdateType>;
-
   useEffect(() => {
-    dispatch(GetUserProfileAction({ id }) as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setTimeout(() => {
+      setFormData({ ...userData });
+    }, 2000);
+  }, [userData]);
 
-  useEffect(() => {
-    if (profileEditRedux?.serverResponse.data) {
-      setFormData({
-        ...profileEditRedux?.serverResponse?.data,
-        id: id,
-      });
+  // update data
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const updateProfileRedux = useSelector(
+    (state: ReducersType) => state?.updateProfile
+  ) as ReduxResponseType;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (formData) {
+      dispatch(UpdateProfileAction(formData) as any);
     }
-  }, [profileEditRedux?.serverResponse, dispatch, id]);
+  };
+
+  useEffect(() => {
+    // updateProfileSocialRedux?.error &&
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     timer: 5000,
+    //     text: updateProfileSocialRedux?.error,
+    //   });
+    updateProfileRedux?.success &&
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        timer: 5000,
+        text: updateProfileRedux?.serverResponse?.message,
+      });
+    if (updateProfileRedux?.success) {
+      setTimeout(function () {
+        dispatch(GetUserProfileAction() as any);
+      }, 1000);
+      setTimeout(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        dispatch({ type: UPDATE_PROFILE_RESET });
+      }, 2000);
+    }
+  }, [updateProfileRedux, dispatch]);
 
   return (
     <Modal
@@ -67,7 +106,7 @@ const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
       onHide={handleClose}
       renderBackdrop={renderBackdrop}
     >
-      <div className="flex flex-col">
+      <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="border-b flex justify-between p-4">
           <div className="font-[600] text-lg">Edit Account Info</div>
           <div>
@@ -84,34 +123,45 @@ const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
             <div className="flex flex-col md:flex-row gap-1 w-full">
               <div className="flex flex-col w-full md:w-1/2">
                 <label className="font-[400] text-sm" htmlFor="">
-                  Company Display name
+                  First name
                 </label>
                 <input
+                  name="first_name"
                   className="border p-2 rounded-md"
                   type="text"
-                  placeholder="Ade Tiger"
+                  placeholder="Ade "
+                  onChange={onChange}
+                  value={formData.first_name}
+                  autoFocus={true}
                 />
               </div>
               <div className="flex flex-col w-full md:w-1/2">
                 <label className="font-[400] text-sm" htmlFor="">
-                  User name
+                  Last name
                 </label>
                 <input
+                  name="last_name"
                   className="border p-2 rounded-md w-full"
                   type="text"
-                  placeholder="Display name"
+                  placeholder="Tiger"
+                  onChange={onChange}
+                  value={formData.last_name}
                 />
               </div>
             </div>
             <div className="flex flex-col md:flex-row gap-1 w-full">
               <div className="flex flex-col w-full md:w-1/2">
                 <label className="font-[400] text-sm" htmlFor="">
-                  Full Name
+                  Username
                 </label>
                 <input
+                  name="username"
                   className="border p-2 rounded-md"
                   type="text"
-                  placeholder="Adekunle Gilbert"
+                  placeholder="Gilbert01"
+                  onChange={onChange}
+                  value={formData.username}
+                  readOnly
                 />
               </div>
               <div className="flex flex-col w-full md:w-1/2">
@@ -119,31 +169,41 @@ const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
                   Email
                 </label>
                 <input
+                  name="email"
                   className="border p-2 rounded-md w-full"
                   type="text"
                   placeholder="ade.gilbert@gmail.com"
+                  onChange={onChange}
+                  readOnly
+                  value={formData.email}
                 />
               </div>
             </div>
             <div className="flex flex-col md:flex-row gap-1 w-full">
               <div className="flex flex-col w-full md:w-1/2">
                 <label className="font-[400] text-sm" htmlFor="">
-                  Secondary Email
+                  Phone Number
                 </label>
                 <input
+                  name="phone_number"
                   className="border p-2 rounded-md w-full"
                   type="text"
-                  placeholder="ade12345@gmail.com"
+                  placeholder="+44 09525162"
+                  onChange={onChange}
+                  value={formData.phone_number}
                 />
               </div>
               <div className="flex flex-col w-full md:w-1/2">
                 <label className="font-[400] text-sm" htmlFor="">
-                  Phone Number
+                  state
                 </label>
                 <input
+                  name="state"
                   className="border p-2 rounded-md"
                   type="text"
-                  placeholder="+234 1234 567 890"
+                  placeholder="Florida"
+                  onChange={onChange}
+                  value={formData.state}
                 />
               </div>
             </div>
@@ -153,31 +213,51 @@ const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
                   Country/Region
                 </label>
                 <input
+                  name="country"
                   className="border p-2 rounded-md"
                   type="text"
-                  placeholder="ade12345@gmail.com"
+                  placeholder="China"
+                  onChange={onChange}
+                  value={formData.country}
                 />
               </div>
               {/* <div className="flex flex-col"> */}
               <div className="flex flex-row gap-1 w-1/2">
                 <div className="flex flex-col w-full md:w-1/2">
                   <label className="font-[400] text-sm" htmlFor="">
-                    Country/Region
+                    Zip code
                   </label>
                   <input
+                    name="zip_code"
                     className="border p-2 rounded-md"
                     type="text"
-                    placeholder="ade12345@gmail.com"
+                    placeholder="52101"
+                    onChange={onChange}
+                    value={formData.zip_code}
                   />
                 </div>
                 <div className="flex flex-col w-full md:w-1/2">
                   <label className="font-[400] text-sm" htmlFor="">
-                    Phone Number
+                    Website Url
                   </label>
-                  <input className="border p-2 rounded-md" type="text" />
+                  <input
+                    name="website_url"
+                    className="border p-2 rounded-md"
+                    type="text"
+                    placeholder="http//.www...."
+                    onChange={onChange}
+                    value={formData.website_url}
+                  />
                 </div>
               </div>
               {/* </div> */}
+              <div className="">
+                {updateProfileRedux?.error && (
+                  <div className="text-[#DB4444]">
+                    {updateProfileRedux?.error}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -189,10 +269,16 @@ const EditAccountInfoModal = ({ showModal, handleClose }: any) => {
             Close
           </button>
           <button className="p-2 border text-white bg-[#EDB842] rounded-md">
-            Save Changes
+            {updateProfileRedux?.loading ? (
+              <div className="" style={{ height: "25px" }}>
+                <PulseLoader color="#ffffff" />
+              </div>
+            ) : (
+              "Save Changes"
+            )}
           </button>
         </div>
-      </div>
+      </form>
     </Modal>
   );
 };
