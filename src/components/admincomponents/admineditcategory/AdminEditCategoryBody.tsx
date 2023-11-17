@@ -24,6 +24,11 @@ const AdminEditCategoryBody = () => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        image: file,
+        // [e.target.name]: e.target.value,
+      }));
     }
   };
 
@@ -36,6 +41,11 @@ const AdminEditCategoryBody = () => {
     const file = event.dataTransfer.files?.[0];
     if (file) {
       setSelectedFile(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        image: file,
+        // [e.target.name]: e.target.value,
+      }));
     }
   };
 
@@ -118,7 +128,7 @@ const AdminEditCategoryBody = () => {
     }
   }, [adminUpdateCategoryRedux, dispatch, id]);
 
-  if (formData.image !== undefined && Array.isArray(formData?.image)) {
+  if (Array.isArray(formData?.image) && formData.image.length >= 1) {
     console.log(formData?.image[0].url);
   }
   return (
@@ -170,6 +180,14 @@ const AdminEditCategoryBody = () => {
                   {selectedFile ? (
                     <img
                       src={URL.createObjectURL(selectedFile)}
+                      alt="Selected"
+                      className="mx-auto h-32"
+                    />
+                  ) : Array.isArray(formData?.image) &&
+                    formData?.image.length >= 1 &&
+                    !selectedFile ? (
+                    <img
+                      src={formData?.image[0].url}
                       alt="Selected"
                       className="mx-auto h-32"
                     />

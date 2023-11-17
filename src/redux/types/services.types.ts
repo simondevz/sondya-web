@@ -86,5 +86,4 @@ export type Owner = {
   id: string;
   username: string;
   email: string;
-  country: string;
 };

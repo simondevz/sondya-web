@@ -18,7 +18,6 @@ const AdminAddCategoryBody = () => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-
       setFormData((prevState) => ({
         ...prevState,
         image: file,
@@ -51,7 +50,6 @@ const AdminAddCategoryBody = () => {
     name: "",
     description: "",
   });
-  // console.log(formData);
   const { name, description } = formData;
 
   const onChange = (

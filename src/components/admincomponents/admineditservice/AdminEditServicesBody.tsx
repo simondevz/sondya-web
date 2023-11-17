@@ -26,12 +26,6 @@ const AdminEditServicesBody = () => {
 
   const [formData, setFormData] = useState<AdminUpdateService>({
     name: "",
-    owner: {
-      id: "",
-      username: "",
-      country: "",
-      email: "",
-    },
     category: "",
     brief_description: "",
     description: "",

@@ -137,7 +137,7 @@ const AdminServicesBody = () => {
                 </div>
                 <div className="h-12 overflow-y-hidden px-3">{t.name}</div>
                 <div className="px-3">
-                  $<FormatNumber price={t.current_price} />
+                  ${t.current_price && <FormatNumber price={t.current_price} />}
                 </div>
                 <div className="relative border-t border-[#EFEFF0] flex justify-between p-2 items-center">
                   <button
