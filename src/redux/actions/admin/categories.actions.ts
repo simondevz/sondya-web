@@ -39,7 +39,9 @@ export const adminCreateCategoryAction =
       let FD: FormData = new FormData();
       FD.append("name", name);
       FD.append("description", description);
-      FD.append("image", image as File);
+      if (image) {
+        FD.append("image", image);
+      }
 
       const config = {
         headers: {
@@ -71,7 +73,7 @@ export const adminCreateCategoryAction =
   };
 
 export const adminUpdateCategoryAction =
-  ({ name, description, id }: AdminUpdateCategory) =>
+  ({ name, description, image, id }: AdminUpdateCategory) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -81,16 +83,24 @@ export const adminUpdateCategoryAction =
       const state = getState();
       const login: ReduxResponseType<LoginResponseType> = state?.login;
 
+      let FD: FormData = new FormData();
+      FD.append("name", name);
+      FD.append("description", description);
+      if (image && !Array.isArray(image)) {
+        FD.append("image", image);
+      }
+
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
       const { data } = await axios.put(
         API_ROUTES?.adminCategories?.update + id,
-        { name, description },
+        FD,
         config
       );
       dispatch({

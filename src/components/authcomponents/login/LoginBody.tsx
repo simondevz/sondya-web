@@ -81,6 +81,8 @@ const LoginBody = () => {
     }
   }, [navigate, loginRedux, dispatch]);
 
+  console.log(loginRedux);
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row items-center gap-1 bg-[#F2F4F5] text-[#5F6C72] p-5">

@@ -14,7 +14,57 @@ import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateProduct } from "../../../redux/types/products.types";
 
 const AdminAddProductsBody = () => {
-  // fetch categories
+  // handle images
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newFiles: File[] = Array.from(files);
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+
+      // sending images
+      setFormData((prevState) => ({
+        ...prevState,
+        image: [...selectedFiles, ...newFiles],
+      }));
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files) {
+      const newFiles: File[] = Array.from(files);
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+
+      // sending images
+      setFormData((prevState) => ({
+        ...prevState,
+        image: [...selectedFiles, ...newFiles],
+      }));
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newFiles = [...selectedFiles];
+    newFiles.splice(index, 1);
+    setSelectedFiles(newFiles);
+
+    // sending images
+    setFormData((prevState) => ({
+      ...prevState,
+      image: newFiles,
+    }));
+  };
+
+  // handle images end
+
+  // create categories
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,9 +84,9 @@ const AdminAddProductsBody = () => {
     total_variants: 0,
   });
 
-  const { name, description } = formData;
+  // console.log(formData.image);
 
-  console.log(formData);
+  const { name, description } = formData;
 
   const onChange = (
     e:
@@ -78,7 +128,6 @@ const AdminAddProductsBody = () => {
       });
     if (adminCreateProductRedux?.success) {
       setTimeout(function () {
-        // navigate("/auth/success");
         navigate("/admin/products");
         // handleClose();
       }, 4000);
@@ -155,10 +204,63 @@ const AdminAddProductsBody = () => {
                   </textarea>
                 </div>
               </div>
+              {/* Handle Images starts */}
               <div className="flex flex-col shadow-md rounded-md p-3 gap-3">
                 <div className="font-[600] text-lg text-[#1D1F2C]">Media</div>
-                <DropImages />
+
+                <div
+                  // className="border-2 border-dashed border-gray-300 p-4"
+                  className="border-2 border-dashed border-[#E0E2E7] p-4 text-center rounded-md bg-[#F9F9FC]"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    multiple
+                    id="multiplePictureInput"
+                  />
+                  <label
+                    className="flex flex-col justify-center"
+                    htmlFor="multiplePictureInput"
+                  >
+                    {selectedFiles.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedFiles.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Image ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-lg"
+                            />
+                            <button
+                              onClick={() => removeImage(index)}
+                              className="absolute top-0 -right-1 bg-red-500 text-white py-1 px-2 rounded-full"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col justify-center gap-2">
+                        <div className="mx-auto p-2 bg-[#EDB842] rounded-md text-white">
+                          <BsFillImageFill />
+                        </div>
+                        <span className="text-[#858D9D] text-sm">
+                          Drag and drop image here, or click add image
+                        </span>
+                        <button className="bg-[#EDB84233] text-[#EDB842] px-4 py-2 rounded-lg mt-2 w-fit mx-auto">
+                          Browse
+                        </button>
+                      </div>
+                    )}
+                  </label>
+                </div>
               </div>
+              {/* Handle Images ends */}
             </div>
             <div className="flex flex-row lg:flex-col gap-3 rounded-md p-1 w-full lg:w-1/4 xl:w-1/5 lg:flex-grow">
               <div className="flex flex-col gap-3 shadow-md rounded-md p-2 w-full">

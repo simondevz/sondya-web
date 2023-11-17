@@ -41,6 +41,7 @@ export const adminCreateProductAction =
     discount_percentage,
     vat_percentage,
     total_variants,
+    image,
   }: AdminCreateProduct) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -48,34 +49,40 @@ export const adminCreateProductAction =
         type: ADMIN_CREATE_PRODUCT_REQUEST,
       });
 
+      // get state
       const state = getState();
       const login: ReduxResponseType<LoginResponseType> = state?.login;
 
+      // load data for flight
+      let FD: FormData = new FormData();
+      FD.append("name", name);
+      FD.append("category", category);
+      FD.append("description", description);
+      FD.append("total_stock", total_stock.toString()); //
+      FD.append("tag", tag);
+      FD.append("brand", brand);
+      FD.append("model", model);
+      FD.append("current_price", current_price.toString());
+      FD.append("product_status", product_status);
+      FD.append("old_price", old_price.toString());
+      FD.append("discount_percentage", discount_percentage.toString());
+      FD.append("vat_percentage", vat_percentage.toString());
+      FD.append("total_variants", total_variants.toString());
+      if (image && Array.isArray(image) && image.length >= 1) {
+        image.forEach((file) => FD.append("image", file as File));
+      }
+
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
       const { data } = await axios.post(
         API_ROUTES?.adminProducts?.create,
-        {
-          name,
-          category,
-          description,
-          total_stock,
-          tag,
-          brand,
-          model,
-          current_price,
-          product_status,
-
-          old_price,
-          discount_percentage,
-          vat_percentage,
-          total_variants,
-        },
+        FD,
         config
       );
       dispatch({
