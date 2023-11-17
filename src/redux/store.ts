@@ -84,7 +84,7 @@ export type ReducersType = {
   //user profile
   getProfile: ReduxResponseType;
   updateProfile: ReduxResponseType;
-  changePassword: ReduxResponseType;
+  updatePassword: ReduxResponseType;
   updateSocials: ReduxResponseType;
 
   // seller && products
@@ -152,7 +152,7 @@ const reducer = combineReducers<ReducersType>({
   //user profile
   getProfile: GetUserProfileReducer,
   updateProfile: UpdateProfileReducer,
-  changePassword: UpdatePasswordReducer,
+  updatePassword: UpdatePasswordReducer,
   updateSocials: UpdateSocialsReducer,
 
   //seller && products
