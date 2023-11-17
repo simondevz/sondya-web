@@ -59,8 +59,17 @@ import {
   UpdateProfileReducer,
   UpdateSocialsReducer,
 } from "./reducers/userDashboard/profile.reducers";
-import { testimonialReducer } from "./reducers/userDashboard/testimonials.reducers";
+import {
+  getApprovedTestimonialReducer,
+  testimonialReducer,
+} from "./reducers/userDashboard/testimonials.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import {
+  adminApproveTestimonialsReducer,
+  adminDeleteTestimonialsReducer,
+  adminGetUnapprovedTestimonialsReducer,
+  adminUpdateTestimonialsReducer,
+} from "./reducers/admin/testimonials.reducers";
 
 export type ReducersType = {
   contactus: ReduxResponseType;
@@ -120,8 +129,15 @@ export type ReducersType = {
   adminGetByIdService: ReduxResponseType;
   adminGetAllService: ReduxResponseType;
 
+  //admin && Testimonial
+  adminApproveTestimonial: ReduxResponseType;
+  adminUpdateTestimonial: ReduxResponseType;
+  adminDeleteTestimonial: ReduxResponseType;
+  adminGetUnapprovedTestimonial: ReduxResponseType;
+
   // user queries
   testimonial: ReduxResponseType;
+  getApprovedTestimonial: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -181,8 +197,15 @@ const reducer = combineReducers<ReducersType>({
   adminGetByIdService: adminGetServiceByIdReducer,
   adminGetAllService: adminGetServicesReducer,
 
+  //admin && Testimonial
+  adminGetUnapprovedTestimonial: adminGetUnapprovedTestimonialsReducer,
+  adminApproveTestimonial: adminApproveTestimonialsReducer,
+  adminDeleteTestimonial: adminDeleteTestimonialsReducer,
+  adminUpdateTestimonial: adminUpdateTestimonialsReducer,
+
   // user queries
   testimonial: testimonialReducer,
+  getApprovedTestimonial: getApprovedTestimonialReducer,
 });
 
 const middleware = [thunk];

@@ -73,12 +73,22 @@ export type ImageType = {
 export type UserTestimonialType = {
   name: string;
   title: string;
-  date?: string;
   // For the react quill component
   content?: string;
   // for submitting to the api
   user_id?: string;
 };
+
+export type AdminTestimonialType = {
+  name: string;
+  title: string;
+  content: string;
+  user_id: { image: Array<any>; _id: string };
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type profileUpdateType = {
   first_name: string;
   last_name: string;

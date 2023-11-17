@@ -75,10 +75,20 @@ export const API_ROUTES = {
     getAll: BASE + "/admin/services", // GET
   },
 
+  // Admin
+  adminTestimonials: {
+    getUnapproved: BASE + "/admin/testimonial/unapproved", // GET
+    update: BASE + "/admin/testimonial/update", // PUT
+    approve: BASE + "/admin/testimonial/approve/", // PUT :id
+    delete: BASE + "/admin/testimonial/delete/", // DELETE :id
+  },
+
   // Users
   users: {
     createTestimonial: BASE + "/user/testimonial/create", // POST: UserTestimonialType
+    getALlAPProvedTestimonial: BASE + "/user/testimonial/approved", // GET: List<UserTestimonialType>
   },
+
   landingPages: {
     contactUs: BASE + "/contactus", // POST
   },

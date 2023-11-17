@@ -61,8 +61,6 @@ const UserTestimonyBodyMain = () => {
   });
 
   // console.log(formData);
-  console.log(value);
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
