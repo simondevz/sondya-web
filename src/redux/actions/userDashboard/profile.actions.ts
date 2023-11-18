@@ -88,7 +88,7 @@ export const UpdateProfileAction =
       if (profileUpdateData?.files) {
         const profilePicture: Array<Blob> = profileUpdateData.files;
         for (let index = 0; index < profilePicture.length; index++) {
-          formData.append("images", profilePicture[index]);
+          formData.append("image", profilePicture[index]);
         }
       }
 
