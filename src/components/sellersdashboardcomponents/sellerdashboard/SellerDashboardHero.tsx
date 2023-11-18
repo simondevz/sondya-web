@@ -1,16 +1,65 @@
+import { useEffect, useState } from "react";
+import { BsWhatsapp, BsYoutube } from "react-icons/bs";
+import { FaLinkedinIn } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Facebook,
-  Google,
   Instagram,
-  Pinterest,
-  Reddit,
-  Telegram,
   Twitter,
-  Whatsapp,
   userImage,
 } from "../../../images/dashboard";
+import { GetUserProfileAction } from "../../../redux/actions/userDashboard/profile.actions";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { adminUGetUserType } from "../../../redux/types/users.types";
 
 const SellerDashboardHero = () => {
+  // fetch data
+  const dispatch = useDispatch();
+
+  const [userData, setUserData] = useState<adminUGetUserType>({
+    _id: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    email: "",
+    password: "",
+    type: "",
+    phone_number: "",
+    address: "",
+    state: "",
+    country: "",
+    zip_code: "",
+    status: "",
+    website_url: "",
+    image: [],
+
+    //social media
+    facebook_url: "",
+    linkedin_url: "",
+    youtube_url: "",
+    instagram_url: "",
+    twitter_url: "",
+    tiktok_url: "",
+  });
+
+  const getProfileDetailsRedux = useSelector(
+    (state: ReducersType) => state?.getProfile
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  useEffect(() => {
+    dispatch(GetUserProfileAction() as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (getProfileDetailsRedux?.serverResponse.data) {
+      setUserData({
+        ...getProfileDetailsRedux?.serverResponse?.data,
+      });
+    }
+  }, [getProfileDetailsRedux?.serverResponse, dispatch]);
+
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-wrap gap-3 justify-start w-full">
@@ -28,33 +77,36 @@ const SellerDashboardHero = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <div className="text-[#191C1F]">Adekunle Gilbert</div>
-                <div className="text-[#5F6C72]">Dhaka - 1207, Bangladesh</div>
+                <div className="text-[#191C1F]">
+                  {" "}
+                  {userData.last_name} {userData.first_name}
+                </div>
+                <div className="text-[#5F6C72]">{userData.address}</div>
               </div>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Username:</span>
-              <span className="text-[#5F6C72]"> kevin12345@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData.username}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Email:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData.email}</span>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Sec Email:</span>
-              <span className="text-[#5F6C72]">kevin12345@gmail.com</span>
+              <span className="text-[#191C1F]">Phone Number:</span>
+              <span className="text-[#5F6C72]">{userData.phone_number}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Country:</span>
-              <span className="text-[#5F6C72]">+234 1234 567 890</span>
+              <span className="text-[#5F6C72]">{userData.country}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">State:</span>
-              <span className="text-[#5F6C72]">+234 1234 567 890</span>
+              <span className="text-[#5F6C72]">{userData.state}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Zip Code:</span>
-              <span className="text-[#5F6C72]">+234 1234 567 890</span>
+              <span className="text-[#5F6C72]">{userData.zip_code}</span>
             </div>
           </div>
         </div>
@@ -64,31 +116,30 @@ const SellerDashboardHero = () => {
           </div>
           <div className="flex flex-col gap-2 p-3 border flex-grow">
             <div className="">
-              <div className="text-[#191C1F]">Adekunle Gilbert</div>
-              <div className="text-[#5F6C72]">
-                East Ikoyi Bazar, Word No. 04, Road No. 13/x, House no. 1320/C,
-                Flat No. 5D, Ikeja - 1200, Lagos
+              <div className="text-[#191C1F]">
+                {userData.last_name} {userData.first_name}
               </div>
+              <div className="text-[#5F6C72]">{userData.address}</div>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Phone:</span>
-              <span className="text-[#5F6C72]">+234 1234 567 890</span>
+              <span className="text-[#5F6C72]">{userData.phone_number}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Email:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData.email}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Website:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData.website_url}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Contact Person:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData.email}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Designation:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData.email}</span>
             </div>
           </div>
         </div>
@@ -98,14 +149,30 @@ const SellerDashboardHero = () => {
           Socials
         </div>
         <div className="flex flex-row gap-2">
-          <img className="object-cover w-8 h-8" src={Facebook} alt="" />
-          <img className="object-cover w-8 h-8" src={Instagram} alt="" />
-          <img className="object-cover w-8 h-8" src={Google} alt="" />
-          <img className="object-cover w-8 h-8" src={Twitter} alt="" />
-          <img className="object-cover w-8 h-8" src={Telegram} alt="" />
-          <img className="object-cover w-8 h-8" src={Reddit} alt="" />
-          <img className="object-cover w-8 h-8" src={Whatsapp} alt="" />
-          <img className="object-cover w-8 h-8" src={Pinterest} alt="" />
+          <a href={userData.facebook_url}>
+            <img className="object-cover w-8 h-8" src={Facebook} alt="" />
+          </a>
+          <a href={userData.instagram_url}>
+            <img className="object-cover w-8 h-8" src={Instagram} alt="" />
+          </a>
+
+          <a href={userData.twitter_url}>
+            {" "}
+            <img className="object-cover w-8 h-8" src={Twitter} alt="" />
+          </a>
+
+          <a className="text-3xl" href={userData.linkedin_url}>
+            {" "}
+            <FaLinkedinIn />
+          </a>
+
+          <a className="text-3xl" href={userData.tiktok_url}>
+            <BsWhatsapp />
+          </a>
+
+          <a className="text-3xl" href={userData.youtube_url}>
+            <BsYoutube />
+          </a>
         </div>
       </div>
     </section>

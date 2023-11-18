@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { adminCreateProductAction } from "../../../redux/actions/admin/products.actions";
 import { ADMIN_CREATE_PRODUCT_RESET } from "../../../redux/constants/admin/products.constants";
 import { ReducersType } from "../../../redux/store";
+import { LoginResponseType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateProduct } from "../../../redux/types/products.types";
 
@@ -64,6 +65,11 @@ const AdminAddProductsBody = () => {
 
   // handle images end
 
+  // get uploader details starts
+  let login = useSelector(
+    (state: ReducersType) => state?.login
+  ) as ReduxResponseType<LoginResponseType>;
+
   // create categories
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -72,9 +78,15 @@ const AdminAddProductsBody = () => {
     name: "",
     category: "",
     description: "",
+    owner: {
+      id: login?.serverResponse?.data?.id,
+      username: login?.serverResponse?.data?.username as string,
+      email: login?.serverResponse?.data?.email,
+    },
     total_stock: 0,
     tag: "",
     brand: "",
+    quantity: 0,
     model: "",
     current_price: 0,
     product_status: "",
@@ -83,8 +95,6 @@ const AdminAddProductsBody = () => {
     vat_percentage: 0,
     total_variants: 0,
   });
-
-  // console.log(formData.image);
 
   const { name, description } = formData;
 
@@ -307,7 +317,7 @@ const AdminAddProductsBody = () => {
                     // value={"draft"}
                     required
                   >
-                    <option value="">Select tags</option>
+                    <option value="">Select status</option>
                     <option value="draft">draft</option>
                     <option value="available">available</option>
                     <option value="hot">hot</option>
@@ -334,31 +344,30 @@ const AdminAddProductsBody = () => {
             <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
               <label htmlFor="">Old Price</label>
               <input
-                name="old_price"
                 className="border p-2 rounded-md bg-[#F9F9FC]"
+                name="old_price"
                 type="number"
-                placeholder="Type base price here. . ."
+                placeholder="Type before price here. . ."
                 onChange={onChange}
               />
             </div>
             <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
               <label htmlFor="">Discount Precentage (%)</label>
-              <select
-                className="border p-2 rounded-md bg-[#F9F9FC]"
+              <input
+                className="border p-2 rounded-md "
+                type="number"
                 name="discount_percentage"
                 id=""
                 onChange={onChange}
-              >
-                <option value="">Type discount precentage. . .</option>
-              </select>
+              />
             </div>
           </div>
           <div className="w-full flex flex-row gap-3">
             <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
               <label htmlFor="">Total Stock</label>
               <input
-                name="total_stock"
                 className="border p-2 rounded-md bg-[#F9F9FC]"
+                name="total_stock"
                 type="number"
                 placeholder="total here. . ."
                 onChange={onChange}
@@ -367,8 +376,8 @@ const AdminAddProductsBody = () => {
             <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
               <label htmlFor="">VAT Amount (%)</label>
               <input
-                name="vat_percentage"
                 className="border p-2 rounded-md bg-[#F9F9FC]"
+                name="vat_percentage"
                 type="number"
                 placeholder="total here. . ."
                 onChange={onChange}
@@ -382,8 +391,8 @@ const AdminAddProductsBody = () => {
             <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
               <label htmlFor="">Model Number</label>
               <input
-                name="model"
                 className="border p-2 rounded-md bg-[#F9F9FC]"
+                name="model"
                 type="text"
                 placeholder="Product Model Number here. . ."
                 onChange={onChange}
@@ -392,8 +401,8 @@ const AdminAddProductsBody = () => {
             <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
               <label htmlFor="">Total variant</label>
               <input
-                name="total_variants"
                 className="border p-2 rounded-md bg-[#F9F9FC]"
+                name="total_variants"
                 type="number"
                 placeholder="Total variant"
                 onChange={onChange}
@@ -403,8 +412,10 @@ const AdminAddProductsBody = () => {
               <label htmlFor="">Quantity</label>
               <input
                 className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
+                name="quantity"
+                type="number"
                 placeholder="Type product quantity here. . ."
+                onChange={onChange}
               />
             </div>
           </div>

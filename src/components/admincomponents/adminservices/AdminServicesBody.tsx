@@ -18,7 +18,7 @@ import { FormatNumber } from "../../shareables/FormatNumber";
 const AdminServicesBody = () => {
   const [Open, setOpen] = useState<number | undefined>();
 
-  // fetch data for user details
+  // fetch data for service details
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

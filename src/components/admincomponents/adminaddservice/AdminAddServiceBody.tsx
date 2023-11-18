@@ -355,8 +355,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/3">
               <div className="font-[400]">Service Duration</div>
               <input
-                name="duration"
                 className="border p-2 rounded-md "
+                name="duration"
                 type="text"
                 placeholder="Duration 1day 2days etc "
                 onChange={onChange}
@@ -427,8 +427,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Phone Number</div>
               <input
-                name="phone_number"
                 className="border p-2 rounded-md "
+                name="phone_number"
                 type="text"
                 placeholder="Phone Number"
                 onChange={onChange}
@@ -439,8 +439,8 @@ const AdminAddServiceBody = () => {
                 Backup Phone Number (Optional)
               </div>
               <input
-                name="phone_number_backup"
                 className="border p-2 rounded-md "
+                name="phone_number_backup"
                 type="text"
                 placeholder="Phone Number"
                 onChange={onChange}
@@ -451,8 +451,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Email Address</div>
               <input
-                name="email"
                 className="border p-2 rounded-md "
+                name="email"
                 type="text"
                 placeholder="Email address"
                 onChange={onChange}
@@ -461,8 +461,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Website Link (Optional)</div>
               <input
-                name="website_link"
                 className="border p-2 rounded-md "
+                name="website_link"
                 type="text"
                 placeholder="your website url"
                 onChange={onChange}
@@ -486,8 +486,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">State</div>
               <input
-                name="state"
                 className="border p-2 rounded-md "
+                name="state"
                 type="text"
                 placeholder="Your State"
                 onChange={onChange}
@@ -498,8 +498,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">City</div>
               <input
-                name="city"
                 className="border p-2 rounded-md "
+                name="city"
                 type="text"
                 placeholder="Your city"
                 onChange={onChange}
@@ -508,8 +508,8 @@ const AdminAddServiceBody = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <div className="font-[400]">Map Location (Optional)</div>
               <input
-                name="map_location_link"
                 className="border p-2 rounded-md "
+                name="map_location_link"
                 type="text"
                 placeholder="Map location"
                 onChange={onChange}

@@ -48,6 +48,7 @@ export const sellerCreateServiceAction =
     state,
     city,
     map_location_link,
+    image,
   }: AdminCreateService) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -58,40 +59,47 @@ export const sellerCreateServiceAction =
       const state1 = getState();
       const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
+      // load data for flight
+      let FD: FormData = new FormData();
+      FD.append("name", name);
+      owner && FD.append("owner", JSON.stringify(owner));
+      FD.append("category", category);
+      FD.append("brief_description", brief_description);
+      FD.append("description", description);
+      FD.append("service_status", service_status);
+      FD.append("currency", currency);
+      FD.append("old_price", old_price.toString());
+      FD.append("current_price", current_price.toString());
+      percentage_price_off &&
+        FD.append("percentage_price_off", percentage_price_off.toString());
+      FD.append("duration", duration);
+      FD.append("location_description", location_description);
+      FD.append("phone_number", phone_number);
+      FD.append("phone_number_backup", phone_number_backup);
+      FD.append("email", email);
+      FD.append("website_link", website_link);
+      FD.append("country", country);
+      FD.append("state", state);
+      FD.append("city", city);
+      FD.append("map_location_link", map_location_link);
+      if (image && Array.isArray(image) && image.length >= 1) {
+        image.forEach((file) => FD.append("image", file as File));
+      }
+
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
       const { data } = await axios.post(
         API_ROUTES?.sellerServices?.create,
-        {
-          name,
-          owner,
-          category,
-          brief_description,
-          description,
-          service_status,
-          currency,
-          old_price,
-          current_price,
-          percentage_price_off,
-          duration,
-
-          location_description,
-          phone_number,
-          phone_number_backup,
-          email,
-          website_link,
-          country,
-          state,
-          city,
-          map_location_link,
-        },
+        FD,
         config
       );
+
+      console.log(data);
       dispatch({
         type: SELLER_CREATE_SERVICE_SUCCESS,
         payload: data,
@@ -266,8 +274,7 @@ export const sellerGetServiceByIdAction =
   };
 
 export const sellerGetServicesAction =
-  ({ userId }: any) =>
-  async (dispatch: Dispatch, getState: any) => {
+  () => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: SELLER_GET_ALL_SERVICE_REQUEST,
@@ -284,7 +291,7 @@ export const sellerGetServicesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.sellerServices?.getAll + userId,
+        API_ROUTES?.sellerServices?.getAll + login?.serverResponse?.data?.id,
         config
       );
       dispatch({

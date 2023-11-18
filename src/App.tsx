@@ -387,13 +387,13 @@ const App = createBrowserRouter([
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/products/edit",
+    path: "/seller/products/edit/:id",
     element: <SellerEditProducts />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/products/details",
+    path: "/seller/products/details/:id",
     element: <SellerProductDetails />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
@@ -429,13 +429,13 @@ const App = createBrowserRouter([
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/service/edit",
+    path: "/seller/service/edit/:id",
     element: <SellerEditService />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/service/details",
+    path: "/seller/service/details/:id",
     element: <SellerServiceDetails />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
