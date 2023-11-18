@@ -57,17 +57,7 @@ export const GetUserProfileAction =
   };
 
 export const UpdateProfileAction =
-  ({
-    first_name,
-    last_name,
-    username,
-    email,
-    phone_number,
-    state,
-    country,
-    zip_code,
-    website_url,
-  }: profileUpdateType) =>
+  (profileUpdateData: profileUpdateType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -79,36 +69,32 @@ export const UpdateProfileAction =
 
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
-      console.log({
-        first_name,
-        last_name,
-        username,
-        email,
-        phone_number,
-        state,
-        country,
-        zip_code,
-        website_url,
-      });
+      const formData = new FormData();
+      formData.append("first_name", profileUpdateData?.first_name);
+      formData.append("last_name", profileUpdateData?.last_name);
+      formData.append("username", profileUpdateData?.username);
+      formData.append("email", profileUpdateData?.email);
+      formData.append("phone_number", profileUpdateData?.phone_number);
+      formData.append("state", profileUpdateData?.state);
+      formData.append("country", profileUpdateData?.country);
+      formData.append("zip_code", profileUpdateData?.zip_code);
+
+      //  Because formData will not accept data type of blob|undefined
+      if (profileUpdateData?.files) {
+        const profilePicture: Array<Blob> = profileUpdateData.files;
+        for (let index = 0; index < profilePicture.length; index++) {
+          formData.append("images", profilePicture[index]);
+        }
+      }
 
       const { data } = await axios.put(
         API_ROUTES?.profile?.updateProfile + login?.serverResponse?.data?.id,
-        {
-          first_name,
-          last_name,
-          username,
-          email,
-          phone_number,
-          state,
-          country,
-          website_url,
-          zip_code,
-        },
+        formData,
         config
       );
       dispatch({
@@ -139,7 +125,7 @@ export const UpdatePasswordAction =
 
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };

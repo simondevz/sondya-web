@@ -83,8 +83,12 @@ const DashboardSettingsBody = () => {
             <div className="flex flex-row gap-2">
               <div className="">
                 <img
-                  className="object-cover rounded-full"
-                  src={userImage}
+                  className="object-cover rounded-full w-16 h-16"
+                  src={
+                    userData.image?.[0]?.url
+                      ? userData.image[0]?.url
+                      : userImage
+                  }
                   alt=""
                 />
               </div>
