@@ -38,6 +38,7 @@ const AdminEditProductBody = () => {
     discount_percentage: 0,
     vat_percentage: 0,
     total_variants: 0,
+    quantity: 0,
 
     id: id as string,
   });
@@ -110,7 +111,7 @@ const AdminEditProductBody = () => {
     }
   }, [adminUpdateProductRedux, dispatch, id]);
 
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <section>
@@ -335,8 +336,10 @@ const AdminEditProductBody = () => {
               <label htmlFor="">Quantity</label>
               <input
                 className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
+                name="quantity"
+                type="number"
                 placeholder="Type product quantity here. . ."
+                onChange={onChange}
               />
             </div>
           </div>

@@ -1,20 +1,118 @@
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BiRefresh } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import { Service1, Service2, ServiceMain } from "../../../images";
 import { user2 } from "../../../images/users";
+import {
+  sellerDeleteServiceAction,
+  sellerGetServiceByIdAction,
+} from "../../../redux/actions/seller/seller-services.actions";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { AdminGetServiceType } from "../../../redux/types/services.types";
 import { Ratings } from "../../shareables/Ratings";
 
 const SellerServiceDetailsBody = () => {
+  // fetch data
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [service, setService] = useState<AdminGetServiceType | null>(null);
+
+  const sellerGetServiceByIdRedux = useSelector(
+    (state: ReducersType) => state?.sellerGetByIdService
+  ) as ReduxResponseType<AdminGetServiceType>;
+
+  useEffect(() => {
+    dispatch(sellerGetServiceByIdAction({ id }) as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (sellerGetServiceByIdRedux?.serverResponse.data) {
+      setService({
+        ...sellerGetServiceByIdRedux?.serverResponse?.data,
+      });
+    }
+  }, [sellerGetServiceByIdRedux?.serverResponse, dispatch, id]);
+
+  // delete service
+  const sellerDeleteServiceByIDRedux = useSelector(
+    (state: ReducersType) => state?.sellerDeleteService
+  ) as ReduxResponseType<AdminGetServiceType>;
+
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(sellerDeleteServiceAction({ id }) as any);
+
+        if (!sellerDeleteServiceByIDRedux.error) {
+          Swal.fire(
+            "Deleted!",
+            sellerDeleteServiceByIDRedux.serverResponse.message,
+            "success"
+          );
+          setTimeout(() => {
+            // dispatch(sellerGetServicesAction() as any);
+            navigate("/seller/service");
+          }, 1000);
+        } else {
+          Swal.fire("Deleted!", sellerDeleteServiceByIDRedux?.error, "error");
+        }
+      }
+    });
+  };
   return (
     <section className="p-3 flex flex-col gap-4">
+      <div className="flex flex-row justify-between">
+        <div
+          onClick={() => navigate("/seller/services")}
+          className="flex items-center gap-3"
+        >
+          <AiOutlineArrowLeft />
+          <div className="text-lg text-[#1D1F2C] font-[600]">Services</div>
+        </div>
+        <div className="flex gap-4">
+          <button
+            onClick={() =>
+              navigate(`/seller/service/edit/${service?._id as string}`)
+            }
+            className="bg-[#EDB84233] rounded-md p-2 text-[#EDB842]"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDelete(service?._id as string)}
+            className="flex items-center gap-2 bg-[#E52626B2] text-white p-2 rounded-md"
+          >
+            <MdDelete />
+            <span>Delete Service</span>
+          </button>
+        </div>
+      </div>
       <div className="flex flex-col lg:flex-row gap-3 justify-start">
         <div className="flex flex-col gap-3 w-full md:w-3/5">
-          <div className="font-[700] text-xl">
-            I will create an amazing website or app promo video
-          </div>
+          <div className="font-[700] text-xl">{service?.name}</div>
           <div className="flex gap-3">
             <img className="w-5 object-contain" src={user2} alt="" />
-            <div className="text-[#404145] font-[500]">airb123</div>
+            <div className="text-[#404145] font-[500]">
+              {service?.owner?.username
+                ? service?.owner?.username
+                : service?.owner?.email}
+            </div>
             <div className="flex gap-2">
               <Ratings rating={4} />{" "}
               <span className="text-[#95979D]">(904)</span>
@@ -68,15 +166,12 @@ const SellerServiceDetailsBody = () => {
           <div className="flex flex-col gap-5 p-2 h-5/6">
             <div className="flex justify-between text-lg font-[600]">
               <div className="">GiG</div>
-              <div className="">NGN868</div>
+              <div className="">NGN{service?.current_price}</div>
             </div>
             <div className=" text-lg font-[600] text-[#EDB842]">
               Brief Description
             </div>
-            <div className="text-[#95979D]">
-              Package includes Only Laptop-scenes Includes, Background
-              Music,Logo, and 720HD Video
-            </div>
+            <div className="text-[#95979D]">{service?.brief_description}</div>
             <div className="flex justify-start gap-4 font-[600]">
               <div className="">4 Days Delivery</div>
               <div className="flex flex-row gap-3 items-center">
@@ -97,22 +192,7 @@ const SellerServiceDetailsBody = () => {
       </div>
       <div className="flex flex-col max-w-[50rem] p-4">
         <div className="text-xl font-[600]">About Gig</div>
-        <div className="font-[400] text-[#62646A]">
-          Currently, WordPress powers 35% of the internet and has over 400
-          million people visiting their sites every month. With a diverse set of
-          features, WordPress is well suited to a wide range of users including
-          personal sites, blogs, e-commerce and business sites that have
-          advanced requirements. Filled with resources and downloads, this
-          course covers everything you need to know to start using wordPress
-          like a pro. You'll learn how to set up your website, add content
-          including pages and blog posts, select and customize a theme, add
-          widgets and plugins to expand your site's features, connect it to your
-          social networks and upload media including videos and images - all
-          without having to code! If you don’t already have a WordPress account,
-          all you need is an email address. Being so simple, there’s no reason
-          why you shouldn’t enroll now, taking advantage of the 25% Fiverr User
-          discount on WordPress, to get your website started today.
-        </div>
+        <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
       <AboutSellerServceDetails />
     </section>

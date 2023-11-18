@@ -29,6 +29,7 @@ export const adminCreateProductAction =
   ({
     name,
     category,
+    owner,
     description,
     total_stock,
     tag,
@@ -41,6 +42,7 @@ export const adminCreateProductAction =
     discount_percentage,
     vat_percentage,
     total_variants,
+    quantity,
     image,
   }: AdminCreateProduct) =>
   async (dispatch: Dispatch, getState: any) => {
@@ -57,6 +59,7 @@ export const adminCreateProductAction =
       let FD: FormData = new FormData();
       FD.append("name", name);
       FD.append("category", category);
+      owner && FD.append("owner", JSON.stringify(owner));
       FD.append("description", description);
       FD.append("total_stock", total_stock.toString()); //
       FD.append("tag", tag);
@@ -68,6 +71,7 @@ export const adminCreateProductAction =
       FD.append("discount_percentage", discount_percentage.toString());
       FD.append("vat_percentage", vat_percentage.toString());
       FD.append("total_variants", total_variants.toString());
+      FD.append("quantity", quantity.toString());
       if (image && Array.isArray(image) && image.length >= 1) {
         image.forEach((file) => FD.append("image", file as File));
       }

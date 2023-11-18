@@ -17,7 +17,7 @@ import { AdminGetProductType } from "../../../redux/types/products.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const AdminProductsBody = () => {
-  // fetch categories
+  // fetch products
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -132,7 +132,10 @@ const AdminProductsBody = () => {
                     <td className="text-[#A3A9B6]">{t.category}</td>
                     <td className="text-[#A3A9B6]">{t.total_stock}</td>
                     <td className="text-[#A3A9B6]">
-                      $<FormatNumber price={t.current_price} />
+                      $
+                      {t.current_price && (
+                        <FormatNumber price={t.current_price} />
+                      )}
                     </td>
                     <td>
                       {t.product_status === "hot" ? (

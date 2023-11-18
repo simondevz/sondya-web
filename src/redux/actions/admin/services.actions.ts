@@ -56,7 +56,6 @@ export const adminCreateServiceAction =
         type: ADMIN_CREATE_SERVICE_REQUEST,
       });
 
-      console.log(owner);
       const state1 = getState();
       const login: ReduxResponseType<LoginResponseType> = state1?.login;
 

@@ -1,15 +1,162 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { BsFillImageFill } from "react-icons/bs";
+import { MdOutlineAdd } from "react-icons/md";
 import { PiRocketBold, PiStackBold, PiStackSimpleBold } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import PulseLoader from "react-spinners/PulseLoader";
 import { circleWavy } from "../../../images";
+import { sellerCreateProductAction } from "../../../redux/actions/seller/seller-products.actions";
+import { SELLER_CREATE_PRODUCT_RESET } from "../../../redux/constants/seller/seller-products.constants";
+import { ReducersType } from "../../../redux/store";
+import { LoginResponseType } from "../../../redux/types/auth.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { AdminCreateProduct } from "../../../redux/types/products.types";
 
 const SellerPostProductBody = () => {
   const [status1] = useState<"closed" | "open" | "done">("done");
   const [status2] = useState<"closed" | "open" | "done">("open");
   const [status3] = useState<"closed" | "open" | "done">("closed");
   const [open, setOpen] = useState<string>("tab1");
-  const [done, setDone] = useState<boolean>(true);
+  const [done, setDone] = useState<boolean>(false);
+
+  // handle images
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newFiles: File[] = Array.from(files);
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+
+      // sending images
+      setFormData((prevState) => ({
+        ...prevState,
+        image: [...selectedFiles, ...newFiles],
+      }));
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files) {
+      const newFiles: File[] = Array.from(files);
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+
+      // sending images
+      setFormData((prevState) => ({
+        ...prevState,
+        image: [...selectedFiles, ...newFiles],
+      }));
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newFiles = [...selectedFiles];
+    newFiles.splice(index, 1);
+    setSelectedFiles(newFiles);
+
+    // sending images
+    setFormData((prevState: any) => ({
+      ...prevState,
+      image: newFiles,
+    }));
+  };
+
+  // handle images end
+
+  // get uploader details starts
+  let login = useSelector(
+    (state: ReducersType) => state?.login
+  ) as ReduxResponseType<LoginResponseType>;
+
+  // create categories
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState<AdminCreateProduct>({
+    name: "",
+    category: "",
+    description: "",
+    owner: {
+      id: login?.serverResponse?.data?.id,
+      username: login?.serverResponse?.data?.username as string,
+      email: login?.serverResponse?.data?.email,
+    },
+    total_stock: 0,
+    tag: "",
+    brand: "",
+    model: "",
+    current_price: 0,
+    quantity: 0,
+    product_status: "",
+    old_price: 0,
+    discount_percentage: 0,
+    vat_percentage: 0,
+    total_variants: 0,
+  });
+
+  const { name, description } = formData;
+
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  let sellerCreateProductRedux = useSelector(
+    (state: ReducersType) => state?.sellerCreateProduct
+  ) as ReduxResponseType;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (name && description) {
+      dispatch(sellerCreateProductAction(formData) as any);
+    }
+  };
+
+  useEffect(() => {
+    // adminCreateProductRedux?.error &&
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     timer: 5000,
+    //     text: adminCreateProductRedux?.error,
+    //   });
+    // adminCreateProductRedux?.success &&
+    //   Swal.fire({
+    //     icon: "success",
+    //     title: "Successful",
+    //     timer: 5000,
+    //     text: adminCreateProductRedux?.serverResponse?.message,
+    //   });
+    if (sellerCreateProductRedux?.success) {
+      setTimeout(function () {
+        // navigate("/seller/products");
+        // handleClose();
+        setDone(true);
+      }, 4000);
+    }
+
+    setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      dispatch({ type: SELLER_CREATE_PRODUCT_RESET });
+    }, 3000);
+  }, [sellerCreateProductRedux, dispatch, navigate]);
+  console.log(sellerCreateProductRedux?.error);
   return (
     <section className="flex flex-col">
       <div className="p-5 shadow-md rounded-md flex flex-col gap-6">
@@ -91,322 +238,419 @@ const SellerPostProductBody = () => {
             </div>
             <div className="">
               {open === "tab1" ? (
-                <Productstab1 />
+                // Tab 1
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2">
+                    <div className="font-[400]">Product Name</div>
+                    <input
+                      name="name"
+                      className="border p-2 rounded-md "
+                      type="text"
+                      placeholder="Ad Name"
+                      onChange={onChange}
+                      autoFocus={true}
+                    />
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Status</div>
+                      <select
+                        className="border p-2 rounded-md text-[#939AAD]"
+                        name="product_status"
+                        onChange={onChange}
+                      >
+                        <option value="">Select status</option>
+                        <option value="draft">draft</option>
+                        <option value="available">available</option>
+                        <option value="hot">hot</option>
+                        <option value="sold">sold</option>
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Subcategory</div>
+                      <select
+                        className="border p-2 rounded-md text-[#939AAD]"
+                        name="category"
+                        id=""
+                        onChange={onChange}
+                      >
+                        <option value="">Select...</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Brand</div>
+                      <input
+                        name="brand"
+                        className="border p-2 rounded-md "
+                        type="text"
+                        placeholder="Brand name"
+                        onChange={onChange}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Tags</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        name="tag"
+                        id=""
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex w-full justify-end gap-3">
+                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                      View posting rules
+                    </button>
+                    <button
+                      onClick={() => setOpen("tab2")}
+                      className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]"
+                    >
+                      <span>Next Steps</span>
+                      <AiOutlineArrowRight />
+                    </button>
+                  </div>
+                </div>
               ) : open === "tab2" ? (
-                <Productstab2 />
+                // Tab 2
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2">
+                    <div className="font-[400]">Description</div>
+                    <textarea
+                      className="border rounded-md text-[#939AAD] p-2"
+                      name="description"
+                      id=""
+                      cols={30}
+                      rows={4}
+                      onChange={onChange}
+                    >
+                      Product description
+                    </textarea>
+                  </div>
+                  <div className="text-center font-[600] text-xl">
+                    Prices data
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="font-[400]">Product Prices</div>
+                    <input
+                      className="border p-2 rounded-md "
+                      type="number"
+                      placeholder="Type base price here. . ."
+                      name="current_price"
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Old Price</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        name="old_price"
+                        type="number"
+                        placeholder="Type before price here. . ."
+                        onChange={onChange}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Discount percentage</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        type="number"
+                        name="discount_percentage"
+                        id=""
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Total Stock</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        name="total_stock"
+                        type="number"
+                        placeholder="total here. . ."
+                        onChange={onChange}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Vat Amount</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        name="vat_percentage"
+                        type="number"
+                        placeholder="total here. . ."
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="font-[400]">Upload Photos</div>
+                    <div
+                      // className="border-2 border-dashed border-gray-300 p-4"
+                      className="border-2 border-dashed border-[#E0E2E7] p-4 text-center rounded-md bg-[#F9F9FC]"
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                    >
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFileChange}
+                        multiple
+                        id="multiplePictureInput"
+                      />
+                      <label
+                        className="flex flex-col justify-center"
+                        htmlFor="multiplePictureInput"
+                      >
+                        {selectedFiles.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {selectedFiles.map((file, index) => (
+                              <div key={index} className="relative">
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={`Images ${index + 1}`}
+                                  className="w-20 h-20 object-cover rounded-lg"
+                                />
+                                <button
+                                  onClick={() => removeImage(index)}
+                                  className="absolute top-0 -right-1 bg-red-500 text-white py-1 px-2 rounded-full"
+                                >
+                                  &times;
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col justify-center gap-2">
+                            <div className="mx-auto p-2 bg-[#EDB842] rounded-md text-white">
+                              <BsFillImageFill />
+                            </div>
+                            <span className="text-[#858D9D] text-sm">
+                              Drag and drop image here, or click add image
+                            </span>
+                            <button className="bg-[#EDB84233] text-[#EDB842] px-4 py-2 rounded-lg mt-2 w-fit mx-auto">
+                              Browse
+                            </button>
+                          </div>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+                  <div className="flex w-full justify-end gap-3">
+                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                      View posting rules
+                    </button>
+                    <button
+                      onClick={() => setOpen("tab3")}
+                      className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]"
+                    >
+                      <span>Next Step</span>
+                      <AiOutlineArrowRight />
+                    </button>
+                  </div>
+                </div>
               ) : (
-                <Productstab3 setDone={setDone} />
+                // Tab 3
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 shadow-md rounded-md p-3">
+                    <div className="font-[600] text-lg text-[#1D1F2C]">
+                      Inventory
+                    </div>
+                    <div className="flex flex-wrap gap-3 items-stretch">
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
+                        <label htmlFor="">Model Number</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          name="model"
+                          type="text"
+                          placeholder="Product Model Number here. . ."
+                          onChange={onChange}
+                        />
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
+                        <label htmlFor="">Total variant</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          name="total_variants"
+                          type="number"
+                          placeholder="Total variant"
+                          onChange={onChange}
+                        />
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
+                        <label htmlFor="">Quantity</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          name="quantity"
+                          type="number"
+                          placeholder="Type product quantity here. . ."
+                          onChange={onChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 shadow-md rounded-md p-3">
+                    <div className="font-[600] text-lg text-[#1D1F2C]">
+                      Variation
+                    </div>
+                    <div className="w-full flex flex-row gap-3 items-end">
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
+                        <label htmlFor="">Variation Type</label>
+                        <select
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          name=""
+                          id=""
+                        >
+                          <option value="">Select a variation</option>
+                        </select>
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
+                        <label htmlFor="">Variation</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          type="text"
+                          placeholder="Variation. . ."
+                        />
+                      </div>
+                      <button className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md">
+                        <MdOutlineAdd />
+                      </button>
+                    </div>
+                    <div className="w-full flex flex-row gap-3 items-end">
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
+                        <label htmlFor="">Variation Type</label>
+                        <select
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          name=""
+                          id=""
+                        >
+                          <option value="">Select a variation</option>
+                        </select>
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
+                        <label htmlFor="">Variation</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          type="text"
+                          placeholder="Variation. . ."
+                        />
+                      </div>
+                      <button className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md">
+                        <MdOutlineAdd />
+                      </button>
+                    </div>
+                    <button className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md flex flex-row gap-2 items-center">
+                      <MdOutlineAdd />
+                      <span>Add Variant</span>
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-3 shadow-md rounded-md p-3">
+                    <div className="font-[600] text-lg text-[#1D1F2C]">
+                      Shiping
+                    </div>
+                    <div className="flex flex-row gap-3">
+                      {" "}
+                      <input type="checkbox" />{" "}
+                      <span className="text-[#EDB842]">
+                        This is a physical product
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-3 items-stretch">
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
+                        <label htmlFor="">Weight</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          type="text"
+                          placeholder="Product weight. . ."
+                        />
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
+                        <label htmlFor="">Height</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          type="text"
+                          placeholder="Height (cm). . ."
+                        />
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
+                        <label htmlFor="">Length</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          type="text"
+                          placeholder="Length (cm). . ."
+                        />
+                      </div>
+                      <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
+                        <label htmlFor="">Width</label>
+                        <input
+                          className="border p-2 rounded-md bg-[#F9F9FC]"
+                          type="text"
+                          placeholder="Width (cm). . ."
+                        />
+                      </div>
+                    </div>
+                    <div className="">
+                      {sellerCreateProductRedux?.error && (
+                        <div className="text-[#DB4444]">
+                          {sellerCreateProductRedux?.error}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex w-full justify-end gap-3">
+                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                      View posting rules
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]"
+                    >
+                      {sellerCreateProductRedux?.loading ? (
+                        <div className="" style={{ height: "25px" }}>
+                          <PulseLoader color="#ffffff" />
+                        </div>
+                      ) : (
+                        <span>Post Product</span>
+                      )}
+
+                      <AiOutlineArrowRight />
+                    </button>
+                  </div>
+                </form>
               )}
             </div>
           </>
         ) : (
-          <ProductsDone setDone={setDone} />
+          <div className="h-[60vh] w-full flex flex-col items-center justify-center text-center gap-2">
+            <img className="object-contain" src={circleWavy} alt="" />
+            <div className="text-2xl font-[700] playfair-display">
+              Your Product is successfully publish
+            </div>
+            <div className="text-[#767E94] text-sm font-[400] w-1/2">
+              Proin placerat risus non justo faucibus commodo. Nunc non neque
+              sit amet magna aliquam condimentum.
+            </div>
+            <div className="flex w-full justify-center gap-3">
+              <button
+                onClick={() => setDone(false)}
+                className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+              >
+                Go Back
+              </button>
+              <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
+                {" "}
+                <span>View Ads</span>
+                <AiOutlineArrowRight />
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </section>
-  );
-};
-
-const Productstab1 = () => {
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-2">
-        <div className="font-[400]">Product Name</div>
-        <input
-          className="border p-2 rounded-md "
-          type="text"
-          placeholder="Ad Name"
-        />
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Category</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Subcategory</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Brand</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Model</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Conditions</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Authenticity</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="font-[400]">Tags</div>
-        <input
-          className="border p-2 rounded-md "
-          type="text"
-          placeholder="Product tag..."
-        />
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Product Prices (USD)</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="Pick a good price - what would you pay?"
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Negotiable</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex w-full justify-end gap-3">
-        <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
-          View posting rules
-        </button>
-        <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
-          {" "}
-          <span>Next Steps</span>
-          <AiOutlineArrowRight />
-        </button>
-      </div>
-    </div>
-  );
-};
-const Productstab2 = () => {
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-2">
-        <div className="font-[400]">Description</div>
-        <textarea
-          className="border rounded-md text-[#939AAD] p-2"
-          name=""
-          id=""
-          cols={30}
-          rows={4}
-        >
-          Product description
-        </textarea>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="font-[400]">Feature (optional)</div>
-        <textarea
-          className="border rounded-md text-[#939AAD] p-2"
-          name=""
-          id=""
-          cols={30}
-          rows={4}
-        >
-          Write a feature in each line eg. Feature 1 Feature 2
-        </textarea>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="font-[400]">Upload Photos</div>
-        <textarea
-          className="border rounded-md text-[#939AAD] p-2"
-          name=""
-          id=""
-          cols={30}
-          rows={4}
-        ></textarea>
-      </div>
-      <div className="flex w-full justify-end gap-3">
-        <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
-          View posting rules
-        </button>
-        <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
-          <span>Next Step</span>
-          <AiOutlineArrowRight />
-        </button>
-      </div>
-    </div>
-  );
-};
-const Productstab3 = ({ setDone }: any) => {
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Phone Number</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="Phone Number"
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Backup Phone Number (Optional)</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="Phone Number"
-          />
-        </div>
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Email Address</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="Email address"
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Website Link (Optional)</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="your website url"
-          />
-        </div>
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Country</div>
-          <select
-            className="border p-2 rounded-md text-[#939AAD]"
-            name=""
-            id=""
-          >
-            <option value="">Select...</option>
-          </select>
-        </div>
-        <div className="flex flex-row gap-3 w-1/2">
-          <div className="flex flex-col gap-2 w-1/2">
-            <div className="font-[400]">City</div>
-            <select
-              className="border p-2 rounded-md text-[#939AAD]"
-              name=""
-              id=""
-            >
-              <option value="">Select...</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2 w-1/2">
-            <div className="font-[400]">State(Optional)</div>
-            <select
-              className="border p-2 rounded-md text-[#939AAD]"
-              name=""
-              id=""
-            >
-              <option value="">Select...</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Location</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="Your location"
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <div className="font-[400]">Map Location (Optional)</div>
-          <input
-            className="border p-2 rounded-md "
-            type="text"
-            placeholder="Map location"
-          />
-        </div>
-      </div>
-      <div className="flex w-full justify-end gap-3">
-        <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
-          View posting rules
-        </button>
-        <button
-          onClick={() => setDone(true)}
-          className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]"
-        >
-          {" "}
-          <span>Post Product</span>
-          <AiOutlineArrowRight />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const ProductsDone = ({ setDone }: any) => {
-  return (
-    <div className="h-[60vh] w-full flex flex-col items-center justify-center text-center gap-2">
-      <img className="object-contain" src={circleWavy} alt="" />
-      <div className="text-2xl font-[700] playfair-display">
-        Your Product is successfully publish
-      </div>
-      <div className="text-[#767E94] text-sm font-[400] w-1/2">
-        Proin placerat risus non justo faucibus commodo. Nunc non neque sit amet
-        magna aliquam condimentum.
-      </div>
-      <div className="flex w-full justify-center gap-3">
-        <button
-          onClick={() => setDone(false)}
-          className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
-        >
-          Go Back
-        </button>
-        <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
-          {" "}
-          <span>View Ads</span>
-          <AiOutlineArrowRight />
-        </button>
-      </div>
-    </div>
   );
 };
 
