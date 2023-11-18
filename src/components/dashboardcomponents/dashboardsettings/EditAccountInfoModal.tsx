@@ -16,6 +16,7 @@ import {
   adminUGetUserType,
   profileUpdateType,
 } from "../../../redux/types/users.types";
+import { BiSolidEditAlt } from "react-icons/bi";
 
 type editprofileType = {
   showModal: any;
@@ -36,6 +37,7 @@ const EditAccountInfoModal = ({
   // fetch data
   const dispatch = useDispatch();
 
+  const [selectedFile, setSelectedFile] = useState<any>(null);
   const [formData, setFormData] = useState<profileUpdateType>({
     first_name: "",
     last_name: "",
@@ -99,6 +101,33 @@ const EditAccountInfoModal = ({
     }
   }, [updateProfileRedux, dispatch]);
 
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files) {
+      setSelectedFile(files);
+      setFormData((prevState) => ({
+        ...prevState,
+        files,
+      }));
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      setSelectedFile(files);
+      setFormData({
+        ...formData,
+        files,
+      });
+    }
+  };
+
   return (
     <Modal
       className="modal top-[20%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"
@@ -116,8 +145,33 @@ const EditAccountInfoModal = ({
           </div>
         </div>
         <div className="py-6 px-3 flex flex-row gap-1 h-[60vh] md:h-auto overflow-y-auto">
-          <div className="w-1/6">
-            <img className="object-cover w-full" src={userImage} alt="" />
+          <div
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className="w-1/6 relative h-fit flex"
+          >
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+              id="pictureInput"
+            />
+            <label
+              className="flex flex-col justify-center"
+              htmlFor="pictureInput"
+            >
+              <img
+                src={
+                  selectedFile
+                    ? URL.createObjectURL(selectedFile?.[0])
+                    : userImage
+                }
+                alt="profile"
+                className="object-cover rounded-full w-20 h-20 "
+              />
+            </label>
+            <BiSolidEditAlt className="absolute top-12 right-4 text-white/80" />
           </div>
           <div className="flex flex-col gap-1 px-2 w-5/6">
             <div className="flex flex-col md:flex-row gap-1 w-full">
@@ -250,14 +304,14 @@ const EditAccountInfoModal = ({
                   />
                 </div>
               </div>
-              {/* </div> */}
-              <div className="">
-                {updateProfileRedux?.error && (
-                  <div className="text-[#DB4444]">
-                    {updateProfileRedux?.error}
-                  </div>
-                )}
-              </div>
+            </div>
+            {/* </div> */}
+            <div className="">
+              {updateProfileRedux?.error && (
+                <div className="text-[#DB4444]">
+                  {updateProfileRedux?.error}
+                </div>
+              )}
             </div>
           </div>
         </div>

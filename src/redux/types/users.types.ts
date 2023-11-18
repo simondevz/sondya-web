@@ -100,6 +100,7 @@ export type profileUpdateType = {
   zip_code: string;
   website_url: string;
   image?: ImageType[];
+  files?: any;
 };
 
 export type passwordUpdateType = {
