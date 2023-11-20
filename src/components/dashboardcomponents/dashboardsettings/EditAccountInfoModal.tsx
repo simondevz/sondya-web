@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { BiSolidEditAlt } from "react-icons/bi";
 import { Modal } from "react-overlays";
 import { useDispatch, useSelector } from "react-redux";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -16,7 +17,6 @@ import {
   adminUGetUserType,
   profileUpdateType,
 } from "../../../redux/types/users.types";
-import { BiSolidEditAlt } from "react-icons/bi";
 
 type editprofileType = {
   showModal: any;
@@ -168,10 +168,10 @@ const EditAccountInfoModal = ({
                     : userImage
                 }
                 alt="profile"
-                className="object-cover rounded-full w-20 h-20 "
+                className="object-cover rounded-full w-full h-20 "
               />
             </label>
-            <BiSolidEditAlt className="absolute top-12 right-4 text-white/80" />
+            <BiSolidEditAlt className="absolute top-9 left-7 text-center text-white/90 w-5 rounded-full text-xl" />
           </div>
           <div className="flex flex-col gap-1 px-2 w-5/6">
             <div className="flex flex-col md:flex-row gap-1 w-full">

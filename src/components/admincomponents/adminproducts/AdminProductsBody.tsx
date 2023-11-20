@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
@@ -21,55 +21,61 @@ const AdminProductsBody = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [products, setProducts] = useState<AdminGetProductType[]>([]);
+  // const [products, setProducts] = useState<AdminGetProductType[]>([]);
   const adminGetProductsRedux = useSelector(
     (state: ReducersType) => state?.adminGetAllProducts
   ) as ReduxResponseType<AdminGetProductType[]>;
-
-  useEffect(() => {
-    dispatch(adminGetProductsAction() as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (adminGetProductsRedux?.serverResponse.data) {
-      setProducts(adminGetProductsRedux?.serverResponse?.data);
-    }
-  }, [adminGetProductsRedux?.serverResponse, dispatch]);
 
   // delete products
   const adminDeleteProductsByIDRedux = useSelector(
     (state: ReducersType) => state?.adminDeleteProduct
   ) as ReduxResponseType<AdminGetProductType>;
 
-  const handleDelete = (id: string) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(adminDeleteProductAction({ id }) as any);
+  const products = useMemo(() => {
+    return adminGetProductsRedux?.serverResponse?.data;
+  }, [adminGetProductsRedux]);
 
-        if (!adminDeleteProductsByIDRedux.error) {
-          Swal.fire(
-            "Deleted!",
-            adminDeleteProductsByIDRedux.serverResponse.message,
-            "success"
-          );
-          setTimeout(() => {
-            dispatch(adminGetProductsAction() as any);
-          }, 1000);
-        } else {
-          Swal.fire("Deleted!", adminDeleteProductsByIDRedux?.error, "error");
+  // useEffect(() => {
+  //   if (adminGetProductsRedux?.serverResponse.data) {
+  //     setProducts(adminGetProductsRedux?.serverResponse?.data);
+  //   }
+  // }, [adminGetProductsRedux?.serverResponse, dispatch]);
+
+  const handleDelete = useCallback(
+    (id: string) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(adminDeleteProductAction({ id }) as any);
+
+          if (!adminDeleteProductsByIDRedux.error) {
+            Swal.fire(
+              "Deleted!",
+              adminDeleteProductsByIDRedux.serverResponse.message,
+              "success"
+            );
+            setTimeout(() => {
+              dispatch(adminGetProductsAction() as any);
+            }, 1000);
+          } else {
+            Swal.fire("Deleted!", adminDeleteProductsByIDRedux?.error, "error");
+          }
         }
-      }
-    });
-  };
+      });
+    },
+    [adminDeleteProductsByIDRedux, dispatch]
+  );
+
+  useEffect(() => {
+    dispatch(adminGetProductsAction() as any);
+  }, [dispatch]);
 
   return (
     <section>
@@ -119,7 +125,11 @@ const AdminProductsBody = () => {
                       <div className="flex flex-col md:flex-row gap-2">
                         <img
                           className="object-contain w-16"
-                          src={productImage1}
+                          src={
+                            t.image && t.image.length > 0
+                              ? t.image[0].url
+                              : productImage1
+                          }
                           alt=""
                         />
                         <div className="flex flex-col gap-2 text-sm">
