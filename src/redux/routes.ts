@@ -1,6 +1,6 @@
 // const BASE = process.env.PUBLIC_SERVER_API;
-// const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
-const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
+// const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
   // Authentication
