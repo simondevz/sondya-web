@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +17,7 @@ import {
   AdminGetProductType,
   AdminUpdateProduct,
 } from "../../../redux/types/products.types";
-import { DropImages } from "../adminaddproduct/AdminAddProductsBody";
+import { ImageType } from "../../../redux/types/users.types";
 
 const AdminEditProductBody = () => {
   // fetch data
@@ -42,6 +43,9 @@ const AdminEditProductBody = () => {
 
     id: id as string,
   });
+  // set the network image for display
+  let [networkimage1, setNetworkImage1] = useState<Array<string>>([]);
+  let [deleteImageId, setDeleteImageId] = useState<Array<string>>([]);
 
   const adminGetProductByIDRedux = useSelector(
     (state: ReducersType) => state?.adminGetByIdProduct
@@ -58,8 +62,89 @@ const AdminEditProductBody = () => {
         ...adminGetProductByIDRedux?.serverResponse?.data,
         id: id as string,
       });
+
+      // set the network image 2
+      if (
+        adminGetProductByIDRedux?.serverResponse?.data.image &&
+        adminGetProductByIDRedux?.serverResponse?.data.image?.length > 0
+      ) {
+        let networkimage: Array<string> = [];
+        adminGetProductByIDRedux?.serverResponse?.data.image.forEach((image) =>
+          networkimage.push(image.url as string)
+        );
+        setNetworkImage1(networkimage);
+      }
     }
   }, [adminGetProductByIDRedux?.serverResponse, dispatch, id]);
+
+  // update image
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newFiles: File[] = Array.from(files);
+
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+
+      // sending images
+      setFormData((prevState) => ({
+        ...prevState,
+        image: [...selectedFiles, ...newFiles],
+      }));
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files) {
+      const newFiles: File[] = Array.from(files);
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+
+      // sending images
+      setFormData((prevState) => ({
+        ...prevState,
+        image: [...selectedFiles, ...newFiles],
+      }));
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newFiles = [...selectedFiles];
+    newFiles.splice(index, 1);
+    setSelectedFiles(newFiles);
+
+    // sending images
+    setFormData((prevState) => ({
+      ...prevState,
+      image: newFiles,
+    }));
+  };
+
+  const removeNetworkImage = (index: number) => {
+    const newFiles = [...networkimage1];
+    newFiles.splice(index, 1);
+    setNetworkImage1(newFiles);
+
+    setTimeout(() => {
+      // add to array
+      let addPublic = formData.image as ImageType[];
+      // Update the state by adding the new identifier to the array
+      if (addPublic?.length > 0 && addPublic !== undefined) {
+        setDeleteImageId((prevIds) => [
+          ...prevIds,
+          addPublic[index]?.public_id,
+        ]);
+      }
+    }, 1000);
+  };
+
+  //update image end
 
   // update data
   const onChange = (
@@ -81,7 +166,7 @@ const AdminEditProductBody = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData) {
-      dispatch(adminUpdateProductAction(formData) as any);
+      dispatch(adminUpdateProductAction(formData, deleteImageId) as any);
     }
   };
 
@@ -93,6 +178,7 @@ const AdminEditProductBody = () => {
         timer: 5000,
         text: adminUpdateProductRedux?.error,
       });
+    adminUpdateProductRedux?.error && setDeleteImageId([]);
     adminUpdateProductRedux?.success &&
       Swal.fire({
         icon: "success",
@@ -107,11 +193,11 @@ const AdminEditProductBody = () => {
       setTimeout(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         dispatch({ type: ADMIN_UPDATE_PRODUCT_RESET });
+        setNetworkImage1([]);
+        setDeleteImageId([]);
       }, 2000);
     }
   }, [adminUpdateProductRedux, dispatch, id]);
-
-  // console.log(formData);
 
   return (
     <section>
@@ -183,7 +269,118 @@ const AdminEditProductBody = () => {
               </div>
               <div className="flex flex-col shadow-md rounded-md p-3 gap-3">
                 <div className="font-[600] text-lg text-[#1D1F2C]">Media</div>
-                <DropImages />
+                {/* Image handling starts */}
+                <div
+                  // className="border-2 border-dashed border-gray-300 p-4"
+                  className="border-2 border-dashed border-[#E0E2E7] p-4 text-center rounded-md bg-[#F9F9FC]"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    multiple
+                    id="multiplePictureInput"
+                  />
+                  <label
+                    className="flex flex-col justify-center"
+                    htmlFor="multiplePictureInput"
+                  >
+                    {selectedFiles.length > 0 && networkimage1.length <= 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedFiles.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Images ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-lg"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              className="absolute top-0 -right-1 bg-red-500 text-white py-1 px-2 rounded-full"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : selectedFiles.length <= 0 &&
+                      networkimage1.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {networkimage1.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={file}
+                              alt={`Images ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-lg"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeNetworkImage(index)}
+                              className="absolute top-0 -right-1 bg-red-500 text-white py-1 px-2 rounded-full"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : selectedFiles.length > 0 && networkimage1.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedFiles.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Images ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-lg"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              className="absolute top-0 -right-1 bg-red-500 text-white py-1 px-2 rounded-full"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                        {networkimage1.map((file, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={file}
+                              alt={`Images ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-lg"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeNetworkImage(index)}
+                              className="absolute top-0 -right-1 bg-red-500 text-white py-1 px-2 rounded-full"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col justify-center gap-2">
+                        <div className="mx-auto p-2 bg-[#EDB842] rounded-md text-white">
+                          <BsFillImageFill />
+                        </div>
+                        <span className="text-[#858D9D] text-sm">
+                          Drag and drop image here, or click add image
+                        </span>
+                        <button
+                          type="button"
+                          className="bg-[#EDB84233] text-[#EDB842] px-4 py-2 rounded-lg mt-2 w-fit mx-auto"
+                        >
+                          Browse
+                        </button>
+                      </div>
+                    )}
+                  </label>
+                </div>
+                {/* Image handling ends */}
               </div>
             </div>
             <div className="flex flex-row lg:flex-col gap-3 rounded-md p-1 w-full lg:w-1/4 xl:w-1/5 lg:flex-grow">

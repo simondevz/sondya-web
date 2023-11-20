@@ -129,7 +129,7 @@ const SellerServiceBody = () => {
                 className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
               >
                 <img
-                  className="rounded-t-md"
+                  className="rounded-t-md h-40"
                   src={
                     t.image && t.image.length >= 1
                       ? t.image[0].url

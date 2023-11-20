@@ -42,6 +42,7 @@ export type AdminUpdateProduct = {
 
   // product id
   id: string;
+  // deleteImageId?: string[];
 };
 
 export type AdminGetProductType = {
