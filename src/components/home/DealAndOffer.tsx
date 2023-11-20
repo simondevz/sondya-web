@@ -60,7 +60,10 @@ const DealAndOffer = () => {
         <div className="flex flex-wrap w-full">
           {inDoorItems.map((t, i) => {
             return (
-              <div className="flex flex-row gap-2 border p-3 flex-grow max-w-[300px]">
+              <div
+                key={i}
+                className="flex flex-row gap-2 border p-3 flex-grow max-w-[300px]"
+              >
                 <div className="">
                   <div className="font-[500] text-[#1C1C1C] playfair-display">
                     {t.name}
@@ -91,7 +94,10 @@ const DealAndOffer = () => {
         <div className="flex flex-wrap w-full">
           {outDoorItems.map((t, i) => {
             return (
-              <div className="flex flex-row gap-2 border p-3 flex-grow max-w-[300px]">
+              <div
+                key={i}
+                className="flex flex-row gap-2 border p-3 flex-grow max-w-[300px]"
+              >
                 <div className="">
                   <div className="font-[500] text-[#1C1C1C] playfair-display">
                     {t.name}

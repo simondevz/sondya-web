@@ -19,7 +19,7 @@ const FeatureBrand = () => {
       <div className="flex flex-row gap-3 whitespace-nowrap overflow-x-scroll">
         {featureBrandItems.map((t, i) => {
           return (
-            <div className="w-3/5">
+            <div key={i} className="w-3/5">
               <img className="w-full" src={t.image} alt="" />
             </div>
           );

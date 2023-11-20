@@ -12,7 +12,10 @@ const LastComponent = () => {
         <div className="flex flex-col gap-2">
           {limitedproductsdata.map((t, i) => {
             return (
-              <div className="flex flex-row border p-3 justify-between gap-2">
+              <div
+                key={i}
+                className="flex flex-row border p-3 justify-between gap-2"
+              >
                 <img className="w-1/2 object-cover" src={t.image} alt="" />
                 <div className="flex flex-col justify-around">
                   <div className="font-[600] text-[11px] md:text-[13px]">
@@ -34,7 +37,10 @@ const LastComponent = () => {
         <div className="flex flex-col gap-2">
           {limitedproductsdata.map((t, i) => {
             return (
-              <div className="flex flex-row border p-3 justify-between gap-2">
+              <div
+                key={i}
+                className="flex flex-row border p-3 justify-between gap-2"
+              >
                 <img className="w-1/2 object-cover" src={t.image} alt="" />
                 <div className="flex flex-col justify-around">
                   <div className="font-[600] text-[11px] md:text-[13px]">
@@ -54,7 +60,10 @@ const LastComponent = () => {
         <div className="flex flex-col gap-2">
           {limitedproductsdata.map((t, i) => {
             return (
-              <div className="flex flex-row border p-3 justify-between gap-2">
+              <div
+                key={i}
+                className="flex flex-row border p-3 justify-between gap-2"
+              >
                 <img className="w-1/2 object-cover" src={t.image} alt="" />
                 <div className="flex flex-col justify-around">
                   <div className="font-[600] text-[11px] md:text-[13px]">
@@ -76,7 +85,10 @@ const LastComponent = () => {
         <div className="flex flex-col gap-2">
           {limitedproductsdata.map((t, i) => {
             return (
-              <div className="flex flex-row border p-3 justify-between gap-2">
+              <div
+                key={i}
+                className="flex flex-row border p-3 justify-between gap-2"
+              >
                 <img className="w-1/2 object-cover" src={t.image} alt="" />
                 <div className="flex flex-col justify-around">
                   <div className="font-[600] text-[11px] md:text-[13px]">
