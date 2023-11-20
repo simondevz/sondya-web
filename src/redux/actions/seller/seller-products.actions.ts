@@ -105,25 +105,29 @@ export const sellerCreateProductAction =
   };
 
 export const sellerUpdateProductAction =
-  ({
-    name,
-    category,
-    description,
-    total_stock,
-    tag,
-    brand,
-    model,
-    current_price,
-    product_status,
+  (
+    {
+      name,
+      category,
+      description,
+      total_stock,
+      tag,
+      brand,
+      model,
+      current_price,
+      product_status,
 
-    old_price,
-    discount_percentage,
-    vat_percentage,
-    total_variants,
-    quantity,
+      old_price,
+      discount_percentage,
+      vat_percentage,
+      total_variants,
+      quantity,
+      image,
 
-    id,
-  }: AdminUpdateProduct) =>
+      id,
+    }: AdminUpdateProduct,
+    deleteImageId: string[]
+  ) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -133,32 +137,39 @@ export const sellerUpdateProductAction =
       const state = getState();
       const login: ReduxResponseType<LoginResponseType> = state?.login;
 
+      // load data for flight
+      let FD: FormData = new FormData();
+      FD.append("name", name);
+      FD.append("category", category);
+
+      FD.append("description", description);
+      total_stock && FD.append("total_stock", total_stock.toString()); //
+      FD.append("tag", tag);
+      FD.append("brand", brand);
+      FD.append("model", model);
+      current_price && FD.append("current_price", current_price.toString());
+      FD.append("product_status", product_status);
+      old_price && FD.append("old_price", old_price.toString());
+      discount_percentage &&
+        FD.append("discount_percentage", discount_percentage.toString());
+      vat_percentage && FD.append("vat_percentage", vat_percentage.toString());
+      total_variants && FD.append("total_variants", total_variants.toString());
+      FD.append("deleteImageId", JSON.stringify(deleteImageId));
+      quantity && FD.append("quantity", quantity.toString());
+      if (image && Array.isArray(image) && image.length >= 1) {
+        image.forEach((file) => FD.append("image", file as File));
+      }
+
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
 
       const { data } = await axios.put(
         API_ROUTES?.sellerProducts?.update + id,
-        {
-          name,
-          category,
-          description,
-          total_stock,
-          tag,
-          brand,
-          model,
-          current_price,
-          product_status,
-
-          old_price,
-          discount_percentage,
-          vat_percentage,
-          total_variants,
-          quantity,
-        },
+        FD,
         config
       );
       dispatch({

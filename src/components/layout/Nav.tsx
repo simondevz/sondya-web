@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { BsBoxSeam, BsTruck } from "react-icons/bs";
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaUser } from "react-icons/fa";
 import { GoVerified } from "react-icons/go";
 import {
   MdFavoriteBorder,
   MdLocationPin,
   MdPersonOutline,
 } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/Nav.css";
 import { Category } from "../../data/CategoryData";
 import { LogoSide, LogoSideBlack } from "../../images/logo";
+import { ReducersType } from "../../redux/store";
+import { LoginResponseType } from "../../redux/types/auth.types";
+import { ReduxResponseType } from "../../redux/types/general.types";
 import {
   Dropdown,
   DropdownMenuBar,
@@ -54,10 +58,11 @@ const Nav = () => {
     flexRef.current.className === "hidden md:hidden"
       ? (flexRef.current.className = "md:hidden")
       : (flexRef.current.className = "hidden md:hidden");
-
-    // console.log(openRef.current.className);
-    // console.log(flexRef.current.className);
   };
+
+  const login = useSelector(
+    (state: ReducersType) => state?.login
+  ) as ReduxResponseType<LoginResponseType[]>;
 
   return (
     <div className="z-40 bg-white w-full flex flex-col flex-grow shadow-sm">
@@ -124,7 +129,7 @@ const Nav = () => {
               <span className="text-[#EDB842] text-2xl">
                 <MdPersonOutline />
               </span>
-              Login
+              {login.serverResponse.success ? "Dashboard" : "Login"}
             </div>
           </Link>
           {/* <div className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2"> */}
@@ -222,16 +227,30 @@ const Nav = () => {
             </span>
             <span>Contact Us</span>
           </Link>
-          <div className=" border-y-2  border-[#5F6C72] flex flex-row w-full justify-around">
-            <Link to={"/register"}>
-              <div className="py-4">Sign Up</div>
+          {!login.serverResponse.success && (
+            <div className=" border-y-2  border-[#5F6C72] flex flex-row w-full justify-around">
+              <Link to={"/register"}>
+                <div className="py-4">Sign Up</div>
+              </Link>
+              <Link to={"/login"}>
+                <div className="border-l-2 border-[#5F6C72] py-4 ps-14">
+                  Login
+                </div>
+              </Link>{" "}
+            </div>
+          )}
+          {login.serverResponse.success && (
+            <Link
+              className="text-xl flex space-x-3 items-center ps-8"
+              onClick={skrill}
+              to={"/login"}
+            >
+              <span>
+                <FaUser />
+              </span>
+              <span>Dasboard</span>
             </Link>
-            <Link to={"/login"}>
-              <div className="border-l-2 border-[#5F6C72] py-4 ps-14">
-                Login
-              </div>
-            </Link>{" "}
-          </div>
+          )}
         </div>
       </div>
     </div>
