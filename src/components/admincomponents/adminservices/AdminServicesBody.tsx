@@ -130,7 +130,13 @@ const AdminServicesBody = () => {
                 key={i}
                 className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
               >
-                <img className="rounded-t-md" src={carRepair} alt="" />
+                <img
+                  className="rounded-t-md h-48 object-cover"
+                  src={
+                    t.image && t.image.length > 0 ? t.image[0].url : carRepair
+                  }
+                  alt=""
+                />
                 <div className="flex gap-3 px-3">
                   <div className="p-3 rounded-full bg-[#EDB842] w-fit h-fit"></div>
                   <div className="">{t.user}</div>

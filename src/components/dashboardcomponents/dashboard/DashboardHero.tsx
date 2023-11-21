@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Facebook,
   Google,
@@ -12,12 +14,31 @@ import {
   Whatsapp,
   userImage,
 } from "../../../images/dashboard";
+import { GetUserProfileAction } from "../../../redux/actions/userDashboard/profile.actions";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { adminUGetUserType } from "../../../redux/types/users.types";
 
 const DashboardHero = () => {
+  // fetch data
+  const dispatch = useDispatch();
+
+  const getProfileDetailsRedux = useSelector(
+    (state: ReducersType) => state?.getProfile
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  const userData = useMemo(() => {
+    return getProfileDetailsRedux?.serverResponse?.data;
+  }, [getProfileDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(GetUserProfileAction() as any);
+  }, [dispatch]);
+
   return (
     <section className="flex flex-col gap-3">
       <div className="text-[#EDB842] playfair-display font-[900] text-xl">
-        Hello, Ade
+        Hello, {userData.username === "" ? userData.email : userData.username}
       </div>
       <div className="max-w-[35rem] text-[#475156] font-[500]">
         From your account dashboard. you can easily check & view your Recent
@@ -42,21 +63,31 @@ const DashboardHero = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <div className="text-[#191C1F]">Adekunle Gilbert</div>
-                <div className="text-[#5F6C72]">Dhaka - 1207, Bangladesh</div>
+                <div className="text-[#191C1F]">
+                  {userData?.last_name} {userData?.first_name}
+                </div>
+                <div className="text-[#5F6C72]">{userData?.address}</div>
               </div>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Email:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#191C1F]">Username:</span>
+              <span className="text-[#5F6C72]"> {userData.username}</span>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Sec Email:</span>
-              <span className="text-[#5F6C72]">kevin12345@gmail.com</span>
+              <span className="text-[#191C1F]">Email:</span>
+              <span className="text-[#5F6C72]"> {userData?.email}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Phone:</span>
-              <span className="text-[#5F6C72]">+234 1234 567 890</span>
+              <span className="text-[#5F6C72]">{userData.phone_number}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">Country:</span>
+              <span className="text-[#5F6C72]">{userData.country}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">State:</span>
+              <span className="text-[#5F6C72]">{userData.state}</span>
             </div>
           </div>
         </div>
@@ -64,19 +95,18 @@ const DashboardHero = () => {
           <div className="p-3 border text-[#191C1F]">Billing address</div>
           <div className="flex flex-col gap-2 p-3 border flex-grow">
             <div className="">
-              <div className="text-[#191C1F]">Adekunle Gilbert</div>
-              <div className="text-[#5F6C72]">
-                East Ikoyi Bazar, Word No. 04, Road No. 13/x, House no. 1320/C,
-                Flat No. 5D, Ikeja - 1200, Lagos
+              <div className="text-[#191C1F]">
+                {userData?.last_name} {userData?.first_name}
               </div>
+              <div className="text-[#5F6C72]">{userData?.address}</div>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Phone:</span>
-              <span className="text-[#5F6C72]">+234 1234 567 890</span>
+              <span className="text-[#5F6C72]">{userData?.phone_number}</span>
             </div>
             <div className="">
               <span className="text-[#191C1F]">Email:</span>
-              <span className="text-[#5F6C72]"> ade.gilbert@gmail.com</span>
+              <span className="text-[#5F6C72]"> {userData?.email}</span>
             </div>
           </div>
         </div>
