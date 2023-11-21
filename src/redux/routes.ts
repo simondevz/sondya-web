@@ -1,6 +1,6 @@
 // const BASE = process.env.PUBLIC_SERVER_API;
-const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
-// const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+// const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
+const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
   // Authentication
@@ -81,6 +81,15 @@ export const API_ROUTES = {
     update: BASE + "/admin/testimonial/update", // PUT
     approve: BASE + "/admin/testimonial/approve/", // PUT :id
     delete: BASE + "/admin/testimonial/delete/", // DELETE :id
+  },
+
+  // Admin
+  adminGroupchats: {
+    create: BASE + "/admin/groupchat/create", // POST - adminGroupchatType
+    getChats: BASE + "/admin/groupchat/list/", // GET :id - admin's id
+    delete: BASE + "/admin/groupchat/delete/", // DELETE :id - the groups id
+    activate: BASE + "/admin/groupchat/activate/", // PUT :id - the groups id
+    suspend: BASE + "/admin/groupchat/suspend/", // PUT :id - the groups id
   },
 
   // Users

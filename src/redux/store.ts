@@ -70,6 +70,13 @@ import {
   adminGetUnapprovedTestimonialsReducer,
   adminUpdateTestimonialsReducer,
 } from "./reducers/admin/testimonials.reducers";
+import {
+  adminActivateGroupchatReducer,
+  adminCreateGroupchatReducer,
+  adminDeleteGroupchatReducer,
+  adminGetGroupchatReducer,
+  adminSuspendGroupchatReducer,
+} from "./reducers/admin/groupchat.reducers";
 
 export type ReducersType = {
   contactus: ReduxResponseType;
@@ -134,6 +141,13 @@ export type ReducersType = {
   adminUpdateTestimonial: ReduxResponseType;
   adminDeleteTestimonial: ReduxResponseType;
   adminGetUnapprovedTestimonial: ReduxResponseType;
+
+  // admin && groupchats
+  adminCreateGroupchat: ReduxResponseType;
+  adminGetGroupchats: ReduxResponseType;
+  adminDeleteGroupchat: ReduxResponseType;
+  adminSuspendGroupchat: ReduxResponseType;
+  adminActivateGroupchat: ReduxResponseType;
 
   // user queries
   testimonial: ReduxResponseType;
@@ -202,6 +216,13 @@ const reducer = combineReducers<ReducersType>({
   adminApproveTestimonial: adminApproveTestimonialsReducer,
   adminDeleteTestimonial: adminDeleteTestimonialsReducer,
   adminUpdateTestimonial: adminUpdateTestimonialsReducer,
+
+  // admin && groupchats
+  adminCreateGroupchat: adminCreateGroupchatReducer,
+  adminGetGroupchats: adminGetGroupchatReducer,
+  adminDeleteGroupchat: adminDeleteGroupchatReducer,
+  adminSuspendGroupchat: adminSuspendGroupchatReducer,
+  adminActivateGroupchat: adminActivateGroupchatReducer,
 
   // user queries
   testimonial: testimonialReducer,

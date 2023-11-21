@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BiSolidBadgeCheck } from "react-icons/bi";
 import { BsBookmarkCheck, BsCart } from "react-icons/bs";
+import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 import {
   MdLogout,
@@ -9,12 +10,15 @@ import {
   MdProductionQuantityLimits,
 } from "react-icons/md";
 import { PiStackBold } from "react-icons/pi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
 import { logoutAction } from "../../redux/actions/auth.actions";
 
 const AdminDashboardNav = () => {
-  const [index, setIndex] = useState<string>("seller-dashboard");
+  const location = useLocation();
+  const [index, setIndex] = useState<string>(
+    location?.state?.index || "seller-dashboard"
+  );
 
   // for logout
   const navigate = useNavigate();
@@ -34,7 +38,7 @@ const AdminDashboardNav = () => {
           index === "admin-dashboard" && "bg-[#EDB842] text-white"
         }`}
         onClick={() => {
-          navigate("/admin/dashboard");
+          navigate("/admin/dashboard", { state: { index: "admin-dashboard" } });
           setIndex("admin-dashboard");
         }}
       >
@@ -48,7 +52,9 @@ const AdminDashboardNav = () => {
           index === "admin-business-analytics" && "bg-[#EDB842] text-white"
         }`}
         onClick={() => {
-          navigate("/admin/analytics");
+          navigate("/admin/analytics", {
+            state: { index: "admin-business-analytics" },
+          });
           setIndex("admin-business-analytics");
         }}
       >
@@ -63,7 +69,7 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-products");
-          navigate("/admin/products");
+          navigate("/admin/products", { state: { index: "admin-products" } });
         }}
       >
         <span>
@@ -77,7 +83,7 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-services");
-          navigate("/admin/services");
+          navigate("/admin/services", { state: { index: "admin-services" } });
         }}
       >
         <span>
@@ -91,7 +97,7 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-categories");
-          navigate("/admin/category");
+          navigate("/admin/category", { state: { index: "admin-categories" } });
         }}
       >
         <span>
@@ -105,7 +111,7 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-orders");
-          navigate("/admin/orders");
+          navigate("/admin/orders", { state: { index: "admin-orders" } });
         }}
       >
         <span>
@@ -121,7 +127,7 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-users");
-          navigate("/admin/users");
+          navigate("/admin/users", { state: { index: "admin-users" } });
         }}
       >
         <span>
@@ -135,13 +141,31 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-testimonial");
-          navigate("/admin/testimonial");
+          navigate("/admin/testimonial", {
+            state: { index: "admin-testimonial" },
+          });
         }}
       >
         <span>
           <BiSolidBadgeCheck />
         </span>{" "}
         <span className="whitespace-nowrap">Testimonial</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-group-chats" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("admin-group-chats");
+          navigate("/admin/groupchat/list", {
+            state: { index: "admin-group-chats" },
+          });
+        }}
+      >
+        <span>
+          <BsFillChatSquareTextFill />
+        </span>{" "}
+        <span className="whitespace-nowrap">Group Chats</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
