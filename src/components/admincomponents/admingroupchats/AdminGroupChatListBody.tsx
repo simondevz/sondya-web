@@ -124,7 +124,7 @@ function AdminGroupChatListBody() {
                 <li
                   key={groupchat._id}
                   className={
-                    (index >= pagination * 1 && index < 10 * pagination
+                    ((Math.ceil(index / 10) || 1) === pagination
                       ? "flex "
                       : "hidden ") +
                     " w-full shadow-md shadow-[#EDB842] rounded-lg justify-between bg-[#F5F5F594] px-6 py-2"
