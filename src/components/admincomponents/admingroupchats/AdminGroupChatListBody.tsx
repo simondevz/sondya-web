@@ -26,6 +26,7 @@ import { PulseLoader } from "react-spinners";
 function AdminGroupChatListBody() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showMenuId, setShowMenuId] = useState<string>("");
 
   const adminGetChatsRedux = useSelector(
     (state: ReducersType) => state?.adminGetGroupchats
@@ -47,8 +48,8 @@ function AdminGroupChatListBody() {
     adminGetChatsRedux?.serverResponse?.data?.numberOfChats;
   const [startIndex, setStartIndex] = useState<number>(0); // start index for the buttons at the buttom of the page
   const [pagination, setPagination] = useState<number>(1); // currently selected page
-  const numberOfPages: number = Math.ceil(numberOfGroups / 10);
-  console.log(adminGetChatsRedux);
+  const numberOfPages: number = Math.ceil(numberOfGroups / 10) || 1;
+  console.log(numberOfPages);
 
   const [deleting, setDeleting] = useState<string>("");
   const [suspending, setSuspending] = useState<string>("");
@@ -119,124 +120,207 @@ function AdminGroupChatListBody() {
         {adminGetChatsRedux?.serverResponse?.data?.chats &&
           adminGetChatsRedux?.serverResponse?.data?.chats.map(
             (groupchat: adminGroupChatType, index: number) => {
-              if (index < 10)
-                return (
-                  <li
-                    key={groupchat._id}
-                    className="flex w-full shadow-md shadow-[#EDB842] rounded-lg justify-between bg-[#F5F5F594] px-6 py-2"
-                  >
-                    <div className="flex gap-2">
-                      <span className="flex my-auto">
-                        <img
-                          src={groupchat?.image?.[0]?.url || logo}
-                          alt="logo"
-                          className="object-cover w-16 h-16"
-                        />
-                      </span>
-                      <span className="font-semibold text-[1.2rem] my-auto">
-                        {groupchat?.name}
-                      </span>
-                    </div>
+              return (
+                <li
+                  key={groupchat._id}
+                  className={
+                    (index >= pagination * 1 && index < 10 * pagination
+                      ? "flex "
+                      : "hidden ") +
+                    " w-full shadow-md shadow-[#EDB842] rounded-lg justify-between bg-[#F5F5F594] px-6 py-2"
+                  }
+                >
+                  <div className="flex gap-2">
+                    <span className="flex my-auto">
+                      <img
+                        src={groupchat?.image?.[0]?.url || logo}
+                        alt="logo"
+                        className="object-cover w-16 h-16"
+                      />
+                    </span>
+                    <span className="font-semibold text-[1.2rem] my-auto">
+                      {groupchat?.name}
+                    </span>
+                  </div>
 
-                    <div className="flex relative gap-4 my-auto mx-2">
-                      <button className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#EDB842]">
-                        View Details
-                      </button>
-                      {groupchat?.status === "suspended" && (
-                        <button
-                          onClick={() => {
-                            setActivating(groupchat?._id || "");
-                            dispatch(
-                              adminActivateGroupchatAction(
-                                groupchat?._id || ""
-                              ) as any
-                            );
-                          }}
-                          className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#4CE13F]"
-                        >
-                          {adminActivateChatsRedux?.loading &&
-                          activating === groupchat?._id ? (
-                            <div className="" style={{ height: "25px" }}>
-                              <PulseLoader color="#ffffff" />
-                            </div>
-                          ) : (
-                            "Activate"
-                          )}
-                        </button>
-                      )}
-                      {groupchat?.status === "active" && (
-                        <button
-                          onClick={() => {
-                            setSuspending(groupchat?._id || "");
-                            dispatch(
-                              adminSuspendGroupchatAction(
-                                groupchat?._id || ""
-                              ) as any
-                            );
-                          }}
-                          className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-[#EDB842] bg-[#EDB84233]"
-                        >
-                          {adminSuspendChatsRedux?.loading &&
-                          suspending === groupchat?._id ? (
-                            <div className="" style={{ height: "25px" }}>
-                              <PulseLoader color="#ffffff" />
-                            </div>
-                          ) : (
-                            "Suspend"
-                          )}
-                        </button>
-                      )}
+                  <div className="flex relative gap-4 my-auto mx-2">
+                    <button
+                      onClick={() => {
+                        navigate("/admin/groupchat/details", {
+                          state: { gruopDetails: groupchat },
+                        });
+                      }}
+                      className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#EDB842]"
+                    >
+                      View Details
+                    </button>
+                    {groupchat?.status === "suspended" && (
                       <button
                         onClick={() => {
-                          setDeleting(groupchat?._id || "");
+                          setActivating(groupchat?._id || "");
                           dispatch(
-                            adminDeleteGroupchatAction(
+                            adminActivateGroupchatAction(
                               groupchat?._id || ""
                             ) as any
                           );
                         }}
-                        className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#EA4335]"
+                        className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#4CE13F]"
                       >
-                        {adminDeleteChatsRedux?.loading &&
-                        deleting === groupchat?._id ? (
+                        {adminActivateChatsRedux?.loading &&
+                        activating === groupchat?._id ? (
                           <div className="" style={{ height: "25px" }}>
                             <PulseLoader color="#ffffff" />
                           </div>
                         ) : (
-                          "Delete"
+                          "Activate"
                         )}
                       </button>
-
-                      <button className="flex md:hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#EDB842]">
-                        <span>Options</span>
-                        <MdArrowDropDown className="my-auto" />
+                    )}
+                    {groupchat?.status === "active" && (
+                      <button
+                        onClick={() => {
+                          setSuspending(groupchat?._id || "");
+                          dispatch(
+                            adminSuspendGroupchatAction(
+                              groupchat?._id || ""
+                            ) as any
+                          );
+                        }}
+                        className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-[#EDB842] bg-[#EDB84233]"
+                      >
+                        {adminSuspendChatsRedux?.loading &&
+                        suspending === groupchat?._id ? (
+                          <div className="" style={{ height: "25px" }}>
+                            <PulseLoader color="#ffffff" />
+                          </div>
+                        ) : (
+                          "Suspend"
+                        )}
                       </button>
-                      <ul className="hidden flex-col absolute bg-white rounded-md gap-2 p-2">
+                    )}
+                    <button
+                      onClick={() => {
+                        setDeleting(groupchat?._id || "");
+                        dispatch(
+                          adminDeleteGroupchatAction(
+                            groupchat?._id || ""
+                          ) as any
+                        );
+                      }}
+                      className="md:flex hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#EA4335]"
+                    >
+                      {adminDeleteChatsRedux?.loading &&
+                      deleting === groupchat?._id ? (
+                        <div className="" style={{ height: "25px" }}>
+                          <PulseLoader color="#ffffff" />
+                        </div>
+                      ) : (
+                        "Delete"
+                      )}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (!showMenuId) setShowMenuId(groupchat._id || "");
+                        if (showMenuId) setShowMenuId("");
+                      }}
+                      className="flex md:hidden px-4 py-[0.35rem] rounded-md font-semibold text-[0.875rem] text-white bg-[#EDB842]"
+                    >
+                      <span>Options</span>
+                      <MdArrowDropDown className="my-auto" />
+                    </button>
+                    <ul
+                      className={
+                        (showMenuId === groupchat?._id ? "flex " : "hidden ") +
+                        " flex-col absolute bg-white rounded-md gap-2 p-2 z-50 top-[2.25rem] left-[-1.25rem]"
+                      }
+                    >
+                      <li>
+                        <button
+                          onClick={() => {
+                            navigate("/admin/groupchat/details", {
+                              state: { gruopDetails: groupchat },
+                            });
+                          }}
+                          className="rounded-lg whitespace-nowrap px-4 py-[0.35rem] flex font-semibold w-full hover:bg-gray-300/40"
+                        >
+                          View Details
+                        </button>
+                      </li>
+                      {groupchat?.status === "suspended" && (
                         <li>
-                          <button className="rounded-lg px-4 py-[0.35rem] flex font-semibold w-full hover:bg-gray-300/40">
-                            View Details
+                          <button
+                            onClick={() => {
+                              setActivating(groupchat?._id || "");
+                              dispatch(
+                                adminActivateGroupchatAction(
+                                  groupchat?._id || ""
+                                ) as any
+                              );
+                            }}
+                            className="rounded-lg whitespace-nowrap px-4 py-[0.35rem] flex font-semibold w-full hover:bg-gray-300/40"
+                          >
+                            {adminActivateChatsRedux?.loading &&
+                            activating === groupchat?._id ? (
+                              <div className="" style={{ height: "20px" }}>
+                                <PulseLoader color="#EDB842" />
+                              </div>
+                            ) : (
+                              "Activate"
+                            )}
                           </button>
                         </li>
+                      )}
+                      {groupchat?.status === "active" && (
                         <li>
-                          <button className="rounded-lg px-4 py-[0.35rem] flex font-semibold w-full hover:bg-gray-300/40">
-                            Activate
+                          <button
+                            onClick={() => {
+                              setSuspending(groupchat?._id || "");
+                              dispatch(
+                                adminSuspendGroupchatAction(
+                                  groupchat?._id || ""
+                                ) as any
+                              );
+                            }}
+                            className="rounded-lg whitespace-nowrap px-4 py-[0.35rem] flex font-semibold w-full hover:bg-gray-300/40"
+                          >
+                            {adminSuspendChatsRedux?.loading &&
+                            suspending === groupchat?._id ? (
+                              <div className="" style={{ height: "20px" }}>
+                                <PulseLoader color="#EDB842" />
+                              </div>
+                            ) : (
+                              "Suspend"
+                            )}
                           </button>
                         </li>
-                        <li>
-                          <button className="rounded-lg px-4 py-[0.35rem] flex font-semibold w-full hover:bg-gray-300/40">
-                            Suspend
-                          </button>
-                        </li>
-                        <li>
-                          <button className="rounded-lg px-4 py-[0.35rem] flex font-semibold w-full text-[#EA4335] hover:bg-gray-300/40">
-                            Delete
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                );
-              return <></>;
+                      )}
+                      <li>
+                        <button
+                          onClick={() => {
+                            setDeleting(groupchat?._id || "");
+                            dispatch(
+                              adminDeleteGroupchatAction(
+                                groupchat?._id || ""
+                              ) as any
+                            );
+                          }}
+                          className="rounded-lg whitespace-nowrap px-4 py-[0.35rem] flex font-semibold w-full text-[#EA4335] hover:bg-gray-300/40"
+                        >
+                          {adminDeleteChatsRedux?.loading &&
+                          deleting === groupchat?._id ? (
+                            <div className="" style={{ height: "20px" }}>
+                              <PulseLoader color="#EA4335" />
+                            </div>
+                          ) : (
+                            "Delete"
+                          )}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              );
             }
           )}
       </ul>
@@ -266,7 +350,7 @@ function AdminGroupChatListBody() {
             </button>
           )}
 
-          {Array(numberOfGroups)
+          {Array(numberOfPages)
             .fill(1)
             .map((value: number, index: number) => {
               if (index < 5 + startIndex && index >= startIndex)

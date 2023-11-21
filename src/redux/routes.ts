@@ -90,6 +90,7 @@ export const API_ROUTES = {
     delete: BASE + "/admin/groupchat/delete/", // DELETE :id - the groups id
     activate: BASE + "/admin/groupchat/activate/", // PUT :id - the groups id
     suspend: BASE + "/admin/groupchat/suspend/", // PUT :id - the groups id
+    update: BASE + "/admin/groupchat/update", // PUT
   },
 
   // Users

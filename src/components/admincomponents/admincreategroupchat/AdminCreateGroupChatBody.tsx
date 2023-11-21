@@ -1,28 +1,39 @@
 import { useEffect, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { adminCreateGroupChatAction } from "../../../redux/actions/admin/groupchat.actions";
+import {
+  adminCreateGroupChatAction,
+  adminUpdateGroupChatAction,
+} from "../../../redux/actions/admin/groupchat.actions";
 import { adminGroupChatType } from "../../../redux/types/groupchat.types";
-import { ADMIN_CREATE_GROUPCHAT_RESET } from "../../../redux/constants/admin/groupchat.constants";
+import {
+  ADMIN_CREATE_GROUPCHAT_RESET,
+  ADMIN_UPDATE_GROUPCHAT_RESET,
+} from "../../../redux/constants/admin/groupchat.constants";
 
 const AdminCreateGroupChat = () => {
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // if groupDetails is present in the url state it sends the data to an action for updating
+  const { gruopDetails }: { gruopDetails: adminGroupChatType } =
+    location?.state;
 
   const [formData, setFormData] = useState<adminGroupChatType>({
-    name: "",
-    description: "",
-    status: "active",
-    admin_id: "",
+    name: gruopDetails?.name || "",
+    description: gruopDetails?.description || "",
+    status: gruopDetails?.status || "active",
+    admin_id: gruopDetails?.admin_id || "",
+    _id: gruopDetails?._id,
   });
-  const { name, description } = formData;
 
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const { name, description } = formData;
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files;
     if (file) {
@@ -65,13 +76,22 @@ const AdminCreateGroupChat = () => {
     (state: ReducersType) => state?.adminCreateGroupchat
   ) as ReduxResponseType;
 
+  let adminUpdateGroupchatRedux = useSelector(
+    (state: ReducersType) => state?.adminUpdateGroupchat
+  ) as ReduxResponseType;
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (name && description) {
-      dispatch(adminCreateGroupChatAction(formData) as any);
+      if (gruopDetails) {
+        dispatch(adminUpdateGroupChatAction(formData) as any);
+      } else {
+        dispatch(adminCreateGroupChatAction(formData) as any);
+      }
     }
   };
 
+  // useEffect for creating group chats
   useEffect(() => {
     adminCreateGroupchatRedux?.error &&
       Swal.fire({
@@ -98,6 +118,33 @@ const AdminCreateGroupChat = () => {
     }, 2000);
   }, [adminCreateGroupchatRedux, dispatch, navigate]);
 
+  // useEffect for updating groupchats
+  useEffect(() => {
+    adminUpdateGroupchatRedux?.error &&
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        timer: 5000,
+        text: adminUpdateGroupchatRedux?.error,
+      });
+    adminUpdateGroupchatRedux?.success &&
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        timer: 5000,
+        text: adminUpdateGroupchatRedux?.serverResponse?.message,
+      });
+    if (adminUpdateGroupchatRedux?.success) {
+      setTimeout(function () {
+        navigate("/admin/groupchat/list");
+      }, 4000);
+    }
+    setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      dispatch({ type: ADMIN_UPDATE_GROUPCHAT_RESET });
+    }, 2000);
+  }, [adminUpdateGroupchatRedux, dispatch, navigate]);
+
   return (
     <div className="flex flex-col gap-3">
       <div>
@@ -107,13 +154,14 @@ const AdminCreateGroupChat = () => {
             onClick={handleSubmit}
             className="flex gap-2 bg-[#EDB842] rounded-md px-6 py-2"
           >
-            {adminCreateGroupchatRedux?.loading ? (
+            {adminCreateGroupchatRedux?.loading ||
+            adminUpdateGroupchatRedux?.loading ? (
               <div className="" style={{ height: "25px" }}>
                 <PulseLoader color="#ffffff" />
               </div>
             ) : (
               <span className="flex my-auto text-white font-semibold">
-                Publish Now
+                {gruopDetails ? "Edit Details" : "Publish Now"}
               </span>
             )}
           </button>
@@ -143,12 +191,20 @@ const AdminCreateGroupChat = () => {
                 className="flex flex-col justify-center"
                 htmlFor="pictureInput"
               >
-                {selectedFile ? (
-                  <img
-                    src={URL.createObjectURL(selectedFile?.[0])}
-                    alt="Selected"
-                    className="mx-auto h-32"
-                  />
+                {selectedFile || gruopDetails?.image?.[0]?.url ? (
+                  selectedFile?.[0] ? (
+                    <img
+                      src={URL.createObjectURL(selectedFile?.[0])}
+                      alt="Selected"
+                      className="mx-auto h-32"
+                    />
+                  ) : (
+                    <img
+                      src={gruopDetails?.image?.[0]?.url}
+                      alt="Selected"
+                      className="mx-auto h-32"
+                    />
+                  )
                 ) : (
                   <div className="flex flex-col justify-center gap-2">
                     <div className="mx-auto p-2 bg-[#EDB842] rounded-md text-white">
@@ -177,6 +233,7 @@ const AdminCreateGroupChat = () => {
               type="text"
               placeholder="Type group name here. . ."
               onChange={onChange}
+              value={name}
               name="name"
               autoFocus={true}
               autoComplete="off"
@@ -193,6 +250,7 @@ const AdminCreateGroupChat = () => {
               cols={30}
               rows={6}
               onChange={onChange}
+              value={description}
               autoComplete="off"
               required
             ></textarea>

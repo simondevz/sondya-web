@@ -486,12 +486,12 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },
-  // {
-  //   path: "/admin/groupchat/details/:id",
-  //   element: <AdminCreateGroupChat />,
-  //   errorElement: <ErrorPage />,
-  //   loader: adminDashboardCheck,
-  // },
+  {
+    path: "/admin/groupchat/details",
+    element: <AdminCreateGroupChat />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
   {
     path: "/admin/products",
     element: <AdminProducts />,

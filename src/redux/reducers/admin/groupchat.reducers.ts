@@ -19,6 +19,10 @@ import {
   ADMIN_SUSPEND_GROUPCHAT_REQUEST,
   ADMIN_SUSPEND_GROUPCHAT_RESET,
   ADMIN_SUSPEND_GROUPCHAT_SUCCESS,
+  ADMIN_UPDATE_GROUPCHAT_FAIL,
+  ADMIN_UPDATE_GROUPCHAT_REQUEST,
+  ADMIN_UPDATE_GROUPCHAT_RESET,
+  ADMIN_UPDATE_GROUPCHAT_SUCCESS,
 } from "../../constants/admin/groupchat.constants";
 import { LOGIN_RESET } from "../../constants/auth.constants";
 import { initialState } from "../../initial.state";
@@ -166,6 +170,36 @@ export const adminSuspendGroupchatReducer = (
         error: action.payload,
       };
     case ADMIN_SUSPEND_GROUPCHAT_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const adminUpdateGroupchatReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case ADMIN_UPDATE_GROUPCHAT_REQUEST:
+      return { ...initialState, loading: true };
+    case ADMIN_UPDATE_GROUPCHAT_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case ADMIN_UPDATE_GROUPCHAT_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case ADMIN_UPDATE_GROUPCHAT_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

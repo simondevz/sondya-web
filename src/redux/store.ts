@@ -76,6 +76,7 @@ import {
   adminDeleteGroupchatReducer,
   adminGetGroupchatReducer,
   adminSuspendGroupchatReducer,
+  adminUpdateGroupchatReducer,
 } from "./reducers/admin/groupchat.reducers";
 
 export type ReducersType = {
@@ -148,6 +149,7 @@ export type ReducersType = {
   adminDeleteGroupchat: ReduxResponseType;
   adminSuspendGroupchat: ReduxResponseType;
   adminActivateGroupchat: ReduxResponseType;
+  adminUpdateGroupchat: ReduxResponseType;
 
   // user queries
   testimonial: ReduxResponseType;
@@ -223,6 +225,7 @@ const reducer = combineReducers<ReducersType>({
   adminDeleteGroupchat: adminDeleteGroupchatReducer,
   adminSuspendGroupchat: adminSuspendGroupchatReducer,
   adminActivateGroupchat: adminActivateGroupchatReducer,
+  adminUpdateGroupchat: adminUpdateGroupchatReducer,
 
   // user queries
   testimonial: testimonialReducer,
