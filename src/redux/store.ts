@@ -78,6 +78,14 @@ import {
   adminSuspendGroupchatReducer,
   adminUpdateGroupchatReducer,
 } from "./reducers/admin/groupchat.reducers";
+import {
+  getUserGroupChatsReducer,
+  userGetGroupchatDetailsReducer,
+  userGetGroupchatMembersReducer,
+  userGetGroupchatsReducer,
+  userGetMessagesReducer,
+  userJoinGroupchatReducer,
+} from "./reducers/userDashboard/groupchat.reducers";
 
 export type ReducersType = {
   contactus: ReduxResponseType;
@@ -154,6 +162,16 @@ export type ReducersType = {
   // user queries
   testimonial: ReduxResponseType;
   getApprovedTestimonial: ReduxResponseType;
+
+  // user && groupchats
+  getUserGroupchats: ReduxResponseType;
+  userGetGroupchats: ReduxResponseType;
+  userGetGroupchatDetails: ReduxResponseType;
+  userGetMessages: ReduxResponseType;
+  userJoinGroupchat: ReduxResponseType;
+  userGetGroupchatMembers: ReduxResponseType;
+  userLikeMessage: ReduxResponseType;
+  userSendMessage: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -230,6 +248,16 @@ const reducer = combineReducers<ReducersType>({
   // user queries
   testimonial: testimonialReducer,
   getApprovedTestimonial: getApprovedTestimonialReducer,
+
+  // user && groupchats
+  getUserGroupchats: getUserGroupChatsReducer,
+  userGetGroupchats: userGetGroupchatsReducer,
+  userGetGroupchatDetails: userGetGroupchatDetailsReducer,
+  userJoinGroupchat: userJoinGroupchatReducer,
+  userGetGroupchatMembers: userGetGroupchatMembersReducer,
+  userGetMessages: userGetMessagesReducer,
+  userLikeMessage: userGetMessagesReducer,
+  userSendMessage: userGetMessagesReducer,
 });
 
 const middleware = [thunk];

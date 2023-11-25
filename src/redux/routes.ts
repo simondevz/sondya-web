@@ -1,6 +1,8 @@
 // const BASE = process.env.PUBLIC_SERVER_API;
-// const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
-const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
+const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
+// const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+// const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
   // Authentication
@@ -98,6 +100,21 @@ export const API_ROUTES = {
     createTestimonial: BASE + "/user/testimonial/create", // POST: UserTestimonialType
     getALlAPProvedTestimonial: BASE + "/user/testimonial/approved", // GET: List<UserTestimonialType>
   },
+
+  // Users
+  userGroupChats: {
+    getUserGroupChats: BASE + "/user/groupchats/", // GET :user_id
+    getChats: BASE + "/groupchats", // GET
+    getChat: BASE + "/groupchat/", // GET :group_id
+    joinChat: BASE + "/groupchat/members/join", // POST :{group_id, user_id}
+    getMembers: BASE + "/groupchat/members/", // GET :group_id
+    getMessages: BASE + "/groupchat/messages/", // GET :group_id
+    sendMessage: BASE + "/groupchat/messages/send", // POST :{group_id, message, sender_id}
+    likeMessage: BASE + "/groupchat/messages/like", // for both liking and unliking a message - POST : {message_id, user_id}
+  },
+
+  // websockets
+  websocket: WS_BASE + "/ws/chat",
 
   landingPages: {
     contactUs: BASE + "/contactus", // POST

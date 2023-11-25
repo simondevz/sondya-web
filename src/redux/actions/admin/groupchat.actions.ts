@@ -182,7 +182,6 @@ export const adminGetGroupChatAction =
     const login: ReduxResponseType<LoginResponseType> = state?.login;
     const admin_id = login?.serverResponse?.data?.id;
     dispatch({ type: ADMIN_GET_GROUPCHATS_REQUEST });
-    console.log(login);
 
     if (!admin_id) {
       dispatch({

@@ -162,7 +162,7 @@ const App = createBrowserRouter([
     loader: homeCheck,
   },
   {
-    path: "/groupchats",
+    path: "/groupchats/:group_id",
     element: <GroupChat />,
     errorElement: <ErrorPage />,
     loader: homeCheck,
