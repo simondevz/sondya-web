@@ -20,3 +20,5 @@ export { default as AdminUpdateTestimonial } from "./AdminUpdateTestimonial";
 export { default as AdminUserDetails } from "./AdminUserDetails";
 export { default as AdminUserManagement } from "./AdminUserManagement";
 export { default as AdminWithdrawalOrders } from "./AdminWithdrawalOrders";
+export { default as AdminGroupChatList } from "./AdminGroupChatList";
+export { default as AdminCreateGroupChat } from "./AdminCreateGroupChat";

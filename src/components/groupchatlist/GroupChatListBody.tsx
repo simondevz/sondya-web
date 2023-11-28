@@ -1,8 +1,51 @@
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { Logo } from "../../images/logo";
+import { useDispatch, useSelector } from "react-redux";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import { useEffect } from "react";
+import {
+  getUserGroupChatsAction,
+  userGetGroupchatsAction,
+} from "../../redux/actions/userDashboard/groupchat.actions";
+import { adminGroupChatType } from "../../redux/types/groupchat.types";
+import JoinBtn from "./joinBtn";
+import { useNavigate } from "react-router-dom";
 
 const GroupChatListBody = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getGroupChatsRedux: ReduxResponseType = useSelector(
+    (state: ReducersType) => state?.userGetGroupchats
+  ) as ReduxResponseType;
+
+  const userGroupChatsRedux: ReduxResponseType = useSelector(
+    (state: ReducersType) => state?.getUserGroupchats
+  ) as ReduxResponseType;
+
+  const loginRedux: ReduxResponseType = useSelector(
+    (state: ReducersType) => state?.login
+  ) as ReduxResponseType;
+
+  const userInGroup = (userGroups: any, group: adminGroupChatType) => {
+    for (let index = 0; index < userGroups.length; index++) {
+      const group_id = userGroups[index]?.group_id;
+      if (group_id === group?._id) return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    dispatch(userGetGroupchatsAction() as any);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (loginRedux?.serverResponse?.data?.id)
+      dispatch(getUserGroupChatsAction() as any);
+  }, [dispatch, loginRedux?.serverResponse?.data?.id]);
+
   return (
     <section>
       <div className="flex flex-col gap-3 p-2">
@@ -32,66 +75,62 @@ const GroupChatListBody = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 p-4">
-          <div className="flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]">
-            <div className="">
-              <img src={Logo} alt="" />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="text-lg font-[600]">Group 1</div>
-              <div className="text-[#5F5D64] text-sm">
-                Social media has become an integral part of our day-to-day
-                lives. It has changed the way
-              </div>
-              <button className="py-2 w-fit px-4 text-white bg-[#EDB842] rounded-md self-end">
-                Join now
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]">
-            <div className="">
-              <img src={Logo} alt="" />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="text-lg font-[600]">Group 1</div>
-              <div className="text-[#5F5D64] text-sm">
-                Social media has become an integral part of our day-to-day
-                lives. It has changed the way
-              </div>
-              <button className="py-2 w-fit px-4 text-white bg-[#EDB842] rounded-md self-end">
-                Join now
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]">
-            <div className="">
-              <img src={Logo} alt="" />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="text-lg font-[600]">Group 1</div>
-              <div className="text-[#5F5D64] text-sm">
-                Social media has become an integral part of our day-to-day
-                lives. It has changed the way
-              </div>
-              <button className="py-2 w-fit px-4 text-white bg-[#EDB842] rounded-md self-end">
-                Join now
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]">
-            <div className="">
-              <img src={Logo} alt="" />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="text-lg font-[600]">Group 1</div>
-              <div className="text-[#5F5D64] text-sm">
-                Social media has become an integral part of our day-to-day
-                lives. It has changed the way
-              </div>
-              <button className="py-2 w-fit px-4 text-white bg-[#EDB842] rounded-md self-end">
-                Join now
-              </button>
-            </div>
-          </div>
+          {getGroupChatsRedux?.serverResponse?.data?.length &&
+            getGroupChatsRedux?.serverResponse?.data?.map(
+              (group: adminGroupChatType) => {
+                return (
+                  <div
+                    key={group._id}
+                    className={
+                      (userInGroup(
+                        userGroupChatsRedux?.serverResponse?.data,
+                        group
+                      )
+                        ? "order-first "
+                        : "") +
+                      "flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]"
+                    }
+                  >
+                    <div className="">
+                      <img
+                        src={group?.image?.[0]?.url || Logo}
+                        alt=""
+                        className="w-20 h-20 object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3 w-full">
+                      <div className="text-lg font-[600]">{group.name}</div>
+                      <div className="text-[#5F5D64] text-sm">
+                        {group.description}
+                      </div>
+                      <div className="flex self-end gap-4 ">
+                        {!userInGroup(
+                          userGroupChatsRedux?.serverResponse?.data,
+                          group
+                        ) && (
+                          <button
+                            onClick={() =>
+                              navigate("/groupchats/" + group?._id, {
+                                state: { currentGroup: group },
+                              })
+                            }
+                            className={
+                              " text-[#EDB842] font-semibold font-semibold py-2 w-fit px-4 rounded-md "
+                            }
+                          >
+                            View Messages
+                          </button>
+                        )}
+                        <JoinBtn
+                          group={group}
+                          userGroups={userGroupChatsRedux?.serverResponse?.data}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+            )}
         </div>
         <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
           <span className="bg-[#EDB84233] p-2 rounded-md">

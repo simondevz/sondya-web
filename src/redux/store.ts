@@ -70,6 +70,22 @@ import {
   adminGetUnapprovedTestimonialsReducer,
   adminUpdateTestimonialsReducer,
 } from "./reducers/admin/testimonials.reducers";
+import {
+  adminActivateGroupchatReducer,
+  adminCreateGroupchatReducer,
+  adminDeleteGroupchatReducer,
+  adminGetGroupchatReducer,
+  adminSuspendGroupchatReducer,
+  adminUpdateGroupchatReducer,
+} from "./reducers/admin/groupchat.reducers";
+import {
+  getUserGroupChatsReducer,
+  userGetGroupchatDetailsReducer,
+  userGetGroupchatMembersReducer,
+  userGetGroupchatsReducer,
+  userGetMessagesReducer,
+  userJoinGroupchatReducer,
+} from "./reducers/userDashboard/groupchat.reducers";
 
 export type ReducersType = {
   contactus: ReduxResponseType;
@@ -135,9 +151,27 @@ export type ReducersType = {
   adminDeleteTestimonial: ReduxResponseType;
   adminGetUnapprovedTestimonial: ReduxResponseType;
 
+  // admin && groupchats
+  adminCreateGroupchat: ReduxResponseType;
+  adminGetGroupchats: ReduxResponseType;
+  adminDeleteGroupchat: ReduxResponseType;
+  adminSuspendGroupchat: ReduxResponseType;
+  adminActivateGroupchat: ReduxResponseType;
+  adminUpdateGroupchat: ReduxResponseType;
+
   // user queries
   testimonial: ReduxResponseType;
   getApprovedTestimonial: ReduxResponseType;
+
+  // user && groupchats
+  getUserGroupchats: ReduxResponseType;
+  userGetGroupchats: ReduxResponseType;
+  userGetGroupchatDetails: ReduxResponseType;
+  userGetMessages: ReduxResponseType;
+  userJoinGroupchat: ReduxResponseType;
+  userGetGroupchatMembers: ReduxResponseType;
+  userLikeMessage: ReduxResponseType;
+  userSendMessage: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -203,9 +237,27 @@ const reducer = combineReducers<ReducersType>({
   adminDeleteTestimonial: adminDeleteTestimonialsReducer,
   adminUpdateTestimonial: adminUpdateTestimonialsReducer,
 
+  // admin && groupchats
+  adminCreateGroupchat: adminCreateGroupchatReducer,
+  adminGetGroupchats: adminGetGroupchatReducer,
+  adminDeleteGroupchat: adminDeleteGroupchatReducer,
+  adminSuspendGroupchat: adminSuspendGroupchatReducer,
+  adminActivateGroupchat: adminActivateGroupchatReducer,
+  adminUpdateGroupchat: adminUpdateGroupchatReducer,
+
   // user queries
   testimonial: testimonialReducer,
   getApprovedTestimonial: getApprovedTestimonialReducer,
+
+  // user && groupchats
+  getUserGroupchats: getUserGroupChatsReducer,
+  userGetGroupchats: userGetGroupchatsReducer,
+  userGetGroupchatDetails: userGetGroupchatDetailsReducer,
+  userJoinGroupchat: userJoinGroupchatReducer,
+  userGetGroupchatMembers: userGetGroupchatMembersReducer,
+  userGetMessages: userGetMessagesReducer,
+  userLikeMessage: userGetMessagesReducer,
+  userSendMessage: userGetMessagesReducer,
 });
 
 const middleware = [thunk];
