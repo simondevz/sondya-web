@@ -81,7 +81,15 @@ const GroupChatListBody = () => {
                 return (
                   <div
                     key={group._id}
-                    className="flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]"
+                    className={
+                      (userInGroup(
+                        userGroupChatsRedux?.serverResponse?.data,
+                        group
+                      )
+                        ? "order-first "
+                        : "") +
+                      "flex gap-3 bg-[#F8F9FA] p-2 rounded-md shadow-md shadow-[#EDB842]"
+                    }
                   >
                     <div className="">
                       <img

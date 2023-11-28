@@ -1,16 +1,18 @@
 import { AiOutlineArrowLeft, AiOutlineSend } from "react-icons/ai";
-import { BsHandThumbsUp } from "react-icons/bs";
+import { BsHandThumbsUp, BsHandThumbsUpFill } from "react-icons/bs";
 import { Logo } from "../../images/logo";
 import { user1 } from "../../images/users";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  userGetGroupChatMembersAction,
   userGetMessagesAction,
   userLikeMessageAction,
 } from "../../redux/actions/userDashboard/groupchat.actions";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   adminGroupChatType,
+  groupMemberType,
   groupMessageType,
 } from "../../redux/types/groupchat.types";
 import { ReducersType } from "../../redux/store";
@@ -18,11 +20,11 @@ import { ReduxResponseType } from "../../redux/types/general.types";
 import { API_ROUTES } from "../../redux/routes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import JoinBtn from "../groupchatlist/joinBtn";
+import Swal from "sweetalert2";
 
 const GroupChatBody = () => {
-  const GroupUsers: Array<string> = ["lucy", "scoba"];
-  const GroupUsersList: Array<string> = [];
   const [sending, setSending] = useState<boolean>(false);
+  const [onlineUsers, setOnlineUsers] = useState<Array<any>>([]);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -43,9 +45,9 @@ const GroupChatBody = () => {
     (state: ReducersType) => state?.getUserGroupchats
   ) as ReduxResponseType;
 
-  for (let index = 0; index < 6; index++) {
-    GroupUsersList.push(...GroupUsers);
-  }
+  const getMembersRedux: ReduxResponseType = useSelector(
+    (state: ReducersType) => state?.userGetGroupchatMembers
+  ) as ReduxResponseType;
 
   const userInGroup = (userGroups: any, group: adminGroupChatType) => {
     for (let index = 0; index < userGroups.length; index++) {
@@ -56,6 +58,7 @@ const GroupChatBody = () => {
   };
 
   useEffect(() => {
+    dispatch(userGetGroupChatMembersAction(group?._id || "") as any);
     dispatch(userGetMessagesAction(group?._id || "") as any);
   }, [dispatch, group?._id]);
 
@@ -72,13 +75,58 @@ const GroupChatBody = () => {
 
   useEffect(() => {
     if (lastMessage !== null) {
-      setMessageHistory((prev: groupMessageType[]) => {
-        setSending(false);
-        setMessage("");
-        return prev.concat(JSON.parse(lastMessage?.data));
-      });
+      const data = JSON.parse(lastMessage?.data);
+      if (data?.meta === "users_online") {
+        setOnlineUsers(() => {
+          // if i was able to get the list of users in this group
+          if (getMembersRedux?.serverResponse?.data) {
+            return getMembersRedux?.serverResponse?.data
+              ?.filter((membership: groupMemberType) => {
+                for (let index = 0; index < data?.online?.length; index++) {
+                  const user_id = data?.online[index];
+                  if (user_id === membership?.user_id?._id) return true;
+                }
+                return false;
+              })
+              .map((membership: groupMemberType) => membership?.user_id);
+          }
+          return [];
+        });
+      } else {
+        setMessageHistory((prev: groupMessageType[]) => {
+          setSending(false);
+          setMessage("");
+          return prev.concat(data);
+        });
+      }
     }
-  }, [lastMessage, setMessageHistory]);
+  }, [lastMessage, setMessageHistory, getMembersRedux?.serverResponse?.data]);
+
+  // Effect to join websocket
+  useEffect(() => {
+    sendMessage(
+      JSON.stringify({
+        meta: "join_conversation",
+        room_id: group?._id || "",
+        user_id: loginRedux?.serverResponse?.data?.id || "",
+        message: "",
+      })
+    );
+  }, [group?._id, loginRedux?.serverResponse?.data?.id, sendMessage]);
+
+  // Effect to get the list of users online
+  useEffect(() => {
+    setInterval(() => {
+      sendMessage(
+        JSON.stringify({
+          meta: "get_online_users",
+          room_id: group?._id || "",
+          user_id: loginRedux?.serverResponse?.data?.id || "anonymous",
+          message: "",
+        })
+      );
+    }, 10000); // checks every 2 minutes
+  }, [group?._id, loginRedux?.serverResponse?.data?.id, sendMessage]);
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -115,7 +163,11 @@ const GroupChatBody = () => {
               <div
                 onClick={() => {
                   navigate("/groupchat/details", {
-                    state: { currentGroupId: group._id },
+                    state: {
+                      currentGroupId: group._id,
+                      members: getMembersRedux?.serverResponse?.data,
+                      onlineUsers,
+                    },
                   });
                 }}
                 className=""
@@ -131,10 +183,19 @@ const GroupChatBody = () => {
               />
             </div>
           </div>
-          <div className="flex flex-wrap gap-3 text-[#9F9F9F] p-2 ps-5">
-            {GroupUsersList.map((t, i) => {
-              return <div>{t}</div>;
-            })}
+          <div className="flex gap-2 text-[#9F9F9F] py-2 px-6">
+            {/* Show online users */}
+            {getMembersRedux?.serverResponse?.data &&
+              onlineUsers.map((user, index) => {
+                if (index < 7) return <div key={index}>{user?.username}</div>;
+                if (index === 7)
+                  return (
+                    <div className="ml-[-0.2rem]" key={index}>
+                      ...
+                    </div>
+                  );
+                return <></>;
+              })}
           </div>
         </div>
         <div className="flex flex-col shadow-md py-3 gap-3">
@@ -143,11 +204,11 @@ const GroupChatBody = () => {
             {getMessagesRedux?.loading ? (
               <div>loading...</div>
             ) : getMessagesRedux?.serverResponse?.data?.length ? (
-              getMessagesRedux?.serverResponse?.data?.map(
-                (message: groupMessageType) => {
+              getMessagesRedux?.serverResponse?.data
+                ?.map((message: groupMessageType) => {
                   return <GroupMessage message={message} key={message._id} />;
-                }
-              )
+                })
+                ?.reverse()
             ) : group?.message?.length ? (
               group?.message?.map((message: groupMessageType) => {
                 return <GroupMessage message={message} key={message._id} />;
@@ -215,8 +276,29 @@ const GroupMessage = ({ message }: { message: groupMessageType }) => {
   ) as ReduxResponseType;
 
   const like = () => {
+    if (!userLiked) {
+      setMessageLikes((state) => [
+        ...state,
+        loginRedux?.serverResponse?.data?.id,
+      ]);
+    } else {
+      setMessageLikes((state) =>
+        state.filter((like) => like !== loginRedux?.serverResponse?.data?.id)
+      );
+    }
     dispatch(userLikeMessageAction(message._id || "") as any);
   };
+
+  const [messageLikes, setMessageLikes] = useState<Array<string>>(
+    message?.likes || []
+  );
+  const userLiked = (() => {
+    for (let index = 0; index < messageLikes.length; index++) {
+      if (messageLikes[index] === loginRedux?.serverResponse?.data?.id)
+        return true;
+    }
+    return false;
+  })();
 
   return (
     <div
@@ -245,12 +327,21 @@ const GroupMessage = ({ message }: { message: groupMessageType }) => {
       <div className="border-b border-[#4D4C6675] pb-3">{message?.message}</div>
       <button
         onClick={() => {
+          if (!loginRedux?.serverResponse?.data?.id) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              timer: 5000,
+              text: "Please login before Reacting to Messages",
+            });
+            return;
+          }
           like();
         }}
         className="flex gap-2 items-center px-4"
       >
-        <span className="font-[400]">{message?.likes?.length || 0}</span>
-        <BsHandThumbsUp />
+        <span className="font-[400]">{messageLikes.length || 0}</span>
+        {userLiked ? <BsHandThumbsUpFill /> : <BsHandThumbsUp />}
       </button>
     </div>
   );
