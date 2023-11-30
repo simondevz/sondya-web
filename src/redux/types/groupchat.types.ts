@@ -19,6 +19,7 @@ export type groupMessageType = {
   group_id: string;
   sender_id: string;
   createdAt?: string;
+  image?: ImageType[];
   likes?: string[];
   sender?: adminUGetUserType;
 };
@@ -34,4 +35,11 @@ export type groupMemberType = {
   group_id: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type chatImageType = {
+  fileName: any;
+  fileType: any;
+  fileSize: any;
+  fileContent: any;
 };

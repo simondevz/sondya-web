@@ -110,7 +110,7 @@ const GroupChatListBody = () => {
                         ) && (
                           <button
                             onClick={() =>
-                              navigate("/groupchats/" + group?._id, {
+                              navigate("/groupchats", {
                                 state: { currentGroup: group },
                               })
                             }

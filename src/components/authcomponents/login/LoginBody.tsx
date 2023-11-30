@@ -6,7 +6,7 @@ import {
 } from "react-icons/ai";
 import { FaHome } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
 import { AuthImage } from "../../../images";
@@ -14,6 +14,7 @@ import { loginAction } from "../../../redux/actions/auth.actions";
 import { ReducersType } from "../../../redux/store";
 import { LoginType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
+import { userJoinGroupchatAction } from "../../../redux/actions/userDashboard/groupchat.actions";
 
 const LoginBody = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,6 +26,11 @@ const LoginBody = () => {
   //handle form
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // when the person is brougth here by the join now button
+  const redirect = location?.state?.redirect;
+  const group = location?.state?.currentGroup;
 
   const [formData, setFormData] = useState<LoginType>({
     email: "",
@@ -67,7 +73,10 @@ const LoginBody = () => {
       });
     if (loginRedux?.success) {
       setTimeout(function () {
-        if (loginRedux?.serverResponse?.data?.type === "user") {
+        if (redirect && group) {
+          dispatch(userJoinGroupchatAction(group._id || "") as any);
+          navigate(redirect, { state: { currentGroup: group } });
+        } else if (loginRedux?.serverResponse?.data?.type === "user") {
           navigate("/dashboard");
         } else if (loginRedux?.serverResponse?.data?.type === "admin") {
           navigate("/admin/dashboard");
@@ -79,7 +88,7 @@ const LoginBody = () => {
         // dispatch({ type: LOGIN_RESET });
       }, 4000);
     }
-  }, [navigate, loginRedux, dispatch]);
+  }, [navigate, loginRedux, dispatch, redirect, group]);
 
   console.log(loginRedux);
 
