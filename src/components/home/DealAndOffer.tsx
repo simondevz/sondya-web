@@ -3,8 +3,11 @@ import { inDoorItems, outDoorItems } from "../../data/dealoffer";
 import { RealMe } from "../../images";
 import { bgExterior } from "../../images/exterior";
 import { bgInterior } from "../../images/interior";
+import { useNavigate } from "react-router-dom";
 
 const DealAndOffer = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="flex flex-col gap-5 p-5 md:p-10">
       <div className="bg-[#EDB84233] flex flex-wrap-reverse md:flex-nowrap gap-3 justify-evenly px-4 py-10 rounded-md">
@@ -16,7 +19,10 @@ const DealAndOffer = () => {
           <div className="text-[#475156] text-left">
             Join our group for news, events and connectitvity
           </div>
-          <button className="flex gap-3 items-center bg-[#EDB842C9] p-3 rounded-md text-white">
+          <button
+            onClick={() => navigate("/groupchat/list")}
+            className="flex gap-3 items-center bg-[#EDB842C9] p-3 rounded-md text-white"
+          >
             <span>Explore now</span> <MdArrowForward />
           </button>
         </div>

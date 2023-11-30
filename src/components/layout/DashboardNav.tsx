@@ -3,6 +3,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
 import { MdPayment, MdStorefront } from "react-icons/md";
+import { IoChatbubblesOutline } from "react-icons/io5";
 import {
   PiClockClockwiseLight,
   PiSignOutFill,
@@ -124,6 +125,20 @@ export const UserDashboardNav = () => {
           <BsChat />
         </span>{" "}
         <span className="whitespace-nowrap">Inbox</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "groupchat" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("groupchat");
+          navigate("/groupchat/list");
+        }}
+      >
+        <span>
+          <IoChatbubblesOutline />
+        </span>{" "}
+        <span className="whitespace-nowrap">Groups</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

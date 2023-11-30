@@ -42,6 +42,19 @@ export default function JoinBtn({
   })(userGroups || userGroupsFromUrl);
 
   const handleJoin = (group: adminGroupChatType) => {
+    if (
+      location?.pathname === "/groupchats" &&
+      !loginRedux?.serverResponse?.data?.id
+    ) {
+      navigate("/login", {
+        state: {
+          currentGroup: group,
+          redirect: location?.pathname,
+        },
+      });
+      return;
+    }
+
     if (!loginRedux?.serverResponse?.data?.id) {
       Swal.fire({
         icon: "error",
@@ -51,8 +64,9 @@ export default function JoinBtn({
       });
       return;
     }
+
     if (!userInGroup) dispatch(userJoinGroupchatAction(group._id || "") as any);
-    navigate("/groupchats/" + group?._id, {
+    navigate("/groupchats", {
       state: {
         currentGroup: group,
         user_id: loginRedux?.serverResponse?.data?.id,
