@@ -106,8 +106,8 @@ const AdminCategory = () => {
           <table className="table-auto w-full">
             <thead>
               <tr className="border-y">
-                <th className="p-2 text-start text-[#1D1F2C]">Category Name</th>
-                <th className="p-2 text-start text-[#1D1F2C]">Added</th>
+                <th className="p-2 text-start text-[#1D1F2C]">Category</th>
+                <th className="p-2 text-start text-[#1D1F2C]">Subcategory</th>
                 <th className="p-2 text-start text-[#1D1F2C]">Action</th>
               </tr>
             </thead>
@@ -115,7 +115,7 @@ const AdminCategory = () => {
               {categories.map((t, i) => {
                 return (
                   <tr className="border-b" key={i}>
-                    <td className="p-3 text-[#1D1F2C]">{t.name}</td>
+                    <td className="p-3 text-[#1D1F2C]">{t.category}</td>
                     <td className="p-3 text-[#667085]">{t.name}</td>
                     <td className="p-3 text-[#667085]">
                       <div className="flex flex-row gap-2 items-center text-[#A3A9B6]">

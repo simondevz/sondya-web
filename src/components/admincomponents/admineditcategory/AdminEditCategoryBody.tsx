@@ -57,7 +57,7 @@ const AdminEditCategoryBody = () => {
   const [formData, setFormData] = useState<AdminUpdateCategory>({
     name: "",
     description: "",
-
+    category: "",
     id: id as string,
   });
 
@@ -216,13 +216,28 @@ const AdminEditCategoryBody = () => {
               General Information
             </div>
             <div className="text-[#777980] flex flex-col gap-2 text-sm">
-              <label htmlFor="">Category Name</label>
+              <label htmlFor="">Category</label>
+              <select
+                value={formData.category}
+                onChange={(event) =>
+                  setFormData((previousState) => {
+                    return { ...previousState, category: event?.target?.value };
+                  })
+                }
+                className="border p-2 rounded-md bg-[#F9F9FC]"
+              >
+                <option value={"Product"}>Product</option>
+                <option value={"Service"}>Service</option>
+              </select>
+            </div>
+            <div className="text-[#777980] flex flex-col gap-2 text-sm">
+              <label htmlFor="">Subcategory</label>
               <input
                 name="name"
                 className="border p-2 rounded-md bg-[#F9F9FC]"
                 type="text"
                 autoFocus={true}
-                placeholder="Type category name here. . ."
+                placeholder="Type Subcategory name here. . ."
                 onChange={onChange}
                 autoComplete="off"
                 required
