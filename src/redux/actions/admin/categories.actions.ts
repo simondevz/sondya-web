@@ -26,7 +26,7 @@ import {
 import { ReduxResponseType } from "../../types/general.types";
 
 export const adminCreateCategoryAction =
-  ({ name, description, image }: AdminCreateCategory) =>
+  ({ name, description, category, image }: AdminCreateCategory) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -39,6 +39,7 @@ export const adminCreateCategoryAction =
       let FD: FormData = new FormData();
       FD.append("name", name);
       FD.append("description", description);
+      FD.append("category", category);
       if (image) {
         FD.append("image", image);
       }
@@ -53,7 +54,7 @@ export const adminCreateCategoryAction =
 
       const { data } = await axios.post(
         API_ROUTES?.adminCategories?.create,
-        // { name, description, image },
+        // { name, description,category, image },
         FD,
         config
       );
@@ -73,7 +74,7 @@ export const adminCreateCategoryAction =
   };
 
 export const adminUpdateCategoryAction =
-  ({ name, description, image, id }: AdminUpdateCategory) =>
+  ({ name, description, category, image, id }: AdminUpdateCategory) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -86,6 +87,7 @@ export const adminUpdateCategoryAction =
       let FD: FormData = new FormData();
       FD.append("name", name);
       FD.append("description", description);
+      FD.append("category", category);
       if (image && !Array.isArray(image)) {
         FD.append("image", image);
       }

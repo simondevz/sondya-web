@@ -49,8 +49,9 @@ const AdminAddCategoryBody = () => {
   const [formData, setFormData] = useState<AdminCreateCategory>({
     name: "",
     description: "",
+    category: "Product",
   });
-  const { name, description } = formData;
+  const { name, description, category } = formData;
 
   const onChange = (
     e:
@@ -70,7 +71,7 @@ const AdminAddCategoryBody = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (name && description) {
+    if (name && description && category) {
       dispatch(adminCreateCategoryAction(formData) as any);
     }
   };
@@ -180,11 +181,26 @@ const AdminAddCategoryBody = () => {
               General Information
             </div>
             <div className="text-[#777980] flex flex-col gap-2 text-sm">
-              <label htmlFor="">Category Name</label>
+              <label htmlFor="">Category</label>
+              <select
+                value={category}
+                onChange={(event) =>
+                  setFormData((previousState) => {
+                    return { ...previousState, category: event?.target?.value };
+                  })
+                }
+                className="border p-2 rounded-md bg-[#F9F9FC]"
+              >
+                <option value={"Product"}>Product</option>
+                <option value={"Service"}>Service</option>
+              </select>
+            </div>
+            <div className="text-[#777980] flex flex-col gap-2 text-sm">
+              <label htmlFor="">Subcategory</label>
               <input
                 className="border p-2 rounded-md bg-[#F9F9FC]"
                 type="text"
-                placeholder="Type category name here. . ."
+                placeholder="Type Subcategory name here. . ."
                 onChange={onChange}
                 name="name"
                 autoFocus={true}
