@@ -1,14 +1,17 @@
 export type ReduxResponseType<T = any> = {
   loading: boolean;
   success: boolean;
-  serverResponse: { data: T; message: string; success: boolean };
+  serverResponse: {
+    data: T;
+    message: string;
+    success: boolean;
+  };
   error: any;
-  // testimonial: {
-  //   loading: boolean;
-  //   success: boolean;
-  //   error: string;
-  //   serverResponse: any;
-  // };
+};
+
+export type Paginator<T = any> = {
+  data: T;
+  count?: number;
 };
 
 export type ActionType = {

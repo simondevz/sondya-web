@@ -261,7 +261,7 @@ export const adminGetProductByIdAction =
   };
 
 export const adminGetProductsAction =
-  () => async (dispatch: Dispatch, getState: any) => {
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_GET_ALL_PRODUCT_REQUEST,
@@ -278,14 +278,18 @@ export const adminGetProductsAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminProducts?.getAll,
+        API_ROUTES?.adminProducts?.getAll + "?" + query.toString(),
         config
       );
+
+      // console.log(data);
+
       dispatch({
         type: ADMIN_GET_ALL_PRODUCT_SUCCESS,
         payload: data,
       });
     } catch (error: any) {
+      // console.log(error);
       dispatch({
         type: ADMIN_GET_ALL_PRODUCT_FAIL,
         payload:
