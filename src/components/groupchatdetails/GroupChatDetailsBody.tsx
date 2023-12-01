@@ -112,8 +112,16 @@ const GroupChatDetailsBody = () => {
           </div>
         </div>
       </div>
-      <img src={groupChatMain} alt="" />
-      <div className="">Become Sondya Partner</div>
+      <img
+        src={
+          getDetailsRedux?.serverResponse?.data?.image?.[0]?.url ||
+          groupChatMain
+        }
+        alt=""
+      />
+      <div className="">
+        {getDetailsRedux?.serverResponse?.data?.name || "loading..."}
+      </div>
       <div className="shadow-md p-4 max-w-[50rem] rounded-lg">
         <div className="flex gap-2 p-2 items-center">
           <div className="font-[600]">
