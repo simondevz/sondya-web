@@ -9,10 +9,4 @@ export const initialState: ReduxResponseType = {
     success: false,
   },
   error: "",
-  // testimonial: {
-  //   success: false,
-  //   loading: false,
-  //   error: "",
-  //   serverResponse: {},
-  // },
 };
