@@ -114,13 +114,6 @@ const AdminProductsBody = () => {
   );
 
   const search = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setQuery((prev) => {
-    //   return {
-    //     ...prev,
-    //     [e.target.name]: e.target.value,
-    //   };
-    // });
-
     setQuery({
       page: 1,
       search: e.target.value,
