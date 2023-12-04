@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { MdOutlineAdd } from "react-icons/md";
@@ -18,6 +18,8 @@ import {
   AdminUpdateProduct,
 } from "../../../redux/types/products.types";
 import { ImageType } from "../../../redux/types/users.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
+import { adminGetProductCategoriesAction } from "../../../redux/actions/admin/categories.actions";
 
 const AdminEditProductBody = () => {
   // fetch data
@@ -170,23 +172,38 @@ const AdminEditProductBody = () => {
     }
   };
 
+  // stops infinite rerender
+  const adminUpdateProductReduxRef = useRef(adminUpdateProductRedux);
+  const [notify, setNotify] = useState<string>("");
+  useLayoutEffect(() => {
+    adminUpdateProductReduxRef.current = adminUpdateProductRedux;
+    if (adminUpdateProductRedux?.loading) setNotify("loading");
+    if (adminUpdateProductRedux?.success) setNotify("success");
+    if (adminUpdateProductRedux?.error) setNotify("error");
+  }, [
+    adminUpdateProductRedux?.success,
+    adminUpdateProductRedux?.loading,
+    adminUpdateProductRedux?.error,
+    adminUpdateProductRedux,
+  ]);
+
   useEffect(() => {
-    adminUpdateProductRedux?.error &&
+    notify === "error" &&
       Swal.fire({
         icon: "error",
         title: "Oops...",
         timer: 5000,
-        text: adminUpdateProductRedux?.error,
+        text: adminUpdateProductReduxRef?.current?.error,
       });
-    adminUpdateProductRedux?.error && setDeleteImageId([]);
-    adminUpdateProductRedux?.success &&
+    notify === "error" && setDeleteImageId([]);
+    notify === "success" &&
       Swal.fire({
         icon: "success",
         title: "Successful",
         timer: 5000,
-        text: adminUpdateProductRedux?.serverResponse?.message,
+        text: adminUpdateProductReduxRef?.current?.serverResponse?.message,
       });
-    if (adminUpdateProductRedux?.success) {
+    if (notify === "success") {
       setTimeout(function () {
         dispatch(adminGetProductByIdAction(id as string) as any);
       }, 1000);
@@ -195,9 +212,20 @@ const AdminEditProductBody = () => {
         dispatch({ type: ADMIN_UPDATE_PRODUCT_RESET });
         setNetworkImage1([]);
         setDeleteImageId([]);
+        setNotify("");
       }, 2000);
     }
-  }, [adminUpdateProductRedux, dispatch, id]);
+  }, [adminUpdateProductReduxRef, notify, dispatch, id]);
+
+  // get list of categories for products
+  let productCategoriesRedux = useSelector(
+    (state: ReducersType) => state?.adminGetProductCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+  console.log(productCategoriesRedux);
+
+  useEffect(() => {
+    dispatch(adminGetProductCategoriesAction() as any);
+  }, [dispatch]);
 
   return (
     <section>
@@ -398,6 +426,18 @@ const AdminEditProductBody = () => {
                     value={formData.category}
                   >
                     <option value="">Select a category</option>
+                    {productCategoriesRedux?.serverResponse?.data.map(
+                      (subcategory: AdminGetCategoryType) => {
+                        return (
+                          <option
+                            key={subcategory._id}
+                            value={subcategory.name}
+                          >
+                            {subcategory.name}
+                          </option>
+                        );
+                      }
+                    )}
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">

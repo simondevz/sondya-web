@@ -13,6 +13,12 @@ import {
   ADMIN_GET_ALL_CATEGORY_FAIL,
   ADMIN_GET_ALL_CATEGORY_REQUEST,
   ADMIN_GET_ALL_CATEGORY_SUCCESS,
+  ADMIN_GET_PRODUCTS_CATEGORY_FAIL,
+  ADMIN_GET_PRODUCTS_CATEGORY_REQUEST,
+  ADMIN_GET_PRODUCTS_CATEGORY_SUCCESS,
+  ADMIN_GET_SERVICES_CATEGORY_FAIL,
+  ADMIN_GET_SERVICES_CATEGORY_REQUEST,
+  ADMIN_GET_SERVICES_CATEGORY_SUCCESS,
   ADMIN_UPDATE_CATEGORY_FAIL,
   ADMIN_UPDATE_CATEGORY_REQUEST,
   ADMIN_UPDATE_CATEGORY_SUCCESS,
@@ -221,6 +227,76 @@ export const adminGetCategoriesAction =
     } catch (error: any) {
       dispatch({
         type: ADMIN_GET_ALL_CATEGORY_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminGetServiceCategoriesAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_GET_SERVICES_CATEGORY_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.adminCategories?.getServices,
+        config
+      );
+      dispatch({
+        type: ADMIN_GET_SERVICES_CATEGORY_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_GET_SERVICES_CATEGORY_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminGetProductCategoriesAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_GET_PRODUCTS_CATEGORY_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.adminCategories?.getProducts,
+        config
+      );
+      dispatch({
+        type: ADMIN_GET_PRODUCTS_CATEGORY_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_GET_PRODUCTS_CATEGORY_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

@@ -177,7 +177,7 @@ export const adminUpdateGroupChatAction =
   };
 
 export const adminGetGroupChatAction =
-  () => async (dispatch: Dispatch, getState: any) => {
+  (queryString: string) => async (dispatch: Dispatch, getState: any) => {
     const state = getState();
     const login: ReduxResponseType<LoginResponseType> = state?.login;
     const admin_id = login?.serverResponse?.data?.id;
@@ -200,7 +200,7 @@ export const adminGetGroupChatAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminGroupchats?.getChats + admin_id,
+        API_ROUTES?.adminGroupchats?.getChats + admin_id + "?" + queryString,
         config
       );
 
