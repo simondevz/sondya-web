@@ -15,6 +15,14 @@ import {
   ADMIN_GET_ALL_CATEGORY_REQUEST,
   ADMIN_GET_ALL_CATEGORY_RESET,
   ADMIN_GET_ALL_CATEGORY_SUCCESS,
+  ADMIN_GET_PRODUCTS_CATEGORY_FAIL,
+  ADMIN_GET_PRODUCTS_CATEGORY_REQUEST,
+  ADMIN_GET_PRODUCTS_CATEGORY_RESET,
+  ADMIN_GET_PRODUCTS_CATEGORY_SUCCESS,
+  ADMIN_GET_SERVICES_CATEGORY_FAIL,
+  ADMIN_GET_SERVICES_CATEGORY_REQUEST,
+  ADMIN_GET_SERVICES_CATEGORY_RESET,
+  ADMIN_GET_SERVICES_CATEGORY_SUCCESS,
   ADMIN_UPDATE_CATEGORY_FAIL,
   ADMIN_UPDATE_CATEGORY_REQUEST,
   ADMIN_UPDATE_CATEGORY_RESET,
@@ -166,6 +174,66 @@ export const adminGetCategoriesReducer = (
         error: action.payload,
       };
     case ADMIN_GET_ALL_CATEGORY_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const adminGetProductCategoriesReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case ADMIN_GET_PRODUCTS_CATEGORY_REQUEST:
+      return { ...initialState, loading: true };
+    case ADMIN_GET_PRODUCTS_CATEGORY_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case ADMIN_GET_PRODUCTS_CATEGORY_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case ADMIN_GET_PRODUCTS_CATEGORY_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const adminGetServiceCategoriesReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case ADMIN_GET_SERVICES_CATEGORY_REQUEST:
+      return { ...initialState, loading: true };
+    case ADMIN_GET_SERVICES_CATEGORY_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case ADMIN_GET_SERVICES_CATEGORY_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case ADMIN_GET_SERVICES_CATEGORY_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

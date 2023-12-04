@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FaBell, FaCalendarAlt } from "react-icons/fa";
 import {
@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import { TbMailFilled } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import logo from "../../../images/logo/logo.png";
 import { user5 } from "../../../images/users";
@@ -22,6 +22,11 @@ import {
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { adminGroupChatType } from "../../../redux/types/groupchat.types";
+
+type QueryType = {
+  page: number;
+  search: string;
+};
 
 function AdminGroupChatListBody() {
   const dispatch = useDispatch();
@@ -51,13 +56,55 @@ function AdminGroupChatListBody() {
   const numberOfPages: number = Math.ceil(numberOfGroups / 10) || 1;
   console.log(numberOfPages);
 
+  // const limit: number = 5;
+  const location = useLocation();
+  const [queryString, setQueryString] = useState<string>("");
+  const [query, setQuery] = useState<QueryType>({
+    page: 1,
+    search: "",
+  });
+
+  // update query and url
+  const updateQueryString = useCallback(
+    (newParams: QueryType) => {
+      const searchParams = new URLSearchParams(location.search);
+      // Update or add new parameters
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          searchParams.set(key, String(value));
+        } else {
+          searchParams.delete(key);
+        }
+      });
+
+      // Build the new search string
+      const newSearch = searchParams.toString();
+
+      // set query string
+      setQueryString(newSearch);
+
+      // Use navigate to change the URL
+      navigate({
+        pathname: location.pathname,
+        search: newSearch,
+      });
+    },
+    [location.pathname, location.search, navigate]
+  );
+
   const [deleting, setDeleting] = useState<string>("");
   const [suspending, setSuspending] = useState<string>("");
   const [activating, setActivating] = useState<string>("");
 
   useEffect(() => {
-    dispatch(adminGetGroupChatAction() as any);
-  }, [dispatch]);
+    setTimeout(() => {
+      updateQueryString(query);
+    }, 1000);
+  }, [query, updateQueryString]);
+
+  useEffect(() => {
+    dispatch(adminGetGroupChatAction(queryString) as any);
+  }, [dispatch, queryString]);
 
   return (
     <div className="flex flex-col w-full">
@@ -124,10 +171,7 @@ function AdminGroupChatListBody() {
                 <li
                   key={groupchat._id}
                   className={
-                    ((Math.ceil(index / 10) || 1) === pagination
-                      ? "flex "
-                      : "hidden ") +
-                    " w-full shadow-md shadow-[#EDB842] rounded-lg justify-between bg-[#F5F5F594] px-6 py-2"
+                    "flex w-full shadow-md shadow-[#EDB842] rounded-lg justify-between bg-[#F5F5F594] px-6 py-2"
                   }
                 >
                   <div className="flex gap-2">
@@ -330,8 +374,18 @@ function AdminGroupChatListBody() {
           <button
             onClick={() => {
               let lastPage: number = pagination - 1;
-              if (lastPage === startIndex) setStartIndex(startIndex - 5);
-              if (lastPage > 0) setPagination(lastPage);
+              if (lastPage === startIndex) {
+                setStartIndex(startIndex - 5);
+              }
+              if (lastPage > 0) {
+                setPagination(lastPage);
+                setQuery((prev) => {
+                  return {
+                    ...prev,
+                    page: lastPage,
+                  };
+                });
+              }
             }}
             className={
               "bg-[#EDB84233] text-[#EDB842] p-2 rounded-md text-[1.3rem]"
@@ -358,6 +412,12 @@ function AdminGroupChatListBody() {
                   <button
                     onClick={() => {
                       setPagination(index + value);
+                      setQuery((prev) => {
+                        return {
+                          ...prev,
+                          page: index + value,
+                        };
+                      });
                     }}
                     className={
                       (index + value === pagination
@@ -386,8 +446,18 @@ function AdminGroupChatListBody() {
           <button
             onClick={() => {
               let newPage: number = pagination + 1;
-              if (newPage === startIndex + 5 + 1) setStartIndex(startIndex + 5);
-              if (newPage < numberOfPages) setPagination(newPage);
+              if (newPage === startIndex + 5 + 1) {
+                setStartIndex(startIndex + 5);
+              }
+              if (newPage < numberOfPages) {
+                setPagination(newPage);
+                setQuery((prev) => {
+                  return {
+                    ...prev,
+                    page: newPage,
+                  };
+                });
+              }
             }}
             className={
               "bg-[#EDB84233] text-[#EDB842] p-2 rounded-md text-[1.3rem]"

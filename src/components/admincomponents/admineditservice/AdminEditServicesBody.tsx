@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,8 @@ import {
   AdminUpdateService,
 } from "../../../redux/types/services.types";
 import { ImageType } from "../../../redux/types/users.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
+import { adminGetServiceCategoriesAction } from "../../../redux/actions/admin/categories.actions";
 
 const AdminEditServicesBody = () => {
   // fetch data for service details
@@ -177,23 +179,42 @@ const AdminEditServicesBody = () => {
     }
   };
 
+  // stops infinite rerender
+  const adminUpdateServiceReduxRef = useRef(adminUpdateServiceRedux);
+  const [notify, setNotify] = useState<string>("");
+  useLayoutEffect(() => {
+    console.log(
+      "adminUpdateServiceReduxRef layout effect ==> ",
+      adminUpdateServiceReduxRef
+    );
+    adminUpdateServiceReduxRef.current = adminUpdateServiceRedux;
+    if (adminUpdateServiceRedux?.loading) setNotify("loading");
+    if (adminUpdateServiceRedux?.success) setNotify("success");
+    if (adminUpdateServiceRedux?.error) setNotify("error");
+  }, [
+    adminUpdateServiceRedux?.success,
+    adminUpdateServiceRedux?.loading,
+    adminUpdateServiceRedux?.error,
+    adminUpdateServiceRedux,
+  ]);
+
   useEffect(() => {
-    adminUpdateServiceRedux?.error &&
+    notify === "error" &&
       Swal.fire({
         icon: "error",
         title: "Oops...",
         timer: 5000,
-        text: adminUpdateServiceRedux?.error,
+        text: adminUpdateServiceReduxRef?.current?.error,
       });
-    adminUpdateServiceRedux?.error && setDeleteImageId([]);
-    adminUpdateServiceRedux?.success &&
+    notify === "error" && setDeleteImageId([]);
+    notify === "success" &&
       Swal.fire({
         icon: "success",
         title: "Successful",
         timer: 5000,
-        text: adminUpdateServiceRedux?.serverResponse?.message,
+        text: adminUpdateServiceReduxRef?.current?.serverResponse?.message,
       });
-    if (adminUpdateServiceRedux?.success) {
+    if (notify === "success") {
       setTimeout(function () {
         dispatch(adminGetServiceByIdAction(id as string) as any);
       }, 1000);
@@ -202,9 +223,20 @@ const AdminEditServicesBody = () => {
         dispatch({ type: ADMIN_UPDATE_SERVICE_RESET });
         setNetworkImage1([]);
         setDeleteImageId([]);
+        setNotify("");
       }, 2000);
     }
-  }, [adminUpdateServiceRedux, dispatch, id]);
+  }, [adminUpdateServiceReduxRef, notify, dispatch, id]);
+
+  // get list of categories for services
+  let serviceCategoriesRedux = useSelector(
+    (state: ReducersType) => state?.adminGetServiceCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+  console.log(serviceCategoriesRedux);
+
+  useEffect(() => {
+    dispatch(adminGetServiceCategoriesAction() as any);
+  }, [dispatch]);
 
   return (
     <section>
@@ -405,6 +437,18 @@ const AdminEditServicesBody = () => {
                     value={formData.category}
                   >
                     <option value="">Select a category</option>
+                    {serviceCategoriesRedux?.serverResponse?.data.map(
+                      (subcategory: AdminGetCategoryType) => {
+                        return (
+                          <option
+                            key={subcategory._id}
+                            value={subcategory.name}
+                          >
+                            {subcategory.name}
+                          </option>
+                        );
+                      }
+                    )}
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">

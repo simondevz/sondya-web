@@ -8,6 +8,8 @@ import {
   adminDeleteCategoryReducer,
   adminGetCategoriesReducer,
   adminGetCategoryByIdReducer,
+  adminGetProductCategoriesReducer,
+  adminGetServiceCategoriesReducer,
   adminUpdateCategoryReducer,
 } from "./reducers/admin/categories.reducers";
 import {
@@ -130,6 +132,8 @@ export type ReducersType = {
   adminDeleteCategory: ReduxResponseType;
   adminGetByIdCategory: ReduxResponseType;
   adminGetAllCategory: ReduxResponseType;
+  adminGetProductCategories: ReduxResponseType;
+  adminGetServiceCategories: ReduxResponseType;
 
   //admin && products
   adminCreateProduct: ReduxResponseType;
@@ -216,6 +220,8 @@ const reducer = combineReducers<ReducersType>({
   adminDeleteCategory: adminDeleteCategoryReducer,
   adminGetByIdCategory: adminGetCategoryByIdReducer,
   adminGetAllCategory: adminGetCategoriesReducer,
+  adminGetProductCategories: adminGetProductCategoriesReducer,
+  adminGetServiceCategories: adminGetServiceCategoriesReducer,
 
   //admin && products
   adminCreateProduct: adminCreateProductReducer,

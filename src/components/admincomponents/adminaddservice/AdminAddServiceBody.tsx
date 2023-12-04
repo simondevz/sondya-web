@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,8 @@ import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateService } from "../../../redux/types/services.types";
+import { adminGetServiceCategoriesAction } from "../../../redux/actions/admin/categories.actions";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const AdminAddServiceBody = () => {
   // handle images
@@ -125,22 +127,42 @@ const AdminAddServiceBody = () => {
     }
   };
 
+  // stops infinite rerender
+  const adminCreateServiceReduxRef = useRef(adminCreateServiceRedux);
+  const [notify, setNotify] = useState<string>("");
+  useLayoutEffect(() => {
+    console.log(
+      "adminCreateServiceReduxRef layout effect ==> ",
+      adminCreateServiceReduxRef
+    );
+    adminCreateServiceReduxRef.current = adminCreateServiceRedux;
+    if (adminCreateServiceRedux?.loading) setNotify("loading");
+    if (adminCreateServiceRedux?.success) setNotify("success");
+    if (adminCreateServiceRedux?.error) setNotify("error");
+  }, [
+    adminCreateServiceRedux?.success,
+    adminCreateServiceRedux?.loading,
+    adminCreateServiceRedux?.error,
+    adminCreateServiceRedux,
+  ]);
+
   useEffect(() => {
-    adminCreateServiceRedux?.error &&
+    console.log("adminCreateServiceReduxRef ==> ", adminCreateServiceReduxRef);
+    notify === "error" &&
       Swal.fire({
         icon: "error",
         title: "Oops...",
         timer: 5000,
-        text: adminCreateServiceRedux?.error,
+        text: adminCreateServiceReduxRef.current?.error,
       });
-    adminCreateServiceRedux?.success &&
+    notify === "success" &&
       Swal.fire({
         icon: "success",
         title: "Successful",
         timer: 5000,
-        text: adminCreateServiceRedux?.serverResponse?.message,
+        text: adminCreateServiceReduxRef.current?.serverResponse?.message,
       });
-    if (adminCreateServiceRedux?.success) {
+    if (notify === "success") {
       setTimeout(function () {
         // navigate("/auth/success");
         // navigate("/admin/services");
@@ -151,9 +173,21 @@ const AdminAddServiceBody = () => {
     setTimeout(() => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       dispatch({ type: ADMIN_CREATE_SERVICE_RESET });
+      setNotify("");
     }, 2000);
-  }, [adminCreateServiceRedux, dispatch, navigate]);
+  }, [adminCreateServiceReduxRef, notify, dispatch, navigate]);
   // console.log(formData);
+
+  // get list of categories for services
+  let serviceCategoriesRedux = useSelector(
+    (state: ReducersType) => state?.adminGetServiceCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+  console.log(serviceCategoriesRedux);
+
+  useEffect(() => {
+    dispatch(adminGetServiceCategoriesAction() as any);
+  }, [dispatch]);
+
   return (
     <section>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -291,6 +325,18 @@ const AdminAddServiceBody = () => {
                     onChange={onChange}
                   >
                     <option value="">Select a category</option>
+                    {serviceCategoriesRedux?.serverResponse?.data.map(
+                      (subcategory: AdminGetCategoryType) => {
+                        return (
+                          <option
+                            key={subcategory._id}
+                            value={subcategory.name}
+                          >
+                            {subcategory.name}
+                          </option>
+                        );
+                      }
+                    )}
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">

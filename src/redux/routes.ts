@@ -57,6 +57,8 @@ export const API_ROUTES = {
     delete: BASE + "/admin/category/", // DELETE :id
     getByID: BASE + "/admin/category/", // GET :id
     getAll: BASE + "/admin/categories", // GET
+    getProducts: BASE + "/admin/categories/Product", // GET
+    getServices: BASE + "/admin/categories/Service", // GET
   },
 
   //Admin

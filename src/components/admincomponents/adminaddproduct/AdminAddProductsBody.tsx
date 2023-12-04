@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { MdOutlineAdd } from "react-icons/md";
@@ -13,6 +13,8 @@ import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateProduct } from "../../../redux/types/products.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
+import { adminGetProductCategoriesAction } from "../../../redux/actions/admin/categories.actions";
 
 const AdminAddProductsBody = () => {
   // handle images
@@ -121,22 +123,42 @@ const AdminAddProductsBody = () => {
     }
   };
 
+  // stops infinite rerender
+  const adminCreateProductReduxRef = useRef(adminCreateProductRedux);
+  const [notify, setNotify] = useState<string>("");
+  useLayoutEffect(() => {
+    console.log(
+      "adminCreateProductReduxRef layout effect ==> ",
+      adminCreateProductReduxRef
+    );
+    adminCreateProductReduxRef.current = adminCreateProductRedux;
+    if (adminCreateProductRedux?.loading) setNotify("loading");
+    if (adminCreateProductRedux?.success) setNotify("success");
+    if (adminCreateProductRedux?.error) setNotify("error");
+  }, [
+    adminCreateProductRedux?.success,
+    adminCreateProductRedux?.loading,
+    adminCreateProductRedux?.error,
+    adminCreateProductRedux,
+  ]);
+
   useEffect(() => {
-    adminCreateProductRedux?.error &&
+    console.log("adminCreateProductReduxRef ==> ", adminCreateProductReduxRef);
+    notify === "error" &&
       Swal.fire({
         icon: "error",
         title: "Oops...",
         timer: 5000,
-        text: adminCreateProductRedux?.error,
+        text: adminCreateProductReduxRef.current?.error,
       });
-    adminCreateProductRedux?.success &&
+    notify === "success" &&
       Swal.fire({
         icon: "success",
         title: "Successful",
         timer: 5000,
-        text: adminCreateProductRedux?.serverResponse?.message,
+        text: adminCreateProductReduxRef.current?.serverResponse?.message,
       });
-    if (adminCreateProductRedux?.success) {
+    if (notify === "success") {
       setTimeout(function () {
         navigate("/admin/products");
         // handleClose();
@@ -146,8 +168,19 @@ const AdminAddProductsBody = () => {
     setTimeout(() => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       dispatch({ type: ADMIN_CREATE_PRODUCT_RESET });
+      setNotify("");
     }, 2000);
-  }, [adminCreateProductRedux, dispatch, navigate]);
+  }, [adminCreateProductReduxRef, notify, dispatch, navigate]);
+
+  // get list of categories for services
+  let productCategoriesRedux = useSelector(
+    (state: ReducersType) => state?.adminGetProductCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+  console.log(productCategoriesRedux);
+
+  useEffect(() => {
+    dispatch(adminGetProductCategoriesAction() as any);
+  }, [dispatch]);
 
   return (
     <section>
@@ -286,6 +319,18 @@ const AdminAddProductsBody = () => {
                     onChange={onChange}
                   >
                     <option value="">Select a category</option>
+                    {productCategoriesRedux?.serverResponse?.data.map(
+                      (subcategory: AdminGetCategoryType) => {
+                        return (
+                          <option
+                            key={subcategory._id}
+                            value={subcategory.name}
+                          >
+                            {subcategory.name}
+                          </option>
+                        );
+                      }
+                    )}
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">
