@@ -101,6 +101,10 @@ export const API_ROUTES = {
   users: {
     createTestimonial: BASE + "/user/testimonial/create", // POST: UserTestimonialType
     getALlAPProvedTestimonial: BASE + "/user/testimonial/approved", // GET: List<UserTestimonialType>
+    getProducts: BASE + "/user/products", // GET
+    getServices: BASE + "/user/services", // GET
+    getProductCategories: BASE + "/user/products/categories", // GET
+    getServiceCategories: BASE + "/user/services/categories", // GET
   },
 
   // Users

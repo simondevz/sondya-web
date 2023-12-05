@@ -35,6 +35,7 @@
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.2",
+    "slugify": "^1.6.6",
     "strftime": "^0.10.2",
     "sweetalert2": "^11.7.32",
     "typescript": "^4.9.5",
