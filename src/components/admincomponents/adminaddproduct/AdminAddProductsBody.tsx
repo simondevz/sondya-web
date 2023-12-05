@@ -127,10 +127,6 @@ const AdminAddProductsBody = () => {
   const adminCreateProductReduxRef = useRef(adminCreateProductRedux);
   const [notify, setNotify] = useState<string>("");
   useLayoutEffect(() => {
-    console.log(
-      "adminCreateProductReduxRef layout effect ==> ",
-      adminCreateProductReduxRef
-    );
     adminCreateProductReduxRef.current = adminCreateProductRedux;
     if (adminCreateProductRedux?.loading) setNotify("loading");
     if (adminCreateProductRedux?.success) setNotify("success");
@@ -143,7 +139,6 @@ const AdminAddProductsBody = () => {
   ]);
 
   useEffect(() => {
-    console.log("adminCreateProductReduxRef ==> ", adminCreateProductReduxRef);
     notify === "error" &&
       Swal.fire({
         icon: "error",
@@ -176,7 +171,6 @@ const AdminAddProductsBody = () => {
   let productCategoriesRedux = useSelector(
     (state: ReducersType) => state?.adminGetProductCategories
   ) as ReduxResponseType<AdminGetCategoryType[]>;
-  console.log(productCategoriesRedux);
 
   useEffect(() => {
     dispatch(adminGetProductCategoriesAction() as any);

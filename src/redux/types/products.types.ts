@@ -65,3 +65,31 @@ export type AdminGetProductType = {
 
   owner?: Owner;
 };
+
+export type UserGetProductType = {
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  total_stock: number;
+  tag: string;
+  brand: string;
+  model: string;
+  current_price: number;
+  product_status: string;
+  old_price: number;
+  discount_percentage: number;
+  vat_percentage: number;
+  total_variants: number;
+  quantity: number;
+  image?: ImageType[];
+  rating: number;
+  total_rating: number;
+
+  owner?: Owner;
+};
+
+export type userGetProductsType = {
+  products: UserGetProductType[];
+  count: number;
+};

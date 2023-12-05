@@ -88,6 +88,14 @@ import {
   userGetMessagesReducer,
   userJoinGroupchatReducer,
 } from "./reducers/userDashboard/groupchat.reducers";
+import {
+  userGetProductCategoriesReducer,
+  userGetProductsReducer,
+} from "./reducers/userDashboard/products.reducers";
+import {
+  userGetServiceCategoriesReducer,
+  userGetServicesReducer,
+} from "./reducers/userDashboard/services.reducers";
 
 export type ReducersType = {
   contactus: ReduxResponseType;
@@ -166,6 +174,10 @@ export type ReducersType = {
   // user queries
   testimonial: ReduxResponseType;
   getApprovedTestimonial: ReduxResponseType;
+  userGetProducts: ReduxResponseType;
+  userGetServices: ReduxResponseType;
+  userGetServiceCategories: ReduxResponseType;
+  userGetProductsCategories: ReduxResponseType;
 
   // user && groupchats
   getUserGroupchats: ReduxResponseType;
@@ -254,6 +266,10 @@ const reducer = combineReducers<ReducersType>({
   // user queries
   testimonial: testimonialReducer,
   getApprovedTestimonial: getApprovedTestimonialReducer,
+  userGetProducts: userGetProductsReducer,
+  userGetServices: userGetServicesReducer,
+  userGetServiceCategories: userGetServiceCategoriesReducer,
+  userGetProductsCategories: userGetProductCategoriesReducer,
 
   // user && groupchats
   getUserGroupchats: getUserGroupChatsReducer,

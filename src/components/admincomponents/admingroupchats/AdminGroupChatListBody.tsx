@@ -166,7 +166,7 @@ function AdminGroupChatListBody() {
         {/* TODO: add loading sign while fetching list of groupchats */}
         {adminGetChatsRedux?.serverResponse?.data?.chats &&
           adminGetChatsRedux?.serverResponse?.data?.chats.map(
-            (groupchat: adminGroupChatType, index: number) => {
+            (groupchat: adminGroupChatType) => {
               return (
                 <li
                   key={groupchat._id}

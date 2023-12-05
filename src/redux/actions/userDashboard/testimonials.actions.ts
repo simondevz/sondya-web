@@ -111,7 +111,6 @@ export const getStateTestimonialAction =
       );
 
       dispatch({ type: GET_APPROVED_TESTIMONIAL_SUCCESS, payload: data });
-      console.log(data);
     } catch (error: any) {
       // dispatch error
       console.log(error);
