@@ -201,7 +201,7 @@ export const adminGetCategoryByIdAction =
   };
 
 export const adminGetCategoriesAction =
-  () => async (dispatch: Dispatch, getState: any) => {
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_GET_ALL_CATEGORY_REQUEST,
@@ -217,7 +217,7 @@ export const adminGetCategoriesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminCategories?.getAll,
+        API_ROUTES?.adminCategories?.getAll + "?" + query.toString(),
         config
       );
       dispatch({
