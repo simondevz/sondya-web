@@ -5,6 +5,14 @@ const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
 // const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
+  // home products and categories
+  home: {
+    // home
+    categories: BASE + "/categories", // GET
+    services: BASE + "/services", // GET
+    products: BASE + "/products", // GET
+  },
+
   // Authentication
   auth: {
     // user

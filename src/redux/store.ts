@@ -13,6 +13,14 @@ import {
   adminUpdateCategoryReducer,
 } from "./reducers/admin/categories.reducers";
 import {
+  adminActivateGroupchatReducer,
+  adminCreateGroupchatReducer,
+  adminDeleteGroupchatReducer,
+  adminGetGroupchatReducer,
+  adminSuspendGroupchatReducer,
+  adminUpdateGroupchatReducer,
+} from "./reducers/admin/groupchat.reducers";
+import {
   adminCreateProductReducer,
   adminDeleteProductReducer,
   adminGetProductByIdReducer,
@@ -26,6 +34,12 @@ import {
   adminGetServicesReducer,
   adminUpdateServiceReducer,
 } from "./reducers/admin/services.reducers";
+import {
+  adminApproveTestimonialsReducer,
+  adminDeleteTestimonialsReducer,
+  adminGetUnapprovedTestimonialsReducer,
+  adminUpdateTestimonialsReducer,
+} from "./reducers/admin/testimonials.reducers";
 import {
   adminCreateUserReducer,
   adminDeleteUserReducer,
@@ -42,6 +56,11 @@ import {
 } from "./reducers/auth.reducers";
 import { CreateContactUsReducer } from "./reducers/contactus.reducers";
 import {
+  homeGetCategoriesReducer,
+  homeGetProductsReducer,
+  homeGetServicesReducer,
+} from "./reducers/home.reducers";
+import {
   sellerCreateProductReducer,
   sellerDeleteProductReducer,
   sellerGetProductByIdReducer,
@@ -56,31 +75,6 @@ import {
   sellerUpdateServiceReducer,
 } from "./reducers/seller/seller-services.reducers";
 import {
-  GetUserProfileReducer,
-  UpdatePasswordReducer,
-  UpdateProfileReducer,
-  UpdateSocialsReducer,
-} from "./reducers/userDashboard/profile.reducers";
-import {
-  getApprovedTestimonialReducer,
-  testimonialReducer,
-} from "./reducers/userDashboard/testimonials.reducers";
-import { ReduxResponseType } from "./types/general.types";
-import {
-  adminApproveTestimonialsReducer,
-  adminDeleteTestimonialsReducer,
-  adminGetUnapprovedTestimonialsReducer,
-  adminUpdateTestimonialsReducer,
-} from "./reducers/admin/testimonials.reducers";
-import {
-  adminActivateGroupchatReducer,
-  adminCreateGroupchatReducer,
-  adminDeleteGroupchatReducer,
-  adminGetGroupchatReducer,
-  adminSuspendGroupchatReducer,
-  adminUpdateGroupchatReducer,
-} from "./reducers/admin/groupchat.reducers";
-import {
   getUserGroupChatsReducer,
   userGetGroupchatDetailsReducer,
   userGetGroupchatMembersReducer,
@@ -93,13 +87,28 @@ import {
   userGetProductsReducer,
 } from "./reducers/userDashboard/products.reducers";
 import {
+  GetUserProfileReducer,
+  UpdatePasswordReducer,
+  UpdateProfileReducer,
+  UpdateSocialsReducer,
+} from "./reducers/userDashboard/profile.reducers";
+import {
   userGetServiceCategoriesReducer,
   userGetServicesReducer,
 } from "./reducers/userDashboard/services.reducers";
+import {
+  getApprovedTestimonialReducer,
+  testimonialReducer,
+} from "./reducers/userDashboard/testimonials.reducers";
+import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
+  //home
+  homeGetCategories: ReduxResponseType;
+  homeGetProducts: ReduxResponseType;
+  homeGetServices: ReduxResponseType;
+  //contact us
   contactus: ReduxResponseType;
-
   //auth
   register: ReduxResponseType;
   verifyEmail: ReduxResponseType;
@@ -191,7 +200,14 @@ export type ReducersType = {
 };
 
 const reducer = combineReducers<ReducersType>({
+  //home
+  homeGetCategories: homeGetCategoriesReducer,
+  homeGetProducts: homeGetProductsReducer,
+  homeGetServices: homeGetServicesReducer,
+
+  //contact us
   contactus: CreateContactUsReducer,
+
   // auth
   register: registerReducer,
   verifyEmail: verifyEmailReducer,

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { MdExpandMore } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { categoryType } from "../../data/CategoryData";
-import { productType } from "../../data/productsData";
 import { serviceType } from "../../data/servicesData";
+import { AdminGetCategoryType } from "../../redux/types/categories.types";
 
 interface DropdownProps<T> {
   options: T[];
+  click?: any;
+  // click?: (option: T) => void;
 }
 
 export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
@@ -51,13 +53,21 @@ export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
   );
 };
 
-export const DropdownProducts = ({ options }: DropdownProps<productType>) => {
+// interface DropdownProps<T> {
+//   options: T[];
+// }
+
+export const DropdownProducts = ({
+  options,
+  click,
+}: DropdownProps<AdminGetCategoryType>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
+    click(option);
   };
 
   return (
@@ -81,9 +91,9 @@ export const DropdownProducts = ({ options }: DropdownProps<productType>) => {
               <button
                 key={index}
                 className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-t"
-                onClick={() => handleOptionClick(option.product)}
+                onClick={() => handleOptionClick(option.name)}
               >
-                {option.product}
+                {option.name}
               </button>
             ))}
           </div>
