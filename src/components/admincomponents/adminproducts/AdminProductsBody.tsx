@@ -26,6 +26,7 @@ type QueryType = {
 
 const AdminProductsBody = () => {
   const limit: number = 5;
+
   const [query, setQuery] = useState<QueryType>({
     page: 1,
     search: "",
@@ -72,14 +73,14 @@ const AdminProductsBody = () => {
     (state: ReducersType) => state?.adminGetAllProducts
   ) as ReduxResponseType<Paginator<AdminGetProductType[]>>;
 
+  const products = useMemo(() => {
+    return adminGetProductsRedux?.serverResponse?.data;
+  }, [adminGetProductsRedux]);
+
   // delete products
   const adminDeleteProductsByIDRedux = useSelector(
     (state: ReducersType) => state?.adminDeleteProduct
   ) as ReduxResponseType<AdminGetProductType>;
-
-  const products = useMemo(() => {
-    return adminGetProductsRedux?.serverResponse?.data;
-  }, [adminGetProductsRedux]);
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -114,13 +115,6 @@ const AdminProductsBody = () => {
   );
 
   const search = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setQuery((prev) => {
-    //   return {
-    //     ...prev,
-    //     [e.target.name]: e.target.value,
-    //   };
-    // });
-
     setQuery({
       page: 1,
       search: e.target.value,
@@ -171,7 +165,8 @@ const AdminProductsBody = () => {
   useEffect(() => {
     dispatch(adminGetProductsAction(queryString) as any);
   }, [dispatch, queryString]);
-  console.log(products.count);
+
+  // console.log(products.count);
   return (
     <section>
       <div className="flex flex-col gap-3">

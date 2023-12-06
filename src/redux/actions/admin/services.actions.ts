@@ -284,7 +284,7 @@ export const adminGetServiceByIdAction =
   };
 
 export const adminGetServicesAction =
-  () => async (dispatch: Dispatch, getState: any) => {
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_GET_ALL_SERVICE_REQUEST,
@@ -301,7 +301,7 @@ export const adminGetServicesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminServices?.getAll,
+        API_ROUTES?.adminServices?.getAll + "?" + query.toString(),
         config
       );
 
