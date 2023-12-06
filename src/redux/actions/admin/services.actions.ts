@@ -304,6 +304,7 @@ export const adminGetServicesAction =
         API_ROUTES?.adminServices?.getAll + "?" + query.toString(),
         config
       );
+
       dispatch({
         type: ADMIN_GET_ALL_SERVICE_SUCCESS,
         payload: data,

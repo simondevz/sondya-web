@@ -232,13 +232,12 @@ const AdminAddProductsBody = () => {
                   <textarea
                     className="border p-2 rounded-md bg-[#F9F9FC]"
                     name="description"
+                    placeholder="Type product description here. . ."
                     id=""
                     cols={30}
                     rows={6}
                     onChange={onChange}
-                  >
-                    Type product description here. . .
-                  </textarea>
+                  ></textarea>
                 </div>
               </div>
               {/* Handle Images starts */}

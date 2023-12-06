@@ -285,14 +285,13 @@ const AdminEditProductBody = () => {
                   <textarea
                     className="border p-2 rounded-md bg-[#F9F9FC]"
                     name="description"
+                    placeholder="Type product description here. . ."
                     id=""
                     cols={30}
                     rows={6}
                     onChange={onChange}
                     value={formData.description}
-                  >
-                    Type product description here. . .
-                  </textarea>
+                  ></textarea>
                 </div>
               </div>
               <div className="flex flex-col shadow-md rounded-md p-3 gap-3">
