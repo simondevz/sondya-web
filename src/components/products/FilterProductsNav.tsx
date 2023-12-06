@@ -246,9 +246,35 @@ export const ProductPriceRange = ({
   );
 };
 
-export const ProductPopularBrands = () => {
+export const ProductPopularBrands = ({
+  query,
+  setQuery,
+}: {
+  query: QueryType;
+  setQuery: any;
+}) => {
   const [openProducts, setOpenProducts] = useState(false);
   const ClickOpenProducts = () => setOpenProducts((prev) => !prev);
+
+  const handleCheckboxChange = (event: any, brand: string) =>
+    setQuery((prev: QueryType) => {
+      const checkArray: string[] = prev.popularBrands.filter(
+        (prevBrand) => prevBrand !== brand
+      );
+
+      if (checkArray.length === prev.popularBrands.length)
+        return {
+          ...prev,
+          popularBrands: [...prev.popularBrands, brand],
+        };
+
+      if (checkArray.length < prev.popularBrands.length)
+        return {
+          ...prev,
+          popularBrands: checkArray,
+        };
+    });
+
   return (
     <div className="flex flex-col border-b-[2px] py-5 gap-2">
       <button
@@ -260,52 +286,100 @@ export const ProductPopularBrands = () => {
       {openProducts && (
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" checked />
-            Apple
+            <input
+              type="checkbox"
+              id="apple"
+              onChange={(event) => handleCheckboxChange(event, "Apple")}
+            />
+            <label htmlFor="apple">Apple</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" checked />
-            Google
+            <input
+              type="checkbox"
+              id="google"
+              onChange={(event) => handleCheckboxChange(event, "Google")}
+            />
+            <label htmlFor="google">Google</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" checked />
-            Microsoft
+            <input
+              type="checkbox"
+              id="microsoft"
+              onChange={(event) => handleCheckboxChange(event, "Microsoft")}
+            />
+            <label htmlFor="microsoft">Microsoft</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" />
-            Samsung
+            <input
+              type="checkbox"
+              id="samsung"
+              onChange={(event) => handleCheckboxChange(event, "Samsung")}
+            />
+            <label htmlFor="samsung">Samsung</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" />
-            Dell
+            <input
+              type="checkbox"
+              id="dell"
+              onChange={(event) => handleCheckboxChange(event, "Dell")}
+            />
+            <label htmlFor="dell">Dell</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" checked />
-            Hp
+            <input
+              type="checkbox"
+              id="hp"
+              onChange={(event) => handleCheckboxChange(event, "Hp")}
+            />
+            <label htmlFor="hp">Hp</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" />
-            Symphony
+            <input
+              type="checkbox"
+              id="symphony"
+              onChange={(event) => handleCheckboxChange(event, "Symphony")}
+            />
+            <label htmlFor="symphony">Symphony</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" />
-            Xiaomi
+            <input
+              type="checkbox"
+              id="xiaomi"
+              onChange={(event) => handleCheckboxChange(event, "Xiaomi")}
+            />
+            <label htmlFor="xiaomi">Xiaomi</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" />
-            Sony
+            <input
+              type="checkbox"
+              id="sony"
+              onChange={(event) => handleCheckboxChange(event, "Sony")}
+            />
+            <label htmlFor="sony">Sony</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" checked />
-            Panasonic
+            <input
+              type="checkbox"
+              id="panasonic"
+              onChange={(event) => handleCheckboxChange(event, "Panasonic")}
+            />
+            <label htmlFor="panasonic">Panasonic</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" checked />
-            LG
+            <input
+              type="checkbox"
+              id="lg"
+              onChange={(event) => handleCheckboxChange(event, "LG")}
+            />
+            <label htmlFor="lg">LG</label>
           </div>
           <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input type="checkbox" />
-            Intel
+            <input
+              type="checkbox"
+              id="intel"
+              onChange={(event) => handleCheckboxChange(event, "Intel")}
+            />
+            <label htmlFor="intel">Intel</label>
           </div>
         </div>
       )}
