@@ -22,22 +22,13 @@ const AdminServicesBody = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [services, setServices] = useState<AdminGetServiceType[]>([]);
-
   const adminGetServicesRedux = useSelector(
     (state: ReducersType) => state?.adminGetAllService
-  ) as ReduxResponseType<AdminGetServiceType[]>;
+  ) as ReduxResponseType;
 
   useEffect(() => {
     dispatch(adminGetServicesAction() as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (adminGetServicesRedux?.serverResponse.data) {
-      setServices(adminGetServicesRedux?.serverResponse?.data);
-    }
-  }, [adminGetServicesRedux?.serverResponse, dispatch]);
+  }, [dispatch]);
 
   // delete service
   const adminDeleteServiceByIDRedux = useSelector(
@@ -124,68 +115,81 @@ const AdminServicesBody = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {services.map((t, i) => {
-            return (
-              <div
-                key={i}
-                className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
-              >
-                <img
-                  className="rounded-t-md h-48 object-cover"
-                  src={
-                    t.image && t.image.length > 0 ? t.image[0].url : carRepair
-                  }
-                  alt=""
-                />
-                <div className="flex gap-3 px-3">
-                  <div className="p-3 rounded-full bg-[#EDB842] w-fit h-fit"></div>
-                  <div className="">{t.user}</div>
-                </div>
-                <div className="h-12 overflow-y-hidden px-3">{t.name}</div>
-                <div className="px-3">
-                  ${t.current_price && <FormatNumber price={t.current_price} />}
-                </div>
-                <div className="relative border-t border-[#EFEFF0] flex justify-between p-2 items-center">
-                  <button
-                    onClick={() => navigate(`/admin/service/edit/${t._id}`)}
-                    className="flex p-2 bg-[#EDB842] text-white items-center rounded-md"
+          {adminGetServicesRedux?.serverResponse?.data?.data?.length ? (
+            adminGetServicesRedux?.serverResponse?.data?.data?.map(
+              (t: AdminGetServiceType, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
                   >
-                    <MdEdit />
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      Open === undefined ? setOpen(i) : setOpen(undefined);
-                    }}
-                  >
-                    <MdMoreVert />
-                  </button>
-                  {Open === i && (
-                    <div className="absolute bg-white z-20 p-3 top-10 rounded-md">
-                      <button
-                        onClick={() =>
-                          navigate(`/admin/service/details/${t._id}`)
-                        }
-                        className="flex gap-5 text-[#464D61] items-center"
-                      >
-                        <BsEye />
-                        <div className="whitespace-nowrap">
-                          View Service Details
-                        </div>
-                      </button>
-                      <button
-                        onClick={() => handleDelete(t._id)}
-                        className="flex gap-5 text-[#464D61] items-center"
-                      >
-                        <MdDelete />
-                        <div className="whitespace-nowrap">Delete Service</div>
-                      </button>
+                    <img
+                      className="rounded-t-md h-48 object-cover"
+                      src={
+                        t.image && t.image.length > 0
+                          ? t.image[0].url
+                          : carRepair
+                      }
+                      alt=""
+                    />
+                    <div className="flex gap-3 px-3">
+                      <div className="p-3 rounded-full bg-[#EDB842] w-fit h-fit"></div>
+                      <div className="">{t.user}</div>
                     </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+                    <div className="h-12 overflow-y-hidden px-3">{t.name}</div>
+                    <div className="px-3">
+                      $
+                      {t.current_price && (
+                        <FormatNumber price={t.current_price} />
+                      )}
+                    </div>
+                    <div className="relative border-t border-[#EFEFF0] flex justify-between p-2 items-center">
+                      <button
+                        onClick={() => navigate(`/admin/service/edit/${t._id}`)}
+                        className="flex p-2 bg-[#EDB842] text-white items-center rounded-md"
+                      >
+                        <MdEdit />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          Open === undefined ? setOpen(i) : setOpen(undefined);
+                        }}
+                      >
+                        <MdMoreVert />
+                      </button>
+                      {Open === i && (
+                        <div className="absolute bg-white z-20 p-3 top-10 rounded-md">
+                          <button
+                            onClick={() =>
+                              navigate(`/admin/service/details/${t._id}`)
+                            }
+                            className="flex gap-5 text-[#464D61] items-center"
+                          >
+                            <BsEye />
+                            <div className="whitespace-nowrap">
+                              View Service Details
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(t._id)}
+                            className="flex gap-5 text-[#464D61] items-center"
+                          >
+                            <MdDelete />
+                            <div className="whitespace-nowrap">
+                              Delete Service
+                            </div>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+            )
+          ) : (
+            <></>
+          )}
         </div>
         <div className="flex flex-row justify-between items-center">
           <div className="text-[#667085]">Showing 1-10 from 100</div>

@@ -19,12 +19,14 @@ import {
   userGetProductsType,
 } from "../../redux/types/products.types";
 import { productImage7 } from "../../images/products";
+import { BsThreeDots } from "react-icons/bs";
 
 export type QueryType = {
   page: number;
   search: string;
   subcategory: string;
   priceRange: string;
+  popularBrands: string[];
 };
 
 const ProductBody = () => {
@@ -33,6 +35,7 @@ const ProductBody = () => {
     search: "",
     subcategory: "",
     priceRange: "",
+    popularBrands: [],
   });
 
   return (
@@ -40,7 +43,7 @@ const ProductBody = () => {
       <div className="w-3/12 px-3 py-4 md:flex hidden flex-col gap-3">
         <ProductNav query={query} setQuery={setQuery} />
         <ProductPriceRange query={query} setQuery={setQuery} />
-        <ProductPopularBrands />
+        <ProductPopularBrands query={query} setQuery={setQuery} />
         <ProductPopularTags />
       </div>
       <ProductBodyMain query={query} setQuery={setQuery} />
@@ -58,7 +61,10 @@ const ProductBodyMain = ({
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [queryString, setQueryString] = useState<string>("page=1");
+  const [queryString, setQueryString] = useState<string>("");
+  const [dotIndex, setDotIndex] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const limit: number = 20;
 
   // update query and url
   const updateQueryString = useCallback(
@@ -66,7 +72,12 @@ const ProductBodyMain = ({
       const searchParams = new URLSearchParams(location.search);
       // Update or add new parameters
       Object.entries(newParams).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          (value as string[]).length !== 0
+        ) {
           searchParams.set(key, String(value));
         } else {
           searchParams.delete(key);
@@ -88,9 +99,44 @@ const ProductBodyMain = ({
     [location.pathname, location.search, navigate]
   );
 
+  const prevPage = () => {
+    setQuery((prev: QueryType) => {
+      return {
+        ...prev,
+        page: prev.page--,
+      };
+    });
+  };
+
+  const nextPage = () => {
+    setQuery((prev: QueryType) => {
+      alert(prev.page++);
+      return {
+        ...prev,
+        page: prev.page++,
+      };
+    });
+  };
+
+  const goToPage = (page: number) => {
+    setQuery((prev: QueryType) => {
+      return {
+        ...prev,
+        page: page,
+      };
+    });
+  };
+
   const productsRedux = useSelector(
     (state: ReducersType) => state?.userGetProducts
   ) as ReduxResponseType<userGetProductsType>;
+
+  useEffect(() => {
+    if (productsRedux.success)
+      setTotalPages(
+        Math.ceil(Number(productsRedux?.serverResponse?.data?.count) / limit)
+      );
+  }, [productsRedux?.success, productsRedux?.serverResponse?.data?.count]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -110,10 +156,11 @@ const ProductBodyMain = ({
             className="border-[#EDB842] outline-none border-[2px] rounded-md px-2 md:px-4"
             type="text"
             placeholder="Search for anything..."
+            value={query.search}
+            onChange={(event) => {
+              setQuery({ ...query, search: event.target.value });
+            }}
           />
-          <button className="text-white bg-[#EDB842] px-2 md:px-3 py-2 rounded-md">
-            Search
-          </button>
         </div>
         <div className="flex flex-row gap-2 items-center text-[#5F6C72]">
           <label htmlFor="">Sort by:</label>
@@ -132,12 +179,82 @@ const ProductBodyMain = ({
       <div className="bg-[#EDB84233] flex flex-row gap-2 justify-between p-2 rounded-md text-[#5F6C72] font-[600]">
         <div className="flex flex-row gap-2 items-center">
           <span className="font-[400] whitespace-nowrap">Active Filters:</span>
-          <span className="hidden md:flex items-center gap-2">
-            Electronics Devices <FaTimes />
-          </span>
-          <span className="hidden md:flex items-center gap-2">
-            5 Star Rating <FaTimes />
-          </span>
+          {/* Active subategory filter */}
+          {query.subcategory && (
+            <span className="hidden md:flex items-center gap-2">
+              {query.subcategory}
+              <button
+                onClick={() =>
+                  setQuery({
+                    ...query,
+                    subcategory: "",
+                  })
+                }
+              >
+                <FaTimes />
+              </button>
+            </span>
+          )}
+
+          {/* Active price range */}
+          {query.priceRange && (
+            <span className="hidden md:flex items-center gap-2">
+              $
+              {Number(query.priceRange.split("_")[0])
+                ? query.priceRange.split("_")[0]
+                : 0}{" "}
+              - $
+              {Number(query.priceRange.split("_")[1])
+                ? query.priceRange.split("_")[1]
+                : 0}
+              <button
+                onClick={() =>
+                  setQuery({
+                    ...query,
+                    priceRange: "",
+                  })
+                }
+              >
+                <FaTimes />
+              </button>
+            </span>
+          )}
+
+          {/* Active popular Brands */}
+          {query.popularBrands.length ? (
+            query.popularBrands.map((brand: string, index: number) => {
+              return (
+                <span key={index} className="hidden md:flex items-center gap-2">
+                  {brand}
+                  <button
+                    onClick={() =>
+                      setQuery({
+                        ...query,
+                        popularBrands: query.popularBrands.filter(
+                          (otherBrands: string) => brand !== otherBrands
+                        ),
+                      })
+                    }
+                  >
+                    <FaTimes />
+                  </button>
+                </span>
+              );
+            })
+          ) : (
+            <></>
+          )}
+
+          {/* No active filters */}
+          {!query.popularBrands.length &&
+          !query.priceRange &&
+          !query.subcategory ? (
+            <span className="hidden md:flex items-center gap-2">
+              No Active Filters
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="whitespace-nowrap">
           {productsRedux?.serverResponse?.data?.count} Results found.
@@ -163,7 +280,7 @@ const ProductBodyMain = ({
                       Reviews ({product.total_rating})
                     </span>
                   </div>
-                  <div className=""></div>
+                  <div className="">{product.name}</div>
                   <div className="text-[#666666]">
                     {product.old_price && "$"}
                     {product.old_price ? (
@@ -185,18 +302,54 @@ const ProductBodyMain = ({
       </div>
 
       <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
-        <span className="bg-[#EDB84233] p-2 rounded-md">
+        <button
+          disabled={query.page <= 1}
+          type="button"
+          onClick={() => prevPage()}
+          className="bg-[#EDB84233] p-2 rounded-md"
+        >
           <BiSolidLeftArrow />
-        </span>
-        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
-        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
-        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
-        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
-        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
-        <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
-        <span className="bg-[#EDB84233] p-2 rounded-md">
+        </button>
+        {Number.isInteger(totalPages) &&
+          totalPages >= 0 &&
+          Array.from({
+            length: totalPages,
+          }).map((_, i) => {
+            if (i >= dotIndex && i <= dotIndex + 2) {
+              return (
+                <button
+                  key={i}
+                  onClick={() => goToPage(i + 1)}
+                  className={`${
+                    query.page === i + 1 && "bg-[#EDB84233]"
+                  } px-4 py-2 rounded-md`}
+                >
+                  {i + 1}
+                </button>
+              );
+            }
+            return <div className="hidden">...</div>;
+          })}
+        {Number.isInteger(totalPages) && totalPages > 3 && (
+          <button
+            onClick={() => {
+              totalPages >= dotIndex
+                ? setDotIndex((prev: number) => prev + 3)
+                : setDotIndex(0);
+            }}
+            className="p-2 bg-[#EDB842] rounded-md text-white"
+          >
+            <BsThreeDots />
+          </button>
+        )}
+        <button
+          type="button"
+          disabled={query.page >= totalPages}
+          onClick={() => nextPage()}
+          className="bg-[#EDB84233] p-2 rounded-md"
+        >
           <BiSolidRightArrow />
-        </span>
+        </button>
       </div>
     </div>
   );
