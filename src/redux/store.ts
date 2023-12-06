@@ -56,7 +56,6 @@ import {
 } from "./reducers/auth.reducers";
 import { CreateContactUsReducer } from "./reducers/contactus.reducers";
 import {
-  homeGetCategoriesReducer,
   homeGetProductsReducer,
   homeGetServicesReducer,
 } from "./reducers/home.reducers";
@@ -104,7 +103,6 @@ import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
   //home
-  homeGetCategories: ReduxResponseType;
   homeGetProducts: ReduxResponseType;
   homeGetServices: ReduxResponseType;
   //contact us
@@ -201,7 +199,6 @@ export type ReducersType = {
 
 const reducer = combineReducers<ReducersType>({
   //home
-  homeGetCategories: homeGetCategoriesReducer,
   homeGetProducts: homeGetProductsReducer,
   homeGetServices: homeGetServicesReducer,
 

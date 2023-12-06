@@ -13,10 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProductsItemsdata2 } from "../../data/productsItemsData";
 import { productImage1 } from "../../images/products";
-import {
-  homeGetCategoriesAction,
-  homeGetProductsAction,
-} from "../../redux/actions/home.actions";
+import { adminGetProductCategoriesAction } from "../../redux/actions/admin/categories.actions";
+import { homeGetProductsAction } from "../../redux/actions/home.actions";
 import { ReducersType } from "../../redux/store";
 import { AdminGetCategoryType } from "../../redux/types/categories.types";
 import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
@@ -65,7 +63,6 @@ const Products = () => {
       // set query string
       setQueryString(newSearch);
 
-      // Use navigate to change the URL
       navigate({
         pathname: location.pathname,
         search: newSearch,
@@ -89,7 +86,7 @@ const Products = () => {
 
   //admin get categories
   const homeGetCategoriesRedux = useSelector(
-    (state: ReducersType) => state?.homeGetCategories
+    (state: ReducersType) => state?.adminGetProductCategories
   ) as ReduxResponseType<AdminGetCategoryType[]>;
 
   const categories = useMemo(() => {
@@ -97,7 +94,8 @@ const Products = () => {
   }, [homeGetCategoriesRedux]);
 
   useEffect(() => {
-    dispatch(homeGetCategoriesAction("category=product") as any);
+    // dispatch(homeGetCategoriesAction("category=product") as any);
+    dispatch(adminGetProductCategoriesAction() as any);
   }, [dispatch, queryString]);
 
   //admin get products
@@ -110,7 +108,7 @@ const Products = () => {
   }, [homeGetProductsRedux]);
 
   useEffect(() => {
-    console.log(queryString);
+    // console.log(queryString);
     dispatch(homeGetProductsAction(queryString) as any);
   }, [dispatch, queryString]);
 
