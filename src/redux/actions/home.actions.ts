@@ -1,9 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import {
-  HOME_CATEGORIES_FAIL,
-  HOME_CATEGORIES_REQUEST,
-  HOME_CATEGORIES_SUCCESS,
   HOME_PRODUCTS_FAIL,
   HOME_PRODUCTS_REQUEST,
   HOME_PRODUCTS_SUCCESS,
@@ -71,39 +68,6 @@ export const homeGetServicesAction =
     } catch (error: any) {
       dispatch({
         type: HOME_SERVICES_FAIL,
-        payload:
-          error?.response && error.response?.data?.message
-            ? error?.response?.data?.message
-            : error?.message,
-      });
-    }
-  };
-
-export const homeGetCategoriesAction =
-  (query: string) => async (dispatch: Dispatch, getState: any) => {
-    try {
-      dispatch({
-        type: HOME_CATEGORIES_REQUEST,
-      });
-
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const { data } = await axios.get(
-        API_ROUTES?.home?.categories + "?" + query.toString(),
-        config
-      );
-
-      dispatch({
-        type: HOME_CATEGORIES_SUCCESS,
-        payload: data,
-      });
-    } catch (error: any) {
-      dispatch({
-        type: HOME_CATEGORIES_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

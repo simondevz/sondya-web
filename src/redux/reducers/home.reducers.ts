@@ -1,9 +1,5 @@
 import { LOGIN_RESET } from "../constants/auth.constants";
 import {
-  HOME_CATEGORIES_FAIL,
-  HOME_CATEGORIES_REQUEST,
-  HOME_CATEGORIES_RESET,
-  HOME_CATEGORIES_SUCCESS,
   HOME_PRODUCTS_FAIL,
   HOME_PRODUCTS_REQUEST,
   HOME_PRODUCTS_RESET,
@@ -68,35 +64,6 @@ export const homeGetServicesReducer = (
         error: action.payload,
       };
     case HOME_SERVICES_RESET:
-    case LOGIN_RESET:
-      return { ...initialState };
-    default:
-      return state;
-  }
-};
-
-export const homeGetCategoriesReducer = (
-  state: ReduxResponseType = initialState,
-  action: ActionType
-) => {
-  switch (action.type) {
-    case HOME_CATEGORIES_REQUEST:
-      return { ...initialState, loading: true };
-    case HOME_CATEGORIES_SUCCESS:
-      return {
-        ...initialState,
-        loading: false,
-        success: true,
-        serverResponse: action.payload,
-      };
-    case HOME_CATEGORIES_FAIL:
-      return {
-        ...initialState,
-        loading: false,
-        success: false,
-        error: action.payload,
-      };
-    case HOME_CATEGORIES_RESET:
     case LOGIN_RESET:
       return { ...initialState };
     default:

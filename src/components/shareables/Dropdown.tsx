@@ -2,13 +2,11 @@ import { useState } from "react";
 import { MdExpandMore } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { categoryType } from "../../data/CategoryData";
-import { serviceType } from "../../data/servicesData";
 import { AdminGetCategoryType } from "../../redux/types/categories.types";
 
 interface DropdownProps<T> {
   options: T[];
-  click?: any;
-  // click?: (option: T) => void;
+  click?: Function;
 }
 
 export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
@@ -53,10 +51,6 @@ export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
   );
 };
 
-// interface DropdownProps<T> {
-//   options: T[];
-// }
-
 export const DropdownProducts = ({
   options,
   click,
@@ -67,7 +61,7 @@ export const DropdownProducts = ({
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
-    click(option);
+    click && click(option);
   };
 
   return (
@@ -103,12 +97,16 @@ export const DropdownProducts = ({
   );
 };
 
-export const DropdownServices = ({ options }: DropdownProps<serviceType>) => {
+export const DropdownServices = ({
+  options,
+  click,
+}: DropdownProps<AdminGetCategoryType>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
+    click && click(option);
   };
 
   return (
@@ -128,13 +126,13 @@ export const DropdownServices = ({ options }: DropdownProps<serviceType>) => {
       {isOpen && (
         <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-40">
           <div className="py-1">
-            {options.map((option, index) => (
+            {options.slice(0, 6).map((option, index) => (
               <button
                 key={index}
                 className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-t"
-                onClick={() => handleOptionClick(option.service)}
+                onClick={() => handleOptionClick(option.name)}
               >
-                {option.service}
+                {option.name}
               </button>
             ))}
           </div>
@@ -210,7 +208,7 @@ export const DropdownMenuForLargeScreen = () => {
         </button>
       </div>
       {isOpen && (
-        <div className="absolute top-12 text-white bg-black w-full">
+        <div className="absolute top-12 text-white bg-black w-full z-50">
           <div className="py-1">
             <button
               onClick={() => handleOptionClick("/products")}
