@@ -54,6 +54,7 @@ export const ServicesNav = ({
                       setQuery({
                         ...query,
                         subcategory: subcategory.name,
+                        page: 1,
                       });
                     }}
                   />
@@ -104,6 +105,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: `${minPrice || 0}_${range}`,
+                  page: 1,
                 });
               }}
             />
@@ -122,6 +124,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: `${min}_${maxPrice}`,
+                  page: 1,
                 });
               }}
             />
@@ -138,6 +141,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: `${minPrice}_${max}`,
+                  page: 1,
                 });
               }}
             />
@@ -151,6 +155,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "",
+                  page: 1,
                 })
               }
             />
@@ -165,6 +170,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "0_20",
+                  page: 1,
                 })
               }
             />
@@ -179,6 +185,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "25_100",
+                  page: 1,
                 })
               }
             />
@@ -193,6 +200,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "100_300",
+                  page: 1,
                 })
               }
             />
@@ -207,6 +215,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "300_500",
+                  page: 1,
                 })
               }
             />
@@ -221,6 +230,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "500_1000",
+                  page: 1,
                 })
               }
             />
@@ -235,6 +245,7 @@ export const ServicesPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "1000_10000",
+                  page: 1,
                 })
               }
             />
@@ -266,12 +277,14 @@ export const ServicesPopularBrands = ({
         return {
           ...prev,
           popularBrands: [...prev.popularBrands, brand],
+          page: 1,
         };
 
       if (checkArray.length < prev.popularBrands.length)
         return {
           ...prev,
           popularBrands: checkArray,
+          page: 1,
         };
     });
 

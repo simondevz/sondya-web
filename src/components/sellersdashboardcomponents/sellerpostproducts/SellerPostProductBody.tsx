@@ -14,6 +14,8 @@ import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateProduct } from "../../../redux/types/products.types";
+import { userGetProductsCategoriesAction } from "../../../redux/actions/userDashboard/products.action";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const SellerPostProductBody = () => {
   const [status1] = useState<"closed" | "open" | "done">("done");
@@ -147,6 +149,27 @@ const SellerPostProductBody = () => {
       setTimeout(function () {
         // navigate("/seller/products");
         // handleClose();
+        setFormData({
+          name: "",
+          category: "",
+          description: "",
+          owner: {
+            id: login?.serverResponse?.data?.id,
+            username: login?.serverResponse?.data?.username as string,
+            email: login?.serverResponse?.data?.email,
+          },
+          total_stock: 0,
+          tag: "",
+          brand: "",
+          model: "",
+          current_price: 0,
+          quantity: 0,
+          product_status: "",
+          old_price: 0,
+          discount_percentage: 0,
+          vat_percentage: 0,
+          total_variants: 0,
+        });
         setDone(true);
       }, 4000);
     }
@@ -155,8 +178,24 @@ const SellerPostProductBody = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       dispatch({ type: SELLER_CREATE_PRODUCT_RESET });
     }, 3000);
-  }, [sellerCreateProductRedux, dispatch, navigate]);
+  }, [
+    sellerCreateProductRedux,
+    dispatch,
+    navigate,
+    login?.serverResponse?.data?.id,
+    login?.serverResponse?.data?.username,
+    login?.serverResponse?.data?.email,
+  ]);
   console.log(sellerCreateProductRedux?.error);
+
+  let subcategoriesRedux = useSelector(
+    (state: ReducersType) => state?.userGetProductsCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+
+  useEffect(() => {
+    dispatch(userGetProductsCategoriesAction() as any);
+  }, [dispatch]);
+
   return (
     <section className="flex flex-col">
       <div className="p-5 shadow-md rounded-md flex flex-col gap-6">
@@ -249,6 +288,7 @@ const SellerPostProductBody = () => {
                       placeholder="Ad Name"
                       onChange={onChange}
                       autoFocus={true}
+                      value={formData.name}
                     />
                   </div>
                   <div className="flex flex-row gap-3">
@@ -258,6 +298,7 @@ const SellerPostProductBody = () => {
                         className="border p-2 rounded-md text-[#939AAD]"
                         name="product_status"
                         onChange={onChange}
+                        value={formData.product_status}
                       >
                         <option value="">Select status</option>
                         <option value="draft">draft</option>
@@ -272,9 +313,23 @@ const SellerPostProductBody = () => {
                         className="border p-2 rounded-md text-[#939AAD]"
                         name="category"
                         id=""
+                        value={formData.category}
                         onChange={onChange}
                       >
                         <option value="">Select...</option>
+                        {subcategoriesRedux.success ? (
+                          subcategoriesRedux.serverResponse.data?.map(
+                            (subcategories: AdminGetCategoryType) => {
+                              return (
+                                <option value={subcategories?.name}>
+                                  {subcategories?.name}
+                                </option>
+                              );
+                            }
+                          )
+                        ) : (
+                          <></>
+                        )}
                       </select>
                     </div>
                   </div>
@@ -287,6 +342,7 @@ const SellerPostProductBody = () => {
                         type="text"
                         placeholder="Brand name"
                         onChange={onChange}
+                        value={formData.brand}
                       />
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
@@ -296,6 +352,7 @@ const SellerPostProductBody = () => {
                         name="tag"
                         id=""
                         onChange={onChange}
+                        value={formData.tag}
                       />
                     </div>
                   </div>
@@ -325,9 +382,8 @@ const SellerPostProductBody = () => {
                       cols={30}
                       rows={4}
                       onChange={onChange}
-                    >
-                      Product description
-                    </textarea>
+                      placeholder="Product description"
+                    ></textarea>
                   </div>
                   <div className="text-center font-[600] text-xl">
                     Prices data
@@ -340,6 +396,7 @@ const SellerPostProductBody = () => {
                       placeholder="Type base price here. . ."
                       name="current_price"
                       onChange={onChange}
+                      value={formData.current_price}
                     />
                   </div>
                   <div className="flex flex-row gap-3">
@@ -351,6 +408,7 @@ const SellerPostProductBody = () => {
                         type="number"
                         placeholder="Type before price here. . ."
                         onChange={onChange}
+                        value={formData.old_price}
                       />
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
@@ -361,6 +419,7 @@ const SellerPostProductBody = () => {
                         name="discount_percentage"
                         id=""
                         onChange={onChange}
+                        value={formData.discount_percentage}
                       />
                     </div>
                   </div>
@@ -373,6 +432,7 @@ const SellerPostProductBody = () => {
                         type="number"
                         placeholder="total here. . ."
                         onChange={onChange}
+                        value={formData.total_stock}
                       />
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
@@ -383,6 +443,7 @@ const SellerPostProductBody = () => {
                         type="number"
                         placeholder="total here. . ."
                         onChange={onChange}
+                        value={formData.vat_percentage}
                       />
                     </div>
                   </div>
@@ -469,6 +530,7 @@ const SellerPostProductBody = () => {
                           type="text"
                           placeholder="Product Model Number here. . ."
                           onChange={onChange}
+                          value={formData.model}
                         />
                       </div>
                       <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
@@ -479,6 +541,7 @@ const SellerPostProductBody = () => {
                           type="number"
                           placeholder="Total variant"
                           onChange={onChange}
+                          value={formData.total_variants}
                         />
                       </div>
                       <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
@@ -489,6 +552,7 @@ const SellerPostProductBody = () => {
                           type="number"
                           placeholder="Type product quantity here. . ."
                           onChange={onChange}
+                          value={formData.quantity}
                         />
                       </div>
                     </div>

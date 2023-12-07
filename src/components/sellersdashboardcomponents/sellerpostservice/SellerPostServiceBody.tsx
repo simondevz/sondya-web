@@ -13,6 +13,8 @@ import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateService } from "../../../redux/types/services.types";
+import { userGetServiceCategoriesAction } from "../../../redux/actions/userDashboard/services.actions";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const SellerPostServiceBody = () => {
   const [status1] = useState<"closed" | "open" | "done">("done");
@@ -168,6 +170,14 @@ const SellerPostServiceBody = () => {
     }, 2000);
   }, [sellerCreateServiceRedux, dispatch, navigate]);
 
+  let subcategoriesRedux = useSelector(
+    (state: ReducersType) => state?.userGetServiceCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+
+  useEffect(() => {
+    dispatch(userGetServiceCategoriesAction() as any);
+  }, [dispatch]);
+
   console.log(formData);
   return (
     <section className="flex flex-col">
@@ -294,6 +304,19 @@ const SellerPostServiceBody = () => {
                         value={formData.category}
                       >
                         <option value="">Select a category</option>
+                        {subcategoriesRedux.success ? (
+                          subcategoriesRedux.serverResponse.data?.map(
+                            (subcategories: AdminGetCategoryType) => {
+                              return (
+                                <option value={subcategories?.name}>
+                                  {subcategories?.name}
+                                </option>
+                              );
+                            }
+                          )
+                        ) : (
+                          <></>
+                        )}
                       </select>
                     </div>
                   </div>
