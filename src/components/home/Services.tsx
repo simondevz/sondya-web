@@ -6,6 +6,7 @@ import {
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import slugify from "slugify";
 import { serviceImage1 } from "../../images/serviceimages";
 import { adminGetServiceCategoriesAction } from "../../redux/actions/admin/categories.actions";
 import { homeGetServicesAction } from "../../redux/actions/home.actions";
@@ -153,7 +154,12 @@ const Services = () => {
                     <div className="text-xl text-[#000000] bg-white p-1 rounded-full">
                       <AiOutlineShoppingCart />
                     </div>
-                    <div className="text-xl bg-white text-[#000000] p-1 rounded-full">
+                    <div
+                      onClick={() =>
+                        navigate(`/service/details/${t._id}/${slugify(t.name)}`)
+                      }
+                      className="text-xl bg-white text-[#000000] p-1 rounded-full"
+                    >
                       <AiOutlineEye />
                     </div>
                   </div>

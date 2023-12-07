@@ -8,7 +8,8 @@ export const API_ROUTES = {
   // home products and categories
   home: {
     // home
-    categories: BASE + "/categories", // GET
+    productDetail: BASE + "/product/details/", // GET /:id/:slug(name)
+    serviceDetail: BASE + "/service/details/", // GET /:id/:slug(name)
     services: BASE + "/services", // GET
     products: BASE + "/products", // GET
   },

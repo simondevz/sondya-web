@@ -1,10 +1,10 @@
+import { useEffect, useMemo, useState } from "react";
 import {
   AiFillStar,
   AiOutlineArrowRight,
   AiOutlineRight,
   AiOutlineShareAlt,
 } from "react-icons/ai";
-import { BiRefresh } from "react-icons/bi";
 import {
   BsArrowRight,
   BsHandThumbsDown,
@@ -14,12 +14,42 @@ import {
 } from "react-icons/bs";
 import { FaFlag, FaHome } from "react-icons/fa";
 import { MdEmail, MdFavoriteBorder, MdMenu } from "react-icons/md";
-import { Service1, Service2, ServiceMain } from "../../images";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { Service2 } from "../../images";
 import { Facebook, Twitter, Whatsapp } from "../../images/dashboard";
 import { user2 } from "../../images/users";
+import { homeGetServiceDetailsAction } from "../../redux/actions/home.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import { AdminGetServiceType } from "../../redux/types/services.types";
 import { Ratings } from "../shareables/Ratings";
 
 const ServiceDetailsBody = () => {
+  // fetch service detail
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const id = String(params.id);
+  const name = String(params.name);
+
+  const homeGetServiceDetailsRedux = useSelector(
+    (state: ReducersType) => state?.homeGetServiceDetails
+  ) as ReduxResponseType<AdminGetServiceType>;
+
+  const service = useMemo(() => {
+    return homeGetServiceDetailsRedux?.serverResponse?.data;
+  }, [homeGetServiceDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(homeGetServiceDetailsAction({ id, name }) as any);
+  }, [dispatch, id, name]);
+
+  // image slider
+  const [currentImage, setCurrentImage] = useState<string>(
+    service.image && service.image.length > 0 ? service.image[0].url : Service2
+  );
   return (
     <section className="p-3 flex flex-col gap-4">
       <div className="text-[#5F6C72] flex flex-row justify-between">
@@ -44,55 +74,38 @@ const ServiceDetailsBody = () => {
       </div>
       <div className="flex flex-col lg:flex-row gap-3 justify-start">
         <div className="flex flex-col gap-3 w-full md:w-3/5">
-          <div className="font-[700] text-xl">
-            I will create an amazing website or app promo video
-          </div>
+          <div className="font-[700] text-xl">{service?.name}</div>
           <div className="flex gap-3">
             <img className="w-5 object-contain" src={user2} alt="" />
-            <div className="text-[#404145] font-[500]">airb123</div>
+            <div className="text-[#404145] font-[500]">
+              {service.owner?.username}
+            </div>
             <div className="flex gap-2">
               <Ratings rating={4} />{" "}
               <span className="text-[#95979D]">(904)</span>
             </div>
           </div>
-          <div className="">
-            <img src={Service2} alt="" />
+          <div className="flex flex-col gap-2 w-4/5">
+            <img
+              style={{ height: "70vh" }}
+              className="w-full object-cover border border-yellow-950 cursor-pointer"
+              src={currentImage}
+              alt=""
+            />
             <div className="flex gap-1 overflow-y-auto">
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={Service1}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
+              {service.image && service.image?.length > 0
+                ? service?.image?.map((image, index) => {
+                    return (
+                      <img
+                        onClick={() => setCurrentImage(image.url)}
+                        className="wrounded-sm object-contain h-20 border-2 border-yellow-950 cursor-pointer animate__animated animate__slideInLeft"
+                        src={image.url}
+                        alt=""
+                        key={index}
+                      />
+                    );
+                  })
+                : null}
             </div>
           </div>
         </div>
@@ -103,20 +116,14 @@ const ServiceDetailsBody = () => {
           <div className="flex flex-col gap-5 p-2 h-5/6">
             <div className="flex justify-between text-lg font-[600]">
               <div className="">GiG</div>
-              <div className="">NGN868</div>
+              <div className="">${service?.current_price}</div>
             </div>
             <div className=" text-lg font-[600] text-[#EDB842]">
               Brief Description
             </div>
-            <div className="text-[#95979D]">
-              Package includes Only Laptop-scenes Includes, Background
-              Music,Logo, and 720HD Video
-            </div>
+            <div className="text-[#95979D]">{service?.brief_description}</div>
             <div className="flex justify-start gap-4 font-[600]">
-              <div className="">4 Days Delivery</div>
-              <div className="flex flex-row gap-3 items-center">
-                <BiRefresh />1 Revision
-              </div>
+              <div className="">{service?.duration} Delivery</div>
             </div>
             <button className="flex flex-row gap-3 text-white bg-[#EDB842] rounded-md p-2 items-center justify-center">
               <span className="">Continue</span>
@@ -132,22 +139,7 @@ const ServiceDetailsBody = () => {
       </div>
       <div className="flex flex-col max-w-[50rem] p-4">
         <div className="text-xl font-[600]">About Gig</div>
-        <div className="font-[400] text-[#62646A]">
-          Currently, WordPress powers 35% of the internet and has over 400
-          million people visiting their sites every month. With a diverse set of
-          features, WordPress is well suited to a wide range of users including
-          personal sites, blogs, e-commerce and business sites that have
-          advanced requirements. Filled with resources and downloads, this
-          course covers everything you need to know to start using wordPress
-          like a pro. You'll learn how to set up your website, add content
-          including pages and blog posts, select and customize a theme, add
-          widgets and plugins to expand your site's features, connect it to your
-          social networks and upload media including videos and images - all
-          without having to code! If you don’t already have a WordPress account,
-          all you need is an email address. Being so simple, there’s no reason
-          why you shouldn’t enroll now, taking advantage of the 25% Fiverr User
-          discount on WordPress, to get your website started today.
-        </div>
+        <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
       <div className="">
         <div className="flex gap-3 items-center">

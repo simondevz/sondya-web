@@ -1,47 +1,43 @@
 import { LOGIN_RESET } from "../constants/auth.constants";
 import {
-  HOME_PRODUCTS_DETAIL_FAIL,
-  HOME_PRODUCTS_DETAIL_REQUEST,
-  HOME_PRODUCTS_DETAIL_RESET,
-  HOME_PRODUCTS_DETAIL_SUCCESS,
-  HOME_PRODUCTS_FAIL,
-  HOME_PRODUCTS_REQUEST,
-  HOME_PRODUCTS_RESET,
-  HOME_PRODUCTS_SUCCESS,
-  HOME_SERVICES_DETAIL_FAIL,
-  HOME_SERVICES_DETAIL_REQUEST,
-  HOME_SERVICES_DETAIL_RESET,
-  HOME_SERVICES_DETAIL_SUCCESS,
-  HOME_SERVICES_FAIL,
-  HOME_SERVICES_REQUEST,
-  HOME_SERVICES_RESET,
-  HOME_SERVICES_SUCCESS,
-} from "../constants/home.constants";
+  ADD_TO_WISHLIST_FAIL,
+  ADD_TO_WISHLIST_REQUEST,
+  ADD_TO_WISHLIST_RESET,
+  ADD_TO_WISHLIST_SUCCESS,
+  REMOVE_FROM_WISHLIST_FAIL,
+  REMOVE_FROM_WISHLIST_REQUEST,
+  REMOVE_FROM_WISHLIST_RESET,
+  REMOVE_FROM_WISHLIST_SUCCESS,
+  VIEW_WISHLIST_FAIL,
+  VIEW_WISHLIST_REQUEST,
+  VIEW_WISHLIST_RESET,
+  VIEW_WISHLIST_SUCCESS,
+} from "../constants/wishlist.constant";
 import { initialState } from "../initial.state";
 import { ActionType, ReduxResponseType } from "../types/general.types";
 
-export const homeGetProductsReducer = (
+export const addToWishlistReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case HOME_PRODUCTS_REQUEST:
+    case ADD_TO_WISHLIST_REQUEST:
       return { ...initialState, loading: true };
-    case HOME_PRODUCTS_SUCCESS:
+    case ADD_TO_WISHLIST_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case HOME_PRODUCTS_FAIL:
+    case ADD_TO_WISHLIST_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case HOME_PRODUCTS_RESET:
+    case ADD_TO_WISHLIST_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -50,57 +46,28 @@ export const homeGetProductsReducer = (
   }
 };
 
-export const homeGetServicesReducer = (
+export const viewWishlistReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case HOME_SERVICES_REQUEST:
+    case VIEW_WISHLIST_REQUEST:
       return { ...initialState, loading: true };
-    case HOME_SERVICES_SUCCESS:
+    case VIEW_WISHLIST_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case HOME_SERVICES_FAIL:
+    case VIEW_WISHLIST_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case HOME_SERVICES_RESET:
-    case LOGIN_RESET:
-      return { ...initialState };
-    default:
-      return state;
-  }
-};
-
-export const homeGetProductDetailReducer = (
-  state: ReduxResponseType = initialState,
-  action: ActionType
-) => {
-  switch (action.type) {
-    case HOME_PRODUCTS_DETAIL_REQUEST:
-      return { ...initialState, loading: true };
-    case HOME_PRODUCTS_DETAIL_SUCCESS:
-      return {
-        ...initialState,
-        loading: false,
-        success: true,
-        serverResponse: action.payload,
-      };
-    case HOME_PRODUCTS_DETAIL_FAIL:
-      return {
-        ...initialState,
-        loading: false,
-        success: false,
-        error: action.payload,
-      };
-    case HOME_PRODUCTS_DETAIL_RESET:
+    case VIEW_WISHLIST_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -109,30 +76,31 @@ export const homeGetProductDetailReducer = (
   }
 };
 
-export const homeGetServiceDetailReducer = (
+export const removeFromWishlistReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case HOME_SERVICES_DETAIL_REQUEST:
+    case REMOVE_FROM_WISHLIST_REQUEST:
       return { ...initialState, loading: true };
-    case HOME_SERVICES_DETAIL_SUCCESS:
+    case REMOVE_FROM_WISHLIST_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case HOME_SERVICES_DETAIL_FAIL:
+    case REMOVE_FROM_WISHLIST_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case HOME_SERVICES_DETAIL_RESET:
+    case REMOVE_FROM_WISHLIST_RESET:
     case LOGIN_RESET:
       return { ...initialState };
+
     default:
       return state;
   }

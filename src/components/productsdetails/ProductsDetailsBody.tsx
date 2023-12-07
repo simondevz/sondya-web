@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AiFillStar, AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
 import { BiRefresh } from "react-icons/bi";
 import {
@@ -14,22 +14,52 @@ import { FaFlag, FaHome, FaPinterestP } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
 import { MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { mayLike } from "../../data/maylikeData";
 import {
   PaymentMethod,
-  ProductdetailImage1,
-  ProductdetailImage2,
-  ProductdetailImage3,
-  ProductdetailImage4,
-  ProductdetailImage5,
-  ProductdetailImage6,
   ProductdetailImageMain,
 } from "../../images/productdetails";
 import { bgWhoAreWe } from "../../images/whoarewe";
+import { homeGetProductDetailsAction } from "../../redux/actions/home.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import { AdminGetProductType } from "../../redux/types/products.types";
 import { Ratings } from "../shareables/Ratings";
 
 const ProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
+
+  // fetch product detail
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const id = String(params.id);
+  const name = String(params.name);
+
+  const homeGetProductDetailsRedux = useSelector(
+    (state: ReducersType) => state?.homeGetProductDetails
+  ) as ReduxResponseType<AdminGetProductType>;
+
+  const product = useMemo(() => {
+    return homeGetProductDetailsRedux?.serverResponse?.data;
+  }, [homeGetProductDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(homeGetProductDetailsAction({ id, name }) as any);
+  }, [dispatch, id, name]);
+
+  // image slider
+  const [currentImage, setCurrentImage] = useState<string>(
+    product.image && product.image.length > 0
+      ? product.image[0].url
+      : ProductdetailImageMain
+  );
+
+  console.log(product);
+
   return (
     <section className="p-3 flex flex-col gap-4">
       <div className="text-[#5F6C72] flex flex-row justify-between">
@@ -53,27 +83,27 @@ const ProductsDetailsBody = () => {
         </div>
       </div>
       <div className="flex flex-col md:flex-row">
-        <div className="flex flex-col gap-2">
-          <img src={ProductdetailImageMain} alt="" />
+        <div className="flex flex-col gap-2 w-4/5">
+          <img
+            style={{ height: "70vh" }}
+            className="w-full object-cover border border-yellow-950 cursor-pointer"
+            src={currentImage}
+            alt=""
+          />
           <div className="flex flex-row gap-2 overflow-x-scroll">
-            <span>
-              <img src={ProductdetailImage1} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage2} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage3} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage4} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage5} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage6} alt="" />
-            </span>
+            {product.image && product.image?.length > 0
+              ? product?.image?.map((image, index) => {
+                  return (
+                    <img
+                      onClick={() => setCurrentImage(image.url)}
+                      className="wrounded-sm object-contain h-20 border-2 border-yellow-950 cursor-pointer animate__animated animate__slideInLeft"
+                      src={image.url}
+                      alt=""
+                      key={index}
+                    />
+                  );
+                })
+              : null}
           </div>
         </div>
         <div className="flex flex-col gap-4 p-3">
@@ -84,31 +114,38 @@ const ProductsDetailsBody = () => {
             <span className="text-[#5F6C72]">(21,671 User feedback)</span>
           </div>
           <div className="">
-            2020 Apple MacBook Pro with Apple M1 Chip (13-inch, 8GB RAM, 256GB
-            SSD Storage) - Space Gray
+            {product?.name && (
+              <h1 className="text-[#191C1F]">{product?.name}</h1>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="">
               <span className="text-[#5F6C72]">Sku:</span>
-              <span className="text-[#191C1F]">A264671</span>
+              <span className="text-[#191C1F]">{product?.model}</span>
             </div>
             <div className="">
               <span className="text-[#5F6C72]">Availability:</span>
-              <span className="text-[#EDB842]">In Stock</span>
+              <span className="text-[#EDB842]">{product?.product_status}</span>
             </div>
             <div className="">
               <span className="text-[#5F6C72]">Brand:</span>
-              <span className="text-[#191C1F]">Apple</span>
+              <span className="text-[#191C1F]">{product.brand}</span>
             </div>
             <div className="">
               <span className="text-[#5F6C72]">Category:</span>
-              <span className="text-[#191C1F]">Electronics Devices</span>
+              <span className="text-[#191C1F]">{product.category}</span>
             </div>
           </div>
           <div className="flex flex-row gap-4 items-baseline">
-            <span className="text-[#EDB842] font-[600]">$1699</span>
-            <span className="text-[#5F6C72] font-[400]">$1999.00</span>
-            <button className="p-2 bg-[#EDB842] rounded-md">21% OFF</button>
+            <span className="text-[#EDB842] font-[600]">
+              ${product.current_price}
+            </span>
+            <span className="text-[#5F6C72] font-[400]">
+              ${product.old_price}.00
+            </span>
+            <button className="p-2 bg-[#EDB842] rounded-md">
+              {product.discount_percentage}% OFF
+            </button>
           </div>
           <hr />
           <div className="grid grid-cols-2 gap-2 text-[#475156]">

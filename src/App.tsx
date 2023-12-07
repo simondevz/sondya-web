@@ -132,13 +132,13 @@ const App = createBrowserRouter([
     loader: homeCheck,
   },
   {
-    path: "/service/details",
+    path: "/service/details/:id/:name",
     element: <ServiceDetails />,
     errorElement: <ErrorPage />,
     loader: homeCheck,
   },
   {
-    path: "/product/details",
+    path: "/product/details/:id/:name",
     element: <ProductDetails />,
     errorElement: <ErrorPage />,
     loader: homeCheck,
