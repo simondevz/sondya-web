@@ -11,6 +11,7 @@ import {
 import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import slugify from "slugify";
 import { ProductsItemsdata2 } from "../../data/productsItemsData";
 import { productImage1 } from "../../images/products";
 import { adminGetProductCategoriesAction } from "../../redux/actions/admin/categories.actions";
@@ -202,7 +203,14 @@ const Products = () => {
                         </span>
                         <span>Add to cart</span>
                       </div>
-                      <div className="p-2 bg-[#EDB84233]">
+                      <div
+                        onClick={() =>
+                          navigate(
+                            `/product/details/${t._id}/${slugify(t.name)}`
+                          )
+                        }
+                        className="p-2 bg-[#EDB84233]"
+                      >
                         <AiOutlineEye />
                       </div>
                     </div>
@@ -248,7 +256,14 @@ const Products = () => {
                       <div className="text-xl text-[#000000] bg-white p-1 rounded-full">
                         <AiOutlineShoppingCart />
                       </div>
-                      <div className="text-xl bg-white text-[#000000] p-1 rounded-full">
+                      <div
+                        onClick={() =>
+                          navigate(
+                            `/product/details/${t._id}/${slugify(t.name)}`
+                          )
+                        }
+                        className="text-xl bg-white text-[#000000] p-1 rounded-full"
+                      >
                         <AiOutlineEye />
                       </div>
                     </div>

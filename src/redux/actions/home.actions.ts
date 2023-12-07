@@ -1,9 +1,15 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import {
+  HOME_PRODUCTS_DETAIL_FAIL,
+  HOME_PRODUCTS_DETAIL_REQUEST,
+  HOME_PRODUCTS_DETAIL_SUCCESS,
   HOME_PRODUCTS_FAIL,
   HOME_PRODUCTS_REQUEST,
   HOME_PRODUCTS_SUCCESS,
+  HOME_SERVICES_DETAIL_FAIL,
+  HOME_SERVICES_DETAIL_REQUEST,
+  HOME_SERVICES_DETAIL_SUCCESS,
   HOME_SERVICES_FAIL,
   HOME_SERVICES_REQUEST,
   HOME_SERVICES_SUCCESS,
@@ -68,6 +74,79 @@ export const homeGetServicesAction =
     } catch (error: any) {
       dispatch({
         type: HOME_SERVICES_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+type DetailsType = {
+  id: string;
+  name: string;
+};
+
+export const homeGetProductDetailsAction =
+  ({ id, name }: DetailsType) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: HOME_PRODUCTS_DETAIL_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.home?.productDetail + id + "/" + name,
+        config
+      );
+
+      dispatch({
+        type: HOME_PRODUCTS_DETAIL_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: HOME_PRODUCTS_DETAIL_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const homeGetServiceDetailsAction =
+  ({ id, name }: DetailsType) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: HOME_SERVICES_DETAIL_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.home?.serviceDetail + id + "/" + name,
+        config
+      );
+
+      dispatch({
+        type: HOME_SERVICES_DETAIL_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: HOME_SERVICES_DETAIL_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

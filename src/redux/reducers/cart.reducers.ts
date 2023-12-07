@@ -1,47 +1,47 @@
 import { LOGIN_RESET } from "../constants/auth.constants";
 import {
-  HOME_PRODUCTS_DETAIL_FAIL,
-  HOME_PRODUCTS_DETAIL_REQUEST,
-  HOME_PRODUCTS_DETAIL_RESET,
-  HOME_PRODUCTS_DETAIL_SUCCESS,
-  HOME_PRODUCTS_FAIL,
-  HOME_PRODUCTS_REQUEST,
-  HOME_PRODUCTS_RESET,
-  HOME_PRODUCTS_SUCCESS,
-  HOME_SERVICES_DETAIL_FAIL,
-  HOME_SERVICES_DETAIL_REQUEST,
-  HOME_SERVICES_DETAIL_RESET,
-  HOME_SERVICES_DETAIL_SUCCESS,
-  HOME_SERVICES_FAIL,
-  HOME_SERVICES_REQUEST,
-  HOME_SERVICES_RESET,
-  HOME_SERVICES_SUCCESS,
-} from "../constants/home.constants";
+  ADD_TO_CART_FAIL,
+  ADD_TO_CART_REQUEST,
+  ADD_TO_CART_RESET,
+  ADD_TO_CART_SUCCESS,
+  REMOVE_FROM_CART_FAIL,
+  REMOVE_FROM_CART_REQUEST,
+  REMOVE_FROM_CART_RESET,
+  REMOVE_FROM_CART_SUCCESS,
+  UPDATE_CART_FAIL,
+  UPDATE_CART_REQUEST,
+  UPDATE_CART_RESET,
+  UPDATE_CART_SUCCESS,
+  VIEW_CART_FAIL,
+  VIEW_CART_REQUEST,
+  VIEW_CART_RESET,
+  VIEW_CART_SUCCESS,
+} from "../constants/cart.constants";
 import { initialState } from "../initial.state";
 import { ActionType, ReduxResponseType } from "../types/general.types";
 
-export const homeGetProductsReducer = (
+export const addToCartReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case HOME_PRODUCTS_REQUEST:
+    case ADD_TO_CART_REQUEST:
       return { ...initialState, loading: true };
-    case HOME_PRODUCTS_SUCCESS:
+    case ADD_TO_CART_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case HOME_PRODUCTS_FAIL:
+    case ADD_TO_CART_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case HOME_PRODUCTS_RESET:
+    case ADD_TO_CART_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -50,57 +50,28 @@ export const homeGetProductsReducer = (
   }
 };
 
-export const homeGetServicesReducer = (
+export const viewCartReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case HOME_SERVICES_REQUEST:
+    case VIEW_CART_REQUEST:
       return { ...initialState, loading: true };
-    case HOME_SERVICES_SUCCESS:
+    case VIEW_CART_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case HOME_SERVICES_FAIL:
+    case VIEW_CART_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case HOME_SERVICES_RESET:
-    case LOGIN_RESET:
-      return { ...initialState };
-    default:
-      return state;
-  }
-};
-
-export const homeGetProductDetailReducer = (
-  state: ReduxResponseType = initialState,
-  action: ActionType
-) => {
-  switch (action.type) {
-    case HOME_PRODUCTS_DETAIL_REQUEST:
-      return { ...initialState, loading: true };
-    case HOME_PRODUCTS_DETAIL_SUCCESS:
-      return {
-        ...initialState,
-        loading: false,
-        success: true,
-        serverResponse: action.payload,
-      };
-    case HOME_PRODUCTS_DETAIL_FAIL:
-      return {
-        ...initialState,
-        loading: false,
-        success: false,
-        error: action.payload,
-      };
-    case HOME_PRODUCTS_DETAIL_RESET:
+    case VIEW_CART_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -109,30 +80,61 @@ export const homeGetProductDetailReducer = (
   }
 };
 
-export const homeGetServiceDetailReducer = (
+export const updateCartReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case HOME_SERVICES_DETAIL_REQUEST:
+    case UPDATE_CART_REQUEST:
       return { ...initialState, loading: true };
-    case HOME_SERVICES_DETAIL_SUCCESS:
+    case UPDATE_CART_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case HOME_SERVICES_DETAIL_FAIL:
+    case UPDATE_CART_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case HOME_SERVICES_DETAIL_RESET:
+    case UPDATE_CART_RESET:
     case LOGIN_RESET:
       return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const removeFromCartReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case REMOVE_FROM_CART_REQUEST:
+      return { ...initialState, loading: true };
+    case REMOVE_FROM_CART_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case REMOVE_FROM_CART_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case REMOVE_FROM_CART_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
     default:
       return state;
   }
