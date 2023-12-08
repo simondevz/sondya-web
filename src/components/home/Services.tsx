@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import slugify from "slugify";
 import { serviceImage1 } from "../../images/serviceimages";
-import { adminGetServiceCategoriesAction } from "../../redux/actions/admin/categories.actions";
-import { homeGetServicesAction } from "../../redux/actions/home.actions";
+import {
+  homeGetServiceCategoryAction,
+  homeGetServicesAction,
+} from "../../redux/actions/home.actions";
 import { ReducersType } from "../../redux/store";
 import { AdminGetCategoryType } from "../../redux/types/categories.types";
 import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
@@ -80,7 +82,7 @@ const Services = () => {
 
   //admin get categories
   const homeGetCategoriesRedux = useSelector(
-    (state: ReducersType) => state?.adminGetServiceCategories
+    (state: ReducersType) => state?.homeGetServiceCategory
   ) as ReduxResponseType<AdminGetCategoryType[]>;
 
   const categories = useMemo(() => {
@@ -88,7 +90,7 @@ const Services = () => {
   }, [homeGetCategoriesRedux]);
 
   useEffect(() => {
-    dispatch(adminGetServiceCategoriesAction() as any);
+    dispatch(homeGetServiceCategoryAction() as any);
   }, [dispatch, queryString]);
 
   //admin get products
@@ -104,7 +106,7 @@ const Services = () => {
     // console.log(queryString);
     dispatch(homeGetServicesAction(queryString) as any);
   }, [dispatch, queryString]);
-  console.log(services.data && services.data);
+  // console.log(services.data && services.data);
   return (
     <div className="p-3 flex flex-col gap-3">
       <div className="flex flex-row gap-2 md:gap-4 w-full p-2 items-baseline text-[lg]">

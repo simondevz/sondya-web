@@ -54,10 +54,19 @@ import {
   resetPasswordReducer,
   verifyEmailReducer,
 } from "./reducers/auth.reducers";
+import {
+  addToCartReducer,
+  clearCartReducer,
+  removeFromCartReducer,
+  updateCartReducer,
+  viewCartReducer,
+} from "./reducers/cart.reducers";
 import { CreateContactUsReducer } from "./reducers/contactus.reducers";
 import {
+  homeGetProductCategoryReducer,
   homeGetProductDetailReducer,
   homeGetProductsReducer,
+  homeGetServiceCategoryReducer,
   homeGetServiceDetailReducer,
   homeGetServicesReducer,
 } from "./reducers/home.reducers";
@@ -104,13 +113,24 @@ import {
 import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
+  //cart system
+  addToCart: ReduxResponseType;
+  updateCart: ReduxResponseType;
+  removeFromCart: ReduxResponseType;
+  viewCart: ReduxResponseType;
+  clearCart: ReduxResponseType;
+
   //home
+  homeGetProductCategory: ReduxResponseType;
+  homeGetServiceCategory: ReduxResponseType;
   homeGetProducts: ReduxResponseType;
   homeGetServices: ReduxResponseType;
   homeGetProductDetails: ReduxResponseType;
   homeGetServiceDetails: ReduxResponseType;
+
   //contact us
   contactus: ReduxResponseType;
+
   //auth
   register: ReduxResponseType;
   verifyEmail: ReduxResponseType;
@@ -202,7 +222,16 @@ export type ReducersType = {
 };
 
 const reducer = combineReducers<ReducersType>({
+  //cart system
+  addToCart: addToCartReducer,
+  updateCart: updateCartReducer,
+  removeFromCart: removeFromCartReducer,
+  viewCart: viewCartReducer,
+  clearCart: clearCartReducer,
+
   //home
+  homeGetProductCategory: homeGetProductCategoryReducer,
+  homeGetServiceCategory: homeGetServiceCategoryReducer,
   homeGetProducts: homeGetProductsReducer,
   homeGetServices: homeGetServicesReducer,
   homeGetProductDetails: homeGetProductDetailReducer,

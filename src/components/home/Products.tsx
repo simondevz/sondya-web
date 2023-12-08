@@ -14,8 +14,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import slugify from "slugify";
 import { ProductsItemsdata2 } from "../../data/productsItemsData";
 import { productImage1 } from "../../images/products";
-import { adminGetProductCategoriesAction } from "../../redux/actions/admin/categories.actions";
-import { homeGetProductsAction } from "../../redux/actions/home.actions";
+import { addToCartAction } from "../../redux/actions/cart.actions";
+import {
+  homeGetProductCategoryAction,
+  homeGetProductsAction,
+} from "../../redux/actions/home.actions";
 import { ReducersType } from "../../redux/store";
 import { AdminGetCategoryType } from "../../redux/types/categories.types";
 import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
@@ -87,7 +90,7 @@ const Products = () => {
 
   //admin get categories
   const homeGetCategoriesRedux = useSelector(
-    (state: ReducersType) => state?.adminGetProductCategories
+    (state: ReducersType) => state?.homeGetProductCategory
   ) as ReduxResponseType<AdminGetCategoryType[]>;
 
   const categories = useMemo(() => {
@@ -95,8 +98,7 @@ const Products = () => {
   }, [homeGetCategoriesRedux]);
 
   useEffect(() => {
-    // dispatch(homeGetCategoriesAction("category=product") as any);
-    dispatch(adminGetProductCategoriesAction() as any);
+    dispatch(homeGetProductCategoryAction() as any);
   }, [dispatch, queryString]);
 
   //admin get products
@@ -109,9 +111,18 @@ const Products = () => {
   }, [homeGetProductsRedux]);
 
   useEffect(() => {
-    // console.log(queryString);
     dispatch(homeGetProductsAction(queryString) as any);
   }, [dispatch, queryString]);
+
+  // add to cart
+  const addToCart = useCallback(
+    (product: AdminGetProductType) => {
+      setTimeout(() => {
+        dispatch(addToCartAction(product) as any);
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   return (
     <div className="p-3 flex flex-col">
@@ -253,7 +264,10 @@ const Products = () => {
                     />
                     <div className="absolute gap-1  inset-0 bg-black bg-opacity-50 flex flex-row justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                       <Like />
-                      <div className="text-xl text-[#000000] bg-white p-1 rounded-full">
+                      <div
+                        onClick={() => addToCart(t)}
+                        className="text-xl text-[#000000] bg-white p-1 rounded-full"
+                      >
                         <AiOutlineShoppingCart />
                       </div>
                       <div

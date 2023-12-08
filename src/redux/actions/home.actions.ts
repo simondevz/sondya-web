@@ -1,12 +1,18 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import {
+  HOME_PRODUCTS_CATEGORY_FAIL,
+  HOME_PRODUCTS_CATEGORY_REQUEST,
+  HOME_PRODUCTS_CATEGORY_SUCCESS,
   HOME_PRODUCTS_DETAIL_FAIL,
   HOME_PRODUCTS_DETAIL_REQUEST,
   HOME_PRODUCTS_DETAIL_SUCCESS,
   HOME_PRODUCTS_FAIL,
   HOME_PRODUCTS_REQUEST,
   HOME_PRODUCTS_SUCCESS,
+  HOME_SERVICES_CATEGORY_FAIL,
+  HOME_SERVICES_CATEGORY_REQUEST,
+  HOME_SERVICES_CATEGORY_SUCCESS,
   HOME_SERVICES_DETAIL_FAIL,
   HOME_SERVICES_DETAIL_REQUEST,
   HOME_SERVICES_DETAIL_SUCCESS,
@@ -147,6 +153,72 @@ export const homeGetServiceDetailsAction =
     } catch (error: any) {
       dispatch({
         type: HOME_SERVICES_DETAIL_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const homeGetServiceCategoryAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: HOME_SERVICES_CATEGORY_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.home?.servicesCategory,
+        config
+      );
+
+      dispatch({
+        type: HOME_SERVICES_CATEGORY_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: HOME_SERVICES_CATEGORY_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const homeGetProductCategoryAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: HOME_PRODUCTS_CATEGORY_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.home?.productsCategory,
+        config
+      );
+
+      dispatch({
+        type: HOME_PRODUCTS_CATEGORY_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: HOME_PRODUCTS_CATEGORY_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

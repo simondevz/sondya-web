@@ -12,6 +12,8 @@ export const API_ROUTES = {
     serviceDetail: BASE + "/service/details/", // GET /:id/:slug(name)
     services: BASE + "/services", // GET
     products: BASE + "/products", // GET
+    servicesCategory: BASE + "/services/categories", // GET
+    productsCategory: BASE + "/products/categories", // GET
   },
 
   // Authentication
