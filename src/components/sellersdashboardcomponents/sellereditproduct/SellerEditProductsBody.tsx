@@ -18,6 +18,8 @@ import {
   AdminUpdateProduct,
 } from "../../../redux/types/products.types";
 import { ImageType } from "../../../redux/types/users.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
+import { userGetProductsCategoriesAction } from "../../../redux/actions/userDashboard/products.action";
 
 const SellerEditProductsBody = () => {
   // fetch data
@@ -198,6 +200,15 @@ const SellerEditProductsBody = () => {
       }, 2000);
     }
   }, [sellerUpdateProductRedux, dispatch, id]);
+
+  let subcategoriesRedux = useSelector(
+    (state: ReducersType) => state?.userGetProductsCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+
+  useEffect(() => {
+    dispatch(userGetProductsCategoriesAction() as any);
+  }, [dispatch]);
+
   return (
     <section>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -397,6 +408,19 @@ const SellerEditProductsBody = () => {
                     value={formData.category}
                   >
                     <option value="">Select a category</option>
+                    {subcategoriesRedux.success ? (
+                      subcategoriesRedux.serverResponse.data?.map(
+                        (subcategories: AdminGetCategoryType) => {
+                          return (
+                            <option value={subcategories?.name}>
+                              {subcategories?.name}
+                            </option>
+                          );
+                        }
+                      )
+                    ) : (
+                      <></>
+                    )}
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">

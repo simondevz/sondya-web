@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { BsEye, BsSearch } from "react-icons/bs";
+import { BsEye, BsSearch, BsThreeDots } from "react-icons/bs";
 import { MdDelete, MdEdit, MdMoreVert, MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { serviceImage1 } from "../../../images/serviceimages";
 import {
@@ -12,29 +12,46 @@ import {
 } from "../../../redux/actions/seller/seller-services.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { AdminGetServiceType } from "../../../redux/types/services.types";
+import {
+  AdminGetServiceType,
+  sellerGetServicesType,
+} from "../../../redux/types/services.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
+
+export type QueryType = {
+  page: number;
+  search: string;
+};
 
 const SellerServiceBody = () => {
   const [Open, setOpen] = useState<number | undefined>();
 
   const [services, setServices] = useState<AdminGetServiceType[]>([]);
 
+  const limit: number = 5;
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const [queryString, setQueryString] = useState<string>("");
+  const [dotIndex, setDotIndex] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [query, setQuery] = useState<QueryType>({
+    page: 1,
+    search: "",
+  });
 
   const sellerGetServicesRedux = useSelector(
     (state: ReducersType) => state?.sellerGetAllService
-  ) as ReduxResponseType<AdminGetServiceType[]>;
+  ) as ReduxResponseType<sellerGetServicesType>;
 
   useEffect(() => {
-    dispatch(sellerGetServicesAction() as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(sellerGetServicesAction(queryString as string) as any);
+  }, [dispatch, queryString]);
 
   useEffect(() => {
     if (sellerGetServicesRedux?.serverResponse.data) {
-      setServices(sellerGetServicesRedux?.serverResponse?.data);
+      setServices(sellerGetServicesRedux?.serverResponse?.data?.services);
     }
   }, [sellerGetServicesRedux?.serverResponse, dispatch]);
 
@@ -63,7 +80,7 @@ const SellerServiceBody = () => {
             "success"
           );
           setTimeout(() => {
-            dispatch(sellerGetServicesAction() as any);
+            dispatch(sellerGetServicesAction(queryString) as any);
           }, 1000);
         } else {
           Swal.fire("Deleted!", sellerDeleteServiceByIDRedux?.error, "error");
@@ -71,6 +88,80 @@ const SellerServiceBody = () => {
       }
     });
   };
+
+  // update query and url
+  const updateQueryString = useCallback(
+    (newParams: QueryType) => {
+      const searchParams = new URLSearchParams(location.search);
+      // Update or add new parameters
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          searchParams.set(key, String(value));
+        } else {
+          searchParams.delete(key);
+        }
+      });
+
+      // Build the new search string
+      const newSearch = searchParams.toString();
+
+      // set query string
+      setQueryString(newSearch);
+
+      // Use navigate to change the URL
+      navigate({
+        pathname: location.pathname,
+        search: newSearch,
+      });
+    },
+    [location.pathname, location.search, navigate]
+  );
+
+  const prevPage = () => {
+    setQuery((prev: QueryType) => {
+      return {
+        ...prev,
+        page: prev.page--,
+      };
+    });
+  };
+
+  const nextPage = () => {
+    setQuery((prev: QueryType) => {
+      alert(prev.page++);
+      return {
+        ...prev,
+        page: prev.page++,
+      };
+    });
+  };
+
+  const goToPage = (page: number) => {
+    setQuery((prev: QueryType) => {
+      return {
+        ...prev,
+        page: page,
+      };
+    });
+  };
+
+  const servicesRedux = useSelector(
+    (state: ReducersType) => state?.sellerGetAllService
+  ) as ReduxResponseType<sellerGetServicesType>;
+
+  useEffect(() => {
+    if (servicesRedux.success)
+      setTotalPages(
+        Math.ceil(Number(servicesRedux?.serverResponse?.data?.count) / limit)
+      );
+  }, [servicesRedux?.success, servicesRedux?.serverResponse?.data?.count]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      updateQueryString(query);
+    }, 1500);
+  }, [query, updateQueryString]);
+
   return (
     <section>
       <div className="flex flex-col gap-3">
@@ -101,7 +192,15 @@ const SellerServiceBody = () => {
             <span className="text-[#EDB842]">
               <BsSearch />
             </span>
-            <input className="outline-none p-1" type="text" />
+            <input
+              className="outline-none p-1"
+              type="text"
+              placeholder="Search services..."
+              value={query.search}
+              onChange={(event) => {
+                setQuery({ ...query, search: event.target.value, page: 1 });
+              }}
+            />
           </div>
           <div className="flex gap-2">
             <select className="border p-3 rounded-md" name="" id="">
@@ -122,7 +221,7 @@ const SellerServiceBody = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {services.map((t, i) => {
+          {services?.map((t: AdminGetServiceType, i: number) => {
             return (
               <div
                 key={i}
@@ -189,19 +288,56 @@ const SellerServiceBody = () => {
         </div>
         <div className="flex flex-row justify-between items-center">
           <div className="text-[#667085]">Showing 1-10 from 100</div>
-          <div className="flex flex-row gap-2 items-center text-[#EDB842] my-5">
-            <span className="bg-[#EDB84233] p-2 rounded-md">
+
+          <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
+            <button
+              disabled={query.page <= 1}
+              type="button"
+              onClick={() => prevPage()}
+              className="bg-[#EDB84233] p-2 rounded-md"
+            >
               <BiSolidLeftArrow />
-            </span>
-            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
-            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
-            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
-            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
-            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
-            <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
-            <span className="bg-[#EDB84233] p-2 rounded-md">
+            </button>
+            {Number.isInteger(totalPages) &&
+              totalPages >= 0 &&
+              Array.from({
+                length: totalPages,
+              }).map((_, i) => {
+                if (i >= dotIndex && i <= dotIndex + 2) {
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => goToPage(i + 1)}
+                      className={`${
+                        query.page === i + 1 && "bg-[#EDB84233]"
+                      } px-4 py-2 rounded-md`}
+                    >
+                      {i + 1}
+                    </button>
+                  );
+                }
+                return <div className="hidden">...</div>;
+              })}
+            {Number.isInteger(totalPages) && totalPages > 3 && (
+              <button
+                onClick={() => {
+                  totalPages >= dotIndex
+                    ? setDotIndex((prev: number) => prev + 3)
+                    : setDotIndex(0);
+                }}
+                className="p-2 bg-[#EDB842] rounded-md text-white"
+              >
+                <BsThreeDots />
+              </button>
+            )}
+            <button
+              type="button"
+              disabled={query.page >= totalPages}
+              onClick={() => nextPage()}
+              className="bg-[#EDB84233] p-2 rounded-md"
+            >
               <BiSolidRightArrow />
-            </span>
+            </button>
           </div>
         </div>
       </div>

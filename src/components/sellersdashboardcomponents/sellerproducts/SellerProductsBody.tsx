@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { BsSearch } from "react-icons/bs";
+import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 import { MdDelete, MdOutlineAdd, MdOutlineMoreHoriz } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { productImage1 } from "../../../images/products";
 import {
@@ -16,11 +16,29 @@ import {
 } from "../../../redux/actions/seller/seller-products.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { AdminGetProductType } from "../../../redux/types/products.types";
+import {
+  AdminGetProductType,
+  sellerGetProductsType,
+} from "../../../redux/types/products.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
+
+export type QueryType = {
+  page: number;
+  search: string;
+};
 
 const SellerProductsBody = () => {
   const [click, setClick] = useState<number | null>(null);
+  const limit: number = 5;
+  const location = useLocation();
+
+  const [queryString, setQueryString] = useState<string>("");
+  const [dotIndex, setDotIndex] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [query, setQuery] = useState<QueryType>({
+    page: 1,
+    search: "",
+  });
 
   // fetch products
   const navigate = useNavigate();
@@ -30,16 +48,15 @@ const SellerProductsBody = () => {
 
   const sellerGetProductsRedux = useSelector(
     (state: ReducersType) => state?.sellerGetAllProducts
-  ) as ReduxResponseType<AdminGetProductType[]>;
+  ) as ReduxResponseType<sellerGetProductsType>;
 
   useEffect(() => {
-    dispatch(sellerGetProductsAction() as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(sellerGetProductsAction(queryString as string) as any);
+  }, [dispatch, queryString]);
 
   useEffect(() => {
     if (sellerGetProductsRedux?.serverResponse.data) {
-      setProducts(sellerGetProductsRedux?.serverResponse?.data);
+      setProducts(sellerGetProductsRedux?.serverResponse?.data?.products);
     }
   }, [sellerGetProductsRedux?.serverResponse, dispatch]);
 
@@ -68,7 +85,7 @@ const SellerProductsBody = () => {
             "success"
           );
           setTimeout(() => {
-            dispatch(sellerGetProductsAction() as any);
+            dispatch(sellerGetProductsAction(queryString) as any);
           }, 1000);
         } else {
           Swal.fire("Deleted!", sellerDeleteProductsByIDRedux?.error, "error");
@@ -76,6 +93,80 @@ const SellerProductsBody = () => {
       }
     });
   };
+
+  // update query and url
+  const updateQueryString = useCallback(
+    (newParams: QueryType) => {
+      const searchParams = new URLSearchParams(location.search);
+      // Update or add new parameters
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          searchParams.set(key, String(value));
+        } else {
+          searchParams.delete(key);
+        }
+      });
+
+      // Build the new search string
+      const newSearch = searchParams.toString();
+
+      // set query string
+      setQueryString(newSearch);
+
+      // Use navigate to change the URL
+      navigate({
+        pathname: location.pathname,
+        search: newSearch,
+      });
+    },
+    [location.pathname, location.search, navigate]
+  );
+
+  const prevPage = () => {
+    setQuery((prev: QueryType) => {
+      return {
+        ...prev,
+        page: prev.page--,
+      };
+    });
+  };
+
+  const nextPage = () => {
+    setQuery((prev: QueryType) => {
+      alert(prev.page++);
+      return {
+        ...prev,
+        page: prev.page++,
+      };
+    });
+  };
+
+  const goToPage = (page: number) => {
+    setQuery((prev: QueryType) => {
+      return {
+        ...prev,
+        page: page,
+      };
+    });
+  };
+
+  const productsRedux = useSelector(
+    (state: ReducersType) => state?.sellerGetAllProducts
+  ) as ReduxResponseType<sellerGetProductsType>;
+  console.log(productsRedux);
+
+  useEffect(() => {
+    if (productsRedux.success)
+      setTotalPages(
+        Math.ceil(Number(productsRedux?.serverResponse?.data?.count) / limit)
+      );
+  }, [productsRedux?.success, productsRedux?.serverResponse?.data?.count]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      updateQueryString(query);
+    }, 1500);
+  }, [query, updateQueryString]);
 
   return (
     <section className="flex flex-col gap-5 w-full overflow-x-hidden">
@@ -112,6 +203,10 @@ const SellerProductsBody = () => {
             className="outline-none p-1 w-[15rem]"
             type="text"
             placeholder="Search in browsing history"
+            value={query.search}
+            onChange={(event) => {
+              setQuery({ ...query, search: event.target.value, page: 1 });
+            }}
           />
         </div>
         <div className="flex gap-2">
@@ -138,7 +233,7 @@ const SellerProductsBody = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((t, i) => {
+            {products?.map((t, i) => {
               return (
                 <tr key={i}>
                   <td className="p-2 text-start">
@@ -256,20 +351,58 @@ const SellerProductsBody = () => {
             })}
           </tbody>
         </table>
+
         <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
-          <span className="bg-[#EDB84233] p-2 rounded-md">
+          <button
+            disabled={query.page <= 1}
+            type="button"
+            onClick={() => prevPage()}
+            className="bg-[#EDB84233] p-2 rounded-md"
+          >
             <BiSolidLeftArrow />
-          </span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
-          <span className="bg-[#EDB84233] p-2 rounded-md">
+          </button>
+          {Number.isInteger(totalPages) &&
+            totalPages >= 0 &&
+            Array.from({
+              length: totalPages,
+            }).map((_, i) => {
+              if (i >= dotIndex && i <= dotIndex + 2) {
+                return (
+                  <button
+                    key={i}
+                    onClick={() => goToPage(i + 1)}
+                    className={`${
+                      query.page === i + 1 && "bg-[#EDB84233]"
+                    } px-4 py-2 rounded-md`}
+                  >
+                    {i + 1}
+                  </button>
+                );
+              }
+              return <div className="hidden">...</div>;
+            })}
+          {Number.isInteger(totalPages) && totalPages > 3 && (
+            <button
+              onClick={() => {
+                totalPages >= dotIndex
+                  ? setDotIndex((prev: number) => prev + 3)
+                  : setDotIndex(0);
+              }}
+              className="p-2 bg-[#EDB842] rounded-md text-white"
+            >
+              <BsThreeDots />
+            </button>
+          )}
+          <button
+            type="button"
+            disabled={query.page >= totalPages}
+            onClick={() => nextPage()}
+            className="bg-[#EDB84233] p-2 rounded-md"
+          >
             <BiSolidRightArrow />
-          </span>
+          </button>
         </div>
+
         <button className="px-4 py-2 text-white bg-[#EDB842] rounded-md w-fit self-center font-[700]">
           ADD PRODUCT
         </button>
