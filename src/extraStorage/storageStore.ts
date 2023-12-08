@@ -1,4 +1,4 @@
 export const LOGIN_SESSION = "loginSession";
-export const CART_SESSION = "cartSession";
-export const WISHLIST_SESSION = "wishlistSession";
-export const BROWSE_HISTORY_SESSION = "browseHistorySession";
+export const CART_SESSION = "sondyaCartSession";
+export const WISHLIST_SESSION = "sondyaWishlistSession";
+export const BROWSE_HISTORY_SESSION = "sondyaBrowseHistorySession";

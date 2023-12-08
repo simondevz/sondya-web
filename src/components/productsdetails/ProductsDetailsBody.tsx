@@ -58,7 +58,15 @@ const ProductsDetailsBody = () => {
       : ProductdetailImageMain
   );
 
-  console.log(product);
+  useEffect(() => {
+    setCurrentImage(
+      product.image && product.image.length > 0
+        ? product.image[0].url
+        : ProductdetailImageMain
+    );
+  }, [product.image]);
+
+  // console.log(product);
 
   return (
     <section className="p-3 flex flex-col gap-4">

@@ -4,6 +4,10 @@ import {
   ADD_TO_CART_REQUEST,
   ADD_TO_CART_RESET,
   ADD_TO_CART_SUCCESS,
+  CLEAR_CART_FAIL,
+  CLEAR_CART_REQUEST,
+  CLEAR_CART_RESET,
+  CLEAR_CART_SUCCESS,
   REMOVE_FROM_CART_FAIL,
   REMOVE_FROM_CART_REQUEST,
   REMOVE_FROM_CART_RESET,
@@ -132,6 +136,36 @@ export const removeFromCartReducer = (
         error: action.payload,
       };
     case REMOVE_FROM_CART_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const clearCartReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case CLEAR_CART_REQUEST:
+      return { ...initialState, loading: true };
+    case CLEAR_CART_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case CLEAR_CART_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case CLEAR_CART_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

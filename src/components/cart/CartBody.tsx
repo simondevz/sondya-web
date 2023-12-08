@@ -1,17 +1,37 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
-import { cartDataItem } from "../../data/cartData";
+import { useDispatch, useSelector } from "react-redux";
 import { CartPaypal, CartZip } from "../../images/cart";
+import { productImage1 } from "../../images/products";
+import { viewCartAction } from "../../redux/actions/cart.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import { ProductOrderType } from "../../redux/types/productOrders.types";
 import { LastComponent } from "../home";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { EmptyCartBody } from "./EmptyCart";
 
 const CartBody = () => {
+  const dispatch = useDispatch();
+  // get cart list
+  const cartListRedux = useSelector(
+    (state: ReducersType) => state?.viewCart
+  ) as ReduxResponseType<ProductOrderType[]>;
+
+  const cartItems = useMemo(() => {
+    return cartListRedux?.serverResponse?.data;
+  }, [cartListRedux]);
+
+  useEffect(() => {
+    dispatch(viewCartAction() as any);
+  }, [dispatch]);
+
+  console.log(cartItems);
   return (
     <>
-      {cartDataItem.length === 0 ? (
+      {cartItems.length === 0 ? (
         <EmptyCartBody />
       ) : (
         <section className="flex flex-col gap-3 px-2 py-5 md:p-10">
@@ -30,14 +50,18 @@ const CartBody = () => {
                 </tr>
               </thead>
               <tbody>
-                {cartDataItem.map((t, i) => {
+                {cartItems.map((t, i) => {
                   return (
                     <tr className="border-b-2" key={i}>
                       <td className="w-1/3 p-3">
                         <div className="flex flex-col md:flex-row gap-3">
                           <img
                             className="object-cover w-full md:w-1/2 h-1/2 md:h-full"
-                            src={t.image}
+                            src={
+                              t.image && t.image.length > 0
+                                ? t.image[0].url
+                                : productImage1
+                            }
                             alt=""
                           />
                           <div className="w-full md:w-1/2 h-1/2 md:h-full text-[0.85rem] md:text-inherit">
@@ -46,17 +70,18 @@ const CartBody = () => {
                         </div>
                       </td>
                       <td className="p-3">
-                        $<FormatNumber price={t.price} />
+                        $<FormatNumber price={t.current_price} />
                       </td>
                       <td className="p-3">
                         <input
                           className="outline-none p-2 outline-0 border-0 w-16 bg-[#EDB84233] rounded-md"
                           type="number"
-                          value={t.quantity}
+                          defaultValue={t.quantity}
+                          // value={t.quantity}
                         />
                       </td>
                       <td className="p-3">
-                        $<FormatNumber price={t.price * t.quantity} />
+                        $<FormatNumber price={t.total_price} />
                       </td>
                       <td>
                         <div className="flex flex-col gap-3 justify-center h-full">
