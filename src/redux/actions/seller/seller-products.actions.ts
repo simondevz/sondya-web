@@ -262,7 +262,7 @@ export const sellerGetProductByIdAction =
   };
 
 export const sellerGetProductsAction =
-  () => async (dispatch: Dispatch, getState: any) => {
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: SELLER_GET_ALL_PRODUCT_REQUEST,
@@ -279,7 +279,10 @@ export const sellerGetProductsAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.sellerProducts?.getAll + login?.serverResponse?.data?.id,
+        API_ROUTES?.sellerProducts?.getAll +
+          login?.serverResponse?.data?.id +
+          "?" +
+          query,
         config
       );
       dispatch({

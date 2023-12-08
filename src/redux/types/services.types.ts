@@ -116,3 +116,8 @@ export type userGetServicesType = {
   services: UserGetServiceType[];
   count: number;
 };
+
+export type sellerGetServicesType = {
+  services: AdminGetServiceType[];
+  count: number;
+};

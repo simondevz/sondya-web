@@ -15,6 +15,7 @@ export const ProductNav = ({
   setQuery: any;
 }) => {
   const [openProducts, setOpenProducts] = useState(true);
+  const [showAll, setShowAll] = useState(false);
   const ClickOpenProducts = () => setOpenProducts((prev) => !prev);
   const dispatch = useDispatch();
 
@@ -37,9 +38,9 @@ export const ProductNav = ({
         Products {openProducts ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </button>
       {openProducts && (
-        <div>
+        <div className="flex flex-col gap-[0.2rem]">
           {productCategoriesRedux?.serverResponse?.data
-            .slice(0, 5)
+            .slice(0, showAll ? Infinity : 5)
             .map((subcategory, index) => {
               return (
                 <div
@@ -54,6 +55,7 @@ export const ProductNav = ({
                       setQuery({
                         ...query,
                         subcategory: subcategory.name,
+                        page: 1,
                       });
                     }}
                   />
@@ -61,6 +63,12 @@ export const ProductNav = ({
                 </div>
               );
             })}
+          <button
+            className="place-self-end flex text-md text-[#475156]"
+            onClick={() => setShowAll(!showAll)}
+          >
+            Show {showAll ? "Less" : "All"}
+          </button>
         </div>
       )}
     </div>
@@ -104,6 +112,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: `${minPrice || 0}_${range}`,
+                  page: 1,
                 });
               }}
             />
@@ -122,6 +131,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: `${min}_${maxPrice}`,
+                  page: 1,
                 });
               }}
             />
@@ -138,6 +148,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: `${minPrice}_${max}`,
+                  page: 1,
                 });
               }}
             />
@@ -151,6 +162,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "",
+                  page: 1,
                 })
               }
             />
@@ -165,6 +177,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "0_20",
+                  page: 1,
                 })
               }
             />
@@ -179,6 +192,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "25_100",
+                  page: 1,
                 })
               }
             />
@@ -193,6 +207,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "100_300",
+                  page: 1,
                 })
               }
             />
@@ -207,6 +222,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "300_500",
+                  page: 1,
                 })
               }
             />
@@ -221,6 +237,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "500_1000",
+                  page: 1,
                 })
               }
             />
@@ -235,6 +252,7 @@ export const ProductPriceRange = ({
                 setQuery({
                   ...query,
                   priceRange: "1000_10000",
+                  page: 1,
                 })
               }
             />
@@ -266,12 +284,14 @@ export const ProductPopularBrands = ({
         return {
           ...prev,
           popularBrands: [...prev.popularBrands, brand],
+          page: 1,
         };
 
       if (checkArray.length < prev.popularBrands.length)
         return {
           ...prev,
           popularBrands: checkArray,
+          page: 1,
         };
     });
 

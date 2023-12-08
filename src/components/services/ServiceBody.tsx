@@ -27,6 +27,7 @@ export type QueryType = {
   subcategory: string;
   priceRange: string;
   popularBrands: string[];
+  sortBy: string;
 };
 
 const ServiceBody = () => {
@@ -36,6 +37,7 @@ const ServiceBody = () => {
     subcategory: "",
     priceRange: "",
     popularBrands: [],
+    sortBy: "",
   });
 
   return (
@@ -58,13 +60,14 @@ const ServiceBodyMain = ({
   query: QueryType;
   setQuery: any;
 }) => {
+  const limit: number = 20;
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+
   const [queryString, setQueryString] = useState<string>("page=1");
   const [dotIndex, setDotIndex] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const limit: number = 20;
 
   // update query and url
   const updateQueryString = useCallback(
@@ -72,7 +75,12 @@ const ServiceBodyMain = ({
       const searchParams = new URLSearchParams(location.search);
       // Update or add new parameters
       Object.entries(newParams).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          (value as string[]).length !== 0
+        ) {
           searchParams.set(key, String(value));
         } else {
           searchParams.delete(key);
@@ -153,20 +161,25 @@ const ServiceBodyMain = ({
             placeholder="Search for anything..."
             value={query.search}
             onChange={(event) => {
-              setQuery({ ...query, search: event.target.value });
+              setQuery({ ...query, search: event.target.value, page: 1 });
             }}
           />
         </div>
         <div className="flex flex-row gap-2 items-center text-[#5F6C72]">
-          <label htmlFor="">Sort by:</label>
+          <label htmlFor="sortBy">Sort by:</label>
           <select
             className="border-[2px] border-[#E4E7E9] p-2 rounded-md"
             name=""
-            id=""
+            value={query.sortBy}
+            id="sortBy"
+            onChange={(event) =>
+              setQuery({ ...query, sortBy: event.target.value, page: 1 })
+            }
           >
-            <option value="">Most Popular</option>
-            <option value="">Most Popular</option>
-            <option value="">Most Popular</option>
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+            <option value="a-z">Alphabetical (A - Z)</option>
+            <option value="z-a">Alphabetical (Z - A)</option>
           </select>
         </div>
       </div>
@@ -182,6 +195,7 @@ const ServiceBodyMain = ({
                   setQuery({
                     ...query,
                     subcategory: "",
+                    page: 1,
                   })
                 }
               >
@@ -206,6 +220,7 @@ const ServiceBodyMain = ({
                   setQuery({
                     ...query,
                     priceRange: "",
+                    page: 1,
                   })
                 }
               >
@@ -227,6 +242,7 @@ const ServiceBodyMain = ({
                         popularBrands: query.popularBrands.filter(
                           (otherBrands: string) => brand !== otherBrands
                         ),
+                        page: 1,
                       })
                     }
                   >

@@ -17,6 +17,8 @@ import {
   AdminUpdateService,
 } from "../../../redux/types/services.types";
 import { ImageType } from "../../../redux/types/users.types";
+import { userGetServiceCategoriesAction } from "../../../redux/actions/userDashboard/services.actions";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const SellerEditServiceBody = () => {
   // fetch data for service details
@@ -205,6 +207,15 @@ const SellerEditServiceBody = () => {
       }, 2000);
     }
   }, [sellerUpdateServiceRedux, dispatch, id]);
+
+  let subcategoriesRedux = useSelector(
+    (state: ReducersType) => state?.userGetServiceCategories
+  ) as ReduxResponseType<AdminGetCategoryType[]>;
+
+  useEffect(() => {
+    dispatch(userGetServiceCategoriesAction() as any);
+  }, [dispatch]);
+
   return (
     <section>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -404,6 +415,19 @@ const SellerEditServiceBody = () => {
                     value={formData.category}
                   >
                     <option value="">Select a category</option>
+                    {subcategoriesRedux.success ? (
+                      subcategoriesRedux.serverResponse.data?.map(
+                        (subcategories: AdminGetCategoryType) => {
+                          return (
+                            <option value={subcategories?.name}>
+                              {subcategories?.name}
+                            </option>
+                          );
+                        }
+                      )
+                    ) : (
+                      <></>
+                    )}
                   </select>
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">

@@ -70,6 +70,7 @@ export type UserGetProductType = {
   _id: string;
   name: string;
   category: string;
+  createdAt: string;
   description: string;
   total_stock: number;
   tag: string;
@@ -91,5 +92,10 @@ export type UserGetProductType = {
 
 export type userGetProductsType = {
   products: UserGetProductType[];
+  count: number;
+};
+
+export type sellerGetProductsType = {
+  products: AdminGetProductType[];
   count: number;
 };
