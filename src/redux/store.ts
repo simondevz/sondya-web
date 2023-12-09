@@ -58,6 +58,7 @@ import {
   addToCartReducer,
   clearCartReducer,
   removeFromCartReducer,
+  totalCartReducer,
   updateCartReducer,
   viewCartReducer,
 } from "./reducers/cart.reducers";
@@ -119,6 +120,7 @@ export type ReducersType = {
   removeFromCart: ReduxResponseType;
   viewCart: ReduxResponseType;
   clearCart: ReduxResponseType;
+  totalCart: ReduxResponseType;
 
   //home
   homeGetProductCategory: ReduxResponseType;
@@ -228,6 +230,7 @@ const reducer = combineReducers<ReducersType>({
   removeFromCart: removeFromCartReducer,
   viewCart: viewCartReducer,
   clearCart: clearCartReducer,
+  totalCart: totalCartReducer,
 
   //home
   homeGetProductCategory: homeGetProductCategoryReducer,

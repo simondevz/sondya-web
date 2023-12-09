@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AiFillStar, AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
 import { BiRefresh } from "react-icons/bi";
 import {
@@ -16,12 +16,17 @@ import { MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { mayLike } from "../../data/maylikeData";
 import {
   PaymentMethod,
   ProductdetailImageMain,
 } from "../../images/productdetails";
 import { bgWhoAreWe } from "../../images/whoarewe";
+import {
+  addToCartAction,
+  totalCartAction,
+} from "../../redux/actions/cart.actions";
 import { homeGetProductDetailsAction } from "../../redux/actions/home.actions";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
@@ -46,6 +51,28 @@ const ProductsDetailsBody = () => {
   const product = useMemo(() => {
     return homeGetProductDetailsRedux?.serverResponse?.data;
   }, [homeGetProductDetailsRedux]);
+
+  // add to cart
+  const addToCart = useCallback(
+    (product: AdminGetProductType) => {
+      setTimeout(() => {
+        dispatch(addToCartAction(product) as any);
+        // send toast message
+        toast("🛒 Added to cart!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        dispatch(totalCartAction() as any);
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     dispatch(homeGetProductDetailsAction({ id, name }) as any);
@@ -201,7 +228,11 @@ const ProductsDetailsBody = () => {
               />
               <button onClick={() => setCount(++count)}>+</button>
             </div>
-            <button className="bg-[#EDB842] text-white p-2 flex gap-2 rounded-md items-center w-5/12 justify-center">
+            <button
+              onClick={() => addToCart(product)}
+              // onClick={() => notify()}
+              className="bg-[#EDB842] text-white p-2 flex gap-2 rounded-md items-center w-5/12 justify-center"
+            >
               <span>Add to card</span>
               <BsCart />
             </button>
