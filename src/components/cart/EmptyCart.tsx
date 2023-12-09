@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { cartEmpty } from "../../images";
 
 export const EmptyCartBody = () => {
+  const navigate = useNavigate();
   return (
     <section className="w-full h-[90vh] flex flex-col items-center">
       <div className="flex flex-col gap-3 m-auto w-full md:w-1/3 text-center justify-center items-center">
@@ -11,7 +13,10 @@ export const EmptyCartBody = () => {
         />
         <div className="text-2xl font-[600]">Your cart is empty and sad :(</div>
         <div className="">Add something to make it happy!</div>
-        <button className=" bg-[#EDB842] p-3 text-white rounded-md font-[700]">
+        <button
+          onClick={() => navigate("/products")}
+          className=" bg-[#EDB842] p-3 text-white rounded-md font-[700]"
+        >
           Continue Shopping
         </button>
       </div>

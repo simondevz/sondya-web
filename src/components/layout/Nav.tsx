@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { BsBoxSeam, BsTruck } from "react-icons/bs";
 import { FaHome, FaUser } from "react-icons/fa";
@@ -8,11 +8,12 @@ import {
   MdLocationPin,
   MdPersonOutline,
 } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/Nav.css";
 import { Category } from "../../data/CategoryData";
 import { LogoSide, LogoSideBlack } from "../../images/logo";
+import { totalCartAction } from "../../redux/actions/cart.actions";
 import { ReducersType } from "../../redux/store";
 import { LoginResponseType } from "../../redux/types/auth.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
@@ -24,6 +25,8 @@ import {
 
 const Nav = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   // for the on change scrollable navbar
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -63,6 +66,29 @@ const Nav = () => {
   const login = useSelector(
     (state: ReducersType) => state?.login
   ) as ReduxResponseType<LoginResponseType[]>;
+
+  // get cart total
+  const totalCartRedux = useSelector(
+    (state: ReducersType) => state?.totalCart
+  ) as ReduxResponseType<number>;
+
+  const totalCartItems = useMemo(() => {
+    return totalCartRedux?.serverResponse?.data;
+  }, [totalCartRedux]);
+
+  useEffect(() => {
+    dispatch(totalCartAction() as any);
+  }, [dispatch]);
+
+  // bounce cart on change
+  const [totalCartItemsChanged, setTotalCartItemsChanged] = useState(false);
+
+  useEffect(() => {
+    setTotalCartItemsChanged(true);
+    setTimeout(() => {
+      setTotalCartItemsChanged(false);
+    }, 600); // Adjust animation duration as needed
+  }, [totalCartItems]);
 
   return (
     <div className="z-40 bg-white w-full flex flex-col flex-grow shadow-sm">
@@ -137,7 +163,16 @@ const Nav = () => {
             className="flex gap-2 items-center border-l-[2px] border-[#D9D9D9] px-2"
             to={"/cart"}
           >
-            <span className="text-[#EDB842] text-2xl">
+            <span className="text-[#EDB842] text-2xl relative p-1">
+              {totalCartItems >= 0 && (
+                <span
+                  className={`absolute -top-3 -right-1 rounded-full bg-[#EDB842] text-white p-[0.3rem] w-fit h-fit font-[600] text-sm animate__animated animate__bounce ${
+                    totalCartItemsChanged ? "animate__bounceIn" : ""
+                  }`}
+                >
+                  {totalCartItems}
+                </span>
+              )}
               <AiOutlineShoppingCart />
             </span>
             Cart
