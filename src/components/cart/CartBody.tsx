@@ -4,17 +4,24 @@ import { MdDelete } from "react-icons/md";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { CartPaypal, CartZip } from "../../images/cart";
+import PulseLoader from "react-spinners/PulseLoader";
+import { CartZip } from "../../images/cart";
 import { productImage1 } from "../../images/products";
 import {
   clearCartAction,
   removeFromCartAction,
   totalCartAction,
+  updateCartAction,
   viewCartAction,
 } from "../../redux/actions/cart.actions";
+import {
+  updateShippingDestinationAction,
+  viewShippingDestinationAction,
+} from "../../redux/actions/shippingdestination.actions";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { ProductOrderType } from "../../redux/types/productOrders.types";
+import { shippingDestinationType } from "../../redux/types/shippingdestination.types";
 import { LastComponent } from "../home";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { EmptyCartBody } from "./EmptyCart";
@@ -22,6 +29,9 @@ import { EmptyCartBody } from "./EmptyCart";
 const CartBody = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // for change cart details
+  const [productChange, setProductChange] = useState<ProductOrderType | null>();
 
   // get cart list
   const cartListRedux = useSelector(
@@ -47,6 +57,18 @@ const CartBody = () => {
     [dispatch]
   );
 
+  //update cart
+  const updateCartRedux = useSelector(
+    (state: ReducersType) => state?.updateCart
+  ) as ReduxResponseType<ProductOrderType[]>;
+
+  useEffect(() => {
+    setTimeout(() => {
+      productChange && dispatch(updateCartAction(productChange) as any);
+      dispatch(viewCartAction() as any);
+    }, 1000);
+  }, [productChange, dispatch]);
+
   // clear cart
   const clearCartRedux = useSelector(
     (state: ReducersType) => state?.clearCart
@@ -59,12 +81,12 @@ const CartBody = () => {
     }, 1000);
   }, [dispatch]);
 
-  // update cart
+  // view cart
   useEffect(() => {
     dispatch(viewCartAction() as any);
-  }, [dispatch, removeFromCartRedux, clearCartRedux]);
+  }, [dispatch, removeFromCartRedux, clearCartRedux, updateCartRedux]);
 
-  console.log(cartItems);
+  // console.log(productChange);
   return (
     <>
       {cartItems.length === 0 ? (
@@ -115,7 +137,12 @@ const CartBody = () => {
                           type="number"
                           min={1}
                           defaultValue={t.Order_quantity}
-                          // value={t.quantity}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setProductChange({
+                              ...t,
+                              Order_quantity: Number(e.target.value),
+                            })
+                          }
                           max={t.quantity}
                         />
                       </td>
@@ -162,7 +189,7 @@ const CartBody = () => {
               </button>
             </div>
           </div>
-          <CartBodySummary />
+          <CartBodySummary cartItems={cartItems} />
           <LastComponent />
         </section>
       )}
@@ -170,9 +197,96 @@ const CartBody = () => {
   );
 };
 
-const CartBodySummary = () => {
+type TotalingType = {
+  SubTotalPrice: number;
+  ShippingFee: number;
+  Tax: number;
+};
+
+const CartBodySummary = ({ cartItems }: any) => {
   const [tab1, settab1] = useState<boolean>(false);
   const [tab2, settab2] = useState<boolean>(true);
+
+  const [formData, setFormData] = useState<shippingDestinationType>({
+    _id: "",
+    country: "",
+    state: "",
+    city: "",
+    zipcode: "",
+    phone_number: "",
+  });
+
+  const dispatch = useDispatch();
+
+  //Calculate the total price
+  const calculateTotal = (cartTotalItems: ProductOrderType[]): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) =>
+        total + item.Order_quantity * item.current_price,
+      0
+    );
+  };
+
+  const [total, setTotal] = useState<TotalingType>({
+    SubTotalPrice: 0,
+    ShippingFee: 21,
+    Tax: 1,
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTotal((prev: TotalingType) => {
+        return {
+          ...prev,
+          SubTotalPrice: calculateTotal(cartItems),
+        };
+      });
+    }, 1000);
+  }, [cartItems]);
+  //calculating total price ends
+
+  // view cart
+  const viewShippingDestinationRedux = useSelector(
+    (state: ReducersType) => state?.viewShippingDestination
+  ) as ReduxResponseType<shippingDestinationType | null>;
+
+  const viewShippingDestination = useMemo(() => {
+    return viewShippingDestinationRedux?.serverResponse?.data;
+  }, [viewShippingDestinationRedux]);
+
+  useEffect(() => {
+    dispatch(viewShippingDestinationAction() as any);
+  }, [dispatch]);
+  // view cart ends
+
+  // update destination starts
+  const updateShippingDestinationRedux = useSelector(
+    (state: ReducersType) => state?.updateShippingDestination
+  ) as ReduxResponseType<shippingDestinationType>;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    dispatch(updateShippingDestinationAction(formData) as any);
+  };
+
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  console.log(updateShippingDestinationRedux);
+
+  // update destination ends
   return (
     <div className="bg-[#EDB84233] text-[#000000] flex flex-col gap-3 p-5 rounded-md">
       <div className="font-[700] text-xl">Summary</div>
@@ -188,30 +302,83 @@ const CartBodySummary = () => {
         </div>
         {tab1 && (
           <div className="flex flex-col gap-3">
-            <form className="flex flex-col gap-3" action="">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <div className="flex flex-col gap-3">
                 <label className="font-[600]" htmlFor="">
                   Country
                 </label>
-                <select className="p-2 rounded-md -m-1" name="" id="">
+                <select
+                  name="country"
+                  id="country"
+                  onChange={onChange}
+                  className="p-2 rounded-md -m-1"
+                  value={viewShippingDestination?.country}
+                >
                   <option className="p-2" value="">
+                    Choose
+                  </option>
+                  <option className="p-2" value="Nigeria">
                     Nigeria
                   </option>
-                  <option value="">Ghana</option>
-                  <option value="">South Africa</option>
+                  <option value="Ghana">Ghana</option>
+                  <option value="South Africa">South Africa</option>
                 </select>
               </div>
               <div className="flex flex-col gap-3">
                 <label className="font-[600]" htmlFor="">
                   State/Province
                 </label>
-                <input className="p-2 rounded-md -m-1" type="text" />
+                <input
+                  name="state"
+                  id="state"
+                  onChange={onChange}
+                  className="p-2 rounded-md -m-1"
+                  type="text"
+                  placeholder="California"
+                  value={viewShippingDestination?.state}
+                />
+              </div>
+              <div className="flex flex-col gap-3">
+                <label className="font-[600]" htmlFor="">
+                  city/town
+                </label>
+                <input
+                  name="city"
+                  id="city"
+                  onChange={onChange}
+                  className="p-2 rounded-md -m-1"
+                  type="text"
+                  placeholder="los Angeles"
+                  value={viewShippingDestination?.city}
+                />
+              </div>
+              <div className="flex flex-col gap-3">
+                <label className="font-[600]" htmlFor="">
+                  Phone Number
+                </label>
+                <input
+                  name="phone_number"
+                  id="phone_number"
+                  onChange={onChange}
+                  className="p-2 rounded-md -m-1"
+                  type="text"
+                  placeholder="+234,2443"
+                  value={viewShippingDestination?.phone_number}
+                />
               </div>
               <div className="flex flex-col gap-3">
                 <label className="font-[600]" htmlFor="">
                   Zip/Postal Code
                 </label>
-                <input className="p-2 rounded-md -m-1" type="text" />
+                <input
+                  name="zipcode"
+                  id="zipcode"
+                  onChange={onChange}
+                  className="p-2 rounded-md -m-1"
+                  type="text"
+                  placeholder="1062983"
+                  value={viewShippingDestination?.zipcode}
+                />
               </div>
               <div className="flex flex-col gap-3">
                 <label className="font-[600]" htmlFor="">
@@ -229,21 +396,25 @@ const CartBodySummary = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <label className="font-[600]" htmlFor="">
-                  Pickup from store
-                </label>
-                <div className="flex flex-row gap-3 items-center">
-                  <input
-                    className="p-2 rounded-md -m-1"
-                    type="radio"
-                    name="discount"
-                  />{" "}
-                  <span className="font-[400] text-sm">
-                    1234 Street Adress City Address, 1234 $0.00
-                  </span>
-                </div>
+              <div className="">
+                {updateShippingDestinationRedux?.error && (
+                  <div className="text-[#DB4444]">
+                    {updateShippingDestinationRedux?.error}
+                  </div>
+                )}
               </div>
+              <button
+                type="submit"
+                className="bg-[#0156FF] p-2 text-white rounded-md"
+              >
+                {updateShippingDestinationRedux?.loading ? (
+                  <div className="" style={{ height: "25px" }}>
+                    <PulseLoader color="#ffffff" />
+                  </div>
+                ) : (
+                  <span> Save</span>
+                )}
+              </button>
             </form>
           </div>
         )}
@@ -274,11 +445,15 @@ const CartBodySummary = () => {
             <hr />
             <div className="flex flex-row justify-between w-full">
               <span>Subtotal</span>
-              <span>$13,047.00</span>
+              <span>
+                $<FormatNumber price={total.SubTotalPrice} />
+              </span>
             </div>
             <div className="flex flex-row justify-between w-full">
               <span>Shipping </span>
-              <span>$21.00</span>
+              <span>
+                $<FormatNumber price={total.ShippingFee} />
+              </span>
             </div>
             <div className="text-[#A2A6B0] w-4/5">
               (Standard Rate - Price may vary depending on the item/destination.
@@ -286,25 +461,24 @@ const CartBodySummary = () => {
             </div>
             <div className="flex flex-row justify-between w-full">
               <span>Tax </span>
-              <span>$1.91</span>
-            </div>
-            <div className="flex flex-row justify-between w-full">
-              <span>GST (10%) </span>
-              <span>$1.91</span>
+              <span>
+                $<FormatNumber price={total.Tax} />
+              </span>
             </div>
             <div className="flex flex-row justify-between w-full">
               <span>Order Total</span>
-              <span>$13,068.00</span>
+              <span>
+                $
+                <FormatNumber
+                  price={total.SubTotalPrice + total.ShippingFee + total.Tax}
+                />
+              </span>
             </div>
-            <button className="bg-[#0156FF] p-2 text-white rounded-md">
-              Proceed to Checkout
-            </button>
-            <button className="bg-[#EDB842] p-2 rounded-md flex flex-row gap-3 justify-center">
-              <span>Check out with</span>
-              <img className="object-cover" src={CartPaypal} alt="" />
-            </button>
-            <button className="p-2 border border-[#EDB842] rounded-md text-[#A2A6B0]">
-              Check Out with Multiple Addresses
+            <button
+              type="submit"
+              className="bg-[#0156FF] p-2 text-white rounded-md"
+            >
+              <span> Proceed to Checkout</span>
             </button>
             <div className="flex flex-row gap-3 self-center">
               <img className="object-contain" src={CartZip} alt="" />
