@@ -1,5 +1,19 @@
+import { useCallback, useEffect, useState } from "react";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BsThreeDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
+import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import slugify from "slugify";
+import { productImage7 } from "../../images/products";
+import { userGetProductsAction } from "../../redux/actions/userDashboard/products.action";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import {
+  UserGetProductType,
+  userGetProductsType,
+} from "../../redux/types/products.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { Ratings } from "../shareables/Ratings";
 import {
@@ -8,18 +22,6 @@ import {
   ProductPopularTags,
   ProductPriceRange,
 } from "./FilterProductsNav";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { userGetProductsAction } from "../../redux/actions/userDashboard/products.action";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ReducersType } from "../../redux/store";
-import { ReduxResponseType } from "../../redux/types/general.types";
-import {
-  UserGetProductType,
-  userGetProductsType,
-} from "../../redux/types/products.types";
-import { productImage7 } from "../../images/products";
-import { BsThreeDots } from "react-icons/bs";
 
 export type QueryType = {
   page: number;
@@ -277,9 +279,12 @@ const ProductBodyMain = ({
           productsRedux?.serverResponse?.data?.products?.map(
             (product: UserGetProductType) => {
               return (
-                <div key={product._id} className="p-3 flex flex-col gap-3">
+                <div
+                  key={product._id}
+                  className="p-3 flex flex-col gap-3 hover:p-2"
+                >
                   <img
-                    className="h-[12rem] object-cover"
+                    className="h-[12rem] object-cover rounded-md"
                     src={
                       (product.image && product.image[0]?.url) || productImage7
                     }
@@ -291,17 +296,34 @@ const ProductBodyMain = ({
                       Reviews ({product.total_rating})
                     </span>
                   </div>
-                  <div className="">{product.name}</div>
-                  <div className="text-[#666666]">
-                    {product.old_price && "$"}
-                    {product.old_price ? (
-                      <FormatNumber price={product.old_price} />
-                    ) : (
-                      <div className="invisible">hi</div>
-                    )}
+                  <div className="h-[3rem]">{product.name}</div>
+                  <div className="flex flex-row gap-1">
+                    <div className="text-lg font-[700]">
+                      $<FormatNumber price={product.current_price} />
+                    </div>
+                    <div className="text-[#666666] line-through">
+                      {product.old_price && "$"}
+                      {product.old_price ? (
+                        <FormatNumber price={product.old_price} />
+                      ) : (
+                        <div className="invisible">hi</div>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-lg font-[700]">
-                    $<FormatNumber price={product.current_price} />
+                  <div className="flex flex-row gap-1 justify-between">
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/product/details/${product._id}/${slugify(
+                            product.name
+                          )}`
+                        )
+                      }
+                      className="flex flex-row gap-1 font-[600] whitespace-nowrap text-[#EDB842] items-center"
+                    >
+                      Shop now
+                    </button>
+                    <ProductLikeButton product={product} />
                   </div>
                 </div>
               );
@@ -363,6 +385,14 @@ const ProductBodyMain = ({
         </button>
       </div>
     </div>
+  );
+};
+const ProductLikeButton = (product: any) => {
+  const [like, setLike] = useState<boolean>(false);
+  return (
+    <button onClick={() => setLike(!like)}>
+      {like ? <MdFavorite /> : <MdOutlineFavoriteBorder />}
+    </button>
   );
 };
 

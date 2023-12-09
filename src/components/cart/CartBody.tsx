@@ -1,11 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { CartPaypal, CartZip } from "../../images/cart";
 import { productImage1 } from "../../images/products";
-import { viewCartAction } from "../../redux/actions/cart.actions";
+import {
+  clearCartAction,
+  removeFromCartAction,
+  totalCartAction,
+  viewCartAction,
+} from "../../redux/actions/cart.actions";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { ProductOrderType } from "../../redux/types/productOrders.types";
@@ -15,6 +21,8 @@ import { EmptyCartBody } from "./EmptyCart";
 
 const CartBody = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   // get cart list
   const cartListRedux = useSelector(
     (state: ReducersType) => state?.viewCart
@@ -24,9 +32,37 @@ const CartBody = () => {
     return cartListRedux?.serverResponse?.data;
   }, [cartListRedux]);
 
+  // remove from cart
+  const removeFromCartRedux = useSelector(
+    (state: ReducersType) => state?.removeFromCart
+  ) as ReduxResponseType<ProductOrderType[]>;
+
+  const removeFromCart = useCallback(
+    (product: ProductOrderType) => {
+      setTimeout(() => {
+        dispatch(removeFromCartAction(product) as any);
+        dispatch(totalCartAction() as any);
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  // clear cart
+  const clearCartRedux = useSelector(
+    (state: ReducersType) => state?.clearCart
+  ) as ReduxResponseType<ProductOrderType[]>;
+
+  const clearCart = useCallback(() => {
+    setTimeout(() => {
+      dispatch(clearCartAction() as any);
+      dispatch(totalCartAction() as any);
+    }, 1000);
+  }, [dispatch]);
+
+  // update cart
   useEffect(() => {
     dispatch(viewCartAction() as any);
-  }, [dispatch]);
+  }, [dispatch, removeFromCartRedux, clearCartRedux]);
 
   console.log(cartItems);
   return (
@@ -73,11 +109,14 @@ const CartBody = () => {
                         $<FormatNumber price={t.current_price} />
                       </td>
                       <td className="p-3">
+                        {t.quantity}
                         <input
                           className="outline-none p-2 outline-0 border-0 w-16 bg-[#EDB84233] rounded-md"
                           type="number"
-                          defaultValue={t.quantity}
+                          min={1}
+                          defaultValue={t.Order_quantity}
                           // value={t.quantity}
+                          max={t.quantity}
                         />
                       </td>
                       <td className="p-3">
@@ -88,7 +127,10 @@ const CartBody = () => {
                           <span className="border-2 p-1 text-[#CACDD8] border-[#CACDD8] rounded-full w-fit">
                             <FiEdit3 />
                           </span>
-                          <span className="border-2 p-1 text-[#CACDD8] border-[#CACDD8] rounded-full w-fit">
+                          <span
+                            onClick={() => removeFromCart(t)}
+                            className="border-2 p-1 text-[#CACDD8] border-[#CACDD8] rounded-full w-fit"
+                          >
                             <MdDelete />
                           </span>
                         </div>
@@ -101,10 +143,16 @@ const CartBody = () => {
           </div>
           <div className="flex fle-row justify-between gap-3">
             <div className="flex flex-row gap-3 items-center">
-              <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap">
+              <button
+                onClick={() => navigate("/products")}
+                className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap"
+              >
                 Continue
               </button>
-              <button className="px-4 py-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap">
+              <button
+                onClick={() => clearCart()}
+                className="px-4 py-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap"
+              >
                 Clear cart
               </button>
             </div>

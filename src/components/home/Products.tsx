@@ -11,10 +11,14 @@ import {
 import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import slugify from "slugify";
 import { ProductsItemsdata2 } from "../../data/productsItemsData";
 import { productImage1 } from "../../images/products";
-import { addToCartAction } from "../../redux/actions/cart.actions";
+import {
+  addToCartAction,
+  totalCartAction,
+} from "../../redux/actions/cart.actions";
 import {
   homeGetProductCategoryAction,
   homeGetProductsAction,
@@ -119,6 +123,18 @@ const Products = () => {
     (product: AdminGetProductType) => {
       setTimeout(() => {
         dispatch(addToCartAction(product) as any);
+
+        // send toast message
+        toast("🛒 Added to cart!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        dispatch(totalCartAction() as any);
       }, 1000);
     },
     [dispatch]
@@ -208,7 +224,10 @@ const Products = () => {
                       >
                         {like ? <MdFavorite /> : <MdOutlineFavoriteBorder />}
                       </div>
-                      <div className="py-1 bg-[#EDB842] flex flex-row gap-1 text-white items-center px-3">
+                      <div
+                        // onClick={() => addToCart(t)}
+                        className="py-1 bg-[#EDB842] flex flex-row gap-1 text-white items-center px-3 active:bg-white active:text-[#EDB842]"
+                      >
                         <span>
                           <AiOutlineShoppingCart />
                         </span>
