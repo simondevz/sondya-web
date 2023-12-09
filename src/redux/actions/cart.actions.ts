@@ -86,15 +86,6 @@ export const updateCartAction =
         type: UPDATE_CART_REQUEST,
       });
 
-      //   const cartOrderItem: ProductOrderType = {
-      //     ...product,
-      //     product_id: product._id,
-      //     Order_quantity: 1,
-      //     // total_price: product.current_price * this.Order_quantity,
-      //   };
-      //   cartOrderItem.total_price =
-      //     cartOrderItem.current_price * cartOrderItem.Order_quantity;
-
       // get existing cart from local storage
       const existingCart: ProductOrderType[] =
         JSON.parse(localStorage.getItem(CART_SESSION) as any) || [];
@@ -112,9 +103,6 @@ export const updateCartAction =
           (existingItem.total_price =
             productOrder.Order_quantity * productOrder.current_price);
       }
-      //    else {
-      //     existingCart.push(cartOrderItem);
-      //   }
 
       // Save updated cart to localStorage
       localStorage.setItem(CART_SESSION, JSON.stringify(existingCart));

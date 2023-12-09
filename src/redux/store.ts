@@ -86,6 +86,10 @@ import {
   sellerUpdateServiceReducer,
 } from "./reducers/seller/seller-services.reducers";
 import {
+  updateShippingDestinationReducer,
+  viewShippingDestinationReducer,
+} from "./reducers/shippingdestination.reducers";
+import {
   getUserGroupChatsReducer,
   userGetGroupchatDetailsReducer,
   userGetGroupchatMembersReducer,
@@ -121,6 +125,10 @@ export type ReducersType = {
   viewCart: ReduxResponseType;
   clearCart: ReduxResponseType;
   totalCart: ReduxResponseType;
+
+  //destination to local storage
+  updateShippingDestination: ReduxResponseType;
+  viewShippingDestination: ReduxResponseType;
 
   //home
   homeGetProductCategory: ReduxResponseType;
@@ -231,6 +239,10 @@ const reducer = combineReducers<ReducersType>({
   viewCart: viewCartReducer,
   clearCart: clearCartReducer,
   totalCart: totalCartReducer,
+
+  //destination to local storage
+  updateShippingDestination: updateShippingDestinationReducer,
+  viewShippingDestination: viewShippingDestinationReducer,
 
   //home
   homeGetProductCategory: homeGetProductCategoryReducer,
