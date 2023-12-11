@@ -1,8 +1,8 @@
 // const BASE = process.env.PUBLIC_SERVER_API;
-const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
-const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
-// const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
-// const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
+// const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
+// const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
+const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
   // home products and categories
@@ -112,10 +112,22 @@ export const API_ROUTES = {
   users: {
     createTestimonial: BASE + "/user/testimonial/create", // POST: UserTestimonialType
     getALlAPProvedTestimonial: BASE + "/user/testimonial/approved", // GET: List<UserTestimonialType>
-    getProducts: BASE + "/user/products", // GET
+    getUsers: BASE + "/profile/users",
+    getUser: BASE + "/profile/user/", // GET
+  },
+
+  // users && services
+  userServices: {
     getServices: BASE + "/user/services", // GET
-    getProductCategories: BASE + "/user/products/categories", // GET
+    getServiceById: BASE + "/user/service/", // GET :service_id
     getServiceCategories: BASE + "/user/services/categories", // GET
+  },
+
+  // users && products
+  userProducts: {
+    getProducts: BASE + "/user/products", // GET
+    getProductById: BASE + "/user/product/", // GET :product_id
+    getProductCategories: BASE + "/user/products/categories", // GET
   },
 
   // Users
@@ -130,8 +142,18 @@ export const API_ROUTES = {
     likeMessage: BASE + "/groupchat/messages/like", // for both liking and unliking a message - POST : {message_id, user_id}
   },
 
+  // Users && chats
+  userChats: {
+    getChats: BASE + "/chats/", // GET :user_id
+    getChat: BASE + "/chat", // GET :query - sender_id and receiver_id
+    getMessages: BASE + "/chat/messages", // GET :query - sender_id and receiver_id
+  },
+
   // websockets
-  websocket: WS_BASE + "/ws/chat",
+  websocket: {
+    groupchat: WS_BASE + "/ws/group/chat",
+    personal: WS_BASE + "/ws/personal/chat",
+  },
 
   landingPages: {
     contactUs: BASE + "/contactus", // POST

@@ -93,6 +93,7 @@ import {
   userJoinGroupchatReducer,
 } from "./reducers/userDashboard/groupchat.reducers";
 import {
+  userGetProductByIdReducer,
   userGetProductCategoriesReducer,
   userGetProductsReducer,
 } from "./reducers/userDashboard/products.reducers";
@@ -103,6 +104,7 @@ import {
   UpdateSocialsReducer,
 } from "./reducers/userDashboard/profile.reducers";
 import {
+  userGetServiceByIdReducer,
   userGetServiceCategoriesReducer,
   userGetServicesReducer,
 } from "./reducers/userDashboard/services.reducers";
@@ -111,6 +113,14 @@ import {
   testimonialReducer,
 } from "./reducers/userDashboard/testimonials.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import {
+  getUserChatsReducer,
+  userGetChatMessagesReducer,
+} from "./reducers/userDashboard/chats.reducers";
+import {
+  getUserReducer,
+  userGetUsersReducer,
+} from "./reducers/userDashboard/users.reducers";
 
 export type ReducersType = {
   //cart system
@@ -205,9 +215,17 @@ export type ReducersType = {
   // user queries
   testimonial: ReduxResponseType;
   getApprovedTestimonial: ReduxResponseType;
-  userGetProducts: ReduxResponseType;
+  userGetUsers: ReduxResponseType;
+  userGetUser: ReduxResponseType;
+
+  // user && services
   userGetServices: ReduxResponseType;
+  userGetServiceById: ReduxResponseType;
   userGetServiceCategories: ReduxResponseType;
+
+  // user && products
+  userGetProducts: ReduxResponseType;
+  userGetProductById: ReduxResponseType;
   userGetProductsCategories: ReduxResponseType;
 
   // user && groupchats
@@ -219,6 +237,10 @@ export type ReducersType = {
   userGetGroupchatMembers: ReduxResponseType;
   userLikeMessage: ReduxResponseType;
   userSendMessage: ReduxResponseType;
+
+  // user && chats
+  userGetChatMessages: ReduxResponseType;
+  getUserChats: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -314,9 +336,17 @@ const reducer = combineReducers<ReducersType>({
   // user queries
   testimonial: testimonialReducer,
   getApprovedTestimonial: getApprovedTestimonialReducer,
-  userGetProducts: userGetProductsReducer,
+  userGetUsers: userGetUsersReducer,
+  userGetUser: getUserReducer,
+
+  // user && services
   userGetServices: userGetServicesReducer,
+  userGetServiceById: userGetServiceByIdReducer,
   userGetServiceCategories: userGetServiceCategoriesReducer,
+
+  // User && Products
+  userGetProducts: userGetProductsReducer,
+  userGetProductById: userGetProductByIdReducer,
   userGetProductsCategories: userGetProductCategoriesReducer,
 
   // user && groupchats
@@ -328,6 +358,10 @@ const reducer = combineReducers<ReducersType>({
   userGetMessages: userGetMessagesReducer,
   userLikeMessage: userGetMessagesReducer,
   userSendMessage: userGetMessagesReducer,
+
+  // user && chats
+  getUserChats: getUserChatsReducer,
+  userGetChatMessages: userGetChatMessagesReducer,
 });
 
 const middleware = [thunk];

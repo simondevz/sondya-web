@@ -7,6 +7,9 @@ import {
   USER_GET_PRODUCTS_CATEGORY_FAIL,
   USER_GET_PRODUCTS_CATEGORY_REQUEST,
   USER_GET_PRODUCTS_CATEGORY_SUCCESS,
+  USER_GET_PRODUCT_BY_ID_FAIL,
+  USER_GET_PRODUCT_BY_ID_REQUEST,
+  USER_GET_PRODUCT_BY_ID_SUCCESS,
 } from "../../constants/userDashboard/products.constants";
 import { API_ROUTES } from "../../routes";
 
@@ -21,7 +24,7 @@ export const userGetProductsAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.users?.getProducts + "?" + query,
+        API_ROUTES?.userProducts?.getProducts + "?" + query,
         config
       );
 
@@ -31,6 +34,35 @@ export const userGetProductsAction =
       console.log(error);
       dispatch({
         type: USER_GET_PRODUCTS_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const userGetProductByIdAction =
+  (product_id: string) => async (dispatch: Dispatch) => {
+    dispatch({ type: USER_GET_PRODUCT_BY_ID_REQUEST });
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.userProducts?.getProductById + product_id,
+        config
+      );
+
+      dispatch({ type: USER_GET_PRODUCT_BY_ID_SUCCESS, payload: data });
+    } catch (error: any) {
+      // dispatch error
+      console.log(error);
+      dispatch({
+        type: USER_GET_PRODUCT_BY_ID_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
@@ -53,7 +85,7 @@ export const userGetProductsCategoriesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.users?.getProductCategories,
+        API_ROUTES?.userProducts?.getProductCategories,
         config
       );
       dispatch({
