@@ -32,6 +32,7 @@ export const API_ROUTES = {
     updateProfile: BASE + "/profile/update/", // PUT :id
     changePassword: BASE + "/profile/update/password/", // PUT :id
     updateSocials: BASE + "/profile/update/socials/", // PUT :id
+    updateCompanyDetails: BASE + "/profile/update/company/", // PUT :id
   },
 
   //Admin

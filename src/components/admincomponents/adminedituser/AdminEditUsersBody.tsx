@@ -44,6 +44,11 @@ const AdminEditUsersBody = () => {
     tiktok_url: "",
 
     id: id,
+
+    //new
+    city: "",
+    currency: "",
+    language: "",
   });
 
   const adminGetUsersRedux = useSelector(
@@ -268,6 +273,45 @@ const AdminEditUsersBody = () => {
                     type="text"
                     placeholder="state"
                     value={formData?.state}
+                    onChange={onChange}
+                  />
+                </div>
+                <div className="flex flex-col w-full gap-1">
+                  <label className="font-[400] text-sm" htmlFor="">
+                    city
+                  </label>
+                  <input
+                    name="city"
+                    className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
+                    type="text"
+                    placeholder="city"
+                    value={formData?.city}
+                    onChange={onChange}
+                  />
+                </div>
+                <div className="flex flex-col w-full gap-1">
+                  <label className="font-[400] text-sm" htmlFor="">
+                    currency
+                  </label>
+                  <input
+                    name="currency"
+                    className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
+                    type="text"
+                    placeholder="currency"
+                    value={formData?.currency}
+                    onChange={onChange}
+                  />
+                </div>
+                <div className="flex flex-col w-full gap-1">
+                  <label className="font-[400] text-sm" htmlFor="">
+                    language
+                  </label>
+                  <input
+                    name="language"
+                    className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
+                    type="text"
+                    placeholder="language"
+                    value={formData?.language}
                     onChange={onChange}
                   />
                 </div>

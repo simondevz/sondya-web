@@ -103,6 +103,7 @@ import {
 } from "./reducers/userDashboard/products.reducers";
 import {
   GetUserProfileReducer,
+  UpdateCompanyDetailsReducer,
   UpdatePasswordReducer,
   UpdateProfileReducer,
   UpdateSocialsReducer,
@@ -153,6 +154,7 @@ export type ReducersType = {
   updateProfile: ReduxResponseType;
   updatePassword: ReduxResponseType;
   updateSocials: ReduxResponseType;
+  updateCompanyDetails: ReduxResponseType;
 
   // seller && products
   sellerCreateProduct: ReduxResponseType;
@@ -267,6 +269,7 @@ const reducer = combineReducers<ReducersType>({
   updateProfile: UpdateProfileReducer,
   updatePassword: UpdatePasswordReducer,
   updateSocials: UpdateSocialsReducer,
+  updateCompanyDetails: UpdateCompanyDetailsReducer,
 
   //seller && products
   sellerCreateProduct: sellerCreateProductReducer,

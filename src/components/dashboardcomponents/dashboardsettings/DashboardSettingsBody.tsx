@@ -52,6 +52,20 @@ const DashboardSettingsBody = () => {
     instagram_url: "",
     twitter_url: "",
     tiktok_url: "",
+
+    //new
+    city: "",
+    currency: "",
+    language: "",
+
+    //company details
+    company_details: {
+      company_name: "",
+      company_website: "",
+      company_email: "",
+      contact_person_name: "",
+      contact_person_number: "",
+    },
   });
 
   const getProfileDetailsRedux = useSelector(
@@ -123,6 +137,18 @@ const DashboardSettingsBody = () => {
               <span className="text-[#191C1F]">Zip Code:</span>
               <span className="text-[#5F6C72]">{userData.zip_code}</span>
             </div>
+            <div className="">
+              <span className="text-[#191C1F]">City:</span>
+              <span className="text-[#5F6C72]">{userData.city}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">Currency:</span>
+              <span className="text-[#5F6C72]">{userData.currency}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">Language:</span>
+              <span className="text-[#5F6C72]">{userData.language}</span>
+            </div>
             <button
               onClick={() => setEditAccounInfo(true)}
               className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-center px-4 my-3"
@@ -138,29 +164,43 @@ const DashboardSettingsBody = () => {
           <div className="flex flex-col gap-2 p-3 border flex-grow">
             <div className="">
               <div className="text-[#191C1F]">
-                {userData.last_name} {userData.first_name}
+                {userData?.last_name} {userData?.first_name}
               </div>
               <div className="text-[#5F6C72]">{userData.address}</div>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Phone:</span>
-              <span className="text-[#5F6C72]">{userData.phone_number}</span>
+              <span className="text-[#191C1F]">Company Name:</span>
+              <span className="text-[#5F6C72]">
+                {userData?.company_details?.company_name}
+              </span>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Email:</span>
-              <span className="text-[#5F6C72]"> {userData.email}</span>
+              <span className="text-[#191C1F]">Company Website:</span>
+              <span className="text-[#5F6C72]">
+                {" "}
+                {userData?.company_details?.company_website}
+              </span>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Website:</span>
-              <span className="text-[#5F6C72]"> {userData.website_url}</span>
+              <span className="text-[#191C1F]">Contact Person Name:</span>
+              <span className="text-[#5F6C72]">
+                {" "}
+                {userData?.company_details?.contact_person_name}
+              </span>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Contact Person:</span>
-              <span className="text-[#5F6C72]"> {userData.email}</span>
+              <span className="text-[#191C1F]">Company Number:</span>
+              <span className="text-[#5F6C72]">
+                {" "}
+                {userData?.company_details?.contact_person_number}
+              </span>
             </div>
             <div className="">
-              <span className="text-[#191C1F]">Designation:</span>
-              <span className="text-[#5F6C72]"> {userData.email}</span>
+              <span className="text-[#191C1F]">Company Email:</span>
+              <span className="text-[#5F6C72]">
+                {" "}
+                {userData?.company_details?.company_email}
+              </span>
             </div>
             <button
               onClick={() => setEditCompanyDetails(true)}
@@ -269,6 +309,7 @@ const DashboardSettingsBody = () => {
         <EditCompanyDetailsModal
           showModal={EditCompanyDetails}
           handleClose={() => setEditCompanyDetails(false)}
+          userData={userData}
         />
         <EditSocialMediaModal
           showModal={EditSocialMedia}

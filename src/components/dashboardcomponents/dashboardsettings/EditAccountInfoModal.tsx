@@ -48,6 +48,12 @@ const EditAccountInfoModal = ({
     country: "",
     website_url: "",
     zip_code: "",
+
+    //new
+    city: "",
+    currency: "",
+    language: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -258,6 +264,62 @@ const EditAccountInfoModal = ({
                   placeholder="Florida"
                   onChange={onChange}
                   value={formData.state}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row gap-1 w-full">
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="font-[400] text-sm" htmlFor="">
+                  city
+                </label>
+                <input
+                  name="city"
+                  className="border p-2 rounded-md w-full"
+                  type="text"
+                  placeholder="Miami"
+                  onChange={onChange}
+                  value={formData.city}
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="font-[400] text-sm" htmlFor="">
+                  language
+                </label>
+                <input
+                  name="language"
+                  className="border p-2 rounded-md"
+                  type="text"
+                  placeholder="English"
+                  onChange={onChange}
+                  value={formData.language}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row gap-1 w-full">
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="font-[400] text-sm" htmlFor="">
+                  Address
+                </label>
+                <input
+                  name="address"
+                  className="border p-2 rounded-md w-full"
+                  type="text"
+                  placeholder="516 5th Ave"
+                  onChange={onChange}
+                  value={formData.address}
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="font-[400] text-sm" htmlFor="">
+                  Currency
+                </label>
+                <input
+                  name="currency"
+                  className="border p-2 rounded-md"
+                  type="text"
+                  placeholder="USD"
+                  onChange={onChange}
+                  value={formData.currency}
                 />
               </div>
             </div>

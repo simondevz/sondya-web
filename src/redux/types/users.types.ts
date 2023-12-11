@@ -1,3 +1,5 @@
+import { CompanyDetailsType } from "./company_details.types";
+
 export type adminCreateUserType = {
   first_name: string;
   last_name: string;
@@ -31,6 +33,11 @@ export type adminUpdateUserType = {
 
   // for route
   id?: string;
+
+  //new
+  city: string;
+  currency: string;
+  language: string;
 };
 
 export type adminUsersId = {
@@ -61,6 +68,13 @@ export type adminUGetUserType = {
   instagram_url: string;
   twitter_url: string;
   tiktok_url: string;
+
+  //new
+  city: string;
+  currency: string;
+  language: string;
+
+  company_details: CompanyDetailsType;
 };
 
 export type ImageType = {
@@ -101,6 +115,12 @@ export type profileUpdateType = {
   website_url: string;
   image?: ImageType[];
   files?: any;
+
+  //new
+  address: string;
+  city: string;
+  currency: string;
+  language: string;
 };
 
 export type passwordUpdateType = {

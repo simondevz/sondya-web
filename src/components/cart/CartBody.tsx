@@ -212,11 +212,13 @@ const CartBodySummary = ({ cartItems }: any) => {
     country: "",
     state: "",
     city: "",
+    address: "",
     zipcode: "",
     phone_number: "",
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //Calculate the total price
   const calculateTotal = (cartTotalItems: ProductOrderType[]): number => {
@@ -354,6 +356,20 @@ const CartBodySummary = ({ cartItems }: any) => {
               </div>
               <div className="flex flex-col gap-3">
                 <label className="font-[600]" htmlFor="">
+                  Address
+                </label>
+                <input
+                  name="address"
+                  id="address"
+                  onChange={onChange}
+                  className="p-2 rounded-md -m-1"
+                  type="text"
+                  placeholder="45th Street los Angeles"
+                  value={viewShippingDestination?.address}
+                />
+              </div>
+              <div className="flex flex-col gap-3">
+                <label className="font-[600]" htmlFor="">
                   Phone Number
                 </label>
                 <input
@@ -475,6 +491,7 @@ const CartBodySummary = ({ cartItems }: any) => {
               </span>
             </div>
             <button
+              onClick={() => navigate("/checkout")}
               type="submit"
               className="bg-[#0156FF] p-2 text-white rounded-md"
             >

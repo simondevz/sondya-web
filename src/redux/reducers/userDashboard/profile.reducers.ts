@@ -4,6 +4,10 @@ import {
   GET_PROFILE_REQUEST,
   GET_PROFILE_RESET,
   GET_PROFILE_SUCCESS,
+  UPDATE_COMPANY_DETAILS_FAIL,
+  UPDATE_COMPANY_DETAILS_REQUEST,
+  UPDATE_COMPANY_DETAILS_RESET,
+  UPDATE_COMPANY_DETAILS_SUCCESS,
   UPDATE_PASSWORD_FAIL,
   UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_RESET,
@@ -132,6 +136,36 @@ export const UpdateSocialsReducer = (
         error: action.payload,
       };
     case UPDATE_SOCIALS_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const UpdateCompanyDetailsReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case UPDATE_COMPANY_DETAILS_REQUEST:
+      return { ...initialState, loading: true };
+    case UPDATE_COMPANY_DETAILS_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case UPDATE_COMPANY_DETAILS_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case UPDATE_COMPANY_DETAILS_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

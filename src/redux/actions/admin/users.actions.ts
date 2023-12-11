@@ -87,6 +87,11 @@ export const adminUpdateUserAction =
     twitter_url,
     tiktok_url,
 
+    //new
+    city,
+    currency,
+    language,
+
     // id for query
     id,
   }: adminUpdateUserType) =>
@@ -121,6 +126,11 @@ export const adminUpdateUserAction =
           country,
           zip_code,
           status,
+
+          //new
+          city,
+          currency,
+          language,
 
           // social media
           facebook_url,
