@@ -34,6 +34,12 @@ export const updateShippingDestinationAction =
           payload: "city is missing in destination",
         });
       }
+      if (destination.address === "" || !destination.address) {
+        dispatch({
+          type: UPDATE_SHIPPING_DESTINATION_FAIL,
+          payload: "address is missing in destination",
+        });
+      }
       if (destination.zipcode === "" || !destination.zipcode) {
         dispatch({
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
@@ -63,6 +69,7 @@ export const updateShippingDestinationAction =
         existingDestination.country = destination.country;
         existingDestination.state = destination.state;
         existingDestination.city = destination.city;
+        existingDestination.address = destination.address;
         existingDestination.zipcode = destination.zipcode;
         existingDestination.phone_number = destination.phone_number;
 
@@ -77,6 +84,7 @@ export const updateShippingDestinationAction =
           country: "",
           state: "",
           city: "",
+          address: "",
           zipcode: "",
           phone_number: "",
         };
@@ -84,6 +92,7 @@ export const updateShippingDestinationAction =
         newDestination.country = destination.country;
         newDestination.state = destination.state;
         newDestination.city = destination.city;
+        newDestination.address = destination.address;
         newDestination.zipcode = destination.zipcode;
         newDestination.phone_number = destination.phone_number;
 
