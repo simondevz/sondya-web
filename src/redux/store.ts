@@ -58,6 +58,7 @@ import {
   addToCartReducer,
   clearCartReducer,
   removeFromCartReducer,
+  totalCartReducer,
   updateCartReducer,
   viewCartReducer,
 } from "./reducers/cart.reducers";
@@ -85,6 +86,10 @@ import {
   sellerUpdateServiceReducer,
 } from "./reducers/seller/seller-services.reducers";
 import {
+  updateShippingDestinationReducer,
+  viewShippingDestinationReducer,
+} from "./reducers/shippingdestination.reducers";
+import {
   getUserGroupChatsReducer,
   userGetGroupchatDetailsReducer,
   userGetGroupchatMembersReducer,
@@ -99,6 +104,7 @@ import {
 } from "./reducers/userDashboard/products.reducers";
 import {
   GetUserProfileReducer,
+  UpdateCompanyDetailsReducer,
   UpdatePasswordReducer,
   UpdateProfileReducer,
   UpdateSocialsReducer,
@@ -129,6 +135,11 @@ export type ReducersType = {
   removeFromCart: ReduxResponseType;
   viewCart: ReduxResponseType;
   clearCart: ReduxResponseType;
+  totalCart: ReduxResponseType;
+
+  //destination to local storage
+  updateShippingDestination: ReduxResponseType;
+  viewShippingDestination: ReduxResponseType;
 
   //home
   homeGetProductCategory: ReduxResponseType;
@@ -153,6 +164,7 @@ export type ReducersType = {
   updateProfile: ReduxResponseType;
   updatePassword: ReduxResponseType;
   updateSocials: ReduxResponseType;
+  updateCompanyDetails: ReduxResponseType;
 
   // seller && products
   sellerCreateProduct: ReduxResponseType;
@@ -250,6 +262,11 @@ const reducer = combineReducers<ReducersType>({
   removeFromCart: removeFromCartReducer,
   viewCart: viewCartReducer,
   clearCart: clearCartReducer,
+  totalCart: totalCartReducer,
+
+  //destination to local storage
+  updateShippingDestination: updateShippingDestinationReducer,
+  viewShippingDestination: viewShippingDestinationReducer,
 
   //home
   homeGetProductCategory: homeGetProductCategoryReducer,
@@ -274,6 +291,7 @@ const reducer = combineReducers<ReducersType>({
   updateProfile: UpdateProfileReducer,
   updatePassword: UpdatePasswordReducer,
   updateSocials: UpdateSocialsReducer,
+  updateCompanyDetails: UpdateCompanyDetailsReducer,
 
   //seller && products
   sellerCreateProduct: sellerCreateProductReducer,

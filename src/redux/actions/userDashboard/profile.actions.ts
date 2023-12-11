@@ -4,6 +4,9 @@ import {
   GET_PROFILE_FAIL,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
+  UPDATE_COMPANY_DETAILS_FAIL,
+  UPDATE_COMPANY_DETAILS_REQUEST,
+  UPDATE_COMPANY_DETAILS_SUCCESS,
   UPDATE_PASSWORD_FAIL,
   UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_SUCCESS,
@@ -13,6 +16,7 @@ import {
 } from "../../constants/userDashboard/profile.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
+import { CompanyDetailsType } from "../../types/company_details.types";
 import { ReduxResponseType } from "../../types/general.types";
 import {
   passwordUpdateType,
@@ -83,6 +87,11 @@ export const UpdateProfileAction =
       formData.append("state", profileUpdateData?.state);
       formData.append("country", profileUpdateData?.country);
       formData.append("zip_code", profileUpdateData?.zip_code);
+      //new
+      formData.append("city", profileUpdateData?.city);
+      formData.append("currency", profileUpdateData?.currency);
+      formData.append("language", profileUpdateData?.language);
+      formData.append("address", profileUpdateData?.address);
 
       //  Because formData will not accept data type of blob|undefined
       if (profileUpdateData?.files) {
@@ -197,6 +206,61 @@ export const UpdateSocialsAction =
     } catch (error: any) {
       dispatch({
         type: UPDATE_PROFILE_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const UpdateCompanyDetailsAction =
+  ({
+    company_name,
+    company_website,
+    company_email,
+    contact_person_name,
+    contact_person_number,
+  }: CompanyDetailsType) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: UPDATE_COMPANY_DETAILS_REQUEST,
+      });
+
+      const state1 = getState();
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const company_details: string = JSON.stringify({
+        company_name,
+        company_website,
+        company_email,
+        contact_person_name,
+        contact_person_number,
+      });
+
+      const { data } = await axios.put(
+        API_ROUTES?.profile?.updateCompanyDetails +
+          login?.serverResponse?.data?.id,
+        {
+          company_details,
+        },
+        config
+      );
+      dispatch({
+        type: UPDATE_COMPANY_DETAILS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: UPDATE_COMPANY_DETAILS_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

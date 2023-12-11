@@ -159,7 +159,7 @@ const App = createBrowserRouter([
     path: "/checkout",
     element: <Checkout />,
     errorElement: <ErrorPage />,
-    loader: homeCheck,
+    loader: dashboardCheck,
   },
   {
     path: "/groupchats",

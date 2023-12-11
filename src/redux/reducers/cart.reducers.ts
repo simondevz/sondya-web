@@ -12,6 +12,10 @@ import {
   REMOVE_FROM_CART_REQUEST,
   REMOVE_FROM_CART_RESET,
   REMOVE_FROM_CART_SUCCESS,
+  TOTAL_CART_FAIL,
+  TOTAL_CART_REQUEST,
+  TOTAL_CART_RESET,
+  TOTAL_CART_SUCCESS,
   UPDATE_CART_FAIL,
   UPDATE_CART_REQUEST,
   UPDATE_CART_RESET,
@@ -166,6 +170,36 @@ export const clearCartReducer = (
         error: action.payload,
       };
     case CLEAR_CART_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const totalCartReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case TOTAL_CART_REQUEST:
+      return { ...initialState, loading: true };
+    case TOTAL_CART_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case TOTAL_CART_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case TOTAL_CART_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
