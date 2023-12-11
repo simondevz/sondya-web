@@ -12,6 +12,7 @@ import {
   USER_GET_PRODUCT_BY_ID_SUCCESS,
 } from "../../constants/userDashboard/products.constants";
 import { API_ROUTES } from "../../routes";
+import { AdminGetProductType } from "../../types/products.types";
 
 export const userGetProductsAction =
   (query: string) => async (dispatch: Dispatch) => {
@@ -43,7 +44,15 @@ export const userGetProductsAction =
   };
 
 export const userGetProductByIdAction =
-  (product_id: string) => async (dispatch: Dispatch) => {
+  (
+    product_id: string,
+    callback: React.Dispatch<
+      React.SetStateAction<
+        (AdminGetProductType & { isProduct: boolean }) | undefined
+      >
+    >
+  ) =>
+  async (dispatch: Dispatch) => {
     dispatch({ type: USER_GET_PRODUCT_BY_ID_REQUEST });
     try {
       const config = {
@@ -58,6 +67,7 @@ export const userGetProductByIdAction =
       );
 
       dispatch({ type: USER_GET_PRODUCT_BY_ID_SUCCESS, payload: data });
+      callback({ ...data?.data, isProduct: true });
     } catch (error: any) {
       // dispatch error
       console.log(error);

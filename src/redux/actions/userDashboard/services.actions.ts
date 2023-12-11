@@ -12,6 +12,7 @@ import {
   USER_GET_SERVICE_BY_ID_REQUEST,
   USER_GET_SERVICE_BY_ID_SUCCESS,
 } from "../../constants/userDashboard/services.constants";
+import { AdminGetServiceType } from "../../types/services.types";
 
 export const userGetServicesAction =
   (query: string) => async (dispatch: Dispatch) => {
@@ -43,7 +44,15 @@ export const userGetServicesAction =
   };
 
 export const userGetServiceByIdAction =
-  (service_id: string) => async (dispatch: Dispatch) => {
+  (
+    service_id: string,
+    callback: React.Dispatch<
+      React.SetStateAction<
+        (AdminGetServiceType & { isProduct: boolean }) | undefined
+      >
+    >
+  ) =>
+  async (dispatch: Dispatch) => {
     dispatch({ type: USER_GET_SERVICE_BY_ID_REQUEST });
     try {
       const config = {
@@ -58,6 +67,7 @@ export const userGetServiceByIdAction =
       );
 
       dispatch({ type: USER_GET_SERVICE_BY_ID_SUCCESS, payload: data });
+      callback(data.data);
     } catch (error: any) {
       // dispatch error
       console.log(error);

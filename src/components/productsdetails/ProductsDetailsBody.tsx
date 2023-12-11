@@ -213,7 +213,10 @@ const ProductsDetailsBody = () => {
           <button
             onClick={() =>
               navigate("/user/inbox", {
-                state: { seller_id: product?.owner?.id },
+                state: {
+                  seller_id: product?.owner?.id,
+                  product_id: product?._id,
+                },
               })
             }
             className="p-2 border-2 border-[#62646A] text-[#62646A] rounded-md w-6/12 mx-auto"

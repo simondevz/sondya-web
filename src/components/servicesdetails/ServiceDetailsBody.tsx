@@ -26,12 +26,12 @@ import { AdminGetServiceType } from "../../redux/types/services.types";
 import { Ratings } from "../shareables/Ratings";
 import { LoginResponseType } from "../../redux/types/auth.types";
 import { chatMessageType } from "../../redux/types/chats.types";
-import { adminUGetUserType } from "../../redux/types/users.types";
 import { API_ROUTES } from "../../redux/routes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { userGeChatMessagesAction } from "../../redux/actions/userDashboard/chats.actions";
 import Swal from "sweetalert2";
 import { Chat1 } from "../../images/chat";
+import FormatDate from "../../utils/dateFormatter";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
@@ -381,7 +381,10 @@ const ChatMessage = ({ message }: { message: chatMessageType }) => {
           <span>
             {message?.sender_id?.first_name} {message?.sender_id?.last_name}
           </span>
-          <span className="text-[#939AAD]">3:14 PM</span>
+          <FormatDate
+            className="text-[#939AAD]"
+            dateString={message?.createdAt as string}
+          />
         </div>
         <div className="text-[#636A80]">{message?.message}</div>
       </div>
