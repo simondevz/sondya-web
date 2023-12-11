@@ -1,7 +1,7 @@
 import { AiOutlineSend } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiCloseFill, RiImageFill } from "react-icons/ri";
-import { Chat1, OnlineImg } from "../../../images/chat";
+import { Chat1 } from "../../../images/chat";
 import { API_ROUTES } from "../../../redux/routes";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
@@ -37,7 +37,7 @@ const SellerInboxBody = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const [seller_id, setSellerId] = useState<string>(location?.state?.seller_id);
+  const seller_id = location?.state?.seller_id;
   const [product_id, setProductId] = useState<string>(
     location?.state?.product_id
   );
