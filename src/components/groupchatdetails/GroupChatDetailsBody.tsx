@@ -46,13 +46,16 @@ const GroupChatDetailsBody = () => {
   }, [groupId, dispatch, members]);
 
   // Websocket related
-  const { sendMessage, lastMessage } = useWebSocket(API_ROUTES.websocket, {
-    shouldReconnect: (closeEvent) => {
-      return true;
-    },
-    reconnectAttempts: 5,
-    reconnectInterval: 3000,
-  });
+  const { sendMessage, lastMessage } = useWebSocket(
+    API_ROUTES.websocket.groupchat,
+    {
+      shouldReconnect: (closeEvent) => {
+        return true;
+      },
+      reconnectAttempts: 5,
+      reconnectInterval: 3000,
+    }
+  );
 
   useEffect(() => {
     if (lastMessage !== null) {

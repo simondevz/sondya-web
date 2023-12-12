@@ -5,7 +5,7 @@ import { PiNotebookLight } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
 import { ImgExample } from "../../../images";
 import { trackRod1 } from "../../../images/cart";
-import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
+// import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
 
 const SellerServiceOrderDetailsBody = () => {
   return (
@@ -180,7 +180,8 @@ const SellerServiceOrderDetailsBody = () => {
           Proceed to Checkout
         </button>
       </div>
-      <ServiceDetailsChat />
+      {/* <ServiceDetailsChat /> */}
+      {/* needs owner_id from the product to work */}
     </section>
   );
 };

@@ -2,7 +2,7 @@ import { SellerInboxBody } from "../../sellersdashboardcomponents/sellerinbox";
 
 const UserInbox = () => {
   return (
-    <div>
+    <div className="flex w-full h-full">
       <SellerInboxBody />
     </div>
   );
