@@ -15,6 +15,7 @@ export const ServicesNav = ({
   setQuery: any;
 }) => {
   const [openServices, setOpenServices] = useState(true);
+  const [showAll, setShowAll] = useState(false);
   const ClickOpenServices = () => setOpenServices((prev) => !prev);
   const dispatch = useDispatch();
 
@@ -37,14 +38,14 @@ export const ServicesNav = ({
         Services {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </button>
       {openServices && (
-        <div>
+        <div className="flex flex-col gap-[0.2rem]">
           {serviceCategoriesRedux?.serverResponse?.data
-            .slice(0, 5)
+            .slice(0, showAll ? Infinity : 5)
             .map((subcategory, index) => {
               return (
                 <div
                   key={index}
-                  className="flex flex-row gap-2 text-[#475156] items-center"
+                  className="flex flex-row gap-2 text-[#475156] text-[0.875rem] items-center"
                 >
                   <input
                     name="service"
@@ -62,6 +63,12 @@ export const ServicesNav = ({
                 </div>
               );
             })}
+          <button
+            className="place-self-end flex text-md text-[#475156]"
+            onClick={() => setShowAll(!showAll)}
+          >
+            Show {showAll ? "Less" : "All"}
+          </button>
         </div>
       )}
     </div>

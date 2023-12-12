@@ -41,7 +41,7 @@ const GroupChatBody = () => {
     (state: ReducersType) => state?.userGetMessages
   ) as ReduxResponseType;
 
-  const loginRedux: ReduxResponseType = useSelector(
+  const loginRedux = useSelector(
     (state: ReducersType) => state?.login
   ) as ReduxResponseType;
 
@@ -74,7 +74,9 @@ const GroupChatBody = () => {
   };
 
   // Websockets related logic
-  const [socketUrl, setSocketUrl] = useState<string>(API_ROUTES.websocket);
+  const [socketUrl, setSocketUrl] = useState<string>(
+    API_ROUTES.websocket.groupchat
+  );
   const [messageHistory, setMessageHistory] = useState<groupMessageType[]>([]);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: (closeEvent) => {
@@ -150,7 +152,8 @@ const GroupChatBody = () => {
 
   const handleSendMesage = async () => {
     setSending(true);
-    if (connectionStatus !== "Open") setSocketUrl(API_ROUTES.websocket);
+    if (connectionStatus !== "Open")
+      setSocketUrl(API_ROUTES.websocket.groupchat);
 
     // If there are files to be sent process it so it can be sent in json
     let images: any[] = [];

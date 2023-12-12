@@ -15,7 +15,7 @@ import {
   Visa,
 } from "../../images/checkout";
 import { serviceImage1 } from "../../images/serviceimages";
-import { ServiceDetailsChat } from "../servicesdetails/ServiceDetailsBody";
+// import { ServiceDetailsChat } from "../servicesdetails/ServiceDetailsBody";
 
 const ServiceCheckoutBody = () => {
   let [status, setStatus] = useState<boolean>(false);
@@ -77,7 +77,8 @@ const ServiceCheckoutBody = () => {
         </div>
         {/* chatting  */}
         <div className="mx-auto">
-          <ServiceDetailsChat />
+          {/* <ServiceDetailsChat /> */}{" "}
+          {/* needs owner_id from the product to work */}
         </div>
         <button
           onClick={() => setStatus(!status)}

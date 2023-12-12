@@ -41,6 +41,20 @@ const SellerDashboardHero = () => {
     instagram_url: "",
     twitter_url: "",
     tiktok_url: "",
+
+    //new
+    city: "",
+    currency: "",
+    language: "",
+
+    // company details
+    company_details: {
+      company_name: "",
+      company_website: "",
+      company_email: "",
+      contact_person_name: "",
+      contact_person_number: "",
+    },
   });
 
   const getProfileDetailsRedux = useSelector(
@@ -107,6 +121,18 @@ const SellerDashboardHero = () => {
             <div className="">
               <span className="text-[#191C1F]">Zip Code:</span>
               <span className="text-[#5F6C72]">{userData.zip_code}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">City:</span>
+              <span className="text-[#5F6C72]">{userData.city}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">Currency:</span>
+              <span className="text-[#5F6C72]">{userData.currency}</span>
+            </div>
+            <div className="">
+              <span className="text-[#191C1F]">Language:</span>
+              <span className="text-[#5F6C72]">{userData.language}</span>
             </div>
           </div>
         </div>

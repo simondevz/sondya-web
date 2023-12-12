@@ -8,7 +8,11 @@ import {
   USER_GET_SERVICES_CATEGORY_FAIL,
   USER_GET_SERVICES_CATEGORY_REQUEST,
   USER_GET_SERVICES_CATEGORY_SUCCESS,
+  USER_GET_SERVICE_BY_ID_FAIL,
+  USER_GET_SERVICE_BY_ID_REQUEST,
+  USER_GET_SERVICE_BY_ID_SUCCESS,
 } from "../../constants/userDashboard/services.constants";
+import { AdminGetServiceType } from "../../types/services.types";
 
 export const userGetServicesAction =
   (query: string) => async (dispatch: Dispatch) => {
@@ -21,7 +25,7 @@ export const userGetServicesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.users?.getServices + "?" + query,
+        API_ROUTES?.userServices?.getServices + "?" + query,
         config
       );
 
@@ -31,6 +35,44 @@ export const userGetServicesAction =
       console.log(error);
       dispatch({
         type: USER_GET_SERVICES_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const userGetServiceByIdAction =
+  (
+    service_id: string,
+    callback: React.Dispatch<
+      React.SetStateAction<
+        (AdminGetServiceType & { isProduct: boolean }) | undefined
+      >
+    >
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch({ type: USER_GET_SERVICE_BY_ID_REQUEST });
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.userServices?.getServiceById + service_id,
+        config
+      );
+
+      dispatch({ type: USER_GET_SERVICE_BY_ID_SUCCESS, payload: data });
+      callback(data.data);
+    } catch (error: any) {
+      // dispatch error
+      console.log(error);
+      dispatch({
+        type: USER_GET_SERVICE_BY_ID_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
@@ -53,7 +95,7 @@ export const userGetServiceCategoriesAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.users?.getServiceCategories,
+        API_ROUTES?.userServices?.getServiceCategories,
         config
       );
       dispatch({

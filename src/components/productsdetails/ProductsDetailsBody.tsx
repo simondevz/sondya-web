@@ -15,7 +15,7 @@ import { FiCopy } from "react-icons/fi";
 import { MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { mayLike } from "../../data/maylikeData";
 import {
@@ -35,6 +35,7 @@ import { Ratings } from "../shareables/Ratings";
 
 const ProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
+  const navigate = useNavigate();
 
   // fetch product detail
   // const navigate = useNavigate();
@@ -240,7 +241,17 @@ const ProductsDetailsBody = () => {
               Buy now
             </button>
           </div>
-          <button className="p-2 border-2 border-[#62646A] text-[#62646A] rounded-md w-6/12 mx-auto">
+          <button
+            onClick={() =>
+              navigate("/user/inbox", {
+                state: {
+                  seller_id: product?.owner?.id,
+                  product_id: product?._id,
+                },
+              })
+            }
+            className="p-2 border-2 border-[#62646A] text-[#62646A] rounded-md w-6/12 mx-auto"
+          >
             Contact Seller
           </button>
           <div className="flex flex-row gap-3 py-2 text-[#475156] items-center">
