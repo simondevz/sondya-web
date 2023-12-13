@@ -303,7 +303,7 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
-    path: "/user/order/details",
+    path: "/user/order/details/:id",
     element: <OrderDetails />,
     errorElement: <ErrorPage />,
     loader: dashboardCheck,
@@ -565,7 +565,7 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/order/details",
+    path: "/admin/order/details/:id",
     element: <AdminOrderDetails />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,

@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
+import PulseLoader from "react-spinners/PulseLoader";
+import Swal from "sweetalert2";
 import {
   Alipay,
   ApplePay,
@@ -13,9 +15,16 @@ import {
 } from "../../images/checkout";
 import { productImage1 } from "../../images/products";
 import { viewCartAction } from "../../redux/actions/cart.actions";
+import { viewShippingDestinationAction } from "../../redux/actions/shippingdestination.actions";
+import { userCreateProductOrderAction } from "../../redux/actions/userDashboard/productsOrder.actions";
+import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
+import { CREATE_PRODUCT_ORDER_RESET } from "../../redux/constants/userDashboard/productsOrder.constants";
 import { ReducersType } from "../../redux/store";
+import { CheckoutType } from "../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { ProductOrderType } from "../../redux/types/productOrders.types";
+import { shippingDestinationType } from "../../redux/types/shippingdestination.types";
+import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 
 type TotalingType = {
@@ -29,7 +38,7 @@ const CheckoutBody = () => {
   const [tab2, settab2] = useState<boolean>(true);
   const [tab3, settab3] = useState<boolean>(true);
 
-  //
+  // import dispatch
   const dispatch = useDispatch();
   // const navigate = useNavigate();
 
@@ -46,7 +55,6 @@ const CheckoutBody = () => {
   useEffect(() => {
     dispatch(viewCartAction() as any);
   }, [dispatch]);
-
   // calculate  total price
 
   const calculateTotal = (cartTotalItems: ProductOrderType[]): number => {
@@ -81,7 +89,179 @@ const CheckoutBody = () => {
 
   // console.log(cartItems);
 
-  // get billing address
+  // get shipping address from local storage
+  const viewShippingDestinationRedux = useSelector(
+    (state: ReducersType) => state?.viewShippingDestination
+  ) as ReduxResponseType<shippingDestinationType | null>;
+
+  const viewShippingDestination = useMemo(() => {
+    return viewShippingDestinationRedux?.serverResponse?.data;
+  }, [viewShippingDestinationRedux]);
+
+  useEffect(() => {
+    dispatch(viewShippingDestinationAction() as any);
+  }, [dispatch]);
+  // get shipping address from local storage ends
+
+  //get shipping address from database
+  const getProfileDetailsRedux = useSelector(
+    (state: ReducersType) => state?.getProfile
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  const userData = useMemo(() => {
+    return getProfileDetailsRedux?.serverResponse?.data;
+  }, [getProfileDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(GetUserProfileAction() as any);
+  }, [dispatch]);
+  //get shipping address from database ends
+
+  //assign shipping address
+  const [shippingAddress, setShippingAddress] =
+    useState<shippingDestinationType>({
+      _id: "",
+      country: "",
+      state: "",
+      city: "",
+      address: "",
+      zipcode: "",
+      phone_number: "",
+    });
+
+  // State to track the checkbox value for shipping address
+  const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    if (viewShippingDestination && !isChecked) {
+      setShippingAddress(viewShippingDestination);
+    } else if (userData && isChecked) {
+      setShippingAddress({
+        _id: "",
+        country: userData.country,
+        state: userData.state,
+        city: userData.city,
+        address: userData.address,
+        zipcode: userData.zip_code,
+        phone_number: userData.phone_number,
+      });
+    }
+  }, [isChecked, userData, viewShippingDestination]);
+  //assign shipping address
+
+  //choose payment method
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  //choose payment method ends
+
+  // checkout order starts
+  const [checkoutOrder, setCheckoutOrder] = useState<CheckoutType>({
+    checkoutItems: [],
+    subTotal: 0,
+    shippingFee: 0,
+    tax: 0,
+    discount: 0,
+    totalAmount: 0,
+    currency: "",
+    buyer: {
+      id: "",
+      username: "",
+      email: "",
+    },
+    ShippingDestination: {
+      _id: "",
+      country: "",
+      state: "",
+      city: "",
+      address: "",
+      zipcode: "",
+      phone_number: "",
+    },
+    paymentMethod: "",
+    paymentStatus: "Pending",
+    orderStatus: "Pending",
+    Category: "Product",
+    callback_url: window.location.origin + "/success",
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCheckoutOrder((prev: CheckoutType) => {
+        return {
+          ...prev,
+          checkoutItems: cartItems,
+          subTotal: total.SubTotalPrice,
+          shippingFee: total.ShippingFee,
+          tax: total.Tax,
+          discount: total.Discount,
+          totalAmount: total.SubTotalPrice + total.ShippingFee + total.Tax,
+          currency: userData.currency,
+          buyer: {
+            id: userData._id,
+            username: userData.username,
+            email: userData.email,
+          },
+          ShippingDestination: shippingAddress,
+          paymentMethod: paymentMethod,
+        };
+      });
+    }, 2000);
+  }, [cartItems, shippingAddress, total, userData, paymentMethod]);
+
+  const checkoutOrderRedux = useSelector(
+    (state: ReducersType) => state?.userCreateProductOrder
+  ) as ReduxResponseType<CheckoutType>;
+
+  const {
+    checkoutItems,
+    ShippingDestination,
+    totalAmount,
+    callback_url,
+    buyer,
+  } = checkoutOrder;
+
+  const handleSubmitCheckout = () => {
+    if (
+      checkoutItems &&
+      ShippingDestination &&
+      totalAmount &&
+      callback_url &&
+      buyer
+    ) {
+      dispatch(userCreateProductOrderAction(checkoutOrder) as any);
+    }
+  };
+
+  useEffect(() => {
+    checkoutOrderRedux?.error &&
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        timer: 5000,
+        text: checkoutOrderRedux?.error,
+      });
+    checkoutOrderRedux?.success &&
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        timer: 5000,
+        text: checkoutOrderRedux?.serverResponse?.message,
+      });
+    if (checkoutOrderRedux?.success) {
+      setTimeout(function () {
+        // navigate("/auth/success");
+        // navigate("/admin/category");
+        // handleClose();
+      }, 4000);
+    }
+    setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      dispatch({ type: CREATE_PRODUCT_ORDER_RESET });
+    }, 2000);
+  }, [checkoutOrderRedux, dispatch]);
+  // checkout order ends
+
+  console.log(checkoutOrder);
+  console.log(paymentMethod);
   return (
     <section className="flex flex-col gap-3 items-center p-4">
       <div className="flex flex-row justify-between w-full md:w-2/3 lg:w-1/2 max-w-[38rem] font-[600]">
@@ -181,18 +361,24 @@ const CheckoutBody = () => {
             <div className="flex flex-col gap-3">
               <div className="flex flex-row justify-between border items-center rounded-md p-3">
                 <div className="text-[#5F6C72] text-sm">
-                  <div className="text-[#191C1F]">Adekunle Gilbert</div>
-                  <div className="w-4/5">
-                    East Ikoyi Bazar, Word No. 04, Road No. 13/x, House no.
-                    1320/C, Flat No. 5D, Ikeja - 1200, Lagos
+                  <div className="text-[#191C1F]">
+                    {userData.last_name} {userData.first_name}
                   </div>
+                  <div className="w-4/5">{shippingAddress.address}</div>
                   <div className="">
                     <span className="text-[#191C1F]">Phone Number:</span>
-                    <span>+234 1234 567 890 </span>
+                    <span>{shippingAddress.phone_number}</span>
                   </div>
                   <div className="">
-                    <span className="text-[#191C1F]">Email:</span>
-                    <span> kevin.gilbert@gmail.com</span>
+                    <span className="text-[#191C1F]">Location:</span>
+                    <span>
+                      {shippingAddress.country},{shippingAddress.state},
+                      {shippingAddress.city}
+                    </span>
+                  </div>
+                  <div className="">
+                    <span className="text-[#191C1F]">Zip Code:</span>
+                    <span>{shippingAddress.zipcode}</span>
                   </div>
                 </div>
                 <div className="">
@@ -202,8 +388,12 @@ const CheckoutBody = () => {
                 </div>
               </div>
               <div className="flex flex-row gap-3">
-                <input type="checkbox" />
-                <span>Billing address is same as shipping</span>
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={(e) => setIsChecked(!isChecked)}
+                />
+                <span>Use profile billing address</span>
               </div>
             </div>
           )}
@@ -219,7 +409,14 @@ const CheckoutBody = () => {
           {tab2 && (
             <div className="flex flex-col leading-[0.1rem]  transition-all duration-1000 ease-in-out pointer-events-auto">
               <div className="flex -my-2 flex-row gap-1 items-center">
-                <input type="radio" name="pay" /> <span>Card</span>
+                <input
+                  value="card"
+                  checked={paymentMethod === "card"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  type="radio"
+                  name="pay"
+                />{" "}
+                <span>Card</span>
                 <img className="-mx-3 object-contain w-16" src={Visa} alt="" />
                 <img
                   className="-mx-3 object-contain w-16"
@@ -228,7 +425,14 @@ const CheckoutBody = () => {
                 />
               </div>
               <div className="flex flex-row gap-1 items-center -my-2">
-                <input type="radio" name="pay" /> <span>Mobile wallet</span>
+                <input
+                  value="wallet"
+                  checked={paymentMethod === "wallet"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  type="radio"
+                  name="pay"
+                />{" "}
+                <span>Mobile wallet</span>
                 <img
                   className="-mx-3 object-contain w-16"
                   src={PayPal}
@@ -270,7 +474,7 @@ const CheckoutBody = () => {
             <div className="flex flex-col gap-3 transition-all duration-1000 ease-in-out pointer-events-auto">
               <div className="flex flex-row gap-2">
                 <div className="mt-1">
-                  <input type="radio" name="shipping" id="" />
+                  <input type="radio" name="shipping" />{" "}
                 </div>
                 <div className="">
                   <div className="">
@@ -286,11 +490,24 @@ const CheckoutBody = () => {
                   </div>
                 </div>
               </div>
-              <button className="bg-[#EDB842] p-2 rounded-md text-white">
-                Pay $
-                <FormatNumber
-                  price={total.SubTotalPrice + total.ShippingFee + total.Tax}
-                />
+              <button
+                onClick={() => handleSubmitCheckout()}
+                className="bg-[#EDB842] p-2 rounded-md text-white"
+              >
+                {checkoutOrderRedux?.loading ? (
+                  <div className="" style={{ height: "25px" }}>
+                    <PulseLoader color="#ffffff" />
+                  </div>
+                ) : (
+                  <div className="">
+                    Pay $
+                    <FormatNumber
+                      price={
+                        total.SubTotalPrice + total.ShippingFee + total.Tax
+                      }
+                    />
+                  </div>
+                )}
               </button>
             </div>
           )}

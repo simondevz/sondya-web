@@ -21,36 +21,42 @@ export const updateShippingDestinationAction =
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
           payload: "country is missing in destination",
         });
+        return;
       }
       if (destination.state === "" || !destination.state) {
         dispatch({
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
           payload: "state is missing in destination",
         });
+        return;
       }
       if (destination.city === "" || !destination.city) {
         dispatch({
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
           payload: "city is missing in destination",
         });
+        return;
       }
       if (destination.address === "" || !destination.address) {
         dispatch({
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
           payload: "address is missing in destination",
         });
+        return;
       }
       if (destination.zipcode === "" || !destination.zipcode) {
         dispatch({
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
           payload: "zipcode is missing in destination",
         });
+        return;
       }
       if (destination.phone_number === "" || !destination.phone_number) {
         dispatch({
           type: UPDATE_SHIPPING_DESTINATION_FAIL,
           payload: "phone number is missing in destination",
         });
+        return;
       }
 
       dispatch({
@@ -60,6 +66,8 @@ export const updateShippingDestinationAction =
       // get existing cart from local storage
       const existingDestination: shippingDestinationType =
         JSON.parse(localStorage.getItem(SHIPPING_SESSION) as any) || {};
+
+      let data: any = "";
 
       // Update existing item quantity or add new item
       if (
@@ -78,6 +86,8 @@ export const updateShippingDestinationAction =
           SHIPPING_SESSION,
           JSON.stringify(existingDestination)
         );
+
+        data = existingDestination;
       } else {
         const newDestination: shippingDestinationType = {
           _id: "",
@@ -98,11 +108,13 @@ export const updateShippingDestinationAction =
 
         //save
         localStorage.setItem(SHIPPING_SESSION, JSON.stringify(newDestination));
+
+        data = newDestination;
       }
 
       dispatch({
         type: UPDATE_SHIPPING_DESTINATION_SUCCESS,
-        payload: { message: "updated destination successfully", data: "" },
+        payload: { message: "updated destination successfully", data: data },
       });
     } catch (error: any) {
       dispatch({

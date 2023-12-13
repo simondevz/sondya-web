@@ -21,6 +21,10 @@ import {
   adminUpdateGroupchatReducer,
 } from "./reducers/admin/groupchat.reducers";
 import {
+  adminGetProductOrderByIDReducer,
+  adminGetProductsOrdersReducer,
+} from "./reducers/admin/productOrder.reducers";
+import {
   adminCreateProductReducer,
   adminDeleteProductReducer,
   adminGetProductByIdReducer,
@@ -90,6 +94,10 @@ import {
   viewShippingDestinationReducer,
 } from "./reducers/shippingdestination.reducers";
 import {
+  getUserChatsReducer,
+  userGetChatMessagesReducer,
+} from "./reducers/userDashboard/chats.reducers";
+import {
   getUserGroupChatsReducer,
   userGetGroupchatDetailsReducer,
   userGetGroupchatMembersReducer,
@@ -97,6 +105,11 @@ import {
   userGetMessagesReducer,
   userJoinGroupchatReducer,
 } from "./reducers/userDashboard/groupchat.reducers";
+import {
+  userCreateProductOrderReducer,
+  userGetProductOrderByIDReducer,
+  userGetProductsOrdersReducer,
+} from "./reducers/userDashboard/productOrder.reducers";
 import {
   userGetProductByIdReducer,
   userGetProductCategoriesReducer,
@@ -118,15 +131,11 @@ import {
   getApprovedTestimonialReducer,
   testimonialReducer,
 } from "./reducers/userDashboard/testimonials.reducers";
-import { ReduxResponseType } from "./types/general.types";
-import {
-  getUserChatsReducer,
-  userGetChatMessagesReducer,
-} from "./reducers/userDashboard/chats.reducers";
 import {
   getUserReducer,
   userGetUsersReducer,
 } from "./reducers/userDashboard/users.reducers";
+import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
   //cart system
@@ -165,6 +174,15 @@ export type ReducersType = {
   updatePassword: ReduxResponseType;
   updateSocials: ReduxResponseType;
   updateCompanyDetails: ReduxResponseType;
+
+  // user && Products orders
+  userCreateProductOrder: ReduxResponseType;
+  userGetProductOrders: ReduxResponseType;
+  userGetProductOrderById: ReduxResponseType;
+
+  // admin && Products orders
+  adminGetProductsOrders: ReduxResponseType;
+  adminGetProductsOrderByID: ReduxResponseType;
 
   // seller && products
   sellerCreateProduct: ReduxResponseType;
@@ -292,6 +310,15 @@ const reducer = combineReducers<ReducersType>({
   updatePassword: UpdatePasswordReducer,
   updateSocials: UpdateSocialsReducer,
   updateCompanyDetails: UpdateCompanyDetailsReducer,
+
+  // user && Products orders
+  userCreateProductOrder: userCreateProductOrderReducer,
+  userGetProductOrders: userGetProductsOrdersReducer,
+  userGetProductOrderById: userGetProductOrderByIDReducer,
+
+  // admin && Products orders
+  adminGetProductsOrders: adminGetProductsOrdersReducer,
+  adminGetProductsOrderByID: adminGetProductOrderByIDReducer,
 
   //seller && products
   sellerCreateProduct: sellerCreateProductReducer,

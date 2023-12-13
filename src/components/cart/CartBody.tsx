@@ -251,7 +251,7 @@ const CartBodySummary = ({ cartItems }: any) => {
   }, [cartItems]);
   //calculating total price ends
 
-  // view cart
+  // view shipping destination starts
   const viewShippingDestinationRedux = useSelector(
     (state: ReducersType) => state?.viewShippingDestination
   ) as ReduxResponseType<shippingDestinationType | null>;
@@ -263,7 +263,7 @@ const CartBodySummary = ({ cartItems }: any) => {
   useEffect(() => {
     dispatch(viewShippingDestinationAction() as any);
   }, [dispatch]);
-  // view cart ends
+  // view shipping destination ends
 
   // update destination starts
   const updateShippingDestinationRedux = useSelector(
@@ -286,7 +286,7 @@ const CartBodySummary = ({ cartItems }: any) => {
       [e.target.name]: e.target.value,
     }));
   };
-  console.log(updateShippingDestinationRedux);
+  // console.log(updateShippingDestinationRedux);
 
   // update destination ends
   return (
@@ -314,7 +314,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                   id="country"
                   onChange={onChange}
                   className="p-2 rounded-md -m-1"
-                  value={viewShippingDestination?.country}
+                  defaultValue={viewShippingDestination?.country}
                 >
                   <option className="p-2" value="">
                     Choose
@@ -337,7 +337,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                   className="p-2 rounded-md -m-1"
                   type="text"
                   placeholder="California"
-                  value={viewShippingDestination?.state}
+                  defaultValue={viewShippingDestination?.state}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -351,7 +351,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                   className="p-2 rounded-md -m-1"
                   type="text"
                   placeholder="los Angeles"
-                  value={viewShippingDestination?.city}
+                  defaultValue={viewShippingDestination?.city}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -365,7 +365,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                   className="p-2 rounded-md -m-1"
                   type="text"
                   placeholder="45th Street los Angeles"
-                  value={viewShippingDestination?.address}
+                  defaultValue={viewShippingDestination?.address}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -379,7 +379,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                   className="p-2 rounded-md -m-1"
                   type="text"
                   placeholder="+234,2443"
-                  value={viewShippingDestination?.phone_number}
+                  defaultValue={viewShippingDestination?.phone_number}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -393,7 +393,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                   className="p-2 rounded-md -m-1"
                   type="text"
                   placeholder="1062983"
-                  value={viewShippingDestination?.zipcode}
+                  defaultValue={viewShippingDestination?.zipcode}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -416,6 +416,13 @@ const CartBodySummary = ({ cartItems }: any) => {
                 {updateShippingDestinationRedux?.error && (
                   <div className="text-[#DB4444]">
                     {updateShippingDestinationRedux?.error}
+                  </div>
+                )}
+              </div>
+              <div className="">
+                {updateShippingDestinationRedux?.success && (
+                  <div className="text-[#357950]">
+                    {updateShippingDestinationRedux?.serverResponse.message}
                   </div>
                 )}
               </div>

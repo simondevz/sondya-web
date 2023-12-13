@@ -1,8 +1,33 @@
+import { format } from "date-fns";
+import { useEffect, useMemo } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { recentOrderData } from "../../../data/RecentOrderData";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { userGetProductsOrdersAction } from "../../../redux/actions/userDashboard/productsOrder.actions";
+import { ReducersType } from "../../../redux/store";
+import { CheckoutType } from "../../../redux/types/checkout.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 
 const OrderHistoryBody = () => {
+  // fetch data
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getProductOrdersRedux = useSelector(
+    (state: ReducersType) => state?.userGetProductOrders
+  ) as ReduxResponseType<CheckoutType[]>;
+
+  const productOrderData = useMemo(() => {
+    return getProductOrdersRedux?.serverResponse?.data;
+  }, [getProductOrdersRedux]);
+
+  useEffect(() => {
+    dispatch(userGetProductsOrdersAction("") as any);
+  }, [dispatch]);
+
+  // console.log(productOrderData);
   return (
     <section className="border w-full flex flex-col gap-1">
       <div className="flex flex-row justify-between font-[600] py-3 px-6">
@@ -24,38 +49,48 @@ const OrderHistoryBody = () => {
             </tr>
           </thead>
           <tbody>
-            {recentOrderData.map((t, i) => {
-              return (
-                <tr key={i}>
-                  <td className="py-4 px-6 text-[#000000] font-[700] whitespace-nowrap">
-                    {t.orderId}
-                  </td>
-                  <td
-                    className={`${
-                      t.status === "IN PROGRESS"
-                        ? "text-[#FA8232]"
-                        : t.status === "COMPLETED"
-                        ? "text-[#2DB224]"
-                        : "text-[#EE5858]"
-                    } py-4 px-6 font-[600] whitespace-nowrap`}
-                  >
-                    {t.status}
-                  </td>
-                  <td className="py-4 px-6 text-[#5F6C72] font-[400] whitespace-nowrap">
-                    {t.date}
-                  </td>
-                  <td className="py-4 px-6 text-[#5F6C72] font-[400] whitespace-nowrap">
-                    {t.Total}
-                  </td>
-                  <td className="py-4 px-6 font-[600]">
-                    <button className="text-[#EDB842] flex flex-row gap-2 items-center whitespace-nowrap">
-                      <span>View Details</span>
-                      <AiOutlineArrowRight />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {productOrderData && productOrderData.length > 0 ? (
+              productOrderData.map((t, i) => {
+                const dateString = t.createdAt ? t.createdAt : "";
+                const dateObject = new Date(dateString);
+                const formattedDate = format(dateObject, "MMMM d, yyyy");
+                return (
+                  <tr key={i}>
+                    <td className="py-4 px-6 text-[#000000] font-[700] whitespace-nowrap">
+                      {t._id}
+                    </td>
+                    <td
+                      className={`${
+                        t.orderStatus === "IN PROGRESS"
+                          ? "text-[#FA8232]"
+                          : t.orderStatus === "COMPLETED"
+                          ? "text-[#2DB224]"
+                          : "text-[#EE5858]"
+                      } py-4 px-6 font-[600] whitespace-nowrap`}
+                    >
+                      {t.orderStatus}
+                    </td>
+                    <td className="py-4 px-6 text-[#5F6C72] font-[400] whitespace-nowrap">
+                      {formattedDate}
+                    </td>
+                    <td className="py-4 px-6 text-[#5F6C72] font-[400] whitespace-nowrap">
+                      $<FormatNumber price={t.totalAmount} />
+                    </td>
+                    <td className="py-4 px-6 font-[600]">
+                      <button
+                        onClick={() => navigate(`/user/order/details/${t._id}`)}
+                        className="text-[#EDB842] flex flex-row gap-2 items-center whitespace-nowrap"
+                      >
+                        <span>View Details</span>
+                        <AiOutlineArrowRight />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <div className="w-full">NO orders at this time</div>
+            )}
           </tbody>
         </table>
       </div>

@@ -1,13 +1,36 @@
-import { useState } from "react";
+import { format } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
 import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsCalendar2, BsFillEyeFill, BsSearch } from "react-icons/bs";
-import { FiEdit2 } from "react-icons/fi";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
-import { ProductsItemsdata } from "../../../data/productsItemsData";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { adminGetProductsOrdersAction } from "../../../redux/actions/admin/productsOrder.actions";
+import { ReducersType } from "../../../redux/store";
+import { CheckoutType } from "../../../redux/types/checkout.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const AdminOrdersBody = () => {
   const [whichTab, setwhichTab] = useState<string>("#1");
+
+  // fetch data
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const AdminGetProductOrdersRedux = useSelector(
+    (state: ReducersType) => state?.adminGetProductsOrders
+  ) as ReduxResponseType<CheckoutType[]>;
+
+  const productOrderData = useMemo(() => {
+    return AdminGetProductOrdersRedux?.serverResponse?.data;
+  }, [AdminGetProductOrdersRedux]);
+
+  useEffect(() => {
+    dispatch(adminGetProductsOrdersAction("") as any);
+  }, [dispatch]);
+
+  // console.log(productOrderData);
   return (
     <section>
       <div className="flex flex-col gap-3">
@@ -91,74 +114,79 @@ const AdminOrdersBody = () => {
             <thead>
               <tr>
                 <th className="text-[#1D1F2C] text-start">Product</th>
-                <th className="p-2 text-start text-[#1D1F2C]">SKU</th>
-                <th className="text-[#1D1F2C] text-start">Category</th>
-                <th className="text-[#1D1F2C] text-start">Stock</th>
-                <th className="text-[#1D1F2C] text-start">Price</th>
-                <th className="text-[#1D1F2C] text-start">Status</th>
+                <th className="text-[#1D1F2C] text-start">Total products</th>
+                <th className="text-[#1D1F2C] text-start">Total Price</th>
+                <th className="text-[#1D1F2C] text-start">Order Status</th>
                 <th className="text-[#1D1F2C] text-start">Added</th>
                 <th className="text-[#1D1F2C] text-start">Action</th>
               </tr>
             </thead>
             <tbody>
-              {ProductsItemsdata.map((t, i) => {
-                return (
-                  <tr key={i}>
-                    <td>
-                      <div className="flex flex-col md:flex-row gap-2">
-                        <img
-                          className="object-contain w-16"
-                          src={t.image}
-                          alt=""
-                        />
-                        <div className="flex flex-col gap-2 text-sm">
-                          <div className="">{t.name?.slice(0, 18)}...</div>
-                          <div className="">{t.variants} Variants</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-2 text-[#A3A9B6]">{t.sku}</td>
-                    <td className="text-[#A3A9B6]">{t.category}</td>
-                    <td className="text-[#A3A9B6]">{t.stock}</td>
-                    <td className="text-[#A3A9B6]">
-                      $<FormatNumber price={t.pricenow} />
-                    </td>
-                    <td>
-                      {t.availablestatus === "Low Stock" ? (
-                        <div className="p-1 text-[#F86624] bg-[#FFF0EA] w-fit h-fit rounded-lg">
-                          {t.availablestatus}
-                        </div>
-                      ) : t.availablestatus === "Published" ? (
-                        <div className="p-1 text-[#1A9882] bg-[#E9FAF7] w-fit h-fit rounded-lg">
-                          {t.availablestatus}
-                        </div>
-                      ) : t.availablestatus === "Draft" ? (
-                        <div className="p-1 text-[#667085] bg-[#F0F1F3] w-fit h-fit rounded-lg">
-                          {t.availablestatus}
-                        </div>
-                      ) : (
-                        <div className="p-1 text-[#EB3D4D] bg-[#FEECEE] w-fit h-fit rounded-lg">
-                          {t.availablestatus}
-                        </div>
-                      )}
-                    </td>
-                    <td className="text-[#A3A9B6]">{t.date}</td>
-                    <td>
-                      <div className="flex flex-row gap-2 items-center text-[#A3A9B6]">
-                        <button>
-                          <FiEdit2 />
-                        </button>
-                        <button>
-                          <BsFillEyeFill />
-                        </button>
-                        <button>
-                          <MdDelete />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+              {productOrderData && productOrderData.length > 0
+                ? productOrderData.map((t, i) => {
+                    const dateString = t.createdAt ? t.createdAt : "";
+                    const dateObject = new Date(dateString);
+                    const formattedDate = format(dateObject, "MMMM d, yyyy");
+                    return (
+                      <tr key={i}>
+                        <td>
+                          <div className="flex flex-col md:flex-row gap-2">
+                            <div className="flex flex-col gap-2 text-sm">
+                              {t.checkoutItems.map((t, i) => {
+                                return (
+                                  <div className="">
+                                    {t.name?.slice(0, 18)}...
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="text-[#A3A9B6]">
+                          {t?.checkoutItems.length}
+                        </td>
+                        <td className="text-[#A3A9B6]">
+                          $<FormatNumber price={t.totalAmount} />
+                        </td>
+                        <td>
+                          {t.orderStatus === "Low Stock" ? (
+                            <div className="p-1 text-[#F86624] bg-[#FFF0EA] w-fit h-fit rounded-lg">
+                              {t.orderStatus}
+                            </div>
+                          ) : t.orderStatus === "Published" ? (
+                            <div className="p-1 text-[#1A9882] bg-[#E9FAF7] w-fit h-fit rounded-lg">
+                              {t.orderStatus}
+                            </div>
+                          ) : t.orderStatus === "Draft" ? (
+                            <div className="p-1 text-[#667085] bg-[#F0F1F3] w-fit h-fit rounded-lg">
+                              {t.orderStatus}
+                            </div>
+                          ) : (
+                            <div className="p-1 text-[#EB3D4D] bg-[#FEECEE] w-fit h-fit rounded-lg">
+                              {t.orderStatus}
+                            </div>
+                          )}
+                        </td>
+                        <td className="text-[#A3A9B6]">{formattedDate}</td>
+                        <td>
+                          <div className="flex flex-row gap-2 items-center text-[#A3A9B6]">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                navigate(`/admin/order/details/${t._id}`)
+                              }
+                            >
+                              <BsFillEyeFill />
+                            </button>
+                            <button>
+                              <MdDelete />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                : ""}
             </tbody>
           </table>
         </div>
