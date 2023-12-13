@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import { BiSolidTruck } from "react-icons/bi";
 import {
   BsBox2Fill,
@@ -10,8 +11,33 @@ import {
 import { FaFileInvoice, FaReceipt, FaUserAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { PiExport } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { adminGetCategoryByIdAction } from "../../../redux/actions/admin/categories.actions";
+import { ReducersType } from "../../../redux/store";
+import { CheckoutType } from "../../../redux/types/checkout.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
 
 const AdminOrderDetailsHero = () => {
+  // const navigate = useNavigate();
+
+  // fetch product detail
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const id = String(params.id);
+
+  const productOrderDetailsRedux = useSelector(
+    (state: ReducersType) => state?.adminGetProductsOrderByID
+  ) as ReduxResponseType<CheckoutType>;
+
+  const productOrder = useMemo(() => {
+    return productOrderDetailsRedux?.serverResponse?.data;
+  }, [productOrderDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(adminGetCategoryByIdAction({ id }) as any);
+  }, [dispatch, id]);
   return (
     <section>
       <div className="flex flex-row justify-between">

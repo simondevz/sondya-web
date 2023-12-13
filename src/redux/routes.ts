@@ -131,6 +131,19 @@ export const API_ROUTES = {
     getProductCategories: BASE + "/user/products/categories", // GET
   },
 
+  // users && products
+  userProductsOrders: {
+    createProductsOrders: BASE + "/user/order/products/create", // GET
+    getProductsOrders: BASE + "/user/order/products", // GET
+    getProductOrdersById: BASE + "/user/order/products/", // GET :id
+  },
+
+  // users && products
+  adminProductsOrders: {
+    getProductsOrders: BASE + "/admin/order/products", // GET
+    getProductOrdersById: BASE + "/admin/order/product/", // GET :id
+  },
+
   // Users
   userGroupChats: {
     getUserGroupChats: BASE + "/user/groupchats/", // GET :user_id
