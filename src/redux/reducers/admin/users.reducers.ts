@@ -158,8 +158,8 @@ export const adminGetUsersReducer = (
         loading: false,
         success: true,
         serverResponse: {
-          ...action.payload,
-          data: action.payload?.data?.data,
+          ...action.payload,                                                                 
+          data: action.payload?.data?.data ?? [],
           count: action.payload?.data?.count
         },
       };
