@@ -230,7 +230,7 @@ export const adminGetUserByIdAction =
   };
 
 export const adminGetUsersAction =
-  () => async (dispatch: Dispatch, getState: any) => {
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_GET_ALL_USERS_REQUEST,
@@ -246,7 +246,10 @@ export const adminGetUsersAction =
         },
       };
 
-      const { data } = await axios.get(API_ROUTES?.adminUsers?.getAll, config);
+      const { data } = await axios.get(
+        API_ROUTES?.adminUsers?.getAll + "?" + query.toString(),
+        config
+      );
 
       dispatch({
         type: ADMIN_GET_ALL_USERS_SUCCESS,

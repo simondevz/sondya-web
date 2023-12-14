@@ -157,11 +157,7 @@ export const adminGetUsersReducer = (
         ...initialState,
         loading: false,
         success: true,
-        serverResponse: {
-          ...action.payload,                                                                 
-          data: action.payload?.data?.data ?? [],
-          count: action.payload?.data?.count
-        },
+        serverResponse: action.payload,
       };
     case ADMIN_GET_ALL_USERS_FAIL:
       return {
