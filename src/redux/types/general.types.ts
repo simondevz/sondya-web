@@ -18,3 +18,10 @@ export type ActionType = {
   type: string;
   payload: any;
 };
+
+
+export enum AdminUsersFilterStatus {
+  all = 'all',
+  active = 'active',
+  blocked = 'blocked'
+}
