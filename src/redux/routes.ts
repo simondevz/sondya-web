@@ -1,8 +1,8 @@
 // const BASE = process.env.PUBLIC_SERVER_API;
-const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
-const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
-// const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
-// const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
+// const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
+// const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
+const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
   // home products and categories
@@ -134,8 +134,8 @@ export const API_ROUTES = {
   // users && products
   userProductsOrders: {
     createProductsOrders: BASE + "/user/order/products/create", // GET
-    getProductsOrders: BASE + "/user/order/products", // GET
-    getProductOrdersById: BASE + "/user/order/products/", // GET :id
+    getProductsOrders: BASE + "/user/order/products/", // GET :user_id
+    getProductOrdersById: BASE + "/user/order/products/details/", // GET :id
   },
 
   // users && products

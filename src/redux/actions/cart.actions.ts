@@ -33,12 +33,22 @@ export const addToCartAction =
 
       const cartOrderItem: ProductOrderType = {
         ...product,
-        product_id: product._id,
-        Order_quantity: 1,
+        _id: product._id,
+        order_quantity: 1,
+
+        sub_total: product.current_price,
+        shipping_fee: 21,
+        tax: 1,
+        discount: 3,
+
         // total_price: product.current_price * this.Order_quantity,
       };
+
       cartOrderItem.total_price =
-        cartOrderItem.current_price * cartOrderItem.Order_quantity;
+        cartOrderItem.current_price * cartOrderItem.order_quantity +
+        cartOrderItem.shipping_fee +
+        cartOrderItem.tax -
+        cartOrderItem.discount;
 
       // get existing cart from local storage
       const existingCart: ProductOrderType[] =
@@ -46,16 +56,16 @@ export const addToCartAction =
 
       // Check if item already exists in cart
       const existingItem = existingCart.find(
-        (cartItem) => cartItem.product_id === cartOrderItem.product_id
+        (cartItem) => cartItem._id === cartOrderItem._id
       );
 
       // Update existing item quantity or add new item
       if (existingItem) {
-        existingItem.Order_quantity += cartOrderItem.Order_quantity;
+        existingItem.order_quantity += cartOrderItem.order_quantity;
         // existingItem.total_price! += cartOrderItem.Order_quantity;
         existingItem.total_price !== undefined &&
           (existingItem.total_price +=
-            cartOrderItem.Order_quantity * cartOrderItem.current_price);
+            cartOrderItem.order_quantity * cartOrderItem.current_price);
       } else {
         existingCart.push(cartOrderItem);
       }
@@ -92,16 +102,27 @@ export const updateCartAction =
 
       // Check if item already exists in cart
       const existingItem = existingCart.find(
-        (cartItem) => cartItem.product_id === productOrder.product_id
+        (cartItem) => cartItem._id === productOrder._id
       );
 
       // Update existing item quantity or add new item
       if (existingItem) {
-        existingItem.Order_quantity = productOrder.Order_quantity;
+        existingItem.order_quantity = productOrder.order_quantity;
         // existingItem.total_price! += cartOrderItem.Order_quantity;
+
+        existingItem.sub_total =
+          existingItem.current_price * existingItem.order_quantity;
+
         existingItem.total_price !== undefined &&
           (existingItem.total_price =
-            productOrder.Order_quantity * productOrder.current_price);
+            existingItem.current_price * existingItem.order_quantity +
+            existingItem.shipping_fee +
+            existingItem.tax -
+            existingItem.discount);
+
+        // existingItem.total_price !== undefined &&
+        //   (existingItem.total_price =
+        //     productOrder.order_quantity * productOrder.current_price);
       }
 
       // Save updated cart to localStorage
@@ -136,7 +157,7 @@ export const removeFromCartAction =
 
       // Check if item already exists in cart
       const existingItem = existingCart.find(
-        (cartItem) => cartItem.product_id === productOrder.product_id
+        (cartItem) => cartItem._id === productOrder._id
       );
 
       // removing item from cart

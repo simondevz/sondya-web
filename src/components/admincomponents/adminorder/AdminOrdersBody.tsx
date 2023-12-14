@@ -132,7 +132,7 @@ const AdminOrdersBody = () => {
                         <td>
                           <div className="flex flex-col md:flex-row gap-2">
                             <div className="flex flex-col gap-2 text-sm">
-                              {t.checkoutItems.map((t, i) => {
+                              {t.checkout_items.map((t, i) => {
                                 return (
                                   <div className="">
                                     {t.name?.slice(0, 18)}...
@@ -143,27 +143,27 @@ const AdminOrdersBody = () => {
                           </div>
                         </td>
                         <td className="text-[#A3A9B6]">
-                          {t?.checkoutItems.length}
+                          {t?.checkout_items.length}
                         </td>
                         <td className="text-[#A3A9B6]">
-                          $<FormatNumber price={t.totalAmount} />
+                          $<FormatNumber price={t.total_amount} />
                         </td>
                         <td>
-                          {t.orderStatus === "Low Stock" ? (
+                          {t.order_status === "Low Stock" ? (
                             <div className="p-1 text-[#F86624] bg-[#FFF0EA] w-fit h-fit rounded-lg">
-                              {t.orderStatus}
+                              {t.order_status}
                             </div>
-                          ) : t.orderStatus === "Published" ? (
+                          ) : t.order_status === "Published" ? (
                             <div className="p-1 text-[#1A9882] bg-[#E9FAF7] w-fit h-fit rounded-lg">
-                              {t.orderStatus}
+                              {t.order_status}
                             </div>
-                          ) : t.orderStatus === "Draft" ? (
+                          ) : t.order_status === "Draft" ? (
                             <div className="p-1 text-[#667085] bg-[#F0F1F3] w-fit h-fit rounded-lg">
-                              {t.orderStatus}
+                              {t.order_status}
                             </div>
                           ) : (
                             <div className="p-1 text-[#EB3D4D] bg-[#FEECEE] w-fit h-fit rounded-lg">
-                              {t.orderStatus}
+                              {t.order_status}
                             </div>
                           )}
                         </td>

@@ -5,19 +5,50 @@ import { shippingDestinationType } from "./shippingdestination.types";
 export type CheckoutType = {
   _id?: string;
 
-  checkoutItems: ProductOrderType[];
-  subTotal: number;
-  shippingFee: number;
-  tax: number;
-  discount: number;
-  totalAmount: number;
-  currency: string;
   buyer?: Owner;
-  ShippingDestination: shippingDestinationType;
-  paymentMethod: string; // 'card' | 'mobile money'
-  paymentStatus: string;
-  Category: string;
-  orderStatus: string;
+
+  checkout_items: ProductOrderType[];
+
+  shipping_destination: shippingDestinationType;
+
+  payment_method: string; // 'card' | 'mobile money'
+  payment_status: string;
+  total_amount: number;
+  currency: string;
+
+  order_status: string;
   callback_url: string;
   createdAt?: Date;
+
+  total_tax: number;
+  total_shipping_fee: number;
+  total_discount: number;
+};
+
+export type GetProductOrderPayment = {
+  _id: string;
+  batch_id: string;
+  buyer: Owner;
+  checkout_items: ProductOrderType[];
+
+  payment_method: string;
+  payment_status: string;
+  payment_id: string;
+  callback_url: string;
+  currency: string;
+  total_amount: number;
+  createdAt: Date;
+};
+
+export type GetProductOrder = {
+  _id: string;
+  buyer: Owner;
+  checkout_items: ProductOrderType;
+  order_status: string;
+  payment_id: string;
+  payment_status: string;
+  batch_id: string;
+  order_id: string;
+  shipping_destination: shippingDestinationType;
+  createdAt: Date;
 };

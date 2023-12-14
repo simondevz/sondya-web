@@ -49,6 +49,7 @@ export type AdminGetProductType = {
   _id: string;
   name: string;
   category: string;
+  sub_category: string;
   description: string;
   total_stock: number;
   tag: string;

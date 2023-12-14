@@ -13,7 +13,7 @@ import {
 } from "../../../images/cart";
 import { userGetProductsOrderByIdAction } from "../../../redux/actions/userDashboard/productsOrder.actions";
 import { ReducersType } from "../../../redux/store";
-import { CheckoutType } from "../../../redux/types/checkout.types";
+import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
@@ -28,7 +28,7 @@ const OrderDetailsBody = () => {
 
   const productOrderDetailsRedux = useSelector(
     (state: ReducersType) => state?.userGetProductOrderById
-  ) as ReduxResponseType<CheckoutType>;
+  ) as ReduxResponseType<GetProductOrder>;
 
   const productOrder = useMemo(() => {
     return productOrderDetailsRedux?.serverResponse?.data;
@@ -37,13 +37,15 @@ const OrderDetailsBody = () => {
   useEffect(() => {
     dispatch(userGetProductsOrderByIdAction({ id }) as any);
   }, [dispatch, id]);
+
+  console.log(productOrder);
   return (
     <>
       <section className="flex flex-col gap-3 shadow-md">
         <div className="flex flex-row gap-3">
           <span className="p-2 font-[#1A9882]">Order List</span>
           <span className="p-2 bg-[#E9FAF7] text-[#1A9882] rounded-md">
-            +{productOrder?.checkoutItems?.length} Orders
+            +{productOrder?.checkout_items?.order_quantity} Orders
           </span>
         </div>
         <div className="w-full">
@@ -58,51 +60,48 @@ const OrderDetailsBody = () => {
               </tr>
             </thead>
             <tbody>
-              {productOrder?.checkoutItems?.map((t, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="flex flex-col md:flex-row gap-2 py-2 px-3 justify-start">
-                      {/* <img src={ImgExample} alt="" /> */}
-                      <img
-                        className="w-14 h-14 object-cover"
-                        src={
-                          t.image && t.image.length > 0
-                            ? t.image[0].url
-                            : ImgExample
-                        }
-                        alt=""
-                      />
-                      <div className="flex flex-col gap-1">
-                        <div className="font-[600] text-[#1D1F2C]">
-                          {t.name}
-                        </div>
-                        <div className="font-[400] text-[#667085]">
-                          {t.brand}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-[#666666] py-2 px-3">{t.model}</td>
-                    <td className="text-[#666666] py-2 px-3">
-                      {t.Order_quantity} pcs
-                    </td>
-                    <td className="text-[#666666] py-2 px-3">
-                      $<FormatNumber price={t.current_price} />
-                    </td>
-                    <td className="text-[#666666] py-2 px-3">
-                      $<FormatNumber price={t.total_price} />
-                    </td>
-                  </tr>
-                );
-              })}
-              <tr className="border">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td className="text-[#1D1F2C] py-2 px-3">Subtotal</td>
-                <td className="text-[#1D1F2C] py-2 px-3">
+              <tr>
+                <td className="flex flex-col md:flex-row gap-2 py-2 px-3 justify-start">
+                  <img
+                    className="w-14 h-14 object-cover rounded-md"
+                    src={
+                      productOrder?.checkout_items?.image !== undefined &&
+                      productOrder?.checkout_items?.image &&
+                      productOrder?.checkout_items?.image?.length > 0
+                        ? productOrder?.checkout_items?.image[0]?.url
+                        : ImgExample
+                    }
+                    alt=""
+                  />
+                  <div className="flex flex-col gap-1">
+                    <div className="font-[600] text-[#1D1F2C]">
+                      {productOrder?.checkout_items?.model}
+                    </div>
+                    <div className="font-[400] text-[#667085]">
+                      {productOrder?.checkout_items?.brand}
+                    </div>
+                  </div>
+                </td>
+                <td className="text-[#666666] py-2 px-3">
+                  {productOrder?.checkout_items?.model}
+                </td>
+                <td className="text-[#666666] py-2 px-3">
+                  {productOrder?.checkout_items?.order_quantity} pcs
+                </td>
+                <td className="text-[#666666] py-2 px-3">
                   $
-                  {productOrder.subTotal && (
-                    <FormatNumber price={productOrder?.subTotal} />
+                  {productOrder?.checkout_items?.current_price && (
+                    <FormatNumber
+                      price={productOrder?.checkout_items?.current_price}
+                    />
+                  )}
+                </td>
+                <td className="text-[#666666] py-2 px-3">
+                  $
+                  {productOrder?.checkout_items?.sub_total && (
+                    <FormatNumber
+                      price={productOrder?.checkout_items?.sub_total}
+                    />
                   )}
                 </td>
               </tr>
@@ -113,8 +112,8 @@ const OrderDetailsBody = () => {
                 <td className="text-[#1D1F2C] py-2 px-3">Tax</td>
                 <td className="text-[#1D1F2C] py-2 px-3">
                   $
-                  {productOrder.tax && (
-                    <FormatNumber price={productOrder?.tax} />
+                  {productOrder?.checkout_items?.tax && (
+                    <FormatNumber price={productOrder?.checkout_items?.tax} />
                   )}
                 </td>
               </tr>
@@ -125,8 +124,24 @@ const OrderDetailsBody = () => {
                 <td className="text-[#1D1F2C] py-2 px-3">Shipping Rate</td>
                 <td className="text-[#1D1F2C] py-2 px-3">
                   $
-                  {productOrder.shippingFee && (
-                    <FormatNumber price={productOrder?.shippingFee} />
+                  {productOrder?.checkout_items?.shipping_fee && (
+                    <FormatNumber
+                      price={productOrder?.checkout_items?.shipping_fee}
+                    />
+                  )}
+                </td>
+              </tr>
+              <tr className="border">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td className="text-[#1D1F2C] py-2 px-3">Discount</td>
+                <td className="text-[#1D1F2C] py-2 px-3">
+                  -$
+                  {productOrder?.checkout_items?.discount && (
+                    <FormatNumber
+                      price={productOrder?.checkout_items?.discount}
+                    />
                   )}
                 </td>
               </tr>
@@ -137,8 +152,10 @@ const OrderDetailsBody = () => {
                 <td className="text-[#1D1F2C] py-2 px-3">Total</td>
                 <td className="text-[#1D1F2C] py-2 px-3">
                   $
-                  {productOrder.totalAmount && (
-                    <FormatNumber price={productOrder?.totalAmount} />
+                  {productOrder?.checkout_items?.total_price && (
+                    <FormatNumber
+                      price={productOrder?.checkout_items?.total_price}
+                    />
                   )}
                 </td>
               </tr>
@@ -149,7 +166,7 @@ const OrderDetailsBody = () => {
       <section className="w-full">
         <div className="flex flex-wrap justify-between">
           <div className="flex flex-col gap-3 shadow-md p-4 rounded-md max-w-[20rem]">
-            <div className="font-[600]">Buyer</div>
+            <div className="font-[600]">Vendor</div>
             <div className="flex flex-row w-full justify-between gap-3 items-center">
               <div className="flex flex-row gap-1 items-center">
                 <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">
@@ -157,7 +174,7 @@ const OrderDetailsBody = () => {
                 </span>
                 <span>Name</span>
               </div>
-              <span>{productOrder.buyer?.username}</span>
+              <span>{productOrder?.checkout_items?.owner?.username}</span>
             </div>
             <div className="flex flex-row w-full justify-between gap-3 items-center">
               <div className="flex flex-row gap-1 items-center">
@@ -166,7 +183,7 @@ const OrderDetailsBody = () => {
                 </span>
                 <span>Email</span>
               </div>
-              <span>{productOrder.buyer?.email}</span>
+              <span>{productOrder?.checkout_items?.owner?.email}</span>
             </div>
             <div className="flex flex-row w-full justify-between gap-3 items-center">
               <div className="flex flex-row gap-1 items-center">
@@ -175,7 +192,7 @@ const OrderDetailsBody = () => {
                 </span>
                 <span>Phone</span>
               </div>
-              <span>{productOrder?.ShippingDestination?.phone_number}</span>
+              <span>{productOrder?.checkout_items?.owner?.phone_number}</span>
             </div>
           </div>
           {/* address part */}
@@ -190,7 +207,7 @@ const OrderDetailsBody = () => {
               <div className="flex flex-col gap-1">
                 <div className="">Shipping Address:</div>
                 <div className="">
-                  {productOrder?.ShippingDestination?.address}
+                  {productOrder?.shipping_destination?.address}
                 </div>
               </div>
             </div>
@@ -203,10 +220,10 @@ const OrderDetailsBody = () => {
               <div className="flex flex-col gap-1">
                 <div className="">Location:</div>
                 <div className="word-break whitespace-pre-wrap">
-                  {productOrder?.ShippingDestination?.country},
-                  {productOrder?.ShippingDestination?.state},
-                  {productOrder?.ShippingDestination?.city},
-                  {productOrder?.ShippingDestination?.zipcode}
+                  {productOrder?.shipping_destination?.country},
+                  {productOrder?.shipping_destination?.state},
+                  {productOrder?.shipping_destination?.city},
+                  {productOrder?.shipping_destination?.zipcode}
                 </div>
               </div>
             </div>
