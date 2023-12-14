@@ -18,20 +18,18 @@ import { ReduxResponseType } from "../../types/general.types";
 
 export const userCreateProductOrderAction =
   ({
-    checkoutItems,
-    subTotal,
-    shippingFee,
-    tax,
-    discount,
-    totalAmount,
-    currency,
     buyer,
-    ShippingDestination,
-    paymentMethod,
-    Category,
-    paymentStatus,
-    orderStatus,
+    checkout_items,
+    shipping_destination,
+    payment_method,
+    payment_status,
+    total_amount,
+    currency,
+    order_status,
     callback_url,
+    total_tax,
+    total_shipping_fee,
+    total_discount,
   }: CheckoutType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -52,20 +50,18 @@ export const userCreateProductOrderAction =
       const { data } = await axios.post(
         API_ROUTES?.userProductsOrders?.createProductsOrders,
         {
-          checkoutItems,
-          subTotal,
-          shippingFee,
-          tax,
-          discount,
-          totalAmount,
-          currency,
           buyer,
-          ShippingDestination,
-          paymentMethod,
-          Category,
-          paymentStatus,
-          orderStatus,
+          checkout_items,
+          shipping_destination,
+          payment_method,
+          payment_status,
+          total_amount,
+          currency,
+          order_status,
           callback_url,
+          total_tax,
+          total_shipping_fee,
+          total_discount,
         },
         config
       );
@@ -102,7 +98,8 @@ export const userGetProductsOrdersAction =
 
       const { data } = await axios.get(
         API_ROUTES?.userProductsOrders?.getProductsOrders +
-          "?" +
+          login?.serverResponse?.data?.id +
+          "/?" +
           query.toString(),
         config
       );

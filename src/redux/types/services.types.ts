@@ -86,6 +86,7 @@ export type Owner = {
   id: string;
   username: string;
   email: string;
+  phone_number?: string;
 };
 
 export type UserGetServiceType = {

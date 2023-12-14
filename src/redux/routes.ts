@@ -134,8 +134,8 @@ export const API_ROUTES = {
   // users && products
   userProductsOrders: {
     createProductsOrders: BASE + "/user/order/products/create", // GET
-    getProductsOrders: BASE + "/user/order/products", // GET
-    getProductOrdersById: BASE + "/user/order/products/", // GET :id
+    getProductsOrders: BASE + "/user/order/products/", // GET :user_id
+    getProductOrdersById: BASE + "/user/order/products/details/", // GET :id
   },
 
   // users && products

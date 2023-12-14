@@ -30,8 +30,8 @@ import { FormatNumber } from "../shareables/FormatNumber";
 type TotalingType = {
   SubTotalPrice: number;
   ShippingFee: number;
-  Discount: number;
   Tax: number;
+  Discount: number;
 };
 const CheckoutBody = () => {
   const [tab1, settab1] = useState<boolean>(false);
@@ -64,7 +64,44 @@ const CheckoutBody = () => {
     }
     return cartTotalItems.reduce(
       (total: number, item: ProductOrderType) =>
-        total + item.Order_quantity * item.current_price,
+        total + item.order_quantity * item.current_price,
+      0
+    );
+  };
+
+  const calculateTotalTax = (cartTotalItems: ProductOrderType[]): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) => total + item.tax,
+      0
+    );
+  };
+
+  const calculateTotalShippingFee = (
+    cartTotalItems: ProductOrderType[]
+  ): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) => total + item.shipping_fee,
+      0
+    );
+  };
+
+  const calculateTotalDiscount = (
+    cartTotalItems: ProductOrderType[]
+  ): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) => total + item.discount,
       0
     );
   };
@@ -82,6 +119,9 @@ const CheckoutBody = () => {
         return {
           ...prev,
           SubTotalPrice: calculateTotal(cartItems),
+          Tax: calculateTotalTax(cartItems),
+          ShippingFee: calculateTotalShippingFee(cartItems),
+          Discount: calculateTotalDiscount(cartItems),
         };
       });
     }, 1000);
@@ -150,24 +190,20 @@ const CheckoutBody = () => {
   //assign shipping address
 
   //choose payment method
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("card");
   //choose payment method ends
 
   // checkout order starts
   const [checkoutOrder, setCheckoutOrder] = useState<CheckoutType>({
-    checkoutItems: [],
-    subTotal: 0,
-    shippingFee: 0,
-    tax: 0,
-    discount: 0,
-    totalAmount: 0,
+    checkout_items: [],
+    total_amount: 0,
     currency: "",
     buyer: {
       id: "",
       username: "",
       email: "",
     },
-    ShippingDestination: {
+    shipping_destination: {
       _id: "",
       country: "",
       state: "",
@@ -176,11 +212,13 @@ const CheckoutBody = () => {
       zipcode: "",
       phone_number: "",
     },
-    paymentMethod: "",
-    paymentStatus: "Pending",
-    orderStatus: "Pending",
-    Category: "Product",
+    payment_method: "",
+    payment_status: "Pending",
+    order_status: "Pending",
     callback_url: window.location.origin + "/success",
+    total_tax: 0,
+    total_shipping_fee: 0,
+    total_discount: 0,
   });
 
   useEffect(() => {
@@ -188,20 +226,23 @@ const CheckoutBody = () => {
       setCheckoutOrder((prev: CheckoutType) => {
         return {
           ...prev,
-          checkoutItems: cartItems,
-          subTotal: total.SubTotalPrice,
-          shippingFee: total.ShippingFee,
-          tax: total.Tax,
-          discount: total.Discount,
-          totalAmount: total.SubTotalPrice + total.ShippingFee + total.Tax,
+          checkout_items: cartItems,
           currency: userData.currency,
           buyer: {
             id: userData._id,
             username: userData.username,
             email: userData.email,
           },
-          ShippingDestination: shippingAddress,
-          paymentMethod: paymentMethod,
+          shipping_destination: shippingAddress,
+          payment_method: paymentMethod,
+          total_tax: total.Tax,
+          total_shipping_fee: total.ShippingFee,
+          total_discount: total.Discount,
+          total_amount:
+            total.SubTotalPrice +
+            total.ShippingFee +
+            total.Tax -
+            total.Discount,
         };
       });
     }, 2000);
@@ -212,18 +253,18 @@ const CheckoutBody = () => {
   ) as ReduxResponseType<CheckoutType>;
 
   const {
-    checkoutItems,
-    ShippingDestination,
-    totalAmount,
+    checkout_items,
+    shipping_destination,
+    total_amount,
     callback_url,
     buyer,
   } = checkoutOrder;
 
   const handleSubmitCheckout = () => {
     if (
-      checkoutItems &&
-      ShippingDestination &&
-      totalAmount &&
+      checkout_items &&
+      shipping_destination &&
+      total_amount &&
       callback_url &&
       buyer
     ) {
@@ -285,8 +326,10 @@ const CheckoutBody = () => {
                 alt=""
               />
               <div className="flex flex-col justify-between h-32">
-                <div className="flex flex-row justify-between">
+                <div className="flex flex-wrap break-words justify-center">
                   <span className="text-sm font-[500]">{t.name}</span>
+                </div>
+                <div className="flex flex-wrap break-words justify-end">
                   <span>
                     $<FormatNumber price={t.current_price} />
                   </span>
@@ -301,7 +344,7 @@ const CheckoutBody = () => {
                 </div>
               </div>
               <div className="absolute -top-2 -left-4 md:-left-4 w-fit py-2 px-3 bg-[#EDB842] text-white rounded-full h-fit">
-                {t.Order_quantity}
+                {t.order_quantity}
               </div>
             </div>
           );
@@ -325,6 +368,12 @@ const CheckoutBody = () => {
           </span>
         </div>
         <div className="flex flex-row justify-between w-full">
+          <span>Tax </span>
+          <span>
+            $<FormatNumber price={total.Tax} />
+          </span>
+        </div>
+        <div className="flex flex-row justify-between w-full">
           <span>Shipping Cost </span>
           <span>
             $<FormatNumber price={total.ShippingFee} />
@@ -343,7 +392,12 @@ const CheckoutBody = () => {
             {" "}
             $
             <FormatNumber
-              price={total.SubTotalPrice + total.ShippingFee + total.Tax}
+              price={
+                total.SubTotalPrice +
+                total.ShippingFee +
+                total.Tax -
+                total.Discount
+              }
             />
           </span>
         </div>
@@ -503,7 +557,10 @@ const CheckoutBody = () => {
                     Pay $
                     <FormatNumber
                       price={
-                        total.SubTotalPrice + total.ShippingFee + total.Tax
+                        total.SubTotalPrice +
+                        total.ShippingFee +
+                        total.Tax -
+                        total.Discount
                       }
                     />
                   </div>

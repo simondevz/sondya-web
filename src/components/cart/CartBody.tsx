@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FiEdit3 } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
@@ -102,9 +101,10 @@ const CartBody = () => {
                 <tr className="text-left">
                   <th>Item</th>
                   <th>Price</th>
+                  <th>Tax, shipping fee, discount</th>
                   <th>Quantity</th>
                   <th>Sub Total</th>
-                  <th>Activity</th>
+                  <th>Remove</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,32 +128,47 @@ const CartBody = () => {
                         </div>
                       </td>
                       <td className="p-3">
-                        $<FormatNumber price={t.current_price} />
+                        $
+                        {t.current_price && (
+                          <FormatNumber price={t.current_price} />
+                        )}
+                      </td>
+                      <td className="p-3 text-lead">
+                        ${t.tax && <FormatNumber price={t.tax} />}, $
+                        {t.shipping_fee && (
+                          <FormatNumber price={t.shipping_fee} />
+                        )}
+                        , ${t.discount && <FormatNumber price={t.discount} />}
                       </td>
                       <td className="p-3">
-                        {t.quantity}
                         <input
                           className="outline-none p-2 outline-0 border-0 w-16 bg-[#EDB84233] rounded-md"
                           type="number"
                           min={1}
-                          defaultValue={t.Order_quantity}
+                          defaultValue={t.order_quantity}
+                          // value={t.order_quantity}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setProductChange({
                               ...t,
-                              Order_quantity: Number(e.target.value),
+                              order_quantity: Number(e.target.value),
                             })
                           }
-                          max={t.quantity}
+                          max={t.total_stock}
                         />
                       </td>
                       <td className="p-3">
-                        $<FormatNumber price={t.total_price} />
+                        $
+                        {t.total_price && t.total_price && (
+                          <FormatNumber
+                            price={t.total_price && t.total_price}
+                          />
+                        )}
                       </td>
                       <td>
                         <div className="flex flex-col gap-3 justify-center h-full">
-                          <span className="border-2 p-1 text-[#CACDD8] border-[#CACDD8] rounded-full w-fit">
+                          {/* <span className="border-2 p-1 text-[#CACDD8] border-[#CACDD8] rounded-full w-fit">
                             <FiEdit3 />
-                          </span>
+                          </span> */}
                           <span
                             onClick={() => removeFromCart(t)}
                             className="border-2 p-1 text-[#CACDD8] border-[#CACDD8] rounded-full w-fit"
@@ -201,21 +216,12 @@ type TotalingType = {
   SubTotalPrice: number;
   ShippingFee: number;
   Tax: number;
+  Discount: number;
 };
 
 const CartBodySummary = ({ cartItems }: any) => {
   const [tab1, settab1] = useState<boolean>(false);
   const [tab2, settab2] = useState<boolean>(true);
-
-  const [formData, setFormData] = useState<shippingDestinationType>({
-    _id: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    zipcode: "",
-    phone_number: "",
-  });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -228,7 +234,45 @@ const CartBodySummary = ({ cartItems }: any) => {
     }
     return cartTotalItems.reduce(
       (total: number, item: ProductOrderType) =>
-        total + item.Order_quantity * item.current_price,
+        total + item.order_quantity * item.current_price,
+      0
+    );
+  };
+
+  //Calculate the total price
+  const calculateTotalTax = (cartTotalItems: ProductOrderType[]): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) => total + item.tax,
+      0
+    );
+  };
+
+  const calculateTotalShippingFee = (
+    cartTotalItems: ProductOrderType[]
+  ): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) => total + item.shipping_fee,
+      0
+    );
+  };
+
+  const calculateTotalDiscount = (
+    cartTotalItems: ProductOrderType[]
+  ): number => {
+    // Ensure that cartTotalItems is an array before using reduce
+    if (!Array.isArray(cartTotalItems)) {
+      return 0;
+    }
+    return cartTotalItems.reduce(
+      (total: number, item: ProductOrderType) => total + item.discount,
       0
     );
   };
@@ -237,6 +281,7 @@ const CartBodySummary = ({ cartItems }: any) => {
     SubTotalPrice: 0,
     ShippingFee: 21,
     Tax: 1,
+    Discount: 3,
   });
 
   useEffect(() => {
@@ -245,6 +290,9 @@ const CartBodySummary = ({ cartItems }: any) => {
         return {
           ...prev,
           SubTotalPrice: calculateTotal(cartItems),
+          Tax: calculateTotalTax(cartItems),
+          ShippingFee: calculateTotalShippingFee(cartItems),
+          Discount: calculateTotalDiscount(cartItems),
         };
       });
     }, 1000);
@@ -252,6 +300,16 @@ const CartBodySummary = ({ cartItems }: any) => {
   //calculating total price ends
 
   // view shipping destination starts
+  const [formData, setFormData] = useState<shippingDestinationType>({
+    _id: "",
+    country: "",
+    state: "",
+    city: "",
+    address: "",
+    zipcode: "",
+    phone_number: "",
+  });
+
   const viewShippingDestinationRedux = useSelector(
     (state: ReducersType) => state?.viewShippingDestination
   ) as ReduxResponseType<shippingDestinationType | null>;
@@ -469,13 +527,19 @@ const CartBodySummary = ({ cartItems }: any) => {
             <div className="flex flex-row justify-between w-full">
               <span>Subtotal</span>
               <span>
-                $<FormatNumber price={total.SubTotalPrice} />
+                $
+                {total.SubTotalPrice && (
+                  <FormatNumber price={total.SubTotalPrice} />
+                )}
               </span>
             </div>
             <div className="flex flex-row justify-between w-full">
-              <span>Shipping </span>
+              <span>Total Shipping Fees</span>
               <span>
-                $<FormatNumber price={total.ShippingFee} />
+                $
+                {total.ShippingFee && (
+                  <FormatNumber price={total.ShippingFee} />
+                )}
               </span>
             </div>
             <div className="text-[#A2A6B0] w-4/5">
@@ -483,18 +547,29 @@ const CartBodySummary = ({ cartItems }: any) => {
               TECS Staff will contact you.)
             </div>
             <div className="flex flex-row justify-between w-full">
-              <span>Tax </span>
+              <span>Tota Tax </span>
+              <span>${total.Tax && <FormatNumber price={total.Tax} />}</span>
+            </div>
+            <div className="flex flex-row justify-between w-full">
+              <span>Total Discount </span>
               <span>
-                $<FormatNumber price={total.Tax} />
+                ${total.Discount && <FormatNumber price={total.Discount} />}
               </span>
             </div>
             <div className="flex flex-row justify-between w-full">
               <span>Order Total</span>
               <span>
                 $
-                <FormatNumber
-                  price={total.SubTotalPrice + total.ShippingFee + total.Tax}
-                />
+                {total.SubTotalPrice && total.ShippingFee && total.Tax && (
+                  <FormatNumber
+                    price={
+                      total.SubTotalPrice +
+                      total.ShippingFee +
+                      total.Tax -
+                      total.Discount
+                    }
+                  />
+                )}
               </span>
             </div>
             <button

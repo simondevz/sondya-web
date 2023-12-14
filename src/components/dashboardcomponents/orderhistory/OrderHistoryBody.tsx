@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { userGetProductsOrdersAction } from "../../../redux/actions/userDashboard/productsOrder.actions";
 import { ReducersType } from "../../../redux/store";
-import { CheckoutType } from "../../../redux/types/checkout.types";
+import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
@@ -17,7 +17,7 @@ const OrderHistoryBody = () => {
 
   const getProductOrdersRedux = useSelector(
     (state: ReducersType) => state?.userGetProductOrders
-  ) as ReduxResponseType<CheckoutType[]>;
+  ) as ReduxResponseType<GetProductOrder[]>;
 
   const productOrderData = useMemo(() => {
     return getProductOrdersRedux?.serverResponse?.data;
@@ -57,24 +57,27 @@ const OrderHistoryBody = () => {
                 return (
                   <tr key={i}>
                     <td className="py-4 px-6 text-[#000000] font-[700] whitespace-nowrap">
-                      {t._id}
+                      {t.order_id}
                     </td>
                     <td
                       className={`${
-                        t.orderStatus === "IN PROGRESS"
+                        t.order_status === "IN PROGRESS"
                           ? "text-[#FA8232]"
-                          : t.orderStatus === "COMPLETED"
+                          : t.order_status === "COMPLETED"
                           ? "text-[#2DB224]"
                           : "text-[#EE5858]"
                       } py-4 px-6 font-[600] whitespace-nowrap`}
                     >
-                      {t.orderStatus}
+                      {t.order_status}
                     </td>
                     <td className="py-4 px-6 text-[#5F6C72] font-[400] whitespace-nowrap">
                       {formattedDate}
                     </td>
                     <td className="py-4 px-6 text-[#5F6C72] font-[400] whitespace-nowrap">
-                      $<FormatNumber price={t.totalAmount} />
+                      $
+                      {t.checkout_items.total_price && (
+                        <FormatNumber price={t.checkout_items.total_price} />
+                      )}
                     </td>
                     <td className="py-4 px-6 font-[600]">
                       <button
