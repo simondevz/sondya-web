@@ -21,6 +21,7 @@ import {
   adminUpdateGroupchatReducer,
 } from "./reducers/admin/groupchat.reducers";
 import {
+  adminDeleteProductOrderByIDReducer,
   adminGetProductOrderByIDReducer,
   adminGetProductsOrdersReducer,
 } from "./reducers/admin/productOrder.reducers";
@@ -76,6 +77,11 @@ import {
   homeGetServicesReducer,
 } from "./reducers/home.reducers";
 import {
+  sellerDeleteProductOrderByIDReducer,
+  sellerGetProductOrderByIDReducer,
+  sellerGetProductsOrdersReducer,
+} from "./reducers/seller/seller-orders.reducers";
+import {
   sellerCreateProductReducer,
   sellerDeleteProductReducer,
   sellerGetProductByIdReducer,
@@ -105,6 +111,10 @@ import {
   userGetMessagesReducer,
   userJoinGroupchatReducer,
 } from "./reducers/userDashboard/groupchat.reducers";
+import {
+  userGetPaymentsByIdReducer,
+  userGetPaymentsReducer,
+} from "./reducers/userDashboard/payments.reducers";
 import {
   userCreateProductOrderReducer,
   userGetProductOrderByIDReducer,
@@ -180,9 +190,19 @@ export type ReducersType = {
   userGetProductOrders: ReduxResponseType;
   userGetProductOrderById: ReduxResponseType;
 
+  //user && payments
+  userGetPayments: ReduxResponseType;
+  userGetPaymentsById: ReduxResponseType;
+
   // admin && Products orders
   adminGetProductsOrders: ReduxResponseType;
   adminGetProductsOrderByID: ReduxResponseType;
+  adminDeleteProductsOrderById: ReduxResponseType;
+
+  // seller && Products orders
+  sellerGetProductsOrders: ReduxResponseType;
+  sellerGetProductsOrderByID: ReduxResponseType;
+  sellerDeleteProductsOrderById: ReduxResponseType;
 
   // seller && products
   sellerCreateProduct: ReduxResponseType;
@@ -316,9 +336,19 @@ const reducer = combineReducers<ReducersType>({
   userGetProductOrders: userGetProductsOrdersReducer,
   userGetProductOrderById: userGetProductOrderByIDReducer,
 
+  //user && payments
+  userGetPayments: userGetPaymentsReducer,
+  userGetPaymentsById: userGetPaymentsByIdReducer,
+
   // admin && Products orders
   adminGetProductsOrders: adminGetProductsOrdersReducer,
   adminGetProductsOrderByID: adminGetProductOrderByIDReducer,
+  adminDeleteProductsOrderById: adminDeleteProductOrderByIDReducer,
+
+  // seller and product orders
+  sellerGetProductsOrders: sellerGetProductsOrdersReducer,
+  sellerGetProductsOrderByID: sellerGetProductOrderByIDReducer,
+  sellerDeleteProductsOrderById: sellerDeleteProductOrderByIDReducer,
 
   //seller && products
   sellerCreateProduct: sellerCreateProductReducer,
