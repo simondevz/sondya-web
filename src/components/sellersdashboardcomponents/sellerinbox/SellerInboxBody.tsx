@@ -31,7 +31,7 @@ import { AdminGetServiceType } from "../../../redux/types/services.types";
 import { AdminGetProductType } from "../../../redux/types/products.types";
 import { productImage2 } from "../../../images/products";
 import { TiArrowForward } from "react-icons/ti";
-import FormatDate from "../../../utils/dateFormatter";
+import FormatDate from "../../shareables/dateFormatter";
 
 const SellerInboxBody = () => {
   const dispatch = useDispatch();

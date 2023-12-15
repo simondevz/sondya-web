@@ -73,9 +73,13 @@ const LoginBody = () => {
       });
     if (loginRedux?.success) {
       setTimeout(function () {
-        if (redirect && group) {
-          dispatch(userJoinGroupchatAction(group._id || "") as any);
-          navigate(redirect, { state: { currentGroup: group } });
+        if (redirect) {
+          if (group) {
+            dispatch(userJoinGroupchatAction(group._id || "") as any);
+            navigate(redirect, { state: { currentGroup: group } });
+          } else {
+            navigate(redirect);
+          }
         } else if (loginRedux?.serverResponse?.data?.type === "user") {
           navigate("/dashboard");
         } else if (loginRedux?.serverResponse?.data?.type === "admin") {

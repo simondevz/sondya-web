@@ -136,6 +136,11 @@ import {
   userGetUsersReducer,
 } from "./reducers/userDashboard/users.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import {
+  listReviewReducer,
+  reviewStatReducer,
+  userCreateReviewReducer,
+} from "./reducers/userDashboard/reviews.reducers";
 
 export type ReducersType = {
   //cart system
@@ -271,6 +276,11 @@ export type ReducersType = {
   // user && chats
   userGetChatMessages: ReduxResponseType;
   getUserChats: ReduxResponseType;
+
+  // user && reviews
+  userCreateReview: ReduxResponseType;
+  reviewStat: ReduxResponseType;
+  reviewsList: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -407,6 +417,11 @@ const reducer = combineReducers<ReducersType>({
   // user && chats
   getUserChats: getUserChatsReducer,
   userGetChatMessages: userGetChatMessagesReducer,
+
+  // user && reviews
+  userCreateReview: userCreateReviewReducer,
+  reviewStat: reviewStatReducer,
+  reviewsList: listReviewReducer,
 });
 
 const middleware = [thunk];
