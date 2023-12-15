@@ -1,8 +1,8 @@
 // const BASE = process.env.PUBLIC_SERVER_API;
-const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
-const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
-// const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
-// const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
+// const BASE = "https://sondya-backend-production.up.railway.app/api/v1";
+// const WS_BASE = "wss://sondya-backend-production.up.railway.app/api/v1";
+const BASE = "http://localhost:8989/api/v1"; // for testing on localhost
+const WS_BASE = "ws://localhost:8989/api/v1"; // for testing on localhost
 
 export const API_ROUTES = {
   // home products and categories
@@ -131,20 +131,40 @@ export const API_ROUTES = {
     getProductCategories: BASE + "/user/products/categories", // GET
   },
 
-  // users && products
+  // users && products order
   userProductsOrders: {
     createProductsOrders: BASE + "/user/order/products/create", // GET
     getProductsOrders: BASE + "/user/order/products/", // GET :user_id
-    getProductOrdersById: BASE + "/user/order/products/details/", // GET :id
+    ProductOrdersById: BASE + "/user/order/products/details/", // GET :id
   },
 
-  // users && products
+  // admin && products order
   adminProductsOrders: {
     getProductsOrders: BASE + "/admin/order/products", // GET
     getProductOrdersById: BASE + "/admin/order/product/", // GET :id
+    deleteProductOrdersById: BASE + "/admin/order/products/", // GET :id
   },
 
-  // Users
+  // admin && products order
+  sellerProductsOrders: {
+    getProductsOrders: BASE + "/seller/order/products/", // GET :user_id
+    getProductOrdersById: BASE + "/seller/order/product/details/", // GET :id
+    deleteProductOrdersById: BASE + "/seller/order/products/", // GET :id
+  },
+
+  //admin && payments
+  adminPayments: {
+    getAdminPayments: BASE + "/user/payments/", // GET :user_id
+    getAdminPaymentsById: BASE + "/user/payments/details/", // GET :id
+  },
+
+  // users && payments
+  userPayments: {
+    getUserPayments: BASE + "/user/payments/", // GET :user_id
+    getUserPaymentsById: BASE + "/user/payments/details/", // GET :id
+  },
+
+  // Users && GroupChats
   userGroupChats: {
     getUserGroupChats: BASE + "/user/groupchats/", // GET :user_id
     getChats: BASE + "/groupchats", // GET
