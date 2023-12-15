@@ -116,7 +116,7 @@ const AdminCategory = () => {
 
   const search = (
     e:
-      | React.ChangeEvent<HTMLInputElement>
+       React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     setQuery({
