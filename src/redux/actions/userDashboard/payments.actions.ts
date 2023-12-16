@@ -29,7 +29,8 @@ export const userGetPaymentsAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.userPayments?.getUserPayments + "?" + query.toString(),
+        API_ROUTES?.userPayments?.getUserPayments +
+          login?.serverResponse?.data?.id,
         config
       );
       dispatch({

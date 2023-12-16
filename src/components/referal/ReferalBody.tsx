@@ -1,8 +1,40 @@
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BiCopy } from "react-icons/bi";
 import { BsCart, BsGift, BsMessenger, BsSend, BsTwitter } from "react-icons/bs";
 import { MdEmail, MdFacebook } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import { adminUGetUserType } from "../../redux/types/users.types";
 
 const ReferalBody = () => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyClick = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+      document.execCommand("copy");
+      setCopied(true);
+    }
+  };
+
+  // fetch data
+  const dispatch = useDispatch();
+
+  const getProfileDetailsRedux = useSelector(
+    (state: ReducersType) => state?.getProfile
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  const userData = useMemo(() => {
+    return getProfileDetailsRedux?.serverResponse?.data;
+  }, [getProfileDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(GetUserProfileAction() as any);
+  }, [dispatch]);
+
   return (
     <section className="flex flex-col justify-center items-center px-3 py-5">
       <div className="flex flex-col gap-3 max-w-[45rem] items-center">
@@ -47,11 +79,18 @@ const ReferalBody = () => {
           </div>
           <div className="flex items-center w-full">
             <input
+              ref={inputRef}
               placeholder="Sondyascoba.io"
               className="border border-black p-3 h-full w-full rounded-sm"
               type="text"
+              defaultValue={
+                window.location.origin + "/register?referrer=" + userData.email
+              }
             />
-            <div className="p-4 text-xl bg-[#EDB842] h-full text-white rounded-sm">
+            <div
+              onClick={handleCopyClick}
+              className="p-4 text-xl bg-[#EDB842] h-full text-white rounded-sm"
+            >
               <BiCopy />
             </div>
           </div>

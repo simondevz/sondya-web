@@ -48,6 +48,8 @@ import {
   AdminGroupChatList,
   AdminOrderDetails,
   AdminOrders,
+  AdminPaymentDetails,
+  AdminPayments,
   AdminProductDetails,
   AdminProducts,
   AdminSalesAnalytics,
@@ -68,6 +70,7 @@ import {
   OrderDetails,
   OrderHistory,
   Payment,
+  PaymentDetails,
   ServiceOrderDetails,
   TrackDetails,
   TrackOrder,
@@ -321,6 +324,12 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
+    path: "/user/payment/details/:id",
+    element: <PaymentDetails />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
     path: "/user/track-details",
     element: <TrackDetails />,
     errorElement: <ErrorPage />,
@@ -371,7 +380,7 @@ const App = createBrowserRouter([
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/order/details",
+    path: "/seller/order/details/:id",
     element: <SellerOrderDetails />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
@@ -465,6 +474,18 @@ const App = createBrowserRouter([
   {
     path: "/admin/category/add",
     element: <AdminAddCategory />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/payments",
+    element: <AdminPayments />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/payment/details/:id",
+    element: <AdminPaymentDetails />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },

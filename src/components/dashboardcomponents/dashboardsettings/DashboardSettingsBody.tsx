@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BsWhatsapp, BsYoutube } from "react-icons/bs";
 import { FaLinkedinIn } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "../../../css/modal.css";
 import {
   Facebook,
@@ -27,6 +28,7 @@ const DashboardSettingsBody = () => {
 
   // fetch data
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [userData, setUserData] = useState<adminUGetUserType>({
     _id: "",
@@ -248,27 +250,16 @@ const DashboardSettingsBody = () => {
           Edit Account
         </button>
       </div>
-      {/* <div className="flex flex-col gap-2 max-w-[40rem]">
-        <div className="font-[600] text-[#191F33] text-xl">
-          Verify Your Account
-        </div>
-        <div className="text-[#767E94]">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan
-          felis nunc, ut sagittis augue imperdiet quis. Vestibulum bibendum
-          ultricies ipsum.
-        </div>
-        <div className="text-[#767E94]">
-          <h4>Rules & Regulations</h4>
-          <ul className="ms-4">
-            <li>asdfasdf</li>
-            <li>asd0fasdfadfasdf</li>
-            <li>adf0asdfasd</li>
-          </ul>
-        </div>
-        <button className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3">
-          Verify Now
+      <div className="w-full py-2 font-[600] text-lg gap-3 text-left">
+        Referal link:{" "}
+        {window.location.origin + "/register?referrer=" + userData.email}{" "}
+        <button
+          className="bg-[#EDB842] rounded-md p-2 md:m-3 text-white"
+          onClick={() => navigate("/referal")}
+        >
+          Go to referal page
         </button>
-      </div> */}
+      </div>
       <div className="flex flex-col gap-2 max-w-[40rem]">
         <div className="font-[600] text-[#191F33] text-xl">Change Password</div>
         <div className="text-[#767E94]">
@@ -283,19 +274,6 @@ const DashboardSettingsBody = () => {
           Verify Now
         </button>
       </div>
-      {/* <div className="flex flex-col gap-2 max-w-[40rem]">
-        <div className="font-[600] text-[#191F33] text-xl">Delete Account</div>
-        <div className="text-[#767E94]">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan
-          felis nunc, ut sagittis augue imperdiet quis. Vestibulum bibendum
-          ultricies ipsum, id suscipit ligula facilisis ac. Praesent ultricies
-          augue metus
-        </div>
-        <button className="py-2 bg-[#FFE5E5] text-[#FF4F4F] rounded-md w-fit self-start px-4 my-3 flex flex-row gap-2 items-center">
-          <MdDeleteOutline />
-          <span>Delete Account</span>
-        </button>
-      </div> */}
       <div className="overflow-y-scroll">
         <EditAccountInfoModal
           showModal={EditAccounInfo}

@@ -28,7 +28,15 @@ import {
 } from "../types/auth.types";
 
 export const registerAction =
-  ({ first_name, last_name, email, password, username }: RegisterType) =>
+  ({
+    first_name,
+    last_name,
+    email,
+    password,
+    username,
+    referrer,
+    country,
+  }: RegisterType) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({
@@ -43,7 +51,7 @@ export const registerAction =
       console.log(API_ROUTES?.auth?.register);
       const { data } = await axios.post(
         API_ROUTES?.auth?.register,
-        { first_name, last_name, email, username, password },
+        { first_name, last_name, email, username, password, referrer, country },
         config
       );
       dispatch({

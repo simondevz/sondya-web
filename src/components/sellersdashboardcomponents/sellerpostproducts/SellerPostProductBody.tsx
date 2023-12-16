@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import { circleWavy } from "../../../images";
 import { sellerCreateProductAction } from "../../../redux/actions/seller/seller-products.actions";
+import { userGetProductsCategoriesAction } from "../../../redux/actions/userDashboard/products.action";
 import { SELLER_CREATE_PRODUCT_RESET } from "../../../redux/constants/seller/seller-products.constants";
 import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateProduct } from "../../../redux/types/products.types";
-import { userGetProductsCategoriesAction } from "../../../redux/actions/userDashboard/products.action";
-import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const SellerPostProductBody = () => {
   const [status1] = useState<"closed" | "open" | "done">("done");
@@ -103,6 +103,13 @@ const SellerPostProductBody = () => {
     discount_percentage: 0,
     vat_percentage: 0,
     total_variants: 0,
+
+    //location
+    country: "",
+    state: "",
+    city: "",
+    address: "",
+    zip_code: "",
   });
 
   const { name, description } = formData;
@@ -150,25 +157,15 @@ const SellerPostProductBody = () => {
         // navigate("/seller/products");
         // handleClose();
         setFormData({
-          name: "",
-          category: "",
-          description: "",
+          // name: "",
+          // category: "",
+          // description: "",
+          ...formData,
           owner: {
             id: login?.serverResponse?.data?.id,
             username: login?.serverResponse?.data?.username as string,
             email: login?.serverResponse?.data?.email,
           },
-          total_stock: 0,
-          tag: "",
-          brand: "",
-          model: "",
-          current_price: 0,
-          quantity: 0,
-          product_status: "",
-          old_price: 0,
-          discount_percentage: 0,
-          vat_percentage: 0,
-          total_variants: 0,
         });
         setDone(true);
       }, 4000);
@@ -178,6 +175,7 @@ const SellerPostProductBody = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       dispatch({ type: SELLER_CREATE_PRODUCT_RESET });
     }, 3000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     sellerCreateProductRedux,
     dispatch,
@@ -356,6 +354,67 @@ const SellerPostProductBody = () => {
                       />
                     </div>
                   </div>
+
+                  {/* location for products start */}
+                  <div className="flex flex-row gap-3">
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">Country</div>
+                      <input
+                        name="country"
+                        className="border p-2 rounded-md "
+                        type="text"
+                        placeholder="country"
+                        onChange={onChange}
+                        value={formData.country}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">State</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        name="state"
+                        id="state"
+                        onChange={onChange}
+                        value={formData.state}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">City</div>
+                      <input
+                        name="city"
+                        className="border p-2 rounded-md "
+                        type="text"
+                        placeholder="city"
+                        onChange={onChange}
+                        value={formData.city}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                      <div className="font-[400]">ZipCode</div>
+                      <input
+                        className="border p-2 rounded-md "
+                        name="zip_code"
+                        id="51001"
+                        type="text"
+                        onChange={onChange}
+                        value={formData.zip_code}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="font-[400]">Address</div>
+                    <input
+                      name="address"
+                      className="border p-2 rounded-md "
+                      type="text"
+                      placeholder="51 est street, lagos"
+                      onChange={onChange}
+                      value={formData.address}
+                    />
+                  </div>
+                  {/* location for products ends */}
 
                   <div className="flex w-full justify-end gap-3">
                     <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
