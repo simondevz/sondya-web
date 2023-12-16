@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { adminGetProductsOrdersAction } from "../../../redux/actions/admin/productsOrder.actions";
 import { ReducersType } from "../../../redux/store";
-import { CheckoutType } from "../../../redux/types/checkout.types";
+import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
@@ -18,19 +18,20 @@ const AdminOrdersBody = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const AdminGetProductOrdersRedux = useSelector(
+  const getProductOrdersRedux = useSelector(
     (state: ReducersType) => state?.adminGetProductsOrders
-  ) as ReduxResponseType<CheckoutType[]>;
+  ) as ReduxResponseType<GetProductOrder[]>;
 
   const productOrderData = useMemo(() => {
-    return AdminGetProductOrdersRedux?.serverResponse?.data;
-  }, [AdminGetProductOrdersRedux]);
+    return getProductOrdersRedux?.serverResponse?.data;
+  }, [getProductOrdersRedux]);
 
   useEffect(() => {
     dispatch(adminGetProductsOrdersAction("") as any);
   }, [dispatch]);
 
-  // console.log(productOrderData);
+  console.log(productOrderData);
+
   return (
     <section>
       <div className="flex flex-col gap-3">
@@ -132,21 +133,19 @@ const AdminOrdersBody = () => {
                         <td>
                           <div className="flex flex-col md:flex-row gap-2">
                             <div className="flex flex-col gap-2 text-sm">
-                              {t.checkout_items.map((t, i) => {
-                                return (
-                                  <div className="">
-                                    {t.name?.slice(0, 18)}...
-                                  </div>
-                                );
-                              })}
+                              {t?.checkout_items?.name}
                             </div>
                           </div>
                         </td>
                         <td className="text-[#A3A9B6]">
-                          {t?.checkout_items.length}
+                          {t?.checkout_items?.order_quantity}
                         </td>
                         <td className="text-[#A3A9B6]">
-                          $<FormatNumber price={t.total_amount} />
+                          {}
+                          $
+                          <FormatNumber
+                            price={t?.checkout_items?.total_price}
+                          />
                         </td>
                         <td>
                           {t.order_status === "Low Stock" ? (

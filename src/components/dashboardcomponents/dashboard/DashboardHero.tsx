@@ -1,19 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Facebook,
-  Google,
-  Instagram,
-  Package,
-  Pinterest,
-  Receipt,
-  Reddit,
-  Rocket,
-  Telegram,
-  Twitter,
-  Whatsapp,
-  userImage,
-} from "../../../images/dashboard";
+import { useNavigate } from "react-router-dom";
+import { Package, Receipt, Rocket, userImage } from "../../../images/dashboard";
 import { GetUserProfileAction } from "../../../redux/actions/userDashboard/profile.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
@@ -22,6 +10,7 @@ import { adminUGetUserType } from "../../../redux/types/users.types";
 const DashboardHero = () => {
   // fetch data
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getProfileDetailsRedux = useSelector(
     (state: ReducersType) => state?.getProfile
@@ -140,20 +129,15 @@ const DashboardHero = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="font-[600] playfair-display text-[#243A73]">
-          Socials
-        </div>
-        <div className="flex flex-row gap-2">
-          <img className="object-cover w-8 h-8" src={Facebook} alt="" />
-          <img className="object-cover w-8 h-8" src={Instagram} alt="" />
-          <img className="object-cover w-8 h-8" src={Google} alt="" />
-          <img className="object-cover w-8 h-8" src={Twitter} alt="" />
-          <img className="object-cover w-8 h-8" src={Telegram} alt="" />
-          <img className="object-cover w-8 h-8" src={Reddit} alt="" />
-          <img className="object-cover w-8 h-8" src={Whatsapp} alt="" />
-          <img className="object-cover w-8 h-8" src={Pinterest} alt="" />
-        </div>
+      <div className="w-full p-2">
+        referal link:{" "}
+        {window.location.origin + "/register?referrer=" + userData.email}{" "}
+        <button
+          className="bg-[#EDB842] rounded-md p-2 mx-3 text-white"
+          onClick={() => navigate("/referal")}
+        >
+          Go to referal page
+        </button>
       </div>
     </section>
   );

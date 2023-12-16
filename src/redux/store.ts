@@ -21,6 +21,10 @@ import {
   adminUpdateGroupchatReducer,
 } from "./reducers/admin/groupchat.reducers";
 import {
+  adminGetPaymentsByIdReducer,
+  adminGetPaymentsReducer,
+} from "./reducers/admin/payments.reducers";
+import {
   adminDeleteProductOrderByIDReducer,
   adminGetProductOrderByIDReducer,
   adminGetProductsOrdersReducer,
@@ -194,6 +198,10 @@ export type ReducersType = {
   userGetPayments: ReduxResponseType;
   userGetPaymentsById: ReduxResponseType;
 
+  //admin && payments
+  adminGetPayments: ReduxResponseType;
+  adminGetPaymentsById: ReduxResponseType;
+
   // admin && Products orders
   adminGetProductsOrders: ReduxResponseType;
   adminGetProductsOrderByID: ReduxResponseType;
@@ -339,6 +347,10 @@ const reducer = combineReducers<ReducersType>({
   //user && payments
   userGetPayments: userGetPaymentsReducer,
   userGetPaymentsById: userGetPaymentsByIdReducer,
+
+  //admin && payments
+  adminGetPayments: adminGetPaymentsReducer,
+  adminGetPaymentsById: adminGetPaymentsByIdReducer,
 
   // admin && Products orders
   adminGetProductsOrders: adminGetProductsOrdersReducer,

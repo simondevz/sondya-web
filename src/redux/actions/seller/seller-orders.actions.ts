@@ -33,8 +33,8 @@ export const sellerGetProductsOrdersAction =
 
       const { data } = await axios.get(
         API_ROUTES?.sellerProductsOrders?.getProductsOrders +
-          "?" +
-          query.toString(),
+          // "65305ba4506249d9c6f21bf7",
+          login?.serverResponse?.data?.id,
         config
       );
       dispatch({

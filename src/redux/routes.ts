@@ -154,8 +154,8 @@ export const API_ROUTES = {
 
   //admin && payments
   adminPayments: {
-    getAdminPayments: BASE + "/user/payments/", // GET :user_id
-    getAdminPaymentsById: BASE + "/user/payments/details/", // GET :id
+    getAdminPayments: BASE + "/admin/payments", // GET
+    getAdminPaymentsById: BASE + "/admin/payments/details/", // GET :id
   },
 
   // users && payments

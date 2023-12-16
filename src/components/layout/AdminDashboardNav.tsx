@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { BiSolidBadgeCheck } from "react-icons/bi";
-import { BsBookmarkCheck, BsCart } from "react-icons/bs";
-import { BsFillChatSquareTextFill } from "react-icons/bs";
+import {
+  BsBookmarkCheck,
+  BsCart,
+  BsFillChatSquareTextFill,
+} from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 import {
   MdLogout,
@@ -119,6 +122,22 @@ const AdminDashboardNav = () => {
         </span>
         <Link to={"/track-Order"}>
           <span className="whitespace-nowrap">Orders</span>
+        </Link>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-payments" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("admin-payments");
+          navigate("/admin/payments", { state: { index: "admin-payments" } });
+        }}
+      >
+        <span>
+          <BsBookmarkCheck />
+        </span>
+        <Link to={"/admin/payments"}>
+          <span className="whitespace-nowrap">Payments</span>
         </Link>
       </div>
       <div

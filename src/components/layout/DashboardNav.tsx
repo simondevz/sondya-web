@@ -2,8 +2,8 @@ import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
-import { MdPayment, MdStorefront } from "react-icons/md";
 import { IoChatbubblesOutline } from "react-icons/io5";
+import { MdPayment, MdStorefront } from "react-icons/md";
 import {
   PiClockClockwiseLight,
   PiSignOutFill,
@@ -94,7 +94,7 @@ export const UserDashboardNav = () => {
         <span>
           <BiMap />
         </span>
-        <Link to={"/track-0rder"}>
+        <Link to={"/user/track-order"}>
           <span className="whitespace-nowrap">Track Order</span>
         </Link>
       </div>
@@ -139,20 +139,6 @@ export const UserDashboardNav = () => {
           <IoChatbubblesOutline />
         </span>{" "}
         <span className="whitespace-nowrap">Groups</span>
-      </div>
-      <div
-        className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "browse" && "bg-[#EDB842] text-white"
-        }`}
-        onClick={() => {
-          setIndex("browse");
-          navigate("/browse-history");
-        }}
-      >
-        <span>
-          <PiClockClockwiseLight />
-        </span>{" "}
-        <span className="whitespace-nowrap">Browsing History</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

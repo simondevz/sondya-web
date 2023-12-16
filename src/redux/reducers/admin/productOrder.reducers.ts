@@ -1,6 +1,7 @@
 import {
   ADMIN_DELETE_PRODUCTS_ORDER_BYID_FAIL,
   ADMIN_DELETE_PRODUCTS_ORDER_BYID_REQUEST,
+  ADMIN_DELETE_PRODUCTS_ORDER_BYID_RESET,
   ADMIN_DELETE_PRODUCTS_ORDER_BYID_SUCCESS,
   ADMIN_GET_PRODUCTS_ORDERS_FAIL,
   ADMIN_GET_PRODUCTS_ORDERS_REQUEST,
@@ -8,10 +9,10 @@ import {
   ADMIN_GET_PRODUCTS_ORDERS_SUCCESS,
   ADMIN_GET_PRODUCTS_ORDER_BYID_FAIL,
   ADMIN_GET_PRODUCTS_ORDER_BYID_REQUEST,
+  ADMIN_GET_PRODUCTS_ORDER_BYID_RESET,
   ADMIN_GET_PRODUCTS_ORDER_BYID_SUCCESS,
 } from "../../constants/admin/ProductOrder.constants";
 import { LOGIN_RESET } from "../../constants/auth.constants";
-import { GET_PRODUCTS_ORDER_BYID_SUCCESS } from "../../constants/userDashboard/productsOrder.constants";
 import { initialState } from "../../initial.state";
 import { ActionType, ReduxResponseType } from "../../types/general.types";
 
@@ -52,21 +53,21 @@ export const adminGetProductOrderByIDReducer = (
   switch (action.type) {
     case ADMIN_GET_PRODUCTS_ORDER_BYID_REQUEST:
       return { ...initialState, loading: true };
-    case GET_PRODUCTS_ORDER_BYID_SUCCESS:
+    case ADMIN_GET_PRODUCTS_ORDER_BYID_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case ADMIN_GET_PRODUCTS_ORDER_BYID_SUCCESS:
+    case ADMIN_GET_PRODUCTS_ORDER_BYID_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case ADMIN_GET_PRODUCTS_ORDER_BYID_FAIL:
+    case ADMIN_GET_PRODUCTS_ORDER_BYID_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -82,21 +83,21 @@ export const adminDeleteProductOrderByIDReducer = (
   switch (action.type) {
     case ADMIN_DELETE_PRODUCTS_ORDER_BYID_REQUEST:
       return { ...initialState, loading: true };
-    case GET_PRODUCTS_ORDER_BYID_SUCCESS:
+    case ADMIN_DELETE_PRODUCTS_ORDER_BYID_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case ADMIN_DELETE_PRODUCTS_ORDER_BYID_SUCCESS:
+    case ADMIN_DELETE_PRODUCTS_ORDER_BYID_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case ADMIN_DELETE_PRODUCTS_ORDER_BYID_FAIL:
+    case ADMIN_DELETE_PRODUCTS_ORDER_BYID_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

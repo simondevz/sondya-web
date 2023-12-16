@@ -11,10 +11,10 @@ import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
 import { AuthImage } from "../../../images";
 import { loginAction } from "../../../redux/actions/auth.actions";
+import { userJoinGroupchatAction } from "../../../redux/actions/userDashboard/groupchat.actions";
 import { ReducersType } from "../../../redux/store";
 import { LoginType } from "../../../redux/types/auth.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { userJoinGroupchatAction } from "../../../redux/actions/userDashboard/groupchat.actions";
 
 const LoginBody = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -160,7 +160,20 @@ const LoginBody = () => {
                     "Login"
                   )}
                 </button>
-                <span className="text-[#DB4444]">Forget Password?</span>
+                <span
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-[#DB4444]"
+                >
+                  Forget Password?
+                </span>
+              </div>
+              <div className="">
+                <button
+                  onClick={() => navigate("/register")}
+                  className="text-[#EDB842] px-4 py-2 border border-[#EDB842] rounded-md w-2/3 self-center md:self-start"
+                >
+                  Don't have an account? Sign Up
+                </button>
               </div>
             </form>
           </div>

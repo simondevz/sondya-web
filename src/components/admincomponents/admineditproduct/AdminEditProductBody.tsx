@@ -6,20 +6,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
+import { adminGetProductCategoriesAction } from "../../../redux/actions/admin/categories.actions";
 import {
   adminGetProductByIdAction,
   adminUpdateProductAction,
 } from "../../../redux/actions/admin/products.actions";
 import { ADMIN_UPDATE_PRODUCT_RESET } from "../../../redux/constants/admin/products.constants";
 import { ReducersType } from "../../../redux/store";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import {
   AdminGetProductType,
   AdminUpdateProduct,
 } from "../../../redux/types/products.types";
 import { ImageType } from "../../../redux/types/users.types";
-import { AdminGetCategoryType } from "../../../redux/types/categories.types";
-import { adminGetProductCategoriesAction } from "../../../redux/actions/admin/categories.actions";
 
 const AdminEditProductBody = () => {
   // fetch data
@@ -44,6 +44,13 @@ const AdminEditProductBody = () => {
     quantity: 0,
 
     id: id as string,
+
+    //location
+    country: "",
+    state: "",
+    city: "",
+    address: "",
+    zip_code: "",
   });
   // set the network image for display
   let [networkimage1, setNetworkImage1] = useState<Array<string>>([]);
@@ -294,6 +301,68 @@ const AdminEditProductBody = () => {
                   ></textarea>
                 </div>
               </div>
+
+              {/* location for products start */}
+              <div className="flex flex-row gap-3">
+                <div className="flex flex-col gap-2 w-1/2">
+                  <div className="font-[400]">Country</div>
+                  <input
+                    name="country"
+                    className="border p-2 rounded-md "
+                    type="text"
+                    placeholder="country"
+                    onChange={onChange}
+                    value={formData.country}
+                  />
+                </div>
+                <div className="flex flex-col gap-2 w-1/2">
+                  <div className="font-[400]">State</div>
+                  <input
+                    className="border p-2 rounded-md "
+                    name="state"
+                    id="state"
+                    onChange={onChange}
+                    value={formData.state}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row gap-3">
+                <div className="flex flex-col gap-2 w-1/2">
+                  <div className="font-[400]">City</div>
+                  <input
+                    name="city"
+                    className="border p-2 rounded-md "
+                    type="text"
+                    placeholder="city"
+                    onChange={onChange}
+                    value={formData.city}
+                  />
+                </div>
+                <div className="flex flex-col gap-2 w-1/2">
+                  <div className="font-[400]">ZipCode</div>
+                  <input
+                    className="border p-2 rounded-md "
+                    name="zip_code"
+                    id="51001"
+                    type="text"
+                    onChange={onChange}
+                    value={formData.zip_code}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="font-[400]">Address</div>
+                <input
+                  name="address"
+                  className="border p-2 rounded-md "
+                  type="text"
+                  placeholder="51 est street, lagos"
+                  onChange={onChange}
+                  value={formData.address}
+                />
+              </div>
+              {/* location for products ends */}
+
               <div className="flex flex-col shadow-md rounded-md p-3 gap-3">
                 <div className="font-[600] text-lg text-[#1D1F2C]">Media</div>
                 {/* Image handling starts */}
