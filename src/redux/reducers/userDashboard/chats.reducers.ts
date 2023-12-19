@@ -8,6 +8,10 @@ import {
   USER_GET_CHATS_SUCCESS,
   USER_GET_CHATS_FAIL,
   USER_GET_CHATS_RESET,
+  USER_SEND_MESSAGES_FAIL,
+  USER_SEND_MESSAGES_REQUEST,
+  USER_SEND_MESSAGES_RESET,
+  USER_SEND_MESSAGES_SUCCESS,
 } from "../../constants/userDashboard/chats.constants";
 import { initialState } from "../../initial.state";
 import { ActionType, ReduxResponseType } from "../../types/general.types";
@@ -34,6 +38,36 @@ export const getUserChatsReducer = (
         error: action.payload,
       };
     case USER_GET_CHATS_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const userSendChatMessageReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case USER_SEND_MESSAGES_REQUEST:
+      return { ...initialState, loading: true };
+    case USER_SEND_MESSAGES_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case USER_SEND_MESSAGES_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case USER_SEND_MESSAGES_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

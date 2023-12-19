@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import {
   AiOutlineArrowRight,
   AiOutlineRight,
@@ -22,11 +22,11 @@ import { API_ROUTES } from "../../redux/routes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { userGeChatMessagesAction } from "../../redux/actions/userDashboard/chats.actions";
 import Swal from "sweetalert2";
-import { Chat1 } from "../../images/chat";
-import FormatDate from "../shareables/dateFormatter";
 import { reviewStatType } from "../../redux/types/review.types";
 import Reviews from "../shareables/reviews";
 import { useParams } from "react-router-dom";
+import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
+import { AdminGetProductType } from "../../redux/types/products.types";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
@@ -205,7 +205,6 @@ export const ServiceDetailsChat = ({
   const chatMessagesRedux = useSelector(
     (state: ReducersType) => state?.userGetChatMessages
   ) as ReduxResponseType;
-  console.log(chatMessagesRedux);
 
   useEffect(() => {
     if (lastMessage !== null) {
@@ -330,8 +329,22 @@ export const ServiceDetailsChat = ({
           chatMessagesRedux?.serverResponse?.data?.length ? (
             chatMessagesRedux?.serverResponse?.data?.map(
               (message: chatMessageType) => {
-                if (message?.service_id !== service_id) return <></>;
-                return <ChatMessage key={message?._id} message={message} />;
+                return (
+                  <ChatMessage
+                    key={message?._id}
+                    message={message}
+                    setAttachment={function (
+                      value: SetStateAction<
+                        | ((AdminGetServiceType | AdminGetProductType) & {
+                            isProduct: boolean;
+                          })
+                        | undefined
+                      >
+                    ): void {
+                      throw new Error("Function not implemented.");
+                    }}
+                  />
+                );
               }
             )
           ) : (
@@ -345,8 +358,22 @@ export const ServiceDetailsChat = ({
 
         {/* messages from the websocket */}
         {messageHistory.map((message: chatMessageType) => {
-          if (message?.service_id !== service_id) return <></>;
-          return <ChatMessage key={message?._id} message={message} />;
+          return (
+            <ChatMessage
+              key={message?._id}
+              message={message}
+              setAttachment={function (
+                value: SetStateAction<
+                  | ((AdminGetServiceType | AdminGetProductType) & {
+                      isProduct: boolean;
+                    })
+                  | undefined
+                >
+              ): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          );
         })}
 
         {/* message ends */}
@@ -371,28 +398,6 @@ export const ServiceDetailsChat = ({
             onChange={(event) => setMessage(event.target.value)}
           ></textarea>
         </div>
-      </div>
-    </div>
-  );
-};
-
-const ChatMessage = ({ message }: { message: chatMessageType }) => {
-  return (
-    <div key={message?._id} className="flex flex-row gap-3">
-      <div className="">
-        <img src={message?.sender_id?.image?.[0]?.url || Chat1} alt="" />
-      </div>
-      <div className="flex flex-col gap-3">
-        <div className="font-[600] flex gap-2">
-          <span>
-            {message?.sender_id?.first_name} {message?.sender_id?.last_name}
-          </span>
-          <FormatDate
-            className="text-[#939AAD]"
-            dateString={message?.createdAt as string}
-          />
-        </div>
-        <div className="text-[#636A80]">{message?.message}</div>
       </div>
     </div>
   );

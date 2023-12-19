@@ -96,6 +96,7 @@ import {
 import {
   getUserChatsReducer,
   userGetChatMessagesReducer,
+  userSendChatMessageReducer,
 } from "./reducers/userDashboard/chats.reducers";
 import {
   getUserGroupChatsReducer,
@@ -276,6 +277,7 @@ export type ReducersType = {
 
   // user && chats
   userGetChatMessages: ReduxResponseType;
+  userSendChatMessage: ReduxResponseType;
   getUserChats: ReduxResponseType;
 
   // user && reviews
@@ -421,6 +423,7 @@ const reducer = combineReducers<ReducersType>({
   // user && chats
   getUserChats: getUserChatsReducer,
   userGetChatMessages: userGetChatMessagesReducer,
+  userSendChatMessage: userSendChatMessageReducer,
 
   // user && reviews
   userCreateReview: userCreateReviewReducer,
