@@ -44,16 +44,18 @@ export const adminCreateProductAction =
     total_variants,
     quantity,
     image,
+
+    country,
+    state,
+    city,
+    address,
+    zip_code,
   }: AdminCreateProduct) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADMIN_CREATE_PRODUCT_REQUEST,
       });
-
-      // get state
-      const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
 
       // load data for flight
       let FD: FormData = new FormData();
@@ -72,6 +74,18 @@ export const adminCreateProductAction =
       FD.append("vat_percentage", vat_percentage.toString());
       FD.append("total_variants", total_variants.toString());
       FD.append("quantity", quantity.toString());
+
+      // location
+      FD.append("country", country);
+      FD.append("state", state);
+      FD.append("city", city);
+      FD.append("address", address);
+      FD.append("zip_code", zip_code);
+
+      // get state
+      const state1 = getState();
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
+
       if (image && Array.isArray(image) && image.length >= 1) {
         image.forEach((file) => FD.append("image", file as File));
       }
@@ -124,6 +138,12 @@ export const adminUpdateProductAction =
       image,
 
       id,
+
+      country,
+      state,
+      city,
+      address,
+      zip_code,
     }: AdminUpdateProduct,
     deleteImageId: string[]
   ) =>
@@ -133,8 +153,8 @@ export const adminUpdateProductAction =
         type: ADMIN_UPDATE_PRODUCT_REQUEST,
       });
 
-      const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const state1 = getState();
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
       // load data for flight
       let FD: FormData = new FormData();
@@ -153,6 +173,14 @@ export const adminUpdateProductAction =
         FD.append("discount_percentage", discount_percentage.toString());
       vat_percentage && FD.append("vat_percentage", vat_percentage.toString());
       total_variants && FD.append("total_variants", total_variants.toString());
+
+      // location
+      FD.append("country", country);
+      FD.append("state", state);
+      FD.append("city", city);
+      FD.append("address", address);
+      FD.append("zip_code", zip_code);
+
       FD.append("deleteImageId", JSON.stringify(deleteImageId));
       // FD.append("quantity", quantity.toString());
       if (image && Array.isArray(image) && image.length >= 1) {

@@ -137,7 +137,7 @@ export const userGetProductsOrderByIdAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.userProductsOrders?.getProductOrdersById + id,
+        API_ROUTES?.userProductsOrders?.ProductOrdersById + id,
         config
       );
       dispatch({

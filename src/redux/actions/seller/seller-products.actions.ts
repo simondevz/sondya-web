@@ -44,6 +44,12 @@ export const sellerCreateProductAction =
     total_variants,
     quantity,
     image,
+
+    country,
+    state,
+    city,
+    address,
+    zip_code,
   }: AdminCreateProduct) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -52,8 +58,8 @@ export const sellerCreateProductAction =
       });
 
       // get state
-      const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const state1 = getState();
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
       // load data for flight
       let FD: FormData = new FormData();
@@ -72,6 +78,14 @@ export const sellerCreateProductAction =
       FD.append("vat_percentage", vat_percentage.toString());
       FD.append("total_variants", total_variants.toString());
       FD.append("quantity", quantity.toString());
+
+      // location
+      FD.append("country", country);
+      FD.append("state", state);
+      FD.append("city", city);
+      FD.append("address", address);
+      FD.append("zip_code", zip_code);
+
       if (image && Array.isArray(image) && image.length >= 1) {
         image.forEach((file) => FD.append("image", file as File));
       }
@@ -125,6 +139,12 @@ export const sellerUpdateProductAction =
       image,
 
       id,
+
+      country,
+      state,
+      city,
+      address,
+      zip_code,
     }: AdminUpdateProduct,
     deleteImageId: string[]
   ) =>
@@ -134,8 +154,8 @@ export const sellerUpdateProductAction =
         type: SELLER_UPDATE_PRODUCT_REQUEST,
       });
 
-      const state = getState();
-      const login: ReduxResponseType<LoginResponseType> = state?.login;
+      const state1 = getState();
+      const login: ReduxResponseType<LoginResponseType> = state1?.login;
 
       // load data for flight
       let FD: FormData = new FormData();
@@ -156,6 +176,14 @@ export const sellerUpdateProductAction =
       total_variants && FD.append("total_variants", total_variants.toString());
       FD.append("deleteImageId", JSON.stringify(deleteImageId));
       quantity && FD.append("quantity", quantity.toString());
+
+      // location
+      FD.append("country", country);
+      FD.append("state", state);
+      FD.append("city", city);
+      FD.append("address", address);
+      FD.append("zip_code", zip_code);
+
       if (image && Array.isArray(image) && image.length >= 1) {
         image.forEach((file) => FD.append("image", file as File));
       }

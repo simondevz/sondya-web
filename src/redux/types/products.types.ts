@@ -19,6 +19,13 @@ export type AdminCreateProduct = {
   image?: File[] | ImageType[];
 
   owner?: Owner;
+
+  //location
+  country: string;
+  state: string;
+  city: string;
+  address: string;
+  zip_code: string;
 };
 
 export type AdminUpdateProduct = {
@@ -43,6 +50,13 @@ export type AdminUpdateProduct = {
   // product id
   id: string;
   // deleteImageId?: string[];
+
+  //location
+  country: string;
+  state: string;
+  city: string;
+  address: string;
+  zip_code: string;
 };
 
 export type AdminGetProductType = {
@@ -65,6 +79,13 @@ export type AdminGetProductType = {
   image?: ImageType[];
 
   owner?: Owner;
+
+  //location
+  country: string;
+  state: string;
+  city: string;
+  address: string;
+  zip_code: string;
 };
 
 export type UserGetProductType = {
@@ -89,6 +110,13 @@ export type UserGetProductType = {
   total_rating: number;
 
   owner?: Owner;
+
+  //location
+  country: string;
+  state: string;
+  city: string;
+  address: string;
+  zip_code: string;
 };
 
 export type userGetProductsType = {

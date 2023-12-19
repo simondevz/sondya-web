@@ -11,7 +11,9 @@ export type RegisterType = {
   last_name: string;
   username: string;
   email: string;
+  country: string;
   password: string;
+  referrer: string;
 };
 
 export type LoginType = {

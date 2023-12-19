@@ -1,13 +1,78 @@
-import { useState } from "react";
+import { format } from "date-fns";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { BsXCircle } from "react-icons/bs";
 import { MdOutlineMoreHoriz } from "react-icons/md";
-import { TiTick } from "react-icons/ti";
-import { recentOrderData } from "../../../data/RecentOrderData";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import {
+  sellerDeleteProductsOrderByIdAction,
+  sellerGetProductsOrdersAction,
+} from "../../../redux/actions/seller/seller-orders.actions";
+import { ReducersType } from "../../../redux/store";
+import { GetProductOrder } from "../../../redux/types/checkout.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 
 const SellerOrderBody = () => {
   const [click, setClick] = useState<string>("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getProductOrdersRedux = useSelector(
+    (state: ReducersType) => state?.sellerGetProductsOrders
+  ) as ReduxResponseType<GetProductOrder[]>;
+
+  const productOrderData = useMemo(() => {
+    return getProductOrdersRedux?.serverResponse?.data;
+  }, [getProductOrdersRedux]);
+
+  useEffect(() => {
+    dispatch(sellerGetProductsOrdersAction("") as any);
+  }, [dispatch]);
+
+  console.log(productOrderData);
+
+  // delete user
+  const sellerDeleteOrderByIDRedux = useSelector(
+    (state: ReducersType) => state?.sellerDeleteProductsOrderById
+  ) as ReduxResponseType<GetProductOrder>;
+
+  const handleDelete = useCallback(
+    (id: string) => {
+      // console.log(id);
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(sellerDeleteProductsOrderByIdAction({ id }) as any);
+
+          if (!sellerDeleteOrderByIDRedux.error) {
+            Swal.fire(
+              "Deleted!",
+              sellerDeleteOrderByIDRedux.serverResponse.message,
+              "success"
+            );
+            setTimeout(() => {
+              dispatch(sellerGetProductsOrdersAction("") as any);
+            }, 1000);
+          } else {
+            Swal.fire("Deleted!", sellerDeleteOrderByIDRedux?.error, "error");
+          }
+        }
+      });
+    },
+    [sellerDeleteOrderByIDRedux, dispatch]
+  );
+
   return (
     <section className="flex flex-row gap-3 p-1">
       <div className="flex flex-col gap-3 shadow-md p-3 rounded-md overflow-x-hidden">
@@ -32,91 +97,105 @@ const SellerOrderBody = () => {
               </tr>
             </thead>
             <tbody>
-              {recentOrderData.map((t, i) => {
-                return (
-                  <tr key={i}>
-                    <td className="py-4 px-6 text-[#292929] font-[700] whitespace-nowrap">
-                      {t.products}
-                    </td>
-                    <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
-                      {t.orderId}
-                    </td>
-                    <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
-                      {t.date}
-                    </td>
-                    <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
-                      {t.name}
-                    </td>
-                    <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap flex justify-around items-center gap-2">
-                      <span
-                        className={`w-3 h-3 rounded-full ${
-                          t.status === "IN PROGRESS"
-                            ? "bg-[#FA8232]"
-                            : t.status === "COMPLETED"
-                            ? "bg-[#2DB224]"
-                            : "bg-[#EE5858]"
-                        }`}
-                      >
-                        <div className=""></div>
-                      </span>
-                      {t.status}
-                    </td>
-                    <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
-                      {t.Total}
-                    </td>
-                    <td
-                      className={`flex ${
-                        click === t.orderId ? "justify-start" : "justify-center"
-                      } relative gap-2`}
-                    >
-                      {click === t.orderId && (
-                        <div className="bg-[#F5F7FA] flex flex-row gap-2 items-center p-2 rounded-md">
-                          {" "}
-                          <AiOutlineEdit /> <span>Edit</span>
-                        </div>
-                      )}
-                      <button
-                        onClick={() => {
-                          click === "" ? setClick(t.orderId) : setClick("");
-                        }}
-                        className="flex rounded-md"
-                      >
+              {productOrderData && productOrderData.length > 0 ? (
+                productOrderData.map((t, i) => {
+                  const dateString = t.createdAt ? t.createdAt : "";
+                  const dateObject = new Date(dateString);
+                  const formattedDate = format(dateObject, "MMMM d, yyyy");
+                  return (
+                    <tr key={i}>
+                      <td className="py-4 px-6 text-[#292929] font-[700] whitespace-nowrap">
+                        {t?.checkout_items?.name}
+                      </td>
+                      <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
+                        {t?.order_id}
+                      </td>
+                      <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
+                        {formattedDate}
+                      </td>
+                      <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
+                        {t.buyer.username}, {t.buyer.email}
+                      </td>
+                      <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap flex justify-around items-center gap-2">
                         <span
-                          className={`p-2 w-fit h-fit ${
-                            click === t.orderId &&
-                            "text-white bg-[#EDB842] rounded-md"
+                          className={`w-3 h-3 rounded-full ${
+                            t.order_status === "IN PROGRESS"
+                              ? "bg-[#FA8232]"
+                              : t.order_status === "COMPLETED"
+                              ? "bg-[#2DB224]"
+                              : "bg-[#EE5858]"
                           }`}
                         >
-                          <MdOutlineMoreHoriz />
+                          <div className=""></div>
                         </span>
-                      </button>
+                        {t.order_status}
+                      </td>
+                      <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
+                        $
+                        {t.checkout_items.total_price && (
+                          <FormatNumber
+                            price={t?.checkout_items?.total_price}
+                          />
+                        )}
+                      </td>
+                      <td
+                        className={`flex ${
+                          click === t.order_id
+                            ? "justify-start"
+                            : "justify-center"
+                        } relative gap-2`}
+                      >
+                        {click === t.order_id && (
+                          <div className="bg-[#F5F7FA] flex flex-row gap-2 items-center p-2 rounded-md">
+                            {" "}
+                            <AiOutlineEdit /> <span>Edit</span>
+                          </div>
+                        )}
+                        <button
+                          onClick={() => {
+                            click === "" ? setClick(t.order_id) : setClick("");
+                          }}
+                          className="flex rounded-md"
+                        >
+                          <span
+                            className={`p-2 w-fit h-fit ${
+                              click === t.order_id &&
+                              "text-white bg-[#EDB842] rounded-md"
+                            }`}
+                          >
+                            <MdOutlineMoreHoriz />
+                          </span>
+                        </button>
 
-                      {click === t.orderId && (
-                        <div className="absolute top-12 right-9 bg-white border z-10 p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
-                          <div className="flex gap-4 items-center">
-                            <AiOutlineEye />{" "}
-                            <span className="whitespace-nowrap">
-                              View Customer Details
-                            </span>
+                        {click === t.order_id && (
+                          <div className="absolute top-12 right-9 bg-white border z-10 p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
+                            <div
+                              onClick={() =>
+                                navigate(`/seller/order/details/${t._id}`)
+                              }
+                              className="flex gap-4 items-center"
+                            >
+                              <AiOutlineEye />{" "}
+                              <span className="whitespace-nowrap">
+                                View Order Details
+                              </span>
+                            </div>
+                            <div
+                              onClick={() => handleDelete(t._id)}
+                              className="flex gap-4 items-center"
+                            >
+                              <AiOutlineEye />{" "}
+                              <span className="whitespace-nowrap">Delete</span>
+                            </div>
                           </div>
-                          <div className="flex gap-4 items-center text-[#27C200]">
-                            <TiTick />{" "}
-                            <span className="whitespace-nowrap">Accept</span>
-                          </div>
-                          <div className="flex gap-4 items-center text-[#FB5B01]">
-                            <BsXCircle />{" "}
-                            <span className="whitespace-nowrap">Suspend</span>
-                          </div>
-                          <div className="flex gap-4 items-center">
-                            <AiOutlineEye />{" "}
-                            <span className="whitespace-nowrap">Delete</span>
-                          </div>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <div className="w-full">NO orders at this time</div>
+              )}
             </tbody>
           </table>
         </div>

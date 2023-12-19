@@ -6,9 +6,10 @@ import {
 } from "react-icons/ai";
 import { FaHome } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
+import countryData from "../../../data/countries.json";
 import { AuthImage, IconGoogle } from "../../../images";
 import { registerAction } from "../../../redux/actions/auth.actions";
 import { ReducersType } from "../../../redux/store";
@@ -17,6 +18,11 @@ import { ReduxResponseType } from "../../../redux/types/general.types";
 
 const RegisterBody = () => {
   const [showPassword, setShowPassword] = useState(false);
+  // const [selectedCountry, setSelectedCountry] = useState(null);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const referrer = queryParams.get("referrer");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -32,10 +38,16 @@ const RegisterBody = () => {
     username: "",
     email: "",
     password: "",
+    country: "",
+    referrer: referrer || "",
   });
   const { first_name, last_name, username, email, password } = formData;
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -74,6 +86,8 @@ const RegisterBody = () => {
       }, 6000);
     }
   }, [navigate, registerRedux]);
+
+  console.log(formData);
 
   return (
     <div className="flex flex-col gap-3">
@@ -142,6 +156,19 @@ const RegisterBody = () => {
                 />
               </div>
               <div className="">
+                <select
+                  className="border-b-2 outline-none w-full md:w-2/3 focus:border-b-[#EDB842]"
+                  name="country"
+                  id="country"
+                  onChange={onChange}
+                  required
+                >
+                  {countryData.map((t, i) => {
+                    return <option value={t.label}>{t.label}</option>;
+                  })}
+                </select>
+              </div>
+              <div className="">
                 <div className="flex flex-row items-center mx-auto md:ms-0  w-full md:w-2/3 justify-between border-b-2 focus:border-b-[#EDB842] hover:border-b-[#EDB842]">
                   <input
                     name="password"
@@ -165,6 +192,18 @@ const RegisterBody = () => {
                   </button>
                 </div>
               </div>
+              <div className="">
+                <input
+                  name="referrer"
+                  className="border-b-2 outline-none w-full md:w-2/3 focus:border-b-[#EDB842] text-[#5F6C72]"
+                  placeholder="sre@gmail.com"
+                  type="text"
+                  value={formData.referrer}
+                  onChange={onChange}
+                  required
+                  readOnly
+                />
+              </div>
               <button
                 type="submit"
                 className="p-2 text-white bg-[#EDB842] rounded-md w-full md:w-2/3 self-center md:self-start flex justify-center"
@@ -181,7 +220,10 @@ const RegisterBody = () => {
                 <img className="w-5" src={IconGoogle} alt="" />
                 <span>Sign up with Google</span>
               </button>
-              <div className="self-center md:self-start">
+              <div
+                onClick={() => navigate("/login")}
+                className="self-center md:self-start"
+              >
                 <span>Already have account?</span>
                 <span>Log in</span>
               </div>

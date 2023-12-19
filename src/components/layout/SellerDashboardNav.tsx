@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BiMap } from "react-icons/bi";
+import { BiMap, BiMoneyWithdraw } from "react-icons/bi";
 import { BsCart } from "react-icons/bs";
 import {
   MdOutlineMiscellaneousServices,
@@ -111,6 +111,20 @@ const SellerDashboardNav = () => {
         <Link to={"/track-Order"}>
           <span className="whitespace-nowrap">Inbox </span>
         </Link>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "seller-withdrawal" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          navigate("/seller/withdrawal");
+          setIndex("seller-withdrawal");
+        }}
+      >
+        <span>
+          <BiMoneyWithdraw />
+        </span>{" "}
+        <span className="whitespace-nowrap">Withdrawal</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

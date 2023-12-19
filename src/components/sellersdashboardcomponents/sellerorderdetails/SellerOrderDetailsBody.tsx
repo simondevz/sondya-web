@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { useEffect, useMemo } from "react";
 import { BiSolidTruck } from "react-icons/bi";
 import {
   BsBox2Fill,
@@ -10,6 +12,8 @@ import {
 import { FaFileInvoice, FaReceipt, FaUserAlt } from "react-icons/fa";
 import { MdEdit, MdLocationOn } from "react-icons/md";
 import { PiExport } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Divider, ImgExample } from "../../../images";
 import {
   trackDelivered,
@@ -18,8 +22,40 @@ import {
   trackProcessing,
   trackShipping,
 } from "../../../images/cart";
+import { sellerGetProductsOrderByIdAction } from "../../../redux/actions/seller/seller-orders.actions";
+import { ReducersType } from "../../../redux/store";
+import { GetProductOrder } from "../../../redux/types/checkout.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 
 const SellerOrderDetailsBody = () => {
+  // fetch product detail
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const id = String(params.id);
+
+  const productOrderDetailsRedux = useSelector(
+    (state: ReducersType) => state?.sellerGetProductsOrderByID
+  ) as ReduxResponseType<GetProductOrder>;
+
+  const productOrder = useMemo(() => {
+    return productOrderDetailsRedux?.serverResponse?.data;
+  }, [productOrderDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(sellerGetProductsOrderByIdAction({ id }) as any);
+  }, [dispatch, id]);
+
+  const dateString = productOrder?.createdAt ? productOrder?.createdAt : "";
+  let formattedDate: any;
+  if (dateString) {
+    const dateObject = new Date(dateString);
+    formattedDate = format(dateObject, "MMMM d, yyyy");
+  }
+
+  console.log(productOrder);
+
   return (
     <section className="p-2">
       <div className="flex flex-col gap-3">
@@ -41,9 +77,11 @@ const SellerOrderDetailsBody = () => {
           <div className="flex flex-col w-1/3 gap-3 shadow-md p-4 rounded-lg max-w-[24rem] min-w-[18rem] flex-grow">
             <div className="flex gap-3 items-center justify-between w-full font-[600]">
               <div className="flex gap-3 items-center">
-                <span className="text-lg whitespace-nowrap">Order #302011</span>
+                <span className="text-lg whitespace-nowrap">
+                  Order #{productOrder?.order_id}
+                </span>
                 <span className="p-2 bg-[#EDB84233] text-[#EDB842] rounded-md">
-                  Processing
+                  {productOrder?.order_status}
                 </span>
               </div>
               <span className="text-[#A3A9B6]">
@@ -57,25 +95,29 @@ const SellerOrderDetailsBody = () => {
                 </span>
                 <span>Added</span>
               </div>
-              <div className="">12 Dec 2022</div>
+              <div className="">{formattedDate && formattedDate}</div>
             </div>
             <div className="flex w-full justify-between text-[#1D1F2C] font-[400]">
               <div className="flex gap-3 items-center">
                 <span className="text-[#EDB842] p-2 bg-[#F0F1F3] rounded-full">
                   <BsFillCreditCard2BackFill />
                 </span>
-                <span>Payment Method</span>
+                <span>Payment Status</span>
               </div>
-              <div className="">Visa</div>
+              <div className="">{productOrder?.payment_status}</div>
             </div>
             <div className="flex w-full justify-between text-[#1D1F2C] font-[400]">
               <div className="flex gap-3 items-center">
                 <span className="text-[#EDB842] p-2 bg-[#F0F1F3] rounded-full">
                   <BiSolidTruck />
                 </span>
-                <span>Shipping Method</span>
+                <span>Shipping to </span>
               </div>
-              <div className="">Flat Shipping</div>
+              <div className="break-words">
+                {productOrder?.shipping_destination?.country} ,{" "}
+                {productOrder?.shipping_destination?.state} ,{" "}
+                {productOrder?.shipping_destination?.city}
+              </div>
             </div>
           </div>
           {/* box 2 */}
@@ -90,7 +132,7 @@ const SellerOrderDetailsBody = () => {
                 </span>
                 <span>Customer</span>
               </div>
-              <div className="">Josh Adam</div>
+              <div className="">{productOrder?.buyer?.username}</div>
             </div>
             <div className="flex w-full justify-between text-[#1D1F2C] font-[400]">
               <div className="flex gap-3 items-center">
@@ -99,7 +141,7 @@ const SellerOrderDetailsBody = () => {
                 </span>
                 <span>Email</span>
               </div>
-              <div className="">joshadam@mail.com</div>
+              <div className="">{productOrder?.buyer?.email}</div>
             </div>
             <div className="flex w-full justify-between text-[#1D1F2C] font-[400]">
               <div className="flex gap-3 items-center">
@@ -108,7 +150,7 @@ const SellerOrderDetailsBody = () => {
                 </span>
                 <span>Phone</span>
               </div>
-              <div className="">909 427 2910</div>
+              <div className="">{productOrder?.buyer?.phone_number}</div>
             </div>
           </div>
           {/* box 3 */}
@@ -151,7 +193,7 @@ const SellerOrderDetailsBody = () => {
             <div className="flex flex-row gap-3">
               <span className="p-2 font-[#1A9882]">Order List</span>
               <span className="p-2 bg-[#E9FAF7] text-[#1A9882] rounded-md">
-                +2 Orders
+                +{productOrder?.checkout_items?.order_quantity} Orders
               </span>
             </div>
             <div className="w-full">
@@ -168,61 +210,106 @@ const SellerOrderDetailsBody = () => {
                 <tbody>
                   <tr className="border">
                     <td className="flex flex-col md:flex-row  gap-2 py-2 px-3 justify-center">
-                      <img src={ImgExample} alt="" />
+                      <img
+                        className="object-cover w-[80px] h-[80px] rounded-md"
+                        src={
+                          productOrder?.checkout_items?.image !== undefined &&
+                          productOrder?.checkout_items?.image &&
+                          productOrder?.checkout_items?.image?.length > 0
+                            ? productOrder?.checkout_items?.image[0]?.url
+                            : ImgExample
+                        }
+                        alt=""
+                      />
                       <div className="flex flex-col gap-1">
                         <div className="font-[600] text-[#1D1F2C]">
-                          Logic+ Wireless Mouse
+                          {productOrder?.checkout_items?.name}
                         </div>
                         <div className="font-[400] text-[#667085]">Black</div>
                       </div>
                     </td>
-                    <td className="text-[#666666] py-2 px-3">302011</td>
-                    <td className="text-[#666666] py-2 px-3">1 pcs</td>
-                    <td className="text-[#666666] py-2 px-3">$121.00</td>
-                    <td className="text-[#666666] py-2 px-3">$121.00</td>
-                  </tr>
-                  <tr className="border">
-                    <td className="flex flex-col md:flex-row gap-2 py-2 px-3 justify-center">
-                      <img src={ImgExample} alt="" />
-                      <div className="flex flex-col gap-1">
-                        <div className="font-[600] text-[#1D1F2C]">
-                          Logic+ Wireless Mouse
-                        </div>
-                        <div className="font-[400] text-[#667085]">Black</div>
-                      </div>
+                    <td className="text-[#666666] py-2 px-3">
+                      {productOrder?.checkout_items?.model}
                     </td>
-                    <td className="text-[#666666] py-2 px-3">302011</td>
-                    <td className="text-[#666666] py-2 px-3">1 pcs</td>
-                    <td className="text-[#666666] py-2 px-3">$590.00</td>
-                    <td className="text-[#666666] py-2 px-3">$590.00</td>
-                  </tr>
-                  <tr className="border">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td className="text-[#1D1F2C] py-2 px-3">Subtotal</td>
-                    <td className="text-[#1D1F2C] py-2 px-3">$711.00</td>
+                    <td className="text-[#666666] py-2 px-3">
+                      {productOrder?.checkout_items?.order_quantity} pcs
+                    </td>
+                    <td className="text-[#666666] py-2 px-3">
+                      $
+                      {productOrder?.checkout_items?.current_price && (
+                        <FormatNumber
+                          price={productOrder?.checkout_items?.current_price}
+                        />
+                      )}
+                    </td>
+                    <td className="text-[#666666] py-2 px-3">
+                      $
+                      {productOrder?.checkout_items?.sub_total && (
+                        <FormatNumber
+                          price={productOrder?.checkout_items?.sub_total}
+                        />
+                      )}
+                    </td>
                   </tr>
                   <tr className="border">
                     <td></td>
                     <td></td>
                     <td></td>
                     <td className="text-[#1D1F2C] py-2 px-3">VAT(0)%</td>
-                    <td className="text-[#1D1F2C] py-2 px-3">$711.00</td>
+                    <td className="text-[#1D1F2C] py-2 px-3">
+                      {" "}
+                      $
+                      {productOrder?.checkout_items?.tax && (
+                        <FormatNumber
+                          price={productOrder?.checkout_items?.tax}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="border">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td className="text-[#1D1F2C] py-2 px-3">Tax</td>
+                    <td className="text-[#1D1F2C] py-2 px-3">
+                      {" "}
+                      $
+                      {productOrder?.checkout_items?.tax && (
+                        <FormatNumber
+                          price={productOrder?.checkout_items?.tax}
+                        />
+                      )}
+                    </td>
                   </tr>
                   <tr className="border">
                     <td></td>
                     <td></td>
                     <td></td>
                     <td className="text-[#1D1F2C] py-2 px-3">Shipping Rate</td>
-                    <td className="text-[#1D1F2C] py-2 px-3">$20.00</td>
+                    <td className="text-[#1D1F2C] py-2 px-3">
+                      {" "}
+                      $
+                      {productOrder?.checkout_items?.shipping_fee && (
+                        <FormatNumber
+                          price={productOrder?.checkout_items?.shipping_fee}
+                        />
+                      )}
+                    </td>
                   </tr>
                   <tr className="border">
                     <td></td>
                     <td></td>
                     <td></td>
                     <td className="text-[#1D1F2C] py-2 px-3">Total</td>
-                    <td className="text-[#1D1F2C] py-2 px-3">$731.00</td>
+                    <td className="text-[#1D1F2C] py-2 px-3">
+                      {" "}
+                      $
+                      {productOrder?.checkout_items?.total_price && (
+                        <FormatNumber
+                          price={productOrder?.checkout_items?.total_price}
+                        />
+                      )}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -237,11 +324,11 @@ const SellerOrderDetailsBody = () => {
                   <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">
                     <MdLocationOn />
                   </span>
-                  <div className="flex flex-col gap-1">
-                    <div className="">Billing Address:</div>
-                    <div className="">
-                      1833 Bel Meadow Drive, Fontana, California 92335, USA
-                    </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <div className="">Address:</div>
+                  <div className="">
+                    {productOrder?.shipping_destination?.address}
                   </div>
                 </div>
               </div>
@@ -252,9 +339,11 @@ const SellerOrderDetailsBody = () => {
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <div className="">Shipping Address:</div>
+                  <div className="">Location:</div>
                   <div className="">
-                    1833 Bel Meadow Drive, Fontana, California 92335, USA
+                    {productOrder?.shipping_destination?.country},
+                    {productOrder?.shipping_destination?.state},
+                    {productOrder?.shipping_destination?.city}
                   </div>
                 </div>
               </div>

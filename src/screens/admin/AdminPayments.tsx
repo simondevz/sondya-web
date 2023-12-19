@@ -1,4 +1,4 @@
-import { AdminOrderDetailsHero } from "../../components/admincomponents/adminorderdetail";
+import { AdminPaymentsBody } from "../../components/admincomponents/adminpayments";
 import {
   AdminDashboardNav,
   DashboardLocation,
@@ -6,7 +6,7 @@ import {
   Nav,
 } from "../../components/layout";
 
-const AdminOrderDetails = () => {
+const AdminPayments = () => {
   return (
     <div>
       <Nav />
@@ -14,7 +14,7 @@ const AdminOrderDetails = () => {
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5 w-full">
-          <AdminOrderDetailsHero />
+          <AdminPaymentsBody />
         </div>
       </div>
       <Footer />
@@ -22,4 +22,4 @@ const AdminOrderDetails = () => {
   );
 };
 
-export default AdminOrderDetails;
+export default AdminPayments;

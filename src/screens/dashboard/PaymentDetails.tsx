@@ -1,11 +1,8 @@
-import {
-  DashboardHero,
-  DashboardRecentOrders,
-} from "../../components/dashboardcomponents/dashboard";
+import { PaymentDetailsBody } from "../../components/dashboardcomponents/paymentdetails";
 import { DashboardLocation, Footer, Nav } from "../../components/layout";
 import { UserDashboardNav } from "../../components/layout/DashboardNav";
 
-const Dashboard = () => {
+const PaymentDetails = () => {
   return (
     <div className="">
       <Nav />
@@ -13,8 +10,7 @@ const Dashboard = () => {
       <div className="flex flex-row p-4 gap-5">
         <UserDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5">
-          <DashboardHero />
-          <DashboardRecentOrders />
+          <PaymentDetailsBody />
         </div>
       </div>
       <Footer />
@@ -22,4 +18,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default PaymentDetails;

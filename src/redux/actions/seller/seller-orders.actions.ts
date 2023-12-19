@@ -1,25 +1,25 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import {
-  ADMIN_DELETE_PRODUCTS_ORDER_BYID_FAIL,
-  ADMIN_DELETE_PRODUCTS_ORDER_BYID_REQUEST,
-  ADMIN_DELETE_PRODUCTS_ORDER_BYID_SUCCESS,
-  ADMIN_GET_PRODUCTS_ORDERS_FAIL,
-  ADMIN_GET_PRODUCTS_ORDERS_REQUEST,
-  ADMIN_GET_PRODUCTS_ORDERS_SUCCESS,
-  ADMIN_GET_PRODUCTS_ORDER_BYID_FAIL,
-  ADMIN_GET_PRODUCTS_ORDER_BYID_REQUEST,
-  ADMIN_GET_PRODUCTS_ORDER_BYID_SUCCESS,
-} from "../../constants/admin/ProductOrder.constants";
+  SELLER_DELETE_PRODUCTS_ORDER_BYID_FAIL,
+  SELLER_DELETE_PRODUCTS_ORDER_BYID_REQUEST,
+  SELLER_DELETE_PRODUCTS_ORDER_BYID_SUCCESS,
+  SELLER_GET_PRODUCTS_ORDERS_FAIL,
+  SELLER_GET_PRODUCTS_ORDERS_REQUEST,
+  SELLER_GET_PRODUCTS_ORDERS_SUCCESS,
+  SELLER_GET_PRODUCTS_ORDER_BYID_FAIL,
+  SELLER_GET_PRODUCTS_ORDER_BYID_REQUEST,
+  SELLER_GET_PRODUCTS_ORDER_BYID_SUCCESS,
+} from "../../constants/seller/seller-orders.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
 import { ReduxResponseType } from "../../types/general.types";
 
-export const adminGetProductsOrdersAction =
+export const sellerGetProductsOrdersAction =
   (query: string) => async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
-        type: ADMIN_GET_PRODUCTS_ORDERS_REQUEST,
+        type: SELLER_GET_PRODUCTS_ORDERS_REQUEST,
       });
 
       const state = getState();
@@ -32,18 +32,18 @@ export const adminGetProductsOrdersAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminProductsOrders?.getProductsOrders +
-          "?" +
-          query.toString(),
+        API_ROUTES?.sellerProductsOrders?.getProductsOrders +
+          // "65305ba4506249d9c6f21bf7",
+          login?.serverResponse?.data?.id,
         config
       );
       dispatch({
-        type: ADMIN_GET_PRODUCTS_ORDERS_SUCCESS,
+        type: SELLER_GET_PRODUCTS_ORDERS_SUCCESS,
         payload: data,
       });
     } catch (error: any) {
       dispatch({
-        type: ADMIN_GET_PRODUCTS_ORDERS_FAIL,
+        type: SELLER_GET_PRODUCTS_ORDERS_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
@@ -52,12 +52,12 @@ export const adminGetProductsOrdersAction =
     }
   };
 
-export const adminGetProductsOrderByIdAction =
+export const sellerGetProductsOrderByIdAction =
   ({ id }: any) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
-        type: ADMIN_GET_PRODUCTS_ORDER_BYID_REQUEST,
+        type: SELLER_GET_PRODUCTS_ORDER_BYID_REQUEST,
       });
 
       const state = getState();
@@ -71,16 +71,16 @@ export const adminGetProductsOrderByIdAction =
       };
 
       const { data } = await axios.get(
-        API_ROUTES?.adminProductsOrders?.getProductOrdersById + id,
+        API_ROUTES?.sellerProductsOrders?.getProductOrdersById + id,
         config
       );
       dispatch({
-        type: ADMIN_GET_PRODUCTS_ORDER_BYID_SUCCESS,
+        type: SELLER_GET_PRODUCTS_ORDER_BYID_SUCCESS,
         payload: data,
       });
     } catch (error: any) {
       dispatch({
-        type: ADMIN_GET_PRODUCTS_ORDER_BYID_FAIL,
+        type: SELLER_GET_PRODUCTS_ORDER_BYID_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
@@ -89,12 +89,12 @@ export const adminGetProductsOrderByIdAction =
     }
   };
 
-export const adminDeleteProductsOrderByIdAction =
+export const sellerDeleteProductsOrderByIdAction =
   ({ id }: any) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
-        type: ADMIN_DELETE_PRODUCTS_ORDER_BYID_REQUEST,
+        type: SELLER_DELETE_PRODUCTS_ORDER_BYID_REQUEST,
       });
 
       const state = getState();
@@ -108,16 +108,16 @@ export const adminDeleteProductsOrderByIdAction =
       };
 
       const { data } = await axios.delete(
-        API_ROUTES?.adminProductsOrders?.deleteProductOrdersById + id,
+        API_ROUTES?.sellerProductsOrders?.deleteProductOrdersById + id,
         config
       );
       dispatch({
-        type: ADMIN_DELETE_PRODUCTS_ORDER_BYID_SUCCESS,
+        type: SELLER_DELETE_PRODUCTS_ORDER_BYID_SUCCESS,
         payload: data,
       });
     } catch (error: any) {
       dispatch({
-        type: ADMIN_DELETE_PRODUCTS_ORDER_BYID_FAIL,
+        type: SELLER_DELETE_PRODUCTS_ORDER_BYID_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
