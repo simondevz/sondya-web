@@ -1,15 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AiFillStar, AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
+import { AiOutlineRight, AiOutlineShareAlt } from "react-icons/ai";
 import { BiRefresh } from "react-icons/bi";
-import {
-  BsArrowRight,
-  BsCart,
-  BsFacebook,
-  BsHandThumbsDown,
-  BsHandThumbsUp,
-  BsSearch,
-  BsTwitter,
-} from "react-icons/bs";
+import { BsCart, BsFacebook, BsTwitter } from "react-icons/bs";
 import { FaFlag, FaHome, FaPinterestP } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
 import { MdFavoriteBorder, MdMenu } from "react-icons/md";
@@ -32,6 +24,8 @@ import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { AdminGetProductType } from "../../redux/types/products.types";
 import { Ratings } from "../shareables/Ratings";
+import { reviewStatType } from "../../redux/types/review.types";
+import Reviews from "../shareables/reviews";
 
 const ProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
@@ -48,6 +42,10 @@ const ProductsDetailsBody = () => {
   const homeGetProductDetailsRedux = useSelector(
     (state: ReducersType) => state?.homeGetProductDetails
   ) as ReduxResponseType<AdminGetProductType>;
+
+  const reviewStatRedux = useSelector(
+    (state: ReducersType) => state?.reviewStat
+  ) as ReduxResponseType<reviewStatType>;
 
   const product = useMemo(() => {
     return homeGetProductDetailsRedux?.serverResponse?.data;
@@ -144,10 +142,17 @@ const ProductsDetailsBody = () => {
         </div>
         <div className="flex flex-col gap-4 p-3">
           <div className="flex flex-row gap-4">
-            {" "}
-            <Ratings rating={4.7} />
-            <span className="text-[#191C1F]">4.7 Star Rating</span>
-            <span className="text-[#5F6C72]">(21,671 User feedback)</span>
+            <Ratings
+              rating={reviewStatRedux?.serverResponse?.data?.averageRating || 0}
+            />
+            <span className="text-[#191C1F]">
+              {reviewStatRedux?.serverResponse?.data?.averageRating || 0} Star
+              Rating
+            </span>
+            <span className="text-[#5F6C72]">
+              ({reviewStatRedux?.serverResponse?.data?.totalReviews || 0} User
+              feedback)
+            </span>
           </div>
           <div className="">
             {product?.name && (
@@ -225,6 +230,7 @@ const ProductsDetailsBody = () => {
               <input
                 className="outline-none outline-0 border-none border-0 w-10 text-center"
                 type="number"
+                onChange={(event) => setCount(Number(event?.target?.value))}
                 value={count}
               />
               <button onClick={() => setCount(++count)}>+</button>
@@ -279,7 +285,7 @@ const ProductsDetailsBody = () => {
         </div>
       </div>
       <ProductsDetailsTab />
-      <Reviews />
+      <Reviews product_id={product._id} product_type={"product"} />
     </section>
   );
 };
@@ -345,9 +351,9 @@ export const ProductsDetailsTab = () => {
       </div>
       <div className="hidden border bg-white rounded-md p-4 space-y-4 md:flex md:flex-col md:w-1/3 lg:w-2/5 max-w-[280px]">
         <div className="font-[600] text-[#1C1C1C] text-xl">You may like</div>
-        {mayLike.map((value, i) => {
+        {mayLike.map((value, index) => {
           return (
-            <div className="flex flex-row space-x-2 w-full">
+            <div key={index} className="flex flex-row space-x-2 w-full">
               <img
                 className="border rounded-md object-cover"
                 src={value.image}
@@ -446,152 +452,6 @@ const ProductsTab3 = () => {
 };
 const ProductsTab4 = () => {
   return <div>Tab 4</div>;
-};
-
-const Reviews = () => {
-  return (
-    <div className="flex flex-col gap-4 p-5 w-full md:w-3/5">
-      <div className="">Reviews</div>
-      <div className="flex flex-row  gap-5">
-        <span>902 reviews for this Gig</span> <Ratings rating={4.6} />
-      </div>
-      <div className="flex flex-row items-center">
-        <input
-          className="border-[1px]  p-[0.46rem] border-[#C5C6C9] outline-none rounded-l-md"
-          type="text"
-        />
-        <button className="bg-[#222325] px-3 py-3 text-white -m-2 rounded-r-md">
-          <BsSearch />
-        </button>
-      </div>
-      <div className="flex gap-3 text-[#404145]">
-        Sort By:{" "}
-        <select className="outline-none" name="" id="">
-          <option value="">Search reviews</option>
-        </select>
-      </div>
-      <div className="flex flex-row gap-3 text-[#62646A] items-center">
-        <input type="checkbox" name="" id="" />
-        <label htmlFor="">Delivery images (558)</label>
-      </div>
-      <div className="flex flex-col gap-4 border shadow-md p-5 rounded-md">
-        <div className="border-b-4 text-[#EDB842] border-b-[#EDB842] w-20 whitespace-nowrap text-lg">
-          Write Review
-        </div>
-        <div className="flex flex-row gap-2 text-2xl text-[#DADDE5]">
-          {" "}
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-        </div>
-        <textarea
-          className="border-2 p-3 rounded-md"
-          name="comment"
-          id=""
-          cols={20}
-          rows={5}
-        >
-          Share you thought about this seller...
-        </textarea>
-        <button className="flex flex-row gap-2 justify-between px-4 py-2 items-center text-white bg-[#EDB842] rounded-md max-w-[190px]">
-          <span>publish Review</span>
-          <span>
-            <BsArrowRight />
-          </span>
-        </button>
-      </div>
-      <hr />
-      <div className="flex flex-row gap-4">
-        <div className="">
-          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
-        </div>
-        <div className="flex flex-col gap-2 text-[#62646A]">
-          <div className="text-[#404145]">marvinachi</div>
-          <div className="">United states</div>
-          <div className="flex flex-row gap-4 items-center">
-            <Ratings rating={5} /> <span>1 month ago</span>
-          </div>
-          <div className="">
-            Amazing work. Will def work again with him this was a big project
-            and he knocked it out of the park.
-          </div>
-          <div className="flex gap-3 items-center">
-            {" "}
-            <span>Helpful?</span>
-            <span className="flex items-center">
-              Yes
-              <BsHandThumbsUp />
-            </span>
-            <span className="flex items-center">
-              No
-              <BsHandThumbsDown />
-            </span>
-          </div>
-          {/* Response */}
-          <div className="mt-4 flex flex-row gap-4">
-            <div className="">
-              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
-                M
-              </span>
-            </div>
-            <div className="">
-              <div className="text-[#404145] font-[700]">Seller's Response</div>
-              <div className="text-[#404145] font-[400]">
-                Thank you so much 😊
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="flex flex-row gap-4">
-        <div className="">
-          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
-        </div>
-        <div className="flex flex-col gap-2 text-[#62646A]">
-          <div className="text-[#404145]">jcpconsulting</div>
-          <div className="">United states</div>
-          <div className="flex flex-row gap-4 items-center">
-            <Ratings rating={5} /> <span>1 month ago</span>
-          </div>
-          <div className="">
-            Amazing work. Will def work again with him this was a big project
-            and he knocked it out of the park.
-          </div>
-          <div className="flex gap-3 items-center">
-            {" "}
-            <span>Helpful?</span>
-            <span className="flex items-center">
-              Yes
-              <BsHandThumbsUp />
-            </span>
-            <span className="flex items-center">
-              No
-              <BsHandThumbsDown />
-            </span>
-          </div>
-          {/* Response */}
-          <div className="mt-4 flex flex-row gap-4">
-            <div className="">
-              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
-                M
-              </span>
-            </div>
-            <div className="">
-              <div className="text-[#404145] font-[700]">Seller's Response</div>
-              <div className="text-[#404145] font-[400]">
-                Thank you so much 😊
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="text-[#EDB842] text-lg font-[700]">+ See More</div>
-    </div>
-  );
 };
 
 export default ProductsDetailsBody;

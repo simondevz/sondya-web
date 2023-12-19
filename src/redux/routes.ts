@@ -181,6 +181,19 @@ export const API_ROUTES = {
     getChats: BASE + "/chats/", // GET :user_id
     getChat: BASE + "/chat", // GET :query - sender_id and receiver_id
     getMessages: BASE + "/chat/messages", // GET :query - sender_id and receiver_id
+    sendMessage: BASE + "/chat/send/message",
+  },
+
+  // Users && Reviews
+  userReviews: {
+    createReview: BASE + "/user/review", // POST: userReviewType
+    getReviewStat: BASE + "/user/review/stat/", // GET: :category/:id
+    listReviews: BASE + "/user/review/list/", // GET: :category/:id
+  },
+
+  // Sellers && Reviews
+  sellerReviews: {
+    respond: BASE + "/seller/review/response",
   },
 
   // websockets

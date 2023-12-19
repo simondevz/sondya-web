@@ -9,6 +9,7 @@ import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetServiceType } from "../../../redux/types/services.types";
 import { Ratings } from "../../shareables/Ratings";
+import Reviews from "../../shareables/reviews";
 
 const AdminServicesDetailsBody = () => {
   // fetch data
@@ -114,6 +115,11 @@ const AdminServicesDetailsBody = () => {
         <div className="text-xl font-[600]">About Gig</div>
         <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
+      <Reviews
+        product_type={"service"}
+        product_id={service?._id || ""}
+        owner_id={service?.owner?.id}
+      />
       <AboutAdminServceDetails />
     </section>
   );

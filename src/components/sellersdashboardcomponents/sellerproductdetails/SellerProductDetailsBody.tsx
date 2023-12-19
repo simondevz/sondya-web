@@ -25,6 +25,7 @@ import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetProductType } from "../../../redux/types/products.types";
 import { Ratings } from "../../shareables/Ratings";
+import Reviews from "../../shareables/reviews";
 
 const SellerProductDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
@@ -232,7 +233,10 @@ const SellerProductDetailsBody = () => {
           </div>
         </div>
       </div>
-      <SellerProductsDetailsTab />
+      <SellerProductsDetailsTab
+        product_id={products?._id as string}
+        owner_id={products?.owner?.id || ""}
+      />
       <SellerAboutSeller />
     </section>
   );
@@ -307,7 +311,13 @@ const SellerAboutSeller = () => {
   );
 };
 
-export const SellerProductsDetailsTab = () => {
+export const SellerProductsDetailsTab = ({
+  product_id,
+  owner_id,
+}: {
+  product_id: string;
+  owner_id: string;
+}) => {
   const [TabItem, setTabItem] = useState<string>("item1");
   return (
     <div className="flex flex-row gap-2 p-3 justify-evenly">
@@ -354,11 +364,11 @@ export const SellerProductsDetailsTab = () => {
             About seller
           </button>
         </div>
-        <div className="">
+        <div className="flex w-full">
           {TabItem === "item1" ? (
             <ProductsTab1 />
           ) : TabItem === "item2" ? (
-            <ProductsTab2 />
+            <ProductsTab2 product_id={product_id} owner_id={owner_id} />
           ) : TabItem === "item3" ? (
             <ProductsTab3 />
           ) : (
@@ -443,8 +453,20 @@ const ProductsTab1 = () => {
     </div>
   );
 };
-const ProductsTab2 = () => {
-  return <div>Tab 2</div>;
+const ProductsTab2 = ({
+  product_id,
+  owner_id,
+}: {
+  product_id: string;
+  owner_id: string;
+}) => {
+  return (
+    <Reviews
+      product_id={product_id}
+      product_type={"product"}
+      owner_id={owner_id}
+    />
+  );
 };
 const ProductsTab3 = () => {
   return <div>Tab 3</div>;

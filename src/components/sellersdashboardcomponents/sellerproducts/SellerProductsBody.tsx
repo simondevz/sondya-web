@@ -235,7 +235,10 @@ const SellerProductsBody = () => {
           <tbody>
             {products?.map((t, i) => {
               return (
-                <tr key={i}>
+                <tr
+                  onClick={() => navigate("/seller/products/details/" + t._id)}
+                  key={i}
+                >
                   <td className="p-2 text-start">
                     <div className="flex flex-col md:flex-row gap-2 items-center">
                       <img

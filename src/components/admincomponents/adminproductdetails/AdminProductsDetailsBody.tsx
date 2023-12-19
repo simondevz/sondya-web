@@ -21,6 +21,7 @@ import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetProductType } from "../../../redux/types/products.types";
 import { Ratings } from "../../shareables/Ratings";
+import Reviews from "../../shareables/reviews";
 
 const AdminProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
@@ -192,7 +193,7 @@ const AdminProductsDetailsBody = () => {
           </div>
         </div>
       </div>
-      <AdminProductsDetailsTab />
+      <AdminProductsDetailsTab product={products} />
       <AdminAboutSeller />
     </section>
   );
@@ -267,7 +268,11 @@ const AdminAboutSeller = () => {
   );
 };
 
-export const AdminProductsDetailsTab = () => {
+export const AdminProductsDetailsTab = ({
+  product,
+}: {
+  product: AdminGetProductType | null;
+}) => {
   const [TabItem, setTabItem] = useState<string>("item1");
   return (
     <div className="flex flex-row gap-2 p-3 justify-evenly">
@@ -318,7 +323,7 @@ export const AdminProductsDetailsTab = () => {
           {TabItem === "item1" ? (
             <ProductsTab1 />
           ) : TabItem === "item2" ? (
-            <ProductsTab2 />
+            <ProductsTab2 product={product} />
           ) : TabItem === "item3" ? (
             <ProductsTab3 />
           ) : (
@@ -403,8 +408,16 @@ const ProductsTab1 = () => {
     </div>
   );
 };
-const ProductsTab2 = () => {
-  return <div>Tab 2</div>;
+const ProductsTab2 = ({ product }: { product: AdminGetProductType | null }) => {
+  return (
+    <div className="flex w-full">
+      <Reviews
+        product_id={product?._id || ""}
+        owner_id={product?.owner?.id}
+        product_type={"product"}
+      />
+    </div>
+  );
 };
 const ProductsTab3 = () => {
   return <div>Tab 3</div>;

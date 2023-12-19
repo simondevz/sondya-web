@@ -1,21 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import {
-  AiFillStar,
   AiOutlineArrowRight,
   AiOutlineRight,
   AiOutlineShareAlt,
 } from "react-icons/ai";
-import {
-  BsArrowRight,
-  BsHandThumbsDown,
-  BsHandThumbsUp,
-  BsSearch,
-  BsSend,
-} from "react-icons/bs";
+import { BsSend } from "react-icons/bs";
 import { FaFlag, FaHome } from "react-icons/fa";
 import { MdEmail, MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { Service2 } from "../../images";
 import { Facebook, Twitter, Whatsapp } from "../../images/dashboard";
 import { user2 } from "../../images/users";
@@ -30,8 +22,11 @@ import { API_ROUTES } from "../../redux/routes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { userGeChatMessagesAction } from "../../redux/actions/userDashboard/chats.actions";
 import Swal from "sweetalert2";
-import { Chat1 } from "../../images/chat";
-import FormatDate from "../../utils/dateFormatter";
+import { reviewStatType } from "../../redux/types/review.types";
+import Reviews from "../shareables/reviews";
+import { useParams } from "react-router-dom";
+import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
+import { AdminGetProductType } from "../../redux/types/products.types";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
@@ -58,6 +53,11 @@ const ServiceDetailsBody = () => {
   const [currentImage, setCurrentImage] = useState<string>(
     service.image && service.image.length > 0 ? service.image[0].url : Service2
   );
+
+  const reviewStatRedux = useSelector(
+    (state: ReducersType) => state?.reviewStat
+  ) as ReduxResponseType<reviewStatType>;
+
   return (
     <section className="p-3 flex flex-col gap-4">
       <div className="text-[#5F6C72] flex flex-row justify-between">
@@ -89,8 +89,14 @@ const ServiceDetailsBody = () => {
               {service.owner?.username}
             </div>
             <div className="flex gap-2">
-              <Ratings rating={4} />{" "}
-              <span className="text-[#95979D]">(904)</span>
+              <Ratings
+                rating={
+                  reviewStatRedux?.serverResponse?.data?.averageRating || 0
+                }
+              />{" "}
+              <span className="text-[#95979D]">
+                ({reviewStatRedux?.serverResponse?.data?.totalReviews || 0})
+              </span>
             </div>
           </div>
           <div className="flex flex-col gap-2 w-4/5">
@@ -165,7 +171,7 @@ const ServiceDetailsBody = () => {
         owner_id={service?.owner?.id || ""}
         service_id={service?._id || ""}
       />
-      <ReviewsService />
+      <Reviews product_id={service?._id} product_type={"service"} />
     </section>
   );
 };
@@ -199,7 +205,6 @@ export const ServiceDetailsChat = ({
   const chatMessagesRedux = useSelector(
     (state: ReducersType) => state?.userGetChatMessages
   ) as ReduxResponseType;
-  console.log(chatMessagesRedux);
 
   useEffect(() => {
     if (lastMessage !== null) {
@@ -324,8 +329,22 @@ export const ServiceDetailsChat = ({
           chatMessagesRedux?.serverResponse?.data?.length ? (
             chatMessagesRedux?.serverResponse?.data?.map(
               (message: chatMessageType) => {
-                if (message?.service_id !== service_id) return <></>;
-                return <ChatMessage key={message?._id} message={message} />;
+                return (
+                  <ChatMessage
+                    key={message?._id}
+                    message={message}
+                    setAttachment={function (
+                      value: SetStateAction<
+                        | ((AdminGetServiceType | AdminGetProductType) & {
+                            isProduct: boolean;
+                          })
+                        | undefined
+                      >
+                    ): void {
+                      throw new Error("Function not implemented.");
+                    }}
+                  />
+                );
               }
             )
           ) : (
@@ -339,8 +358,22 @@ export const ServiceDetailsChat = ({
 
         {/* messages from the websocket */}
         {messageHistory.map((message: chatMessageType) => {
-          if (message?.service_id !== service_id) return <></>;
-          return <ChatMessage key={message?._id} message={message} />;
+          return (
+            <ChatMessage
+              key={message?._id}
+              message={message}
+              setAttachment={function (
+                value: SetStateAction<
+                  | ((AdminGetServiceType | AdminGetProductType) & {
+                      isProduct: boolean;
+                    })
+                  | undefined
+                >
+              ): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          );
         })}
 
         {/* message ends */}
@@ -365,28 +398,6 @@ export const ServiceDetailsChat = ({
             onChange={(event) => setMessage(event.target.value)}
           ></textarea>
         </div>
-      </div>
-    </div>
-  );
-};
-
-const ChatMessage = ({ message }: { message: chatMessageType }) => {
-  return (
-    <div key={message?._id} className="flex flex-row gap-3">
-      <div className="">
-        <img src={message?.sender_id?.image?.[0]?.url || Chat1} alt="" />
-      </div>
-      <div className="flex flex-col gap-3">
-        <div className="font-[600] flex gap-2">
-          <span>
-            {message?.sender_id?.first_name} {message?.sender_id?.last_name}
-          </span>
-          <FormatDate
-            className="text-[#939AAD]"
-            dateString={message?.createdAt as string}
-          />
-        </div>
-        <div className="text-[#636A80]">{message?.message}</div>
       </div>
     </div>
   );
@@ -461,149 +472,4 @@ const AboutSellerServceDetails = () => {
   );
 };
 
-const ReviewsService = () => {
-  return (
-    <div className="flex flex-col gap-4 p-5 w-full md:w-3/5 max-w-[50rem]">
-      <div className="">Reviews</div>
-      <div className="flex flex-row  gap-5">
-        <span>902 reviews for this Gig</span> <Ratings rating={4.6} />
-      </div>
-      <div className="flex flex-row items-center">
-        <input
-          className="border-[1px]  p-[0.46rem] border-[#C5C6C9] outline-none rounded-l-md"
-          type="text"
-        />
-        <button className="bg-[#222325] px-3 py-3 text-white -m-2 rounded-r-md">
-          <BsSearch />
-        </button>
-      </div>
-      <div className="flex gap-3 text-[#404145]">
-        Sort By:{" "}
-        <select className="outline-none" name="" id="">
-          <option value="">Search reviews</option>
-        </select>
-      </div>
-      <div className="flex flex-row gap-3 text-[#62646A] items-center">
-        <input type="checkbox" name="" id="" />
-        <label htmlFor="">Delivery images (558)</label>
-      </div>
-      <div className="flex flex-col gap-4 border shadow-md p-5 rounded-md">
-        <div className="border-b-4 text-[#EDB842] border-b-[#EDB842] w-20 whitespace-nowrap text-lg">
-          Write Review
-        </div>
-        <div className="flex flex-row gap-2 text-2xl text-[#DADDE5]">
-          {" "}
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-        </div>
-        <textarea
-          className="border-2 p-3 rounded-md"
-          name="comment"
-          id=""
-          cols={20}
-          rows={5}
-        >
-          Share you thought about this seller...
-        </textarea>
-        <button className="flex flex-row gap-2 justify-between px-4 py-2 items-center text-white bg-[#EDB842] rounded-md max-w-[190px]">
-          <span>publish Review</span>
-          <span>
-            <BsArrowRight />
-          </span>
-        </button>
-      </div>
-      <hr />
-      <div className="flex flex-row gap-4">
-        <div className="">
-          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
-        </div>
-        <div className="flex flex-col gap-2 text-[#62646A]">
-          <div className="text-[#404145]">marvinachi</div>
-          <div className="">United states</div>
-          <div className="flex flex-row gap-4 items-center">
-            <Ratings rating={5} /> <span>1 month ago</span>
-          </div>
-          <div className="">
-            Amazing work. Will def work again with him this was a big project
-            and he knocked it out of the park.
-          </div>
-          <div className="flex gap-3 items-center">
-            {" "}
-            <span>Helpful?</span>
-            <span className="flex items-center">
-              Yes
-              <BsHandThumbsUp />
-            </span>
-            <span className="flex items-center">
-              No
-              <BsHandThumbsDown />
-            </span>
-          </div>
-          {/* Response */}
-          <div className="mt-4 flex flex-row gap-4">
-            <div className="">
-              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
-                M
-              </span>
-            </div>
-            <div className="">
-              <div className="text-[#404145] font-[700]">Seller's Response</div>
-              <div className="text-[#404145] font-[400]">
-                Thank you so much 😊
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="flex flex-row gap-4">
-        <div className="">
-          <span className="bg-[#E4E5E7] p-2 rounded-full text-white">M</span>
-        </div>
-        <div className="flex flex-col gap-2 text-[#62646A]">
-          <div className="text-[#404145]">jcpconsulting</div>
-          <div className="">United states</div>
-          <div className="flex flex-row gap-4 items-center">
-            <Ratings rating={5} /> <span>1 month ago</span>
-          </div>
-          <div className="">
-            Amazing work. Will def work again with him this was a big project
-            and he knocked it out of the park.
-          </div>
-          <div className="flex gap-3 items-center">
-            {" "}
-            <span>Helpful?</span>
-            <span className="flex items-center">
-              Yes
-              <BsHandThumbsUp />
-            </span>
-            <span className="flex items-center">
-              No
-              <BsHandThumbsDown />
-            </span>
-          </div>
-          {/* Response */}
-          <div className="mt-4 flex flex-row gap-4">
-            <div className="">
-              <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
-                M
-              </span>
-            </div>
-            <div className="">
-              <div className="text-[#404145] font-[700]">Seller's Response</div>
-              <div className="text-[#404145] font-[400]">
-                Thank you so much 😊
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="text-[#EDB842] text-lg font-[700]">+ See More</div>
-    </div>
-  );
-};
 export default ServiceDetailsBody;

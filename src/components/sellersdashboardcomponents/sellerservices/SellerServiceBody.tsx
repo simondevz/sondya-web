@@ -225,6 +225,7 @@ const SellerServiceBody = () => {
             return (
               <div
                 key={i}
+                onClick={() => navigate("/seller/service/details/" + t?._id)}
                 className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
               >
                 <img

@@ -1,43 +1,43 @@
 import { LOGIN_RESET } from "../../constants/auth.constants";
 import {
-  USER_GET_CHATS_MESSAGES_REQUEST,
-  USER_GET_CHATS_MESSAGES_SUCCESS,
-  USER_GET_CHATS_MESSAGES_FAIL,
-  USER_GET_CHATS_MESSAGES_RESET,
-  USER_GET_CHATS_REQUEST,
-  USER_GET_CHATS_SUCCESS,
-  USER_GET_CHATS_FAIL,
-  USER_GET_CHATS_RESET,
-  USER_SEND_MESSAGES_FAIL,
-  USER_SEND_MESSAGES_REQUEST,
-  USER_SEND_MESSAGES_RESET,
-  USER_SEND_MESSAGES_SUCCESS,
-} from "../../constants/userDashboard/chats.constants";
+  USER_CREATE_REVIEW_REQUEST,
+  USER_CREATE_REVIEW_SUCCESS,
+  USER_CREATE_REVIEW_FAIL,
+  USER_CREATE_REVIEW_RESET,
+  USER_REVIEW_STAT_FAIL,
+  USER_REVIEW_STAT_REQUEST,
+  USER_REVIEW_STAT_RESET,
+  USER_REVIEW_STAT_SUCCESS,
+  USER_LIST_REVIEW_FAIL,
+  USER_LIST_REVIEW_REQUEST,
+  USER_LIST_REVIEW_RESET,
+  USER_LIST_REVIEW_SUCCESS,
+} from "../../constants/userDashboard/review.constants";
 import { initialState } from "../../initial.state";
-import { ActionType, ReduxResponseType } from "../../types/general.types";
+import { ReduxResponseType, ActionType } from "../../types/general.types";
 
-export const getUserChatsReducer = (
+export const userCreateReviewReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case USER_GET_CHATS_REQUEST:
+    case USER_CREATE_REVIEW_REQUEST:
       return { ...initialState, loading: true };
-    case USER_GET_CHATS_SUCCESS:
+    case USER_CREATE_REVIEW_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case USER_GET_CHATS_FAIL:
+    case USER_CREATE_REVIEW_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case USER_GET_CHATS_RESET:
+    case USER_CREATE_REVIEW_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -46,28 +46,28 @@ export const getUserChatsReducer = (
   }
 };
 
-export const userSendChatMessageReducer = (
+export const reviewStatReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case USER_SEND_MESSAGES_REQUEST:
+    case USER_REVIEW_STAT_REQUEST:
       return { ...initialState, loading: true };
-    case USER_SEND_MESSAGES_SUCCESS:
+    case USER_REVIEW_STAT_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case USER_SEND_MESSAGES_FAIL:
+    case USER_REVIEW_STAT_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case USER_SEND_MESSAGES_RESET:
+    case USER_REVIEW_STAT_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
@@ -76,28 +76,28 @@ export const userSendChatMessageReducer = (
   }
 };
 
-export const userGetChatMessagesReducer = (
+export const listReviewReducer = (
   state: ReduxResponseType = initialState,
   action: ActionType
 ) => {
   switch (action.type) {
-    case USER_GET_CHATS_MESSAGES_REQUEST:
+    case USER_LIST_REVIEW_REQUEST:
       return { ...initialState, loading: true };
-    case USER_GET_CHATS_MESSAGES_SUCCESS:
+    case USER_LIST_REVIEW_SUCCESS:
       return {
         ...initialState,
         loading: false,
         success: true,
         serverResponse: action.payload,
       };
-    case USER_GET_CHATS_MESSAGES_FAIL:
+    case USER_LIST_REVIEW_FAIL:
       return {
         ...initialState,
         loading: false,
         success: false,
         error: action.payload,
       };
-    case USER_GET_CHATS_MESSAGES_RESET:
+    case USER_LIST_REVIEW_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 
