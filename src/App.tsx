@@ -99,6 +99,7 @@ import {
   homeCheck,
   sellerDashboardCheck,
 } from "./utils/checkAuth.utils";
+import AdminInbox from "./screens/admin/AdminInbox";
 
 const App = createBrowserRouter([
   {
@@ -489,6 +490,12 @@ const App = createBrowserRouter([
   {
     path: "/admin/groupchat/details",
     element: <AdminCreateGroupChat />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/inbox",
+    element: <AdminInbox />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },

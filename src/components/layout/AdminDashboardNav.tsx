@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BiSolidBadgeCheck } from "react-icons/bi";
+import { BiSolidBadgeCheck, BiMap } from "react-icons/bi";
 import { BsBookmarkCheck, BsCart } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
@@ -150,6 +150,20 @@ const AdminDashboardNav = () => {
           <BiSolidBadgeCheck />
         </span>{" "}
         <span className="whitespace-nowrap">Testimonial</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "inbox" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          navigate("/admin/inbox");
+          setIndex("inbox");
+        }}
+      >
+        <span>
+          <BiMap />
+        </span>
+        <span className="whitespace-nowrap">Inbox </span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

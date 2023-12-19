@@ -15,6 +15,7 @@ import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetServiceType } from "../../../redux/types/services.types";
 import { Ratings } from "../../shareables/Ratings";
+import Reviews from "../../shareables/reviews";
 
 const SellerServiceDetailsBody = () => {
   // fetch data
@@ -194,6 +195,11 @@ const SellerServiceDetailsBody = () => {
         <div className="text-xl font-[600]">About Gig</div>
         <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
+      <Reviews
+        product_id={service?._id || ""}
+        product_type={"service"}
+        owner_id={service?.owner?.id}
+      />
       <AboutSellerServceDetails />
     </section>
   );

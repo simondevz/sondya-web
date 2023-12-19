@@ -170,6 +170,11 @@ export const API_ROUTES = {
     listReviews: BASE + "/user/review/list/", // GET: :category/:id
   },
 
+  // Sellers && Reviews
+  sellerReviews: {
+    respond: BASE + "/seller/review/response",
+  },
+
   // websockets
   websocket: {
     groupchat: WS_BASE + "/ws/group/chat",

@@ -141,6 +141,7 @@ import {
   reviewStatReducer,
   userCreateReviewReducer,
 } from "./reducers/userDashboard/reviews.reducers";
+import { sellerRespondReviewReducer } from "./reducers/seller/seller-reviewResponse.reducers";
 
 export type ReducersType = {
   //cart system
@@ -281,6 +282,9 @@ export type ReducersType = {
   userCreateReview: ReduxResponseType;
   reviewStat: ReduxResponseType;
   reviewsList: ReduxResponseType;
+
+  // seller && reviews
+  reviewResponse: ReduxResponseType;
 };
 
 const reducer = combineReducers<ReducersType>({
@@ -422,6 +426,9 @@ const reducer = combineReducers<ReducersType>({
   userCreateReview: userCreateReviewReducer,
   reviewStat: reviewStatReducer,
   reviewsList: listReviewReducer,
+
+  // seller && revieww
+  reviewResponse: sellerRespondReviewReducer,
 });
 
 const middleware = [thunk];

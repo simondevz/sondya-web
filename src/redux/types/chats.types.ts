@@ -7,7 +7,7 @@ export type chatMessageType = {
   sender_id?: ChatUserType;
   chat_id: string;
   message?: string;
-  image?: ImageType[];
+  file_attachments?: (ImageType & { format: string })[];
   service_id?: string;
   product_id?: string;
   createdAt?: string;
@@ -19,7 +19,7 @@ export type sendChatMessageType = {
   reciever_id: string;
   room_id: string;
   message?: string;
-  image?: chatImageType[];
+  file_attachments?: chatImageType[];
 };
 
 export type GetChatsType = {

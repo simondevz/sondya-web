@@ -17,6 +17,7 @@ export type userReviewType = {
   };
   product_id?: string;
   service_id?: string;
+  responses?: respondReviewType[];
   review: string;
   rating: number;
   createdAt: string;
@@ -25,4 +26,12 @@ export type userReviewType = {
 export type reviewStatType = {
   averageRating: number;
   totalReviews: number;
+};
+
+export type respondReviewType = {
+  _id?: string;
+  response: string;
+  review_id: string;
+  user_id?: string;
+  createdAt?: string;
 };
