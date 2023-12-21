@@ -31,6 +31,8 @@ import { DropdownProducts } from "../shareables/Dropdown";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { Ratings } from "../shareables/Ratings";
 import { Like } from "../shareables/like";
+import { WishlistItemType } from "../../redux/types/wishlist.types";
+import { addToWishlistAction } from "../../redux/actions/wishlist.actions";
 
 type QueryType = {
   // page: number;
@@ -135,6 +137,27 @@ const Products = () => {
           theme: "light",
         });
         dispatch(totalCartAction() as any);
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  // add to wishlist
+  const addToWishlist = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(addToWishlistAction(item) as any);
+
+        // send toast message
+        toast("Added to Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }, 1000);
     },
     [dispatch]
@@ -282,7 +305,12 @@ const Products = () => {
                       alt=""
                     />
                     <div className="absolute gap-1  inset-0 bg-black bg-opacity-50 flex flex-row justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-                      <Like />
+                      <div
+                        onClick={() => addToWishlist({ ...t, isProduct: true })}
+                        className="text-xl rounded-full"
+                      >
+                        <Like />
+                      </div>
                       <div
                         onClick={() => addToCart(t)}
                         className="text-xl text-[#000000] bg-white p-1 rounded-full"

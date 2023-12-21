@@ -157,6 +157,11 @@ import {
   userCreateReviewReducer,
 } from "./reducers/userDashboard/reviews.reducers";
 import { sellerRespondReviewReducer } from "./reducers/seller/seller-reviewResponse.reducers";
+import {
+  addToWishlistReducer,
+  removeFromWishlistReducer,
+  viewWishlistReducer,
+} from "./reducers/wishlist.reducers";
 
 export type ReducersType = {
   //cart system
@@ -166,6 +171,11 @@ export type ReducersType = {
   viewCart: ReduxResponseType;
   clearCart: ReduxResponseType;
   totalCart: ReduxResponseType;
+
+  //Wishlist system
+  addToWishlist: ReduxResponseType;
+  removeFromWishlist: ReduxResponseType;
+  viewWishlist: ReduxResponseType;
 
   //destination to local storage
   updateShippingDestination: ReduxResponseType;
@@ -325,6 +335,11 @@ const reducer = combineReducers<ReducersType>({
   viewCart: viewCartReducer,
   clearCart: clearCartReducer,
   totalCart: totalCartReducer,
+
+  //wishlist system
+  addToWishlist: addToWishlistReducer,
+  removeFromWishlist: removeFromWishlistReducer,
+  viewWishlist: viewWishlistReducer,
 
   //destination to local storage
   updateShippingDestination: updateShippingDestinationReducer,
