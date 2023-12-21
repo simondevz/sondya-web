@@ -1,6 +1,10 @@
+import axios from "axios";
 import { Dispatch } from "redux";
 import { SHIPPING_SESSION } from "../../extraStorage/storageStore";
 import {
+  TRACK_DISTANCE_TIME_FAIL,
+  TRACK_DISTANCE_TIME_REQUEST,
+  TRACK_DISTANCE_TIME_SUCCESS,
   UPDATE_SHIPPING_DESTINATION_FAIL,
   UPDATE_SHIPPING_DESTINATION_REQUEST,
   UPDATE_SHIPPING_DESTINATION_SUCCESS,
@@ -8,7 +12,11 @@ import {
   VIEW_SHIPPING_DESTINATION_REQUEST,
   VIEW_SHIPPING_DESTINATION_SUCCESS,
 } from "../constants/shippingdestination.constants";
-import { shippingDestinationType } from "../types/shippingdestination.types";
+import { API_ROUTES } from "../routes";
+import {
+  TrackDistanceTimeRequestType,
+  shippingDestinationType,
+} from "../types/shippingdestination.types";
 
 export const updateShippingDestinationAction =
   (destination: shippingDestinationType) =>
@@ -162,6 +170,41 @@ export const viewShippingDestinationAction =
     } catch (error: any) {
       dispatch({
         type: VIEW_SHIPPING_DESTINATION_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const trackDistanceTimeAction =
+  (data1: TrackDistanceTimeRequestType[]) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: TRACK_DISTANCE_TIME_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        API_ROUTES?.tracking?.getTracking,
+        data1,
+        config
+      );
+
+      dispatch({
+        type: TRACK_DISTANCE_TIME_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: TRACK_DISTANCE_TIME_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

@@ -7,6 +7,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 import { CartZip } from "../../images/cart";
 import { productImage1 } from "../../images/products";
 import {
+  UpdateCartTimeDistanceAction,
   clearCartAction,
   removeFromCartAction,
   totalCartAction,
@@ -14,13 +15,18 @@ import {
   viewCartAction,
 } from "../../redux/actions/cart.actions";
 import {
+  trackDistanceTimeAction,
   updateShippingDestinationAction,
   viewShippingDestinationAction,
 } from "../../redux/actions/shippingdestination.actions";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { ProductOrderType } from "../../redux/types/productOrders.types";
-import { shippingDestinationType } from "../../redux/types/shippingdestination.types";
+import {
+  TrackDistanceTimeRequestType,
+  TrackDistanceTimeType,
+  shippingDestinationType,
+} from "../../redux/types/shippingdestination.types";
 import { LastComponent } from "../home";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { EmptyCartBody } from "./EmptyCart";
@@ -85,7 +91,9 @@ const CartBody = () => {
     dispatch(viewCartAction() as any);
   }, [dispatch, removeFromCartRedux, clearCartRedux, updateCartRedux]);
 
-  // console.log(productChange);
+  // calculate tracking
+
+  // console.log(cartItems);
   return (
     <>
       {cartItems.length === 0 ? (
@@ -224,7 +232,7 @@ const CartBodySummary = ({ cartItems }: any) => {
   const [tab2, settab2] = useState<boolean>(true);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   //Calculate the total price
   const calculateTotal = (cartTotalItems: ProductOrderType[]): number => {
@@ -321,6 +329,14 @@ const CartBodySummary = ({ cartItems }: any) => {
   useEffect(() => {
     dispatch(viewShippingDestinationAction() as any);
   }, [dispatch]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (viewShippingDestination) {
+        setFormData(viewShippingDestination);
+      }
+    });
+  }, [dispatch, viewShippingDestination]);
   // view shipping destination ends
 
   // update destination starts
@@ -344,9 +360,88 @@ const CartBodySummary = ({ cartItems }: any) => {
       [e.target.name]: e.target.value,
     }));
   };
-  // console.log(updateShippingDestinationRedux);
-
   // update destination ends
+
+  //calculate tracking distance and time
+  const [trackingFormdata, setTrackingFormdata] = useState<
+    TrackDistanceTimeRequestType[]
+  >([]);
+
+  // add shipping destinations
+  useEffect(() => {
+    setTimeout(() => {
+      cartItems.forEach((t: any, i: number) => {
+        setTrackingFormdata((prev) => {
+          if (t?._id !== prev[i]?._id && formData?.country !== "") {
+            return [
+              ...prev,
+              {
+                _id: t._id,
+                origin: {
+                  country: t.country,
+                  state: t.state,
+                  city: t.city,
+                  address: t.address,
+                  zip_code: t.zip_code,
+                },
+                destination: {
+                  country: formData?.country ?? "",
+                  state: formData?.state ?? "",
+                  city: formData?.city ?? "",
+                  address: formData?.address ?? "",
+                  zip_code: formData?.zipcode ?? "",
+                },
+              },
+            ];
+          } else {
+            return [...prev];
+          }
+        });
+      });
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewShippingDestination, formData]);
+
+  // update tracking data
+  const trackDistanceTimeRedux = useSelector(
+    (state: ReducersType) => state?.trackDistanceTime
+  ) as ReduxResponseType<TrackDistanceTimeType[]>;
+
+  useEffect(() => {
+    if (trackDistanceTimeRedux.success) {
+      setTimeout(() => {
+        dispatch(
+          UpdateCartTimeDistanceAction(
+            trackDistanceTimeRedux.serverResponse.data
+          ) as any
+        );
+      }, 1000);
+    }
+  }, [dispatch, trackDistanceTimeRedux]);
+
+  const handleSubmitTrackingData = () => {
+    setTimeout(() => {
+      if (trackingFormdata.length > 0) {
+        dispatch(trackDistanceTimeAction(trackingFormdata) as any);
+        if (trackDistanceTimeRedux.success) {
+          setTimeout(() => {
+            dispatch(
+              UpdateCartTimeDistanceAction(
+                trackDistanceTimeRedux.serverResponse.data
+              ) as any
+            );
+          }, 1000);
+        }
+      }
+    }, 1000);
+  };
+
+  // console.log(trackDistanceTimeRedux.serverResponse.success);
+  // console.log(trackDistanceTimeRedux);
+
+  // console.log(cartItems);
+  // console.log(trackingFormdata);
+  // console.log(trackDistanceTimeRedux.serverResponse.data);
   return (
     <div className="bg-[#EDB84233] text-[#000000] flex flex-col gap-3 p-5 rounded-md">
       <div className="font-[700] text-xl">Summary</div>
@@ -573,7 +668,10 @@ const CartBodySummary = ({ cartItems }: any) => {
               </span>
             </div>
             <button
-              onClick={() => navigate("/checkout")}
+              onClick={() => {
+                handleSubmitTrackingData();
+                // navigate("/checkout")
+              }}
               type="submit"
               className="bg-[#0156FF] p-2 text-white rounded-md"
             >

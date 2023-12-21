@@ -313,6 +313,7 @@ const AdminEditProductBody = () => {
                     placeholder="country"
                     onChange={onChange}
                     value={formData.country}
+                    required
                   />
                 </div>
                 <div className="flex flex-col gap-2 w-1/2">
@@ -323,6 +324,7 @@ const AdminEditProductBody = () => {
                     id="state"
                     onChange={onChange}
                     value={formData.state}
+                    required
                   />
                 </div>
               </div>
@@ -336,10 +338,11 @@ const AdminEditProductBody = () => {
                     placeholder="city"
                     onChange={onChange}
                     value={formData.city}
+                    required
                   />
                 </div>
                 <div className="flex flex-col gap-2 w-1/2">
-                  <div className="font-[400]">ZipCode</div>
+                  <div className="font-[400]">Zip Code</div>
                   <input
                     className="border p-2 rounded-md "
                     name="zip_code"
@@ -359,6 +362,7 @@ const AdminEditProductBody = () => {
                   placeholder="51 est street, lagos"
                   onChange={onChange}
                   value={formData.address}
+                  required
                 />
               </div>
               {/* location for products ends */}

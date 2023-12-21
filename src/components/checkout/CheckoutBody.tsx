@@ -14,8 +14,15 @@ import {
   Visa,
 } from "../../images/checkout";
 import { productImage1 } from "../../images/products";
-import { viewCartAction } from "../../redux/actions/cart.actions";
-import { viewShippingDestinationAction } from "../../redux/actions/shippingdestination.actions";
+import {
+  UpdateCartTimeDistanceAction,
+  viewCartAction,
+} from "../../redux/actions/cart.actions";
+import {
+  trackDistanceTimeAction,
+  // trackDistanceTimeAction,
+  viewShippingDestinationAction,
+} from "../../redux/actions/shippingdestination.actions";
 import { userCreateProductOrderAction } from "../../redux/actions/userDashboard/productsOrder.actions";
 import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
 import { CREATE_PRODUCT_ORDER_RESET } from "../../redux/constants/userDashboard/productsOrder.constants";
@@ -23,7 +30,11 @@ import { ReducersType } from "../../redux/store";
 import { CheckoutType } from "../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { ProductOrderType } from "../../redux/types/productOrders.types";
-import { shippingDestinationType } from "../../redux/types/shippingdestination.types";
+import {
+  TrackDistanceTimeRequestType,
+  TrackDistanceTimeType,
+  shippingDestinationType,
+} from "../../redux/types/shippingdestination.types";
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 
@@ -47,16 +58,21 @@ const CheckoutBody = () => {
     (state: ReducersType) => state?.viewCart
   ) as ReduxResponseType<ProductOrderType[]>;
 
+  const trackDistanceTimeRedux = useSelector(
+    (state: ReducersType) => state?.trackDistanceTime
+  ) as ReduxResponseType<TrackDistanceTimeType[]>;
+
   const cartItems = useMemo(() => {
     return cartListRedux?.serverResponse?.data;
-  }, [cartListRedux]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartListRedux, trackDistanceTimeRedux]);
 
   // view cart
   useEffect(() => {
     dispatch(viewCartAction() as any);
   }, [dispatch]);
-  // calculate  total price
 
+  // calculate  total price
   const calculateTotal = (cartTotalItems: ProductOrderType[]): number => {
     // Ensure that cartTotalItems is an array before using reduce
     if (!Array.isArray(cartTotalItems)) {
@@ -126,8 +142,6 @@ const CheckoutBody = () => {
       });
     }, 1000);
   }, [cartItems]);
-
-  // console.log(cartItems);
 
   // get shipping address from local storage
   const viewShippingDestinationRedux = useSelector(
@@ -288,21 +302,112 @@ const CheckoutBody = () => {
         text: checkoutOrderRedux?.serverResponse?.message,
       });
     if (checkoutOrderRedux?.success) {
-      setTimeout(function () {
+      setTimeout(() => {
         // navigate("/auth/success");
         // navigate("/admin/category");
         // handleClose();
-      }, 4000);
+      }, 3000);
     }
     setTimeout(() => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       dispatch({ type: CREATE_PRODUCT_ORDER_RESET });
-    }, 2000);
+    }, 3000);
   }, [checkoutOrderRedux, dispatch]);
   // checkout order ends
 
-  console.log(checkoutOrder);
-  console.log(paymentMethod);
+  // update tracking data
+  //calculate tracking distance and time
+  const [trackingFormdata, setTrackingFormdata] = useState<
+    TrackDistanceTimeRequestType[]
+  >([]);
+
+  // add shipping destinations
+  useEffect(() => {
+    setTimeout(() => {
+      cartItems.forEach((t, i) => {
+        setTrackingFormdata((prev) => {
+          const existingItem = prev.find((prev1) => prev1._id === t._id);
+
+          if (!existingItem) {
+            return [
+              ...prev,
+              {
+                _id: t._id,
+                origin: {
+                  country: t.country,
+                  state: t.state,
+                  city: t.city,
+                  address: t.address,
+                  zip_code: t.zip_code,
+                },
+                destination: {
+                  country: shippingAddress?.country ?? "",
+                  state: shippingAddress?.state ?? "",
+                  city: shippingAddress?.city ?? "",
+                  address: shippingAddress?.address ?? "",
+                  zip_code: shippingAddress?.zipcode ?? "",
+                },
+              },
+            ];
+          } else {
+            return [
+              {
+                _id: t._id,
+                origin: {
+                  country: t.country,
+                  state: t.state,
+                  city: t.city,
+                  address: t.address,
+                  zip_code: t.zip_code,
+                },
+                destination: {
+                  country: shippingAddress?.country ?? "",
+                  state: shippingAddress?.state ?? "",
+                  city: shippingAddress?.city ?? "",
+                  address: shippingAddress?.address ?? "",
+                  zip_code: shippingAddress?.zipcode ?? "",
+                },
+              },
+            ];
+          }
+        });
+      });
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shippingAddress]);
+
+  // State variable to track whether the component has loaded
+  const [componentLoaded, setComponentLoaded] = useState(false);
+
+  useEffect(() => {
+    if (trackingFormdata.length > 0 && componentLoaded) {
+      setTimeout(() => {
+        if (trackingFormdata.length > 0) {
+          console.log(trackingFormdata);
+          dispatch(trackDistanceTimeAction(trackingFormdata) as any);
+        }
+      }, 1000);
+    } else if (trackingFormdata.length > 0 && !componentLoaded) {
+      setComponentLoaded(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackingFormdata]);
+
+  useEffect(() => {
+    if (trackDistanceTimeRedux.success) {
+      setTimeout(() => {
+        dispatch(
+          UpdateCartTimeDistanceAction(
+            trackDistanceTimeRedux.serverResponse.data
+          ) as any
+        );
+        dispatch(viewCartAction() as any);
+        console.log(cartItems);
+      }, 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, trackDistanceTimeRedux]);
+
   return (
     <section className="flex flex-col gap-3 items-center p-4">
       <div className="flex flex-row justify-between w-full md:w-2/3 lg:w-1/2 max-w-[38rem] font-[600]">
@@ -518,7 +623,7 @@ const CheckoutBody = () => {
         </div>
         <div className="flex flex-col w-full self-center gap-3">
           <div className="flex flex-row justify-start gap-4 w-full">
-            <span className="font-[500] text-lg">Delivery Option</span>
+            <span className="font-[500] text-lg">Estimated Delivery Dates</span>
             <button onClick={() => settab3(!tab3)}>
               {tab3 ? <PiCaretDownBold /> : <PiCaretUpBold />}
             </button>
@@ -527,21 +632,23 @@ const CheckoutBody = () => {
           {tab3 && (
             <div className="flex flex-col gap-3 transition-all duration-1000 ease-in-out pointer-events-auto">
               <div className="flex flex-row gap-2">
-                <div className="mt-1">
-                  <input type="radio" name="shipping" />{" "}
-                </div>
                 <div className="">
-                  <div className="">
-                    <span className="font-[700]">Free Shipping</span>
-                    <br />
-                    Estimated delivery: May 10 2023 - December 12 2024
-                  </div>
-                  <div className="">
-                    <span className="font-[700]">GIG</span>
-                    <br />
-                    Free Shipping Estimated delivery: May 10 2023 - December 12
-                    2024
-                  </div>
+                  {cartItems.map((item) => (
+                    <div key={item._id} className="flex flex-col gap-1 py-2">
+                      <div className="text-[#191C1F] font-[600] text-lg">
+                        Item: {item.name}
+                      </div>
+                      <div className="">
+                        <span className="font-[500]">Shipping: </span>
+                        {item?.track_distance_time?.deliveryDateShipping ??
+                          "N/A"}
+                      </div>
+                      <div className="">
+                        <span className="font-[500]">Flight: </span>
+                        {item?.track_distance_time?.deliveryDateFlight ?? "N/A"}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
               <button

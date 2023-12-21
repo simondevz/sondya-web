@@ -22,6 +22,7 @@ import {
 } from "../constants/cart.constants";
 import { ProductOrderType } from "../types/productOrders.types";
 import { AdminGetProductType } from "../types/products.types";
+import { TrackDistanceTimeType } from "../types/shippingdestination.types";
 
 export const addToCartAction =
   (product: AdminGetProductType) =>
@@ -268,6 +269,50 @@ export const totalCartAction =
     } catch (error: any) {
       dispatch({
         type: TOTAL_CART_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const UpdateCartTimeDistanceAction =
+  (trackDistanceTime: TrackDistanceTimeType[]) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: UPDATE_CART_REQUEST,
+      });
+
+      // get existing cart from local storage
+      const existingCart: ProductOrderType[] =
+        JSON.parse(localStorage.getItem(CART_SESSION) as any) || [];
+
+      // console.log(trackDistanceTime);
+      // console.log(existingCart);
+
+      trackDistanceTime.forEach((item) => {
+        // Check if item exists in cart
+        const existingItem = existingCart.find(
+          (cartItem) => cartItem._id === item._id
+        );
+
+        // Update existing item quantity or add new item
+        if (existingItem) {
+          existingItem.track_distance_time = item;
+        }
+      });
+      // Save updated cart to localStorage
+      localStorage.setItem(CART_SESSION, JSON.stringify(existingCart));
+
+      dispatch({
+        type: UPDATE_CART_SUCCESS,
+        payload: { message: "cart Updated successfully", data: existingCart },
+      });
+    } catch (error: any) {
+      dispatch({
+        type: UPDATE_CART_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
