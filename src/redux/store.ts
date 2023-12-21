@@ -100,6 +100,7 @@ import {
   sellerUpdateServiceReducer,
 } from "./reducers/seller/seller-services.reducers";
 import {
+  trackDistanceTimeReducer,
   updateShippingDestinationReducer,
   viewShippingDestinationReducer,
 } from "./reducers/shippingdestination.reducers";
@@ -180,6 +181,7 @@ export type ReducersType = {
   //destination to local storage
   updateShippingDestination: ReduxResponseType;
   viewShippingDestination: ReduxResponseType;
+  trackDistanceTime: ReduxResponseType;
 
   //home
   homeGetProductCategory: ReduxResponseType;
@@ -344,6 +346,7 @@ const reducer = combineReducers<ReducersType>({
   //destination to local storage
   updateShippingDestination: updateShippingDestinationReducer,
   viewShippingDestination: viewShippingDestinationReducer,
+  trackDistanceTime: trackDistanceTimeReducer,
 
   //home
   homeGetProductCategory: homeGetProductCategoryReducer,

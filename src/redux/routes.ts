@@ -205,4 +205,9 @@ export const API_ROUTES = {
   landingPages: {
     contactUs: BASE + "/contactus", // POST
   },
+
+  // tracking
+  tracking: {
+    getTracking: BASE + "/track", // GET
+  },
 };

@@ -367,6 +367,7 @@ const SellerPostProductBody = () => {
                         placeholder="country"
                         onChange={onChange}
                         value={formData.country}
+                        required
                       />
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
@@ -377,6 +378,7 @@ const SellerPostProductBody = () => {
                         id="state"
                         onChange={onChange}
                         value={formData.state}
+                        required
                       />
                     </div>
                   </div>
@@ -390,6 +392,7 @@ const SellerPostProductBody = () => {
                         placeholder="city"
                         onChange={onChange}
                         value={formData.city}
+                        required
                       />
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
@@ -413,6 +416,7 @@ const SellerPostProductBody = () => {
                       placeholder="51 est street, lagos"
                       onChange={onChange}
                       value={formData.address}
+                      required
                     />
                   </div>
                   {/* location for products ends */}

@@ -1,4 +1,5 @@
 import { Owner } from "./services.types";
+import { TrackDistanceTimeType } from "./shippingdestination.types";
 import { ImageType } from "./users.types";
 
 export type ProductOrderType = {
@@ -30,4 +31,14 @@ export type ProductOrderType = {
   discount: number;
 
   total_price?: number;
+
+  //location
+  country: string;
+  state: string;
+  city: string;
+  address: string;
+  zip_code: string;
+
+  //shipping address
+  track_distance_time?: TrackDistanceTimeType;
 };
