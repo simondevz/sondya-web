@@ -22,6 +22,7 @@ import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetProductType } from "../../../redux/types/products.types";
 import { Ratings } from "../../shareables/Ratings";
 import Reviews from "../../shareables/reviews";
+import SelectVariant from "../../shareables/selectVariants";
 
 const AdminProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
@@ -138,41 +139,7 @@ const AdminProductsDetailsBody = () => {
             </button>
           </div>
           <hr />
-          <div className="grid grid-cols-2 gap-2 text-[#475156]">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Color</label>
-              <div className="flex gap-2">
-                <input name="color" className="p-3" type="radio" />
-                <input name="color" className="p-3" type="radio" />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Size</label>
-              <div className="border-2 p-1 rounded-md overflow-x-hidden">
-                <select name="" id="">
-                  <option className="" value="">
-                    14-inch Liquid Retina XDR display
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Memory</label>
-              <div className="border-2 p-1 rounded-md">
-                <select name="" id="">
-                  <option value="">16GB unified memory</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Storage</label>
-              <div className="border-2 p-1 rounded-md">
-                <select name="" id="">
-                  <option value="">1TV SSD Storage</option>
-                </select>
-              </div>
-            </div>
-          </div>
+          <SelectVariant variants={products?.variants || {}} />
           <div className="flex flex-row gap-2 w-full justify-between">
             <div className="flex flex-row gap-2 border-2 p-2 rounded-md w-3/12 justify-center">
               <button onClick={() => setCount(--count)}>-</button>

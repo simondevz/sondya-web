@@ -1,4 +1,10 @@
-import { SetStateAction, useEffect, useMemo, useState } from "react";
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   AiOutlineArrowRight,
   AiOutlineRight,
@@ -6,7 +12,7 @@ import {
 } from "react-icons/ai";
 import { BsSend } from "react-icons/bs";
 import { FaFlag, FaHome } from "react-icons/fa";
-import { MdEmail, MdFavoriteBorder, MdMenu } from "react-icons/md";
+import { MdEmail, MdFavorite, MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Service2 } from "../../images";
 import { Facebook, Twitter, Whatsapp } from "../../images/dashboard";
@@ -27,6 +33,13 @@ import Reviews from "../shareables/reviews";
 import { useParams } from "react-router-dom";
 import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
 import { AdminGetProductType } from "../../redux/types/products.types";
+import { toast } from "react-toastify";
+import {
+  addToWishlistAction,
+  removeFromWishlistAction,
+} from "../../redux/actions/wishlist.actions";
+import { WishlistItemType } from "../../redux/types/wishlist.types";
+import inWishlist from "../../utils/checkWhishlist";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
@@ -57,6 +70,51 @@ const ServiceDetailsBody = () => {
   const reviewStatRedux = useSelector(
     (state: ReducersType) => state?.reviewStat
   ) as ReduxResponseType<reviewStatType>;
+
+  const [inWishlistBool, setInWishlist] = useState<boolean>(
+    inWishlist({ ...service, isProduct: true })
+  );
+
+  // add to wishlist
+  const addToWishlist = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(addToWishlistAction(item) as any);
+
+        // send toast message
+        toast("Added to Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  const deleteWishlistItem = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(removeFromWishlistAction(item) as any);
+
+        // send toast message
+        toast("Removed from Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   return (
     <section className="p-3 flex flex-col gap-4">
@@ -144,7 +202,23 @@ const ServiceDetailsBody = () => {
               <AiOutlineArrowRight />
             </button>
           </div>
-          <div className="p-4">
+          <div className="p-4 flex flex-col gap-2">
+            <span
+              onClick={() => {
+                if (inWishlist({ ...service, isProduct: false })) {
+                  deleteWishlistItem({ ...service, isProduct: false });
+                } else {
+                  addToWishlist({ ...service, isProduct: false });
+                }
+                setInWishlist(inWishlist({ ...service, isProduct: false }));
+              }}
+              className="flex flex-wrap gap-2 items-center"
+            >
+              <span className="text-3xl">
+                {inWishlistBool ? <MdFavoriteBorder /> : <MdFavorite />}
+              </span>
+              Add to Wishlist
+            </span>
             <button className="border broder-[#62646A] rounded-md text-[#62646A] p-2 w-full">
               Contact Seller
             </button>
