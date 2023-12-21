@@ -14,9 +14,11 @@ import { ReduxResponseType } from "../../../redux/types/general.types";
 import { WishlistItemType } from "../../../redux/types/wishlist.types";
 import { productImage1 } from "../../../images/products";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const WishlistBody = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [wishlist, setWishlist] = useState<WishlistItemType[]>([]);
 
   const wishlistRedux = useSelector(
@@ -35,7 +37,7 @@ const WishlistBody = () => {
     dispatch(viewWishlistAction() as any);
   }, [dispatch]);
 
-  const deleteWishlist = useCallback(
+  const deleteWishlistItem = useCallback(
     (item: WishlistItemType) => {
       setTimeout(() => {
         dispatch(removeFromWishlistAction(item) as any);
@@ -79,7 +81,7 @@ const WishlistBody = () => {
                           {item.name}
                         </div>
                         <div className="font-[600] text-[#1C1C1C]">
-                          $<FormatNumber price={item?.current_price} />
+                          $<FormatNumber price={item?.current_price || 0} />
                         </div>
                         <div className="flex flex-row gap-0 text-sm">
                           <Ratings rating={0} starColor={"text-[#FF9017]"} />
@@ -100,7 +102,16 @@ const WishlistBody = () => {
                         <div className="text-[#505050] font-[400]">
                           {item?.description}
                         </div>
-                        <button className="text-[#EDB842] font-[600]">
+                        <button
+                          onClick={() =>
+                            navigate(
+                              item.isProduct
+                                ? `/product/details/${item?._id}/${item?.name}`
+                                : `/service/details/${item?._id}/${item?.name}`
+                            )
+                          }
+                          className="text-[#EDB842] font-[600]"
+                        >
                           View Details
                         </button>
                       </div>
@@ -109,12 +120,11 @@ const WishlistBody = () => {
                       <div className="text-[#EDB842] text-2xl w-fit p-1 h-fit border-2 border-[#DEE2E7] rounded-full">
                         <MdDelete
                           onClick={() => {
-                            deleteWishlist(item);
-                            setTimeout(
-                              () =>
-                                setWishlist(wishlistRedux.serverResponse?.data),
-                              1200
-                            );
+                            deleteWishlistItem(item);
+                            setTimeout(() => {
+                              setWishlist(wishlistRedux.serverResponse?.data);
+                              window.location.reload();
+                            }, 1200);
                           }}
                         />
                       </div>

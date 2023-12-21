@@ -1,20 +1,38 @@
 import { useState, useEffect } from "react";
 import { MdOutlineAdd, MdClose } from "react-icons/md";
 import slugify from "slugify";
-import { AdminUpdateProduct } from "../../redux/types/products.types";
+import {
+  AdminCreateProduct,
+  AdminUpdateProduct,
+} from "../../redux/types/products.types";
 
 const InputVariants = ({
   setFormData,
+  existingVariants,
 }: {
-  setFormData: (value: React.SetStateAction<AdminUpdateProduct>) => void;
+  setFormData:
+    | React.Dispatch<React.SetStateAction<AdminUpdateProduct>>
+    | React.Dispatch<React.SetStateAction<AdminCreateProduct>>;
+  existingVariants?: any;
 }) => {
   const [numberOfVariations, setNumberOfVariations] = useState<number>(2);
   const [variations, setVariations] = useState<any>({});
 
+  // const existingVariantsKeys = useMemo(() => {
+  //   return Object.keys(existingVariants || {});
+  // }, [existingVariants]);
+
+  // useEffect(() => {
+  //   if (existingVariantsKeys.length > 0) {
+  //     setNumberOfVariations(existingVariantsKeys.length);
+  //     setVariations(existingVariants);
+  //   }
+  // }, [existingVariantsKeys.length, existingVariants]);
+
   useEffect(() => {
     console.log("variations ==> ", variations);
 
-    setFormData((prev) => {
+    setFormData((prev: any) => {
       console.log("formdata from variations ==>", prev);
       return {
         ...prev,

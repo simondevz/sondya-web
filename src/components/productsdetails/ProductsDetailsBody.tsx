@@ -4,10 +4,10 @@ import { BiRefresh } from "react-icons/bi";
 import { BsCart, BsFacebook, BsTwitter } from "react-icons/bs";
 import { FaFlag, FaHome, FaPinterestP } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
-import { MdFavoriteBorder, MdMenu } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { mayLike } from "../../data/maylikeData";
 import {
@@ -26,6 +26,13 @@ import { AdminGetProductType } from "../../redux/types/products.types";
 import { Ratings } from "../shareables/Ratings";
 import { reviewStatType } from "../../redux/types/review.types";
 import Reviews from "../shareables/reviews";
+import SelectVariant from "../shareables/selectVariants";
+import inWishlist from "../../utils/checkWhishlist";
+import {
+  addToWishlistAction,
+  removeFromWishlistAction,
+} from "../../redux/actions/wishlist.actions";
+import { WishlistItemType } from "../../redux/types/wishlist.types";
 
 const ProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
@@ -50,6 +57,14 @@ const ProductsDetailsBody = () => {
   const product = useMemo(() => {
     return homeGetProductDetailsRedux?.serverResponse?.data;
   }, [homeGetProductDetailsRedux]);
+
+  const [inWishlistBool, setInWishlist] = useState<boolean>(false);
+
+  const location = useLocation();
+  const pathname = location.pathname;
+  useEffect(() => {
+    setInWishlist(inWishlist({ ...product, isProduct: true }));
+  }, [pathname, product]);
 
   // add to cart
   const addToCart = useCallback(
@@ -91,6 +106,47 @@ const ProductsDetailsBody = () => {
         : ProductdetailImageMain
     );
   }, [product.image]);
+
+  // add to wishlist
+  const addToWishlist = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(addToWishlistAction(item) as any);
+
+        // send toast message
+        toast("Added to Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  const deleteWishlistItem = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(removeFromWishlistAction(item) as any);
+
+        // send toast message
+        toast("Removed from Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   // console.log(product);
 
@@ -189,41 +245,7 @@ const ProductsDetailsBody = () => {
             </button>
           </div>
           <hr />
-          <div className="grid grid-cols-2 gap-2 text-[#475156]">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Color</label>
-              <div className="flex gap-2">
-                <input name="color" className="p-3" type="radio" />
-                <input name="color" className="p-3" type="radio" />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Size</label>
-              <div className="border-2 p-1 rounded-md overflow-x-hidden">
-                <select name="" id="">
-                  <option className="" value="">
-                    14-inch Liquid Retina XDR display
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Memory</label>
-              <div className="border-2 p-1 rounded-md">
-                <select name="" id="">
-                  <option value="">16GB unified memory</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Storage</label>
-              <div className="border-2 p-1 rounded-md">
-                <select name="" id="">
-                  <option value="">1TV SSD Storage</option>
-                </select>
-              </div>
-            </div>
-          </div>
+          <SelectVariant variants={product?.variants || {}} />
           <div className="flex flex-row gap-2 w-full justify-between">
             <div className="flex flex-row gap-2 border-2 p-2 rounded-md w-3/12 justify-center">
               <button onClick={() => setCount(--count)}>-</button>
@@ -261,9 +283,19 @@ const ProductsDetailsBody = () => {
             Contact Seller
           </button>
           <div className="flex flex-row gap-3 py-2 text-[#475156] items-center">
-            <span className="flex flex-wrap gap-2 items-center">
+            <span
+              onClick={() => {
+                if (inWishlist({ ...product, isProduct: true })) {
+                  deleteWishlistItem({ ...product, isProduct: true });
+                } else {
+                  addToWishlist({ ...product, isProduct: true });
+                }
+                setInWishlist(inWishlist({ ...product, isProduct: true }));
+              }}
+              className="flex flex-wrap gap-2 items-center"
+            >
               <span className="text-3xl">
-                <MdFavoriteBorder />
+                {inWishlistBool ? <MdFavoriteBorder /> : <MdFavorite />}
               </span>
               Add to Wishlist
             </span>

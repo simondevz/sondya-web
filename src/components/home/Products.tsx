@@ -32,7 +32,11 @@ import { FormatNumber } from "../shareables/FormatNumber";
 import { Ratings } from "../shareables/Ratings";
 import { Like } from "../shareables/like";
 import { WishlistItemType } from "../../redux/types/wishlist.types";
-import { addToWishlistAction } from "../../redux/actions/wishlist.actions";
+import {
+  addToWishlistAction,
+  removeFromWishlistAction,
+} from "../../redux/actions/wishlist.actions";
+import inWishlist from "../../utils/checkWhishlist";
 
 type QueryType = {
   // page: number;
@@ -150,6 +154,26 @@ const Products = () => {
 
         // send toast message
         toast("Added to Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  const deleteWishlistItem = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(removeFromWishlistAction(item) as any);
+
+        // send toast message
+        toast("Removed from Wishlist!", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -288,6 +312,7 @@ const Products = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-self-stretch">
           {products.data &&
+            products.data?.slice &&
             products.data.slice(0, 8).map((t, i) => {
               return (
                 <div
@@ -306,10 +331,18 @@ const Products = () => {
                     />
                     <div className="absolute gap-1  inset-0 bg-black bg-opacity-50 flex flex-row justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                       <div
-                        onClick={() => addToWishlist({ ...t, isProduct: true })}
+                        onClick={() => {
+                          if (inWishlist({ ...t, isProduct: true })) {
+                            deleteWishlistItem({ ...t, isProduct: true });
+                          } else {
+                            addToWishlist({ ...t, isProduct: true });
+                          }
+                        }}
                         className="text-xl rounded-full"
                       >
-                        <Like />
+                        <Like
+                          defaultValue={inWishlist({ ...t, isProduct: true })}
+                        />
                       </div>
                       <div
                         onClick={() => addToCart(t)}

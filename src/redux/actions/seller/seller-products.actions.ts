@@ -78,7 +78,7 @@ export const sellerCreateProductAction =
       FD.append("discount_percentage", discount_percentage.toString());
       FD.append("vat_percentage", vat_percentage.toString());
       FD.append("total_variants", total_variants.toString());
-      variants && FD.append("variants", JSON.stringify(variants));
+      FD.append("variants", JSON.stringify(variants));
       FD.append("quantity", quantity.toString());
 
       // location

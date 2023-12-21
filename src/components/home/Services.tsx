@@ -19,9 +19,13 @@ import { AdminGetServiceType } from "../../redux/types/services.types";
 import { DropdownServices } from "../shareables/Dropdown";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { Like } from "../shareables/like";
-import { addToWishlistAction } from "../../redux/actions/wishlist.actions";
+import {
+  addToWishlistAction,
+  removeFromWishlistAction,
+} from "../../redux/actions/wishlist.actions";
 import { toast } from "react-toastify";
 import { WishlistItemType } from "../../redux/types/wishlist.types";
+import inWishlist from "../../utils/checkWhishlist";
 
 type QueryType = {
   // page: number;
@@ -132,6 +136,26 @@ const Services = () => {
     [dispatch]
   );
 
+  const deleteWishlistItem = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(removeFromWishlistAction(item) as any);
+
+        // send toast message
+        toast("Removed from Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
   return (
     <div className="p-3 flex flex-col gap-3">
       <div className="flex flex-row gap-2 md:gap-4 w-full p-2 items-baseline text-[lg]">
@@ -178,10 +202,18 @@ const Services = () => {
                   />
                   <div className="absolute gap-1  inset-0 bg-black bg-opacity-50 flex flex-row justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                     <div
-                      onClick={() => addToWishlist({ ...t, isProduct: false })}
+                      onClick={() => {
+                        if (inWishlist({ ...t, isProduct: false })) {
+                          deleteWishlistItem({ ...t, isProduct: false });
+                        } else {
+                          addToWishlist({ ...t, isProduct: false });
+                        }
+                      }}
                       className="text-xl rounded-full"
                     >
-                      <Like />
+                      <Like
+                        defaultValue={inWishlist({ ...t, isProduct: false })}
+                      />
                     </div>
                     <div className="text-xl text-[#000000] bg-white p-1 rounded-full">
                       <AiOutlineShoppingCart />
