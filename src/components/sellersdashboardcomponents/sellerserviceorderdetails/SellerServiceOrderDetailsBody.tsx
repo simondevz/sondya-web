@@ -5,9 +5,49 @@ import { PiNotebookLight } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
 import { ImgExample } from "../../../images";
 import { trackRod1 } from "../../../images/cart";
+import ReviewTerms from "../../shareables/reviewTerms";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getServiceOrderByIdAction } from "../../../redux/actions/userDashboard/serviceOrder.actions";
+import { GET_SERVICE_ORDER_BYID_RESET } from "../../../redux/constants/userDashboard/serviceOrder.constants";
+import { ReducersType } from "../../../redux/store";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
+import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
 // import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
 
 const SellerServiceOrderDetailsBody = () => {
+  const [currentOrder, setCurrentOrder] = useState<ServiceOrderType>();
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const serviceOrderById = useSelector(
+    (state: ReducersType) => state.getServiceOrderById
+  ) as ReduxResponseType<ServiceOrderType>;
+
+  // Get service order details
+  useEffect(() => {
+    if (!currentOrder?._id) {
+      dispatch(
+        getServiceOrderByIdAction({ order_id: params?.order_id || "" }) as any
+      );
+    }
+  }, [dispatch, params?.order_id, currentOrder?._id]);
+
+  // If get service by id is run setState
+  useEffect(() => {
+    if (serviceOrderById?.success) {
+      setCurrentOrder(serviceOrderById?.serverResponse?.data);
+      dispatch({ type: GET_SERVICE_ORDER_BYID_RESET });
+    }
+  }, [
+    dispatch,
+    serviceOrderById?.serverResponse?.data,
+    serviceOrderById?.success,
+    params?.order_id,
+  ]);
+
   return (
     <section className="flex flex-col gap-6 w-full p-3">
       <div className="flex flex-row gap-3">
@@ -155,33 +195,17 @@ const SellerServiceOrderDetailsBody = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-3 w-full md:w-1/2 shadow-md">
-        <div className="bg-[#EDB842] text-white p-3 rounded-t-md">
-          Revive Terms
-        </div>
-        <div className="font-[600] text-[#1D1F2C] px-4">Duration</div>
-        <div className="font-[600] text-[#667085] text-sm px-4">
-          You and Seller must click the “Accept Button” for this to be updated.
-          Note: Both parties will be notified on this
-        </div>
-        <div className="flex flex-row gap-3 px-4">
-          <button className="bg-[#FF0000B2] p-2 text-white rounded-md">
-            Reject
-          </button>
-          <button className="bg-[#EDB842] p-2 text-white rounded-md">
-            Accept
-          </button>
-        </div>
-        <div className="font-[600] text-[#1D1F2C] px-4">Payment</div>
-        <div className="font-[600] text-[#667085] text-sm px-4">
-          Complete payment Note: Both parties will be notified on this
-        </div>
-        <button className="bg-[#EDB842] p-2 text-white rounded-b-md">
-          Proceed to Checkout
-        </button>
-      </div>
-      {/* <ServiceDetailsChat /> */}
-      {/* needs owner_id from the product to work */}
+      <ReviewTerms
+        setCurrentOrder={setCurrentOrder}
+        currentOrder={currentOrder}
+      />
+      {/* the owner_id is the id of the person recieving the messages. */}
+      {/* In this particular case the person recieving the messages will be the buyer since it is the seller that will be sending the messages */}
+      {/* The componenet was originally made for the customer to contact the seller without leaving the details page hence the variable name "owner_id" */}
+      <ServiceDetailsChat
+        owner_id={currentOrder?.buyer?.id || ""}
+        service_id={currentOrder?.service_id || ""}
+      />
     </section>
   );
 };

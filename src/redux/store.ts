@@ -163,6 +163,11 @@ import {
   removeFromWishlistReducer,
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
+import {
+  createServiceOrderReducer,
+  getServiceOrderByIdReducer,
+  updateTermsReducer,
+} from "./reducers/userDashboard/serviceOrder.reducers";
 
 export type ReducersType = {
   //cart system
@@ -212,6 +217,11 @@ export type ReducersType = {
   userCreateProductOrder: ReduxResponseType;
   userGetProductOrders: ReduxResponseType;
   userGetProductOrderById: ReduxResponseType;
+
+  // user && SERVICE orders
+  updateTerms: ReduxResponseType;
+  createServiceOrder: ReduxResponseType;
+  getServiceOrderById: ReduxResponseType;
 
   //user && payments
   userGetPayments: ReduxResponseType;
@@ -377,6 +387,11 @@ const reducer = combineReducers<ReducersType>({
   userCreateProductOrder: userCreateProductOrderReducer,
   userGetProductOrders: userGetProductsOrdersReducer,
   userGetProductOrderById: userGetProductOrderByIDReducer,
+
+  // user && SERVICE orders
+  updateTerms: updateTermsReducer,
+  createServiceOrder: createServiceOrderReducer,
+  getServiceOrderById: getServiceOrderByIdReducer,
 
   //user && payments
   userGetPayments: userGetPaymentsReducer,

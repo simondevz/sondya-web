@@ -124,6 +124,13 @@ export const API_ROUTES = {
     getServiceCategories: BASE + "/user/services/categories", // GET
   },
 
+  // users && services order
+  userServiceOrders: {
+    createServiceOrder: BASE + "/user/order/services/create/", // POST :service_id
+    getServiceOrderById: BASE + "/user/order/services/", // GET: order_id
+    updateTerms: BASE + "/user/order/services/update/", // PUT: order_id
+  },
+
   // users && products
   userProducts: {
     getProducts: BASE + "/user/products", // GET
