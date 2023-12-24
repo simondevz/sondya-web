@@ -162,6 +162,8 @@ export const API_ROUTES = {
   userPayments: {
     getUserPayments: BASE + "/user/payments/", // GET :user_id
     getUserPaymentsById: BASE + "/user/payments/details/", // GET :id
+    initializePayment: BASE + "/user/payments/pay",
+    verifyPayment: BASE + "/user/payments/verify/", // GET :tx_ref
   },
 
   // Users && GroupChats

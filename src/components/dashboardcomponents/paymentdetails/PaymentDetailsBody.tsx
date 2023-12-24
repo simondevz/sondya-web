@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { userGetPaymentByIdAction } from "../../../redux/actions/userDashboard/payments.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { PaymentType } from "../../../redux/types/payments.types";
+import { OrderPaymentType } from "../../../redux/types/payments.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const PaymentDetailsBody = () => {
@@ -17,7 +17,7 @@ const PaymentDetailsBody = () => {
 
   const paymentDetailsRedux = useSelector(
     (state: ReducersType) => state?.userGetPaymentsById
-  ) as ReduxResponseType<PaymentType>;
+  ) as ReduxResponseType<OrderPaymentType>;
 
   const paymentData = useMemo(() => {
     return paymentDetailsRedux?.serverResponse?.data;

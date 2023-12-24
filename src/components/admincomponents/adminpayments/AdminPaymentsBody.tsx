@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { adminGetPaymentsAction } from "../../../redux/actions/admin/payments.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { PaymentType } from "../../../redux/types/payments.types";
+import { OrderPaymentType } from "../../../redux/types/payments.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 const AdminPaymentsBody = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const AdminPaymentsBody = () => {
 
   const getPaymentsRedux = useSelector(
     (state: ReducersType) => state?.adminGetPayments
-  ) as ReduxResponseType<PaymentType[]>;
+  ) as ReduxResponseType<OrderPaymentType[]>;
 
   const paymentsData = useMemo(() => {
     return getPaymentsRedux?.serverResponse?.data;
