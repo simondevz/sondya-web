@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { adminGetPaymentByIdAction } from "../../../redux/actions/admin/payments.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { PaymentType } from "../../../redux/types/payments.types";
+import { OrderPaymentType } from "../../../redux/types/payments.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 const AdminPaymentDetailsBody = () => {
   // fetch product detail
@@ -16,7 +16,7 @@ const AdminPaymentDetailsBody = () => {
 
   const paymentDetailsRedux = useSelector(
     (state: ReducersType) => state?.adminGetPaymentsById
-  ) as ReduxResponseType<PaymentType>;
+  ) as ReduxResponseType<OrderPaymentType>;
 
   const paymentData = useMemo(() => {
     return paymentDetailsRedux?.serverResponse?.data;

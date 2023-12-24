@@ -17,7 +17,7 @@ export type CheckoutType = {
   currency: string;
 
   order_status: string;
-  callback_url: string;
+  redirect_url?: string;
   createdAt?: Date;
 
   total_tax: number;

@@ -232,7 +232,7 @@ const CartBodySummary = ({ cartItems }: any) => {
   const [tab2, settab2] = useState<boolean>(true);
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   //Calculate the total price
   const calculateTotal = (cartTotalItems: ProductOrderType[]): number => {
@@ -430,6 +430,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                 trackDistanceTimeRedux.serverResponse.data
               ) as any
             );
+            navigate("/checkout");
           }, 1000);
         }
       }
@@ -670,7 +671,6 @@ const CartBodySummary = ({ cartItems }: any) => {
             <button
               onClick={() => {
                 handleSubmitTrackingData();
-                // navigate("/checkout")
               }}
               type="submit"
               className="bg-[#0156FF] p-2 text-white rounded-md"

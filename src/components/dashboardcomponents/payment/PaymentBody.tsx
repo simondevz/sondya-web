@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { userGetPaymentsAction } from "../../../redux/actions/userDashboard/payments.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { PaymentType } from "../../../redux/types/payments.types";
+import { OrderPaymentType } from "../../../redux/types/payments.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const PaymentBody = () => {
@@ -15,7 +15,7 @@ const PaymentBody = () => {
 
   const getPaymentsRedux = useSelector(
     (state: ReducersType) => state?.userGetPayments
-  ) as ReduxResponseType<PaymentType[]>;
+  ) as ReduxResponseType<OrderPaymentType[]>;
 
   const paymentsData = useMemo(() => {
     return getPaymentsRedux?.serverResponse?.data;
