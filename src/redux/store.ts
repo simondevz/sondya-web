@@ -92,6 +92,7 @@ import {
   sellerGetProductsReducer,
   sellerUpdateProductReducer,
 } from "./reducers/seller/seller-products.reducers";
+import { sellerRespondReviewReducer } from "./reducers/seller/seller-reviewResponse.reducers";
 import {
   sellerCreateServiceReducer,
   sellerDeleteServiceReducer,
@@ -118,8 +119,10 @@ import {
   userJoinGroupchatReducer,
 } from "./reducers/userDashboard/groupchat.reducers";
 import {
+  initializePaymentsReducer,
   userGetPaymentsByIdReducer,
   userGetPaymentsReducer,
+  verifyPaymentsReducer,
 } from "./reducers/userDashboard/payments.reducers";
 import {
   userCreateProductOrderReducer,
@@ -139,6 +142,11 @@ import {
   UpdateSocialsReducer,
 } from "./reducers/userDashboard/profile.reducers";
 import {
+  listReviewReducer,
+  reviewStatReducer,
+  userCreateReviewReducer,
+} from "./reducers/userDashboard/reviews.reducers";
+import {
   userGetServiceByIdReducer,
   userGetServiceCategoriesReducer,
   userGetServicesReducer,
@@ -151,18 +159,12 @@ import {
   getUserReducer,
   userGetUsersReducer,
 } from "./reducers/userDashboard/users.reducers";
-import { ReduxResponseType } from "./types/general.types";
-import {
-  listReviewReducer,
-  reviewStatReducer,
-  userCreateReviewReducer,
-} from "./reducers/userDashboard/reviews.reducers";
-import { sellerRespondReviewReducer } from "./reducers/seller/seller-reviewResponse.reducers";
 import {
   addToWishlistReducer,
   removeFromWishlistReducer,
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
+import { ReduxResponseType } from "./types/general.types";
 
 export type ReducersType = {
   //cart system
@@ -214,6 +216,8 @@ export type ReducersType = {
   userGetProductOrderById: ReduxResponseType;
 
   //user && payments
+  initializePayments: ReduxResponseType;
+  verifyPayments: ReduxResponseType;
   userGetPayments: ReduxResponseType;
   userGetPaymentsById: ReduxResponseType;
 
@@ -379,6 +383,8 @@ const reducer = combineReducers<ReducersType>({
   userGetProductOrderById: userGetProductOrderByIDReducer,
 
   //user && payments
+  initializePayments: initializePaymentsReducer,
+  verifyPayments: verifyPaymentsReducer,
   userGetPayments: userGetPaymentsReducer,
   userGetPaymentsById: userGetPaymentsByIdReducer,
 

@@ -1,10 +1,26 @@
 import { Owner } from "./services.types";
 
-export type PaymentType = {
+export type PaymentRequestType = {
+  buyer: Owner;
+  amount: number;
+  currency: string;
+  redirect_url: string;
+};
+
+export type PaymentResponseType = {
+  status: string;
+  message: string;
+  data: {
+    link: string;
+  };
+  tx_ref: string;
+};
+
+export type OrderPaymentType = {
   _id: string;
   buyer: Owner;
   batch_id: string;
-  checkout_items?: PaymentCheckoutItemType[];
+  checkout_items?: OrderPaymentCheckoutItemType[];
   payment_method: string;
   payment_status: string;
   payment_id: string;
@@ -18,7 +34,7 @@ export type PaymentType = {
   id?: string;
 };
 
-export type PaymentCheckoutItemType = {
+export type OrderPaymentCheckoutItemType = {
   _id: string;
   name: string;
   category: string;
