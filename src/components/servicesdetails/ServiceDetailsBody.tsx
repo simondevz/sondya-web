@@ -30,7 +30,7 @@ import { userGeChatMessagesAction } from "../../redux/actions/userDashboard/chat
 import Swal from "sweetalert2";
 import { reviewStatType } from "../../redux/types/review.types";
 import Reviews from "../shareables/reviews";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
 import { AdminGetProductType } from "../../redux/types/products.types";
 import { toast } from "react-toastify";
@@ -40,10 +40,14 @@ import {
 } from "../../redux/actions/wishlist.actions";
 import { WishlistItemType } from "../../redux/types/wishlist.types";
 import inWishlist from "../../utils/checkWhishlist";
+import { createServiceOrderAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
+import { ServiceOrderType } from "../../redux/types/serviceOrders.types";
+import { PulseLoader } from "react-spinners";
+import { UPDATE_TERMS_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -71,9 +75,44 @@ const ServiceDetailsBody = () => {
     (state: ReducersType) => state?.reviewStat
   ) as ReduxResponseType<reviewStatType>;
 
+  const serviceOrderRedux = useSelector(
+    (state: ReducersType) => state?.createServiceOrder
+  ) as ReduxResponseType<ServiceOrderType>;
+
   const [inWishlistBool, setInWishlist] = useState<boolean>(
     inWishlist({ ...service, isProduct: true })
   );
+
+  useEffect(() => {
+    if (serviceOrderRedux?.success) {
+      navigate(
+        "/user/order/service/details/" +
+          serviceOrderRedux?.serverResponse?.data?._id
+      );
+      dispatch({
+        type: UPDATE_TERMS_RESET,
+      });
+    } else if (serviceOrderRedux?.error) {
+      Swal.fire({
+        title: "Error!!",
+        text: serviceOrderRedux?.error,
+        icon: "error",
+        timer: 5000,
+        confirmButtonText: "Okay",
+      }).finally(() =>
+        dispatch({
+          type: UPDATE_TERMS_RESET,
+        })
+      );
+    }
+  }, [
+    service?.current_price,
+    dispatch,
+    serviceOrderRedux?.serverResponse?.data,
+    serviceOrderRedux?.success,
+    navigate,
+    serviceOrderRedux?.error,
+  ]);
 
   // add to wishlist
   const addToWishlist = useCallback(
@@ -197,9 +236,29 @@ const ServiceDetailsBody = () => {
             <div className="flex justify-start gap-4 font-[600]">
               <div className="">{service?.duration} Delivery</div>
             </div>
-            <button className="flex flex-row gap-3 text-white bg-[#EDB842] rounded-md p-2 items-center justify-center">
-              <span className="">Continue</span>
-              <AiOutlineArrowRight />
+            <button
+              onClick={() => {
+                dispatch(
+                  createServiceOrderAction({
+                    service_id: service?._id,
+                    seller: {
+                      id: service?.owner?.id || "",
+                      username: service?.owner?.username || "",
+                      email: service?.owner?.email || "",
+                    },
+                  }) as any
+                );
+              }}
+              className="flex flex-row gap-3 text-white bg-[#EDB842] rounded-md p-2 items-center justify-center"
+            >
+              {serviceOrderRedux?.loading ? (
+                <PulseLoader color="white" />
+              ) : (
+                <>
+                  <span className="">Continue</span>
+                  <AiOutlineArrowRight />
+                </>
+              )}
             </button>
           </div>
           <div className="p-4 flex flex-col gap-2">

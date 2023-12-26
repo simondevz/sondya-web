@@ -313,7 +313,7 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
-    path: "/user/order/service/details",
+    path: "/user/order/service/details/:order_id",
     element: <ServiceOrderDetails />,
     errorElement: <ErrorPage />,
     loader: dashboardCheck,
@@ -387,7 +387,7 @@ const App = createBrowserRouter([
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/service/order/details",
+    path: "/seller/service/order/details/:order_id",
     element: <SellerServiceOrderDetails />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
