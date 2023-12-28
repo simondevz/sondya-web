@@ -39,7 +39,7 @@ export const API_ROUTES = {
     updateCompanyDetails: BASE + "/profile/update/company/", // PUT :id
   },
 
-  //Admin
+  //seller
   sellerProducts: {
     create: BASE + "/seller/product/create", // POST
     update: BASE + "/seller/product/update/", // PUT :id
@@ -48,13 +48,41 @@ export const API_ROUTES = {
     getAll: BASE + "/seller/products/", // GET :userId
   },
 
-  //Admin
+  //seller
   sellerServices: {
     create: BASE + "/seller/service/create", // POST
     update: BASE + "/seller/service/update/", // PUT :id
     delete: BASE + "/seller/service/", // DELETE :id
     getByID: BASE + "/seller/service/", // GET :id
     getAll: BASE + "/seller/services/", // GET :userId
+  },
+
+  //seller
+  sellerAccounts: {
+    getBalance: BASE + "/account/balance/", // GET :id  - user's id
+    addBankAccount: BASE + "/account/bank/add/", // PUT :id - user's id
+    deleteBankAccount: BASE + "/account/bank/delete/", // DELETE :userId - user's id /:id - bank's id
+    addPayPalAccount: BASE + "/account/paypal/add/", // PUT :id - user's id
+    deletePayPalAccount: BASE + "/account/paypal/delete/", // DELETE :userId - user's id /:id - paypal's id
+    addPayoneerAccount: BASE + "/account/payoneer/add/", // PUT :id - user's id
+    deletePayoneerAccount: BASE + "/account/payoneer/delete/", // DELETE :userId - user's id /:id - payoneer's id
+  },
+
+  //seller
+  sellerWithdrawal: {
+    withdraw: BASE + "/seller/withdraw", // POST
+    getWithdrawals: BASE + "/seller/withdrawals/", // GET :id - user's id
+    getWithdrawalById: BASE + "/seller/withdrawal/details/", // GET :id - withdrawal's id
+    deleteWithdrawal: BASE + "/seller/withdrawal/delete/", // DELETE :id - withdrawal's id
+  },
+
+  //admin
+  adminWithdrawalPayment: {
+    adminMakePayment: BASE + "/admin/withdraw/", // POST :id - withdrawal's id
+    AdminGetPendingWithdrawals: BASE + "/admin/withdrawals/pending", // GET
+    AdminGetWithdrawals: BASE + "/admin/withdrawals", // GET
+    AdminGetWithdrawalById: BASE + "/admin/withdrawal/details/", // GET :id - withdrawal's id
+    AdminDeleteWithdrawal: BASE + "/admin/withdrawal/delete/", // DELETE :id - withdrawal's id
   },
 
   //Admin
