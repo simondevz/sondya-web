@@ -61,6 +61,7 @@ import {
   AdminUserManagement,
   AdminWithdrawalOrders,
 } from "./screens/admin";
+import AdminInbox from "./screens/admin/AdminInbox";
 import {
   BrowseHistory,
   Dashboard,
@@ -102,7 +103,6 @@ import {
   homeCheck,
   sellerDashboardCheck,
 } from "./utils/checkAuth.utils";
-import AdminInbox from "./screens/admin/AdminInbox";
 import SellerServiceOrder from "./screens/seller/SellerServiceOrder";
 import ServiceOrderHistory from "./screens/dashboard/ServiceOrderHistory";
 
@@ -625,7 +625,7 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/payments",
+    path: "/admin/withdrawals",
     element: <AdminAccountPayment />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,

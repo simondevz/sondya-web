@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BiSolidBadgeCheck, BiMap } from "react-icons/bi";
+import { BiMap, BiSolidBadgeCheck } from "react-icons/bi";
 import {
   BsBookmarkCheck,
   BsCart,
@@ -137,7 +137,25 @@ const AdminDashboardNav = () => {
           <BsBookmarkCheck />
         </span>
         <Link to={"/admin/payments"}>
-          <span className="whitespace-nowrap">Payments</span>
+          <span className="whitespace-nowrap">Deposits</span>
+        </Link>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-withdrawals" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("admin-withdrawals");
+          navigate("/admin/withdrawals", {
+            state: { index: "admin-withdrawals" },
+          });
+        }}
+      >
+        <span>
+          <BsBookmarkCheck />
+        </span>
+        <Link to={"/admin/withdrawals"}>
+          <span className="whitespace-nowrap">Payments & Withdrawals</span>
         </Link>
       </div>
       <div

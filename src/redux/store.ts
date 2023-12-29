@@ -4,6 +4,13 @@ import thunk from "redux-thunk";
 import { LOGIN_SESSION } from "../extraStorage/storageStore";
 import { initialState as initialStateReducer } from "./initial.state";
 import {
+  adminDeleteWithdrawalReducer,
+  adminGetPendingWithdrawalsReducer,
+  adminGetWithdrawalByIDReducer,
+  adminGetWithdrawalHistoryReducer,
+  adminWithdrawalPaymentReducer,
+} from "./reducers/admin/admin-withdrawal.reducers";
+import {
   adminCreateCategoryReducer,
   adminDeleteCategoryReducer,
   adminGetCategoriesReducer,
@@ -81,6 +88,15 @@ import {
   homeGetServicesReducer,
 } from "./reducers/home.reducers";
 import {
+  sellerAddBankAccountReducer,
+  sellerAddPayoneerReducer,
+  sellerAddPaypalReducer,
+  sellerDeleteBankAccountReducer,
+  sellerDeletePayoneerReducer,
+  sellerDeletePaypalReducer,
+  sellerGetBalanceReducer,
+} from "./reducers/seller/seller-accounts.reducers";
+import {
   sellerDeleteProductOrderByIDReducer,
   sellerGetProductOrderByIDReducer,
   sellerGetProductsOrdersReducer,
@@ -100,6 +116,12 @@ import {
   sellerGetServicesReducer,
   sellerUpdateServiceReducer,
 } from "./reducers/seller/seller-services.reducers";
+import {
+  sellerDeleteWithdrawalsReducer,
+  sellerGetWithdrawalByIdReducer,
+  sellerGetWithdrawalsReducer,
+  sellerWithdrawalReducer,
+} from "./reducers/seller/seller-withdrawal.reducers";
 import {
   trackDistanceTimeReducer,
   updateShippingDestinationReducer,
@@ -146,6 +168,11 @@ import {
   reviewStatReducer,
   userCreateReviewReducer,
 } from "./reducers/userDashboard/reviews.reducers";
+import {
+  createServiceOrderReducer,
+  getServiceOrderByIdReducer,
+  updateTermsReducer,
+} from "./reducers/userDashboard/serviceOrder.reducers";
 import {
   userGetServiceByIdReducer,
   userGetServiceCategoriesReducer,
@@ -259,6 +286,28 @@ export type ReducersType = {
   sellerDeleteProduct: ReduxResponseType;
   sellerGetByIdProduct: ReduxResponseType;
   sellerGetAllProducts: ReduxResponseType;
+
+  //seller and account
+  sellerGetBalance: ReduxResponseType;
+  sellerAddBankAccount: ReduxResponseType;
+  sellerAddPaypalAccount: ReduxResponseType;
+  sellerAddPayoneerAccount: ReduxResponseType;
+  sellerDeleteBankAccount: ReduxResponseType;
+  sellerDeletePaypalAccount: ReduxResponseType;
+  sellerDeletePayoneerAccount: ReduxResponseType;
+
+  //seller and withdrawal
+  sellerWithdraw: ReduxResponseType;
+  sellerGetWithdrawals: ReduxResponseType;
+  sellerGetWithdrawalById: ReduxResponseType;
+  sellerDeleteWithdrawal: ReduxResponseType;
+
+  // admin and withdrawal
+  adminWithdrawalPayment: ReduxResponseType;
+  adminGetPendingWithdrawal: ReduxResponseType;
+  adminGetWithdrawals: ReduxResponseType;
+  adminGetWithdrawalById: ReduxResponseType;
+  adminDeleteWithdrawal: ReduxResponseType;
 
   //admin && services
   sellerCreateService: ReduxResponseType;
@@ -443,6 +492,28 @@ const reducer = combineReducers<ReducersType>({
   sellerDeleteService: sellerDeleteServiceReducer,
   sellerGetByIdService: sellerGetServiceByIdReducer,
   sellerGetAllService: sellerGetServicesReducer,
+
+  //seller and accounts
+  sellerGetBalance: sellerGetBalanceReducer,
+  sellerAddBankAccount: sellerAddBankAccountReducer,
+  sellerAddPayoneerAccount: sellerAddPayoneerReducer,
+  sellerAddPaypalAccount: sellerAddPaypalReducer,
+  sellerDeleteBankAccount: sellerDeleteBankAccountReducer,
+  sellerDeletePayoneerAccount: sellerDeletePayoneerReducer,
+  sellerDeletePaypalAccount: sellerDeletePaypalReducer,
+
+  //seller && withdrawals
+  sellerGetWithdrawals: sellerGetWithdrawalsReducer,
+  sellerWithdraw: sellerWithdrawalReducer,
+  sellerGetWithdrawalById: sellerGetWithdrawalByIdReducer,
+  sellerDeleteWithdrawal: sellerDeleteWithdrawalsReducer,
+
+  //admin && withdrawals
+  adminWithdrawalPayment: adminWithdrawalPaymentReducer,
+  adminDeleteWithdrawal: adminDeleteWithdrawalReducer,
+  adminGetPendingWithdrawal: adminGetPendingWithdrawalsReducer,
+  adminGetWithdrawalById: adminGetWithdrawalByIDReducer,
+  adminGetWithdrawals: adminGetWithdrawalHistoryReducer,
 
   //admin && users
   adminCreateUser: adminCreateUserReducer,
