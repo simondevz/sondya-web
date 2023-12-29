@@ -1,77 +1,73 @@
 import { format } from "date-fns";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import {
-  sellerDeleteProductsOrderByIdAction,
-  sellerGetProductsOrdersAction,
-} from "../../../redux/actions/seller/seller-orders.actions";
 import { ReducersType } from "../../../redux/store";
-import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
+import { getSellerServiceOrdersAction } from "../../../redux/actions/seller/seller-service-orders.actions";
+import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
 
-const SellerOrderBody = () => {
+const SellerServiceOrderBody = () => {
   const [click, setClick] = useState<string>("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getProductOrdersRedux = useSelector(
-    (state: ReducersType) => state?.sellerGetProductsOrders
-  ) as ReduxResponseType<GetProductOrder[]>;
+  const getServiceOrdersRedux = useSelector(
+    (state: ReducersType) => state?.getSellerServiceOrders
+  ) as ReduxResponseType<ServiceOrderType[]>;
 
-  const productOrderData = useMemo(() => {
-    return getProductOrdersRedux?.serverResponse?.data;
-  }, [getProductOrdersRedux]);
+  const serviceOrderData = useMemo(() => {
+    return getServiceOrdersRedux?.serverResponse?.data;
+  }, [getServiceOrdersRedux]);
 
   useEffect(() => {
-    dispatch(sellerGetProductsOrdersAction("") as any);
+    dispatch(getSellerServiceOrdersAction() as any);
   }, [dispatch]);
 
-  console.log(productOrderData);
+  console.log(serviceOrderData);
 
   // delete user
-  const sellerDeleteOrderByIDRedux = useSelector(
-    (state: ReducersType) => state?.sellerDeleteProductsOrderById
-  ) as ReduxResponseType<GetProductOrder>;
+  //   const sellerDeleteOrderByIDRedux = useSelector(
+  //     (state: ReducersType) => state?.sellerDeleteProductsOrderById
+  //   ) as ReduxResponseType<GetProductOrder>;
 
-  const handleDelete = useCallback(
-    (id: string) => {
-      // console.log(id);
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          dispatch(sellerDeleteProductsOrderByIdAction({ id }) as any);
+  //   const handleDelete = useCallback(
+  //     (id: string) => {
+  //       // console.log(id);
+  //       Swal.fire({
+  //         title: "Are you sure?",
+  //         text: "You won't be able to revert this!",
+  //         icon: "warning",
+  //         showCancelButton: true,
+  //         confirmButtonColor: "#3085d6",
+  //         cancelButtonColor: "#d33",
+  //         confirmButtonText: "Yes, delete it!",
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           dispatch(sellerDeleteProductsOrderByIdAction({ id }) as any);
 
-          if (!sellerDeleteOrderByIDRedux.error) {
-            Swal.fire(
-              "Deleted!",
-              sellerDeleteOrderByIDRedux.serverResponse.message,
-              "success"
-            );
-            setTimeout(() => {
-              dispatch(sellerGetProductsOrdersAction("") as any);
-            }, 1000);
-          } else {
-            Swal.fire("Deleted!", sellerDeleteOrderByIDRedux?.error, "error");
-          }
-        }
-      });
-    },
-    [sellerDeleteOrderByIDRedux, dispatch]
-  );
+  //           if (!sellerDeleteOrderByIDRedux.error) {
+  //             Swal.fire(
+  //               "Deleted!",
+  //               sellerDeleteOrderByIDRedux.serverResponse.message,
+  //               "success"
+  //             );
+  //             setTimeout(() => {
+  //               dispatch(sellerGetProductsOrdersAction("") as any);
+  //             }, 1000);
+  //           } else {
+  //             Swal.fire("Deleted!", sellerDeleteOrderByIDRedux?.error, "error");
+  //           }
+  //         }
+  //       });
+  //     },
+  //     [sellerDeleteOrderByIDRedux, dispatch]
+  //   );
 
   return (
     <section className="flex flex-row gap-3 p-1">
@@ -82,7 +78,7 @@ const SellerOrderBody = () => {
             <thead className="bg-[#EDB84233]">
               <tr>
                 <th className="py-4 px-6 font-[400] text-[#292929]">
-                  Products
+                  Services
                 </th>
                 <th className="py-4 px-6 font-[400] text-[#292929]">
                   Order ID
@@ -96,14 +92,14 @@ const SellerOrderBody = () => {
                 <th className="py-4 px-6 font-[400] text-[#292929]">Action</th>
               </tr>
             </thead>
-            <tbody>
-              {productOrderData && productOrderData.length > 0 ? (
-                productOrderData.map((t, i) => {
+            <tbody className="text-[0.875rem]">
+              {serviceOrderData && serviceOrderData.length > 0 ? (
+                serviceOrderData.map((t, i) => {
                   const dateString = t.createdAt ? t.createdAt : "";
                   const dateObject = new Date(dateString);
                   const formattedDate = format(dateObject, "MMMM d, yyyy");
                   return (
-                    <tr key={i}>
+                    <tr className="text-[0.85rem]" key={i}>
                       <td className="py-4 px-6 text-[#292929] font-[700] whitespace-nowrap">
                         {t?.checkout_items?.name}
                       </td>
@@ -132,9 +128,13 @@ const SellerOrderBody = () => {
                       </td>
                       <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
                         $
-                        {t.checkout_items.total_price && (
+                        {(t?.checkout_items?.total_price ||
+                          t.checkout_items?.terms?.amount) && (
                           <FormatNumber
-                            price={t?.checkout_items?.total_price}
+                            price={
+                              t?.checkout_items?.total_price ||
+                              t?.checkout_items?.terms?.amount
+                            }
                           />
                         )}
                       </td>
@@ -168,10 +168,12 @@ const SellerOrderBody = () => {
                         </button>
 
                         {click === t.order_id && (
-                          <div className="absolute top-12 right-9 bg-white border z-10 p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
+                          <div className="absolute top-12 right-9 bg-white border z-[50] p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
                             <div
                               onClick={() =>
-                                navigate(`/seller/order/details/${t._id}`)
+                                navigate(
+                                  `/seller/service/order/details/${t.order_id}`
+                                )
                               }
                               className="flex gap-4 items-center"
                             >
@@ -181,7 +183,7 @@ const SellerOrderBody = () => {
                               </span>
                             </div>
                             <div
-                              onClick={() => handleDelete(t._id)}
+                              //   onClick={() => handleDelete(t._id)}
                               className="flex gap-4 items-center"
                             >
                               <AiOutlineEye />{" "}
@@ -218,4 +220,4 @@ const SellerOrderBody = () => {
   );
 };
 
-export default SellerOrderBody;
+export default SellerServiceOrderBody;

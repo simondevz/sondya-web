@@ -167,9 +167,12 @@ import {
 import {
   createServiceOrderReducer,
   getServiceOrderByIdReducer,
+  getServiceOrdersReducer,
+  updateServiceOrderReducer,
   updateTermsReducer,
 } from "./reducers/userDashboard/serviceOrder.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import { getSellerServiceOrdersReducer } from "./reducers/seller/seler-service-orders";
 
 export type ReducersType = {
   //cart system
@@ -224,6 +227,8 @@ export type ReducersType = {
   updateTerms: ReduxResponseType;
   createServiceOrder: ReduxResponseType;
   getServiceOrderById: ReduxResponseType;
+  getServiceOrders: ReduxResponseType;
+  updateServiceOrders: ReduxResponseType;
 
   //user && payments
   initializePayments: ReduxResponseType;
@@ -244,6 +249,9 @@ export type ReducersType = {
   sellerGetProductsOrders: ReduxResponseType;
   sellerGetProductsOrderByID: ReduxResponseType;
   sellerDeleteProductsOrderById: ReduxResponseType;
+
+  // seller && service orders
+  getSellerServiceOrders: ReduxResponseType;
 
   // seller && products
   sellerCreateProduct: ReduxResponseType;
@@ -396,6 +404,8 @@ const reducer = combineReducers<ReducersType>({
   updateTerms: updateTermsReducer,
   createServiceOrder: createServiceOrderReducer,
   getServiceOrderById: getServiceOrderByIdReducer,
+  getServiceOrders: getServiceOrdersReducer,
+  updateServiceOrders: updateServiceOrderReducer,
 
   //user && payments
   initializePayments: initializePaymentsReducer,
@@ -416,6 +426,9 @@ const reducer = combineReducers<ReducersType>({
   sellerGetProductsOrders: sellerGetProductsOrdersReducer,
   sellerGetProductsOrderByID: sellerGetProductOrderByIDReducer,
   sellerDeleteProductsOrderById: sellerDeleteProductOrderByIDReducer,
+
+  // seller and service orders
+  getSellerServiceOrders: getSellerServiceOrdersReducer,
 
   //seller && products
   sellerCreateProduct: sellerCreateProductReducer,

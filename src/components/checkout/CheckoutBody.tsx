@@ -484,7 +484,7 @@ const CheckoutBody = () => {
       const tx_ref = param.get("tx_ref");
       if (tx_ref !== null) {
         dispatch(verifyPaymentsAction({ tx_ref }) as any);
-        navigate("/checkout");
+        navigate("/checkout", { replace: true });
       }
     }, 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps

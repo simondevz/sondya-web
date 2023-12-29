@@ -3,7 +3,11 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import { MdPayment, MdStorefront } from "react-icons/md";
+import {
+  MdOutlineMiscellaneousServices,
+  MdPayment,
+  MdStorefront,
+} from "react-icons/md";
 import {
   PiClockClockwiseLight,
   PiSignOutFill,
@@ -84,6 +88,20 @@ export const UserDashboardNav = () => {
           <MdStorefront />
         </span>{" "}
         <span className="whitespace-nowrap">Order History</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "service-history" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("service-history");
+          navigate("/user/service/order/history");
+        }}
+      >
+        <span>
+          <MdOutlineMiscellaneousServices />
+        </span>{" "}
+        <span className="whitespace-nowrap">Service Order History</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
