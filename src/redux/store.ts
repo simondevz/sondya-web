@@ -171,6 +171,8 @@ import {
 import {
   createServiceOrderReducer,
   getServiceOrderByIdReducer,
+  getServiceOrdersReducer,
+  updateServiceOrderReducer,
   updateTermsReducer,
 } from "./reducers/userDashboard/serviceOrder.reducers";
 import {
@@ -191,13 +193,6 @@ import {
   removeFromWishlistReducer,
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
-import {
-  createServiceOrderReducer,
-  getServiceOrderByIdReducer,
-  getServiceOrdersReducer,
-  updateServiceOrderReducer,
-  updateTermsReducer,
-} from "./reducers/userDashboard/serviceOrder.reducers";
 import { ReduxResponseType } from "./types/general.types";
 import { getSellerServiceOrdersReducer } from "./reducers/seller/seler-service-orders";
 
