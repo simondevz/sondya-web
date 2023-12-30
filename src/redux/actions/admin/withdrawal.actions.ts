@@ -40,6 +40,10 @@ export const adminWithdrawalPaymentAction =
         },
       };
 
+      // console.log(withdrawal_status);
+      // console.log(withdrawal_amount);
+      // const data = "";
+
       const { data } = await axios.post(
         API_ROUTES?.adminWithdrawalPayment?.adminMakePayment + id,
         { withdrawal_status, withdrawal_amount },

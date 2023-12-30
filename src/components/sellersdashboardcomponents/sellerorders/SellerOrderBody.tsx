@@ -114,7 +114,7 @@ const SellerOrderBody = () => {
                         {formattedDate}
                       </td>
                       <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap">
-                        {t.buyer.username}, {t.buyer.email}
+                        {t?.buyer?.username}, {t?.buyer?.email}
                       </td>
                       <td className="py-4 px-6 text-[#292929] font-[400] whitespace-nowrap flex justify-around items-center gap-2">
                         <span
