@@ -3,7 +3,6 @@ import {
   ServiceOrderType,
   TermsType,
 } from "../../redux/types/serviceOrders.types";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTermsAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
 import { ReducersType } from "../../redux/store";
@@ -15,25 +14,28 @@ import { API_ROUTES } from "../../redux/routes";
 import Swal from "sweetalert2";
 import { UPDATE_TERMS_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
 import { toast } from "react-toastify";
+import { Modal } from "react-overlays";
 
 const ReviewTerms = ({
   currentOrder,
-  setCurrentOrder,
+  showModal,
+  handleClose,
 }: {
   currentOrder?: ServiceOrderType;
-  setCurrentOrder: React.Dispatch<
-    React.SetStateAction<ServiceOrderType | undefined>
-  >;
+  showModal: any;
+  handleClose: any;
 }) => {
+  // Backdrop JSX code
+  const renderBackdrop = (props: any) => (
+    <div className="backdrop" {...props} />
+  );
+
   const dispatch = useDispatch();
-  const params = useParams();
   const [rejecting, setRejecting] = useState<boolean>(false);
   const [terms, setTerms] = useState<TermsType>({
-    order_id: params?.order_id || "",
     amount: 0,
     duration: 1,
     durationUnit: "hours",
-    advance: 0,
     acceptedByBuyer: false,
     acceptedBySeller: false,
     rejectedByBuyer: false,
@@ -47,22 +49,19 @@ const ReviewTerms = ({
   const updateTermsRedux = useSelector(
     (state: ReducersType) => state.updateTerms
   ) as ReduxResponseType<TermsType>;
+  console.log("updated terms ==> ", updateTermsRedux);
 
   const isSeller = useMemo(() => {
     return loginRedux.serverResponse?.data?.id === currentOrder?.seller?.id;
   }, [loginRedux.serverResponse?.data?.id, currentOrder?.seller?.id]);
 
   useEffect(() => {
-    if (currentOrder?._id)
+    if (currentOrder?.order_id)
       setTerms({
-        ...currentOrder!.terms,
-        buyer_id: currentOrder?.buyer?.id,
-        seller_id: currentOrder?.seller?.id,
-        order_id: params?.order_id || "",
+        ...currentOrder!.checkout_items?.terms,
       });
   }, [
-    params?.order_id,
-    currentOrder?._id,
+    currentOrder?.order_id,
     currentOrder?.buyer?.id,
     currentOrder?.seller?.id,
     currentOrder,
@@ -89,27 +88,29 @@ const ReviewTerms = ({
   // Effect to join websocket
   useEffect(() => {
     if (
-      terms?.order_id !== "" &&
+      currentOrder?.order_id !== "" &&
       loginRedux?.serverResponse?.data?.id &&
-      terms?.seller_id &&
-      terms?.buyer_id
+      currentOrder?.buyer?.id &&
+      currentOrder?.seller?.id
     )
       sendMessage(
         JSON.stringify({
           meta: "join_review_terms_room",
-          room_id: terms?.order_id,
+          room_id: currentOrder?.order_id,
           sender_id: loginRedux?.serverResponse?.data?.id || "",
-          receiver_id: isSeller ? terms?.buyer_id : terms?.seller_id,
+          receiver_id: isSeller
+            ? currentOrder?.buyer?.id
+            : currentOrder?.seller?.id,
           message: "",
         })
       );
   }, [
     loginRedux?.serverResponse?.data?.id,
     sendMessage,
-    terms?.buyer_id,
-    terms?.seller_id,
     isSeller,
-    terms?.order_id,
+    currentOrder?.order_id,
+    currentOrder?.seller?.id,
+    currentOrder?.buyer?.id,
   ]);
 
   useEffect(() => {
@@ -118,12 +119,14 @@ const ReviewTerms = ({
       sendMessage(
         JSON.stringify({
           meta: "echo_terms",
-          receiver_id: isSeller ? terms?.buyer_id : terms?.seller_id,
+          receiver_id: isSeller
+            ? currentOrder?.buyer?.id
+            : currentOrder?.seller?.id,
           payload: {
             terms: updateTermsRedux?.serverResponse?.data,
             meta: "echo_terms",
             sender_id: loginRedux?.serverResponse?.data?.id,
-            chat_id: params?.order_id,
+            chat_id: currentOrder?.order_id,
           },
         })
       );
@@ -138,12 +141,12 @@ const ReviewTerms = ({
   }, [
     updateTermsRedux?.serverResponse?.data,
     updateTermsRedux.success,
-    terms?.buyer_id,
-    terms?.seller_id,
     sendMessage,
     isSeller,
     dispatch,
-    params?.order_id,
+    currentOrder?.order_id,
+    currentOrder?.buyer?.id,
+    currentOrder?.seller?.id,
     loginRedux?.serverResponse?.data?.id,
   ]);
 
@@ -154,126 +157,113 @@ const ReviewTerms = ({
         sendMessage(
           JSON.stringify({
             meta: "Test_echo_terms",
-            receiver_id: isSeller ? terms?.buyer_id : terms?.seller_id,
+            receiver_id: isSeller
+              ? currentOrder?.buyer?.id
+              : currentOrder?.seller?.id,
             payload: {
               message: "Echo tested, say Hi",
               meta: "Test_echo_terms",
               sender_id: loginRedux?.serverResponse?.data?.id,
-              chat_id: params?.order_id,
+              chat_id: currentOrder?.order_id,
             },
           })
         );
     }, 60 * 1000);
   }, [
-    terms?.buyer_id,
-    terms?.seller_id,
+    currentOrder?.buyer?.id,
+    currentOrder?.seller?.id,
+    currentOrder?.order_id,
     sendMessage,
     isSeller,
     dispatch,
-    params?.order_id,
     loginRedux?.serverResponse?.data?.id,
     connectionStatus,
   ]);
 
   return (
-    <div className="flex flex-col gap-3 w-full md:w-1/2 shadow-md py-4">
-      <div className="bg-[#EDB842] text-white p-3 rounded-t-md">
-        Revive Terms
-      </div>
-      <Terms
-        terms={terms}
-        setTerms={setTerms}
-        lastMessage={lastMessage}
-        isSeller={isSeller}
-        order_id={params?.order_id || currentOrder?._id || ""}
-      />
-      <div className="font-[600] text-[#667085] text-sm px-4">
-        {terms?.acceptedBySeller && terms?.acceptedByBuyer ? (
-          <span>
-            These are the terms aggreed upon by both parties.{" "}
-            {isSeller
-              ? "Please click below to deliver the work done."
-              : "Please click below to proceed to checkout"}
-          </span>
+    <Modal
+      className="modal top-[20%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"
+      show={showModal}
+      onHide={handleClose}
+      renderBackdrop={renderBackdrop}
+    >
+      <div className="flex flex-col gap-3 w-full shadow-md py-4">
+        <div className="bg-[#EDB842] text-white p-3 rounded-t-md">
+          Revive Terms
+        </div>
+        <Terms
+          terms={terms}
+          setTerms={setTerms}
+          lastMessage={lastMessage}
+          isSeller={isSeller}
+          order_id={currentOrder?.order_id || ""}
+        />
+        <div className="font-[600] text-[#667085] text-sm px-4">
+          {terms?.acceptedBySeller && terms?.acceptedByBuyer ? (
+            <span>
+              These are the terms aggreed upon by both parties.{" "}
+              {isSeller
+                ? "You can now deliver the work done."
+                : "You can now proceed to checkout"}
+            </span>
+          ) : (
+            <span>
+              Note: Click the "Reject Button" to edit terms and the "Accept
+              Button" to notify the other party of your newly set terms. You and{" "}
+              {isSeller ? "Buyer" : "Seller"} must click the “Accept Button” for
+              the agreement to hold. Both parties will be notified on this
+            </span>
+          )}
+        </div>
+        {terms?.acceptedByBuyer && terms?.acceptedBySeller ? (
+          <></>
         ) : (
-          <span>
-            Note: Click the "Reject Button" to edit terms and the "Accept
-            Button" to notify the other party of your newly set terms. You and{" "}
-            {isSeller ? "Buyer" : "Seller"} must click the “Accept Button” for
-            the agreement to hold. Both parties will be notified on this
-          </span>
+          <div className="flex flex-row gap-3 px-4">
+            <button
+              onClick={() => {
+                setRejecting(true);
+                dispatch(
+                  updateTermsAction(currentOrder?.order_id || "", {
+                    ...terms,
+                    [isSeller ? "rejectedBySeller" : "rejectedByBuyer"]: true,
+                    [!isSeller ? "rejectedBySeller" : "rejectedByBuyer"]: false,
+                    acceptedByBuyer: false,
+                    acceptedBySeller: false,
+                  }) as any
+                );
+              }}
+              className="bg-[#FF0000B2] p-2 text-white rounded-md"
+            >
+              {updateTermsRedux?.loading && rejecting ? (
+                <PulseLoader color="white" />
+              ) : (
+                "Reject"
+              )}
+            </button>
+            <button
+              onClick={() => {
+                setRejecting(false);
+                dispatch(
+                  updateTermsAction(currentOrder?.order_id || "", {
+                    ...terms,
+                    [isSeller ? "acceptedBySeller" : "acceptedByBuyer"]: true,
+                    rejectedByBuyer: false,
+                    rejectedBySeller: false,
+                  }) as any
+                );
+              }}
+              className="bg-[#EDB842] p-2 text-white rounded-md"
+            >
+              {updateTermsRedux?.loading && !rejecting ? (
+                <PulseLoader color="white" />
+              ) : (
+                "Accept"
+              )}
+            </button>
+          </div>
         )}
       </div>
-      {terms?.acceptedByBuyer && terms?.acceptedBySeller ? (
-        <></>
-      ) : (
-        <div className="flex flex-row gap-3 px-4">
-          <button
-            onClick={() => {
-              setRejecting(true);
-              dispatch(
-                updateTermsAction({
-                  ...terms,
-                  [isSeller ? "rejectedBySeller" : "rejectedByBuyer"]: true,
-                  [!isSeller ? "rejectedBySeller" : "rejectedByBuyer"]: false,
-                  acceptedByBuyer: false,
-                  acceptedBySeller: false,
-                }) as any
-              );
-            }}
-            className="bg-[#FF0000B2] p-2 text-white rounded-md"
-          >
-            {updateTermsRedux?.loading && rejecting ? (
-              <PulseLoader color="white" />
-            ) : (
-              "Reject"
-            )}
-          </button>
-          <button
-            onClick={() => {
-              setRejecting(false);
-              dispatch(
-                updateTermsAction({
-                  ...terms,
-                  [isSeller ? "acceptedBySeller" : "acceptedByBuyer"]: true,
-                  rejectedByBuyer: false,
-                  rejectedBySeller: false,
-                }) as any
-              );
-            }}
-            className="bg-[#EDB842] p-2 text-white rounded-md"
-          >
-            {updateTermsRedux?.loading && !rejecting ? (
-              <PulseLoader color="white" />
-            ) : (
-              "Accept"
-            )}
-          </button>
-        </div>
-      )}
-      {isSeller ? (
-        <>
-          {" "}
-          <div className="font-[600] text-[#1D1F2C] px-4">Delivery</div>
-          <div className="font-[600] text-[#667085] text-sm px-4">
-            Deliver Note: Both parties will be notified on this
-          </div>
-          <button className="bg-[#EDB842] p-2 text-white rounded-b-md">
-            Deliver Work
-          </button>
-        </>
-      ) : (
-        <>
-          <div className="font-[600] text-[#1D1F2C] px-4">Payment</div>
-          <div className="font-[600] text-[#667085] text-sm px-4">
-            Complete payment Note: Both parties will be notified on this
-          </div>
-          <button className="bg-[#EDB842] p-2 text-white rounded-b-md">
-            Proceed to Checkout
-          </button>
-        </>
-      )}
-    </div>
+    </Modal>
   );
 };
 
@@ -298,7 +288,7 @@ const Terms = ({
         if (data.meta === "Test_echo_terms") console.log(data.message);
         if (data.meta === "echo_terms") {
           const newTerms: TermsType = data?.terms;
-          setTerms({ ...newTerms, order_id });
+          setTerms(newTerms);
           const notificationText =
             newTerms?.acceptedByBuyer && newTerms?.acceptedBySeller
               ? `Both you and ${
@@ -338,40 +328,24 @@ const Terms = ({
   }, [lastMessage, setTerms, order_id, isSeller]);
 
   const disableInputs = useMemo(() => {
-    return !terms.rejectedByBuyer && !terms.rejectedBySeller ? true : false;
-  }, [terms.rejectedByBuyer, terms.rejectedBySeller]);
+    return !terms?.rejectedByBuyer && !terms?.rejectedBySeller ? true : false;
+  }, [terms?.rejectedByBuyer, terms?.rejectedBySeller]);
 
   return (
-    <div className="flex flex-col gap-2 p-4 w-full">
+    <div className="flex flex-wrap gap-2 p-4 w-full">
       <div>{disableInputs ? "Currently Set Terms" : "Edit Terms"}</div>
       <div className="flex w-full gap-2">
         <div className="flex base-1/2 flex-col">
           <label htmlFor="amount">Amount:</label>
           <input
-            className="border-2 border-[#667085]"
+            className="border p-2 rounded-md bg-[#F9F9FC]"
             id="amount"
             disabled={disableInputs}
             type={"number"}
             name="amount"
-            value={terms.amount}
+            value={terms?.amount || 0}
             onChange={(event) =>
               setTerms({ ...terms, amount: Number(event.target.value) })
-            }
-          />
-        </div>
-        <div className="flex base-1/2 flex-col">
-          <label htmlFor="advance">Advance:</label>
-          <input
-            className="border-2 border-[#667085]"
-            disabled={disableInputs}
-            id="advance"
-            name="advance"
-            type={"number"}
-            max={100}
-            min={0}
-            value={terms.advance}
-            onChange={(event) =>
-              setTerms({ ...terms, advance: Number(event.target.value) })
             }
           />
         </div>
@@ -380,13 +354,13 @@ const Terms = ({
         <label htmlFor="duration">Duration:</label>
         <div className="flex">
           <input
-            className="border-2 border-[#667085]"
+            className="border p-2 rounded-md bg-[#F9F9FC]"
             disabled={disableInputs}
             id="duration"
             name="duration"
             type={"number"}
             min={1}
-            value={terms.duration}
+            value={terms?.duration || 1}
             onChange={(event) =>
               setTerms({ ...terms, duration: Number(event.target.value) })
             }

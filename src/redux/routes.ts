@@ -160,7 +160,14 @@ export const API_ROUTES = {
   userServiceOrders: {
     createServiceOrder: BASE + "/user/order/services/create/", // POST :service_id
     getServiceOrderById: BASE + "/user/order/services/", // GET: order_id
-    updateTerms: BASE + "/user/order/services/update/", // PUT: order_id
+    getUserServiceOrders: BASE + "/user/order/services/list/", // GET: buyer_id
+    updateTerms: BASE + "/user/order/services/updateterms/", // PUT: order_id
+    updateServiceOrder: BASE + "/user/order/services/update/", // PUT: order_id
+  },
+
+  // seller && services order
+  sellerServiceOrders: {
+    getSellerServiceOrders: BASE + "/seller/order/services/list/", // GET: seller_id
   },
 
   // users && products

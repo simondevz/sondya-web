@@ -4,10 +4,18 @@ import {
   CREATE_SERVICE_ORDER_REQUEST,
   CREATE_SERVICE_ORDER_RESET,
   CREATE_SERVICE_ORDER_SUCCESS,
+  GET_SERVICE_ORDERS_FAIL,
+  GET_SERVICE_ORDERS_REQUEST,
+  GET_SERVICE_ORDERS_RESET,
+  GET_SERVICE_ORDERS_SUCCESS,
   GET_SERVICE_ORDER_BYID_FAIL,
   GET_SERVICE_ORDER_BYID_REQUEST,
   GET_SERVICE_ORDER_BYID_RESET,
   GET_SERVICE_ORDER_BYID_SUCCESS,
+  UPDATE_SERVICE_ORDERS_FAIL,
+  UPDATE_SERVICE_ORDERS_REQUEST,
+  UPDATE_SERVICE_ORDERS_RESET,
+  UPDATE_SERVICE_ORDERS_SUCCESS,
   UPDATE_TERMS_FAIL,
   UPDATE_TERMS_REQUEST,
   UPDATE_TERMS_RESET,
@@ -38,6 +46,66 @@ export const getServiceOrderByIdReducer = (
         error: action.payload,
       };
     case GET_SERVICE_ORDER_BYID_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const getServiceOrdersReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case GET_SERVICE_ORDERS_REQUEST:
+      return { ...initialState, loading: true };
+    case GET_SERVICE_ORDERS_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case GET_SERVICE_ORDERS_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case GET_SERVICE_ORDERS_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const updateServiceOrderReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case UPDATE_SERVICE_ORDERS_REQUEST:
+      return { ...initialState, loading: true };
+    case UPDATE_SERVICE_ORDERS_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case UPDATE_SERVICE_ORDERS_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case UPDATE_SERVICE_ORDERS_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

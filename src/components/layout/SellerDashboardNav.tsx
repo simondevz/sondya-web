@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BiMap, BiMoneyWithdraw } from "react-icons/bi";
 import { BsCart } from "react-icons/bs";
+import { GoChecklist } from "react-icons/go";
 import {
   MdOutlineMiscellaneousServices,
   MdPayment,
@@ -24,6 +25,7 @@ const SellerDashboardNav = () => {
     }
     navigate("/");
   };
+
   return (
     <div className="text-[#5F6C72] hidden md:flex flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[17rem]">
       <div
@@ -56,17 +58,31 @@ const SellerDashboardNav = () => {
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-orders" && "bg-[#EDB842] text-white"
+          index === "seller-orders-products" && "bg-[#EDB842] text-white"
         }`}
         onClick={() => {
-          navigate("/seller/order");
-          setIndex("seller-orders");
+          navigate("/seller/orders/products");
+          setIndex("seller-orders-products");
         }}
       >
         <span>
           <MdPayment />
-        </span>{" "}
-        <span className="whitespace-nowrap">Orders</span>
+        </span>
+        <span className="whitespace-nowrap">Product Orders</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "seller-orders-services" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          navigate("/seller/orders/services");
+          setIndex("seller-orders-services");
+        }}
+      >
+        <span>
+          <GoChecklist />
+        </span>
+        <span className="whitespace-nowrap">Service Orders</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
@@ -79,7 +95,7 @@ const SellerDashboardNav = () => {
       >
         <span>
           <MdStorefront />
-        </span>{" "}
+        </span>
         <span className="whitespace-nowrap">Products</span>
       </div>
       <div
@@ -93,7 +109,7 @@ const SellerDashboardNav = () => {
       >
         <span>
           <MdOutlineMiscellaneousServices />
-        </span>{" "}
+        </span>
         <span className="whitespace-nowrap">Services</span>
       </div>
       <div
@@ -123,7 +139,7 @@ const SellerDashboardNav = () => {
       >
         <span>
           <BiMoneyWithdraw />
-        </span>{" "}
+        </span>
         <span className="whitespace-nowrap">Withdrawal</span>
       </div>
       <div
@@ -137,7 +153,7 @@ const SellerDashboardNav = () => {
       >
         <span>
           <PiClockClockwiseLight />
-        </span>{" "}
+        </span>
         <span className="whitespace-nowrap">Settings</span>
       </div>
       <div
@@ -151,7 +167,7 @@ const SellerDashboardNav = () => {
       >
         <span>
           <PiClockClockwiseLight />
-        </span>{" "}
+        </span>
         <span className="whitespace-nowrap">Log out</span>
       </div>
     </div>

@@ -56,4 +56,29 @@ const FormatDate = ({
   return <span className={className}>{returnString}</span>;
 };
 
+export const TimeLeft = ({
+  utcDateString,
+  className,
+}: {
+  utcDateString: string;
+  className?: string;
+}) => {
+  if (utcDateString === "")
+    return <span className={className}>No set time</span>;
+  const dateNow = new Date();
+  const date = new Date(utcDateString);
+  const timeDiff = (date.getTime() - dateNow.getUTCMilliseconds()) / 1000;
+
+  const secondsLeft = Math.round(timeDiff) % 60; // seconds left in a minute
+  const minutesLeft = Math.round(timeDiff / 60) % 60; // minute left in an hour
+  const hoursLeft = Math.round(timeDiff / (60 * 60)) % 24; // hours left in a day
+  const daysLeft = Math.round(timeDiff / (60 * 60 * 24)); // days left
+
+  let returnString: string = `${
+    daysLeft < 0 ? daysLeft + "d" : ""
+  } ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s`;
+
+  return <span className={className}>{returnString}</span>;
+};
+
 export default FormatDate;

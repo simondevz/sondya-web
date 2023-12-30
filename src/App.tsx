@@ -104,6 +104,8 @@ import {
   homeCheck,
   sellerDashboardCheck,
 } from "./utils/checkAuth.utils";
+import SellerServiceOrder from "./screens/seller/SellerServiceOrder";
+import ServiceOrderHistory from "./screens/dashboard/ServiceOrderHistory";
 
 const App = createBrowserRouter([
   {
@@ -221,7 +223,7 @@ const App = createBrowserRouter([
     loader: homeCheck,
   },
   {
-    path: "/service/checkout",
+    path: "/service/checkout/:order_id",
     element: <ServiceCheckout />,
     errorElement: <ErrorPage />,
     loader: homeCheck,
@@ -308,6 +310,12 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
+    path: "/user/service/order/history",
+    element: <ServiceOrderHistory />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
     path: "/user/order/details/:id",
     element: <OrderDetails />,
     errorElement: <ErrorPage />,
@@ -376,8 +384,14 @@ const App = createBrowserRouter([
     loader: sellerDashboardCheck,
   },
   {
-    path: "/seller/order",
+    path: "/seller/orders/products",
     element: <SellerOrder />,
+    errorElement: <ErrorPage />,
+    loader: sellerDashboardCheck,
+  },
+  {
+    path: "/seller/orders/services",
+    element: <SellerServiceOrder />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
   },
