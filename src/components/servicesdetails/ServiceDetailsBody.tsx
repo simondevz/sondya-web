@@ -43,7 +43,9 @@ import inWishlist from "../../utils/checkWhishlist";
 import { createServiceOrderAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
 import { ServiceOrderType } from "../../redux/types/serviceOrders.types";
 import { PulseLoader } from "react-spinners";
-import { UPDATE_TERMS_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
+import { CREATE_SERVICE_ORDER_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
+import { adminUGetUserType } from "../../redux/types/users.types";
+import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
@@ -83,15 +85,25 @@ const ServiceDetailsBody = () => {
     inWishlist({ ...service, isProduct: true })
   );
 
+  const getProfileDetailsRedux = useSelector(
+    (state: ReducersType) => state?.getProfile
+  ) as ReduxResponseType<adminUGetUserType>;
+
+  const userData = useMemo(() => {
+    return getProfileDetailsRedux?.serverResponse?.data;
+  }, [getProfileDetailsRedux]);
+
+  useEffect(() => {
+    dispatch(GetUserProfileAction() as any);
+  }, [dispatch]);
+
   useEffect(() => {
     if (serviceOrderRedux?.success) {
-      navigate(
-        "/user/order/service/details/" +
-          serviceOrderRedux?.serverResponse?.data?._id
-      );
+      const order_id = serviceOrderRedux?.serverResponse?.data?.order_id;
       dispatch({
-        type: UPDATE_TERMS_RESET,
+        type: CREATE_SERVICE_ORDER_RESET,
       });
+      navigate("/user/order/service/details/" + order_id);
     } else if (serviceOrderRedux?.error) {
       Swal.fire({
         title: "Error!!",
@@ -101,7 +113,7 @@ const ServiceDetailsBody = () => {
         confirmButtonText: "Okay",
       }).finally(() =>
         dispatch({
-          type: UPDATE_TERMS_RESET,
+          type: CREATE_SERVICE_ORDER_RESET,
         })
       );
     }
@@ -239,14 +251,57 @@ const ServiceDetailsBody = () => {
             <button
               onClick={() => {
                 dispatch(
-                  createServiceOrderAction({
-                    service_id: service?._id,
-                    seller: {
-                      id: service?.owner?.id || "",
-                      username: service?.owner?.username || "",
-                      email: service?.owner?.email || "",
+                  createServiceOrderAction(
+                    {
+                      order_status: "IN PROGRESS",
+                      seller: {
+                        id: service?.owner?.id || "",
+                        username: service?.owner?.username || "",
+                        email: service?.owner?.email || "",
+                        phone: service?.owner?.phone_number || "",
+                      },
+                      checkout_items: {
+                        _id: service?._id,
+                        name: service?.name,
+                        category: "service",
+                        sub_category: service?.category,
+                        brief_description: service?.brief_description,
+                        description: service?.description,
+                        owner: {
+                          id: service?.owner?.id || "",
+                          username: service?.owner?.username || "",
+                          email: service?.owner?.email || "",
+                          phone_number: service?.owner?.phone_number || "",
+                        },
+                        currency: service?.currency,
+                        old_price: service?.old_price,
+                        current_price: service?.current_price,
+                        percentage_price_off:
+                          service?.percentage_price_off || 0,
+                        service_status: service?.service_status,
+                        image: service?.image,
+                        location_description: service?.location_description,
+                        phone_number: service?.phone_number,
+                        phone_number_backup: service?.phone_number_backup,
+                        email: service?.email,
+                        website_link: service?.website_link,
+                        country: service?.country,
+                        state: service?.state,
+                        city: service?.city,
+                        map_location_link: service?.map_location_link,
+                        terms: {
+                          amount: service?.current_price,
+                          duration: 24,
+                          durationUnit: "hours",
+                          acceptedByBuyer: false,
+                          acceptedBySeller: false,
+                          rejectedByBuyer: true,
+                          rejectedBySeller: true,
+                        },
+                      },
                     },
-                  }) as any
+                    userData?.phone_number
+                  ) as any
                 );
               }}
               className="flex flex-row gap-3 text-white bg-[#EDB842] rounded-md p-2 items-center justify-center"
@@ -441,7 +496,7 @@ export const ServiceDetailsChat = ({
   }, [dispatch, owner_id, loginRedux?.serverResponse?.data?.id, service_id]);
 
   return (
-    <div className="p-3 max-w-[50rem] flex flex-col gap-4 border-2 rounded-md shadow-md">
+    <div className="p-3 max-w-[50rem] max-h-[25rem] flex flex-col gap-4 border-2 rounded-md shadow-md overflow-y-scroll">
       <div className="p-2 shadow-md">Away. Avg. response time:1 Hour</div>
       <div className="p-3 border max-w-[30rem] mx-auto rounded-lg">
         Ask Extreme Design a question or share your project details
