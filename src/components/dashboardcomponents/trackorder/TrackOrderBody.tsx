@@ -1,7 +1,9 @@
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import { bgWhoAreWe } from "../../../images/whoarewe";
 
 const TrackOrderBody = () => {
+  const navigate = useNavigate();
   return (
     <section className="p-12">
       <div
@@ -30,18 +32,11 @@ const TrackOrderBody = () => {
               &#9432; Order ID that we sended to your in your email address.
             </small>
           </div>
-          <div className="flex flex-col gap-3 w-full md:w-1/2">
-            <label className="font-[600]" htmlFor="">
-              Billing Email
-            </label>
-            <input
-              className="border p-2 rounded-md"
-              type="text"
-              placeholder="Email address"
-            />
-          </div>
         </div>
-        <button className="flex flex-row gap-2 p-2 bg-[#EDB842] text-white items-center rounded-md max-w-[13rem] justify-center">
+        <button
+          onClick={() => navigate("/user/track/details/96459761")}
+          className="flex flex-row gap-2 p-2 bg-[#EDB842] text-white items-center rounded-md max-w-[13rem] justify-center"
+        >
           <span>Track Order</span>
           <span>
             <AiOutlineArrowRight />

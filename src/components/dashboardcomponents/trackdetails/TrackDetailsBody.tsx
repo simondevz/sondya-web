@@ -1,15 +1,11 @@
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import { BiMap, BiSolidPackage } from "react-icons/bi";
 import { BsTruck } from "react-icons/bs";
 import { FaHandshake } from "react-icons/fa";
-import { FiPackage } from "react-icons/fi";
-import { GoArrowUpRight } from "react-icons/go";
 import { MdDocumentScanner } from "react-icons/md";
 import { PiNotebookLight } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
 import { trackDataItem } from "../../../data/trackData";
 import { trackRod1 } from "../../../images/cart";
-import { Visa } from "../../../images/checkout";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const TrackDetailsBody = () => {
@@ -103,7 +99,7 @@ const TrackDetailsBody = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3 p-3">
-          {trackDataItem.map((t, i) => {
+          {trackDataItem.slice(0, 1).map((t, i) => {
             return (
               <div className="flex flex-row items-center gap-3">
                 <img className="object-cover" src={t.image} alt="" />
@@ -133,16 +129,15 @@ const TrackDetailsBody = () => {
         </div>
         <hr />
         <div className="flex flex-row justify-around p-3">
-          <div className="flex flex-col leading-[.25rem]">
-            <div className="font-[600]">Payment</div>
-            <div className="flex flex-row items-center gap-0">
-              {" "}
-              <span className="font-[400] text-[#667085]">Visa **56</span>
-              <img src={Visa} alt="" />
-            </div>
+          <div className="font-[400] text-[#667085] text-sm">
+            <div className="font-[600] text-black text-lg">Origin</div>
+            <div className="">Address</div>
+            <div className="">847 Jewess Bridge Apt. 174</div>
+            <div className="">London, UK</div>
+            <div className="">474-769-3919</div>
           </div>
           <div className="font-[400] text-[#667085] text-sm">
-            <div className="font-[600] text-black text-lg">Delivery</div>
+            <div className="font-[600] text-black text-lg">Destination</div>
             <div className="">Address</div>
             <div className="">847 Jewess Bridge Apt. 174</div>
             <div className="">London, UK</div>
@@ -150,48 +145,47 @@ const TrackDetailsBody = () => {
           </div>
         </div>
         <hr />
-        <div className="flex flex-row justify-between p-3 text-[#667085]">
-          <div className="flex flex-col gap-2">
-            <div className="font-[600] text-black text-lg">Need Help</div>
-            <div className="flex flex-row items-center gap-2 text-sm">
-              <AiOutlineInfoCircle />
-              <span>Order Issues</span>
-              <GoArrowUpRight />
-            </div>
-            <div className="flex flex-row items-center gap-2 text-sm">
-              <BsTruck />
-              <span>Delivery Info</span>
-              <GoArrowUpRight />
-            </div>
-            <div className="flex flex-row items-center gap-2 text-sm">
-              <FiPackage />
-              <span>Returns</span>
-              <GoArrowUpRight />
-            </div>
+        <div className="flex flex-col justify-between p-3 text-[#667085]">
+          <div className="flex flex-row gap-3">
+            <span className="p-2 text-[#1D1F2C] font-[600]">
+              Current Locations
+            </span>
           </div>
-          <div className="font-[400] text-[#667085] text-sm flex flex-col gap-2 w-3/5 md:w-1/2 lg:w-1/3">
-            <div className="font-[600] text-black text-lg">Order Summary</div>
-            <div className="flex flex-row justify-between">
-              <span>Discount</span>
-              <span>$5554</span>
-            </div>
-            <div className="flex flex-row justify-between">
-              <span>Discount</span>
-              <span>(20%) - $1109.40</span>
-            </div>
-            <div className="flex flex-row justify-between">
-              <span>Delivery</span>
-              <span>$0.00</span>
-            </div>
-            <div className="flex flex-row justify-between">
-              <span>Tax</span>
-              <span>+$221.88</span>
-            </div>
-            <hr />
-            <div className="flex flex-row justify-between font-[600]">
-              <span>Total</span>
-              <span className="text-black">$0.00</span>
-            </div>
+          <div className="w-full">
+            <table className="table-auto w-full">
+              <thead className="bg-[#F0F1F3]">
+                <tr className="text-[#1D1F2C] font-[600]">
+                  <th className="py-2 px-3 text-start">Country</th>
+                  <th className="py-2 px-3 text-start">State</th>
+                  <th className="py-2 px-3 text-start">City</th>
+                  <th className="py-2 px-3 text-start">Zip Code</th>
+                  <th className="py-2 px-3 text-start">Order status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border">
+                  <td className="text-[#1D1F2C] py-2 px-3">Nigeria</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Akwaibom</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Uyo</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">520101</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Shipping</td>
+                </tr>
+                <tr className="border">
+                  <td className="text-[#1D1F2C] py-2 px-3">Nigeria</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Akwaibom</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Uyo</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">520101</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Shipping</td>
+                </tr>
+                <tr className="border">
+                  <td className="text-[#1D1F2C] py-2 px-3">Nigeria</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Akwaibom</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Uyo</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">520101</td>
+                  <td className="text-[#1D1F2C] py-2 px-3">Delivered</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

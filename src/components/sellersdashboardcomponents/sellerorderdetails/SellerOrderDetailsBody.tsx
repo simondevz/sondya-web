@@ -11,7 +11,6 @@ import {
 } from "react-icons/bs";
 import { FaFileInvoice, FaReceipt, FaUserAlt } from "react-icons/fa";
 import { MdEdit, MdLocationOn } from "react-icons/md";
-import { PiExport } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Divider, ImgExample } from "../../../images";
@@ -62,9 +61,13 @@ const SellerOrderDetailsBody = () => {
         <div className="flex flex-row justify-between">
           <div className="font-[600] text-lg">Order Details </div>
           <div className="flex gap-2">
-            <button className="flex gap-2 items-center bg-[#EDB84233] text-[#EDB842] p-2 rounded-md">
-              <PiExport />
-              <span>Export</span>
+            <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+              <MdEdit />
+              <span>Update Destination</span>
+            </button>
+            <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+              <MdEdit />
+              <span>Update Order status</span>
             </button>
             <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
               <FaFileInvoice />
@@ -172,18 +175,18 @@ const SellerOrderDetailsBody = () => {
                 <span className="text-[#EDB842] p-2 bg-[#F0F1F3] rounded-full">
                   <BsBox2Fill />
                 </span>
-                <span>Shipping</span>
+                <span>Order ID</span>
               </div>
-              <div className="">SHP-2011REG</div>
+              <div className="">{productOrder?.order_id}</div>
             </div>
             <div className="flex w-full justify-between text-[#1D1F2C] font-[400]">
               <div className="flex gap-3 items-center">
                 <span className="text-[#EDB842] p-2 bg-[#F0F1F3] rounded-full">
                   <BsTrophyFill />
                 </span>
-                <span>Rewards</span>
+                <span>Payment Status</span>
               </div>
-              <div className="">480 point</div>
+              <div className="">{productOrder?.payment_status}</div>
             </div>
           </div>
         </div>
@@ -195,6 +198,14 @@ const SellerOrderDetailsBody = () => {
               <span className="p-2 bg-[#E9FAF7] text-[#1A9882] rounded-md">
                 +{productOrder?.checkout_items?.order_quantity} Orders
               </span>
+              <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+                <MdEdit />
+                <span>Update Destination</span>
+              </button>
+              <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+                <MdEdit />
+                <span>Update Order status</span>
+              </button>
             </div>
             <div className="w-full">
               <table className="table-auto w-full">

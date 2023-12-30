@@ -25,3 +25,4 @@ export { default as AdminWithdrawalOrders } from "./AdminWithdrawalOrders";
 
 export { default as AdminPaymentDetails } from "./AdminPaymentDetails";
 export { default as AdminPayments } from "./AdminPayments";
+export { default as AdminWithdrawalDetails } from "./AdminWithdrawalDetails";

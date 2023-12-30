@@ -59,6 +59,7 @@ import {
   AdminUpdateTestimonial,
   AdminUserDetails,
   AdminUserManagement,
+  AdminWithdrawalDetails,
   AdminWithdrawalOrders,
 } from "./screens/admin";
 import AdminInbox from "./screens/admin/AdminInbox";
@@ -339,7 +340,7 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
-    path: "/user/track-details",
+    path: "/user/track/details/:id",
     element: <TrackDetails />,
     errorElement: <ErrorPage />,
     loader: dashboardCheck,
@@ -631,7 +632,13 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/withdrawal/orders",
+    path: "/admin/withdrawals/details/:id",
+    element: <AdminWithdrawalDetails />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/withdrawal/history",
     element: <AdminWithdrawalOrders />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,

@@ -14,3 +14,14 @@ export type SellerWithdrawalType = {
   withdrawal_mode: string;
   withdrawal_account: any;
 };
+
+export type WithdrawalResponseType = {
+  _id: string;
+  user: Owner;
+  currency: string;
+  withdrawal_amount: number;
+  withdrawal_mode: string;
+  withdrawal_account: any;
+  withdrawal_status: string;
+  createdAt?: Date;
+};
