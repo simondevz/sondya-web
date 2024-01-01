@@ -6,7 +6,6 @@ import {
   ContactUs,
   ErrorPage,
   GiftBoxes,
-  Home,
   HotOffers,
   ProductDetails,
   Products,
@@ -26,6 +25,7 @@ import {
   SignUp,
 } from "./screens/auth";
 // dashboard Import
+import { lazy } from "react";
 import Acknowledgement from "./screens/Acknowledgement";
 import GroupChat from "./screens/GroupChat";
 import GroupChatDetails from "./screens/GroupChatDetails";
@@ -78,6 +78,7 @@ import {
   TrackOrder,
 } from "./screens/dashboard";
 import Notifications from "./screens/dashboard/Notifications";
+import ServiceOrderHistory from "./screens/dashboard/ServiceOrderHistory";
 import UserTestimony from "./screens/dashboard/UserTestimony";
 import {
   SellerBusinessAnalytics,
@@ -94,9 +95,11 @@ import {
   SellerServices,
   SellerSettings,
   SellerWithdrawal,
+  SellerWithdrawalDetails,
 } from "./screens/seller";
 import SellerEditProducts from "./screens/seller/SellerEditProducts";
 import SellerProductDetails from "./screens/seller/SellerProductDetails";
+import SellerServiceOrder from "./screens/seller/SellerServiceOrder";
 import {
   adminDashboardCheck,
   authCheck,
@@ -104,8 +107,8 @@ import {
   homeCheck,
   sellerDashboardCheck,
 } from "./utils/checkAuth.utils";
-import SellerServiceOrder from "./screens/seller/SellerServiceOrder";
-import ServiceOrderHistory from "./screens/dashboard/ServiceOrderHistory";
+
+const Home = lazy(() => import("./screens/Home"));
 
 const App = createBrowserRouter([
   {
@@ -440,6 +443,12 @@ const App = createBrowserRouter([
   {
     path: "/seller/withdrawal",
     element: <SellerWithdrawal />,
+    errorElement: <ErrorPage />,
+    loader: sellerDashboardCheck,
+  },
+  {
+    path: "/seller/withdrawal/details/:id",
+    element: <SellerWithdrawalDetails />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
   },

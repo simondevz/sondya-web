@@ -423,6 +423,7 @@ const CartBodySummary = ({ cartItems }: any) => {
     setTimeout(() => {
       if (trackingFormdata.length > 0) {
         dispatch(trackDistanceTimeAction(trackingFormdata) as any);
+        // console.log(trackingFormdata);
         if (trackDistanceTimeRedux.success) {
           setTimeout(() => {
             dispatch(
@@ -430,8 +431,13 @@ const CartBodySummary = ({ cartItems }: any) => {
                 trackDistanceTimeRedux.serverResponse.data
               ) as any
             );
-            navigate("/checkout");
+            // navigate("/checkout");
           }, 1000);
+        }
+        if (trackDistanceTimeRedux.success || trackDistanceTimeRedux.error) {
+          setTimeout(() => {
+            navigate("/checkout");
+          }, 1500);
         }
       }
     }, 1000);
@@ -668,6 +674,7 @@ const CartBodySummary = ({ cartItems }: any) => {
                 )}
               </span>
             </div>
+            <div className="">{trackDistanceTimeRedux?.error}</div>
             <button
               onClick={() => {
                 handleSubmitTrackingData();
@@ -675,7 +682,16 @@ const CartBodySummary = ({ cartItems }: any) => {
               type="submit"
               className="bg-[#0156FF] p-2 text-white rounded-md"
             >
-              <span> Proceed to Checkout</span>
+              {trackDistanceTimeRedux?.loading ||
+              updateShippingDestinationRedux?.loading ? (
+                <div className="" style={{ height: "25px" }}>
+                  <PulseLoader color="#ffffff" />
+                </div>
+              ) : (
+                <div className="">
+                  <span> Proceed to Checkout</span>
+                </div>
+              )}
             </button>
             <div className="flex flex-row gap-3 self-center">
               <img className="object-contain" src={CartZip} alt="" />

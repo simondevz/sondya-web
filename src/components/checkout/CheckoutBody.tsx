@@ -251,7 +251,7 @@ const CheckoutBody = () => {
     total_discount: 0,
   });
 
-  console.log(checkoutOrder);
+  // console.log(checkoutOrder);
 
   useEffect(() => {
     setTimeout(() => {
