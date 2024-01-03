@@ -185,7 +185,7 @@ const SellerPostProductBody = () => {
     login?.serverResponse?.data?.username,
     login?.serverResponse?.data?.email,
   ]);
-  console.log(sellerCreateProductRedux?.error);
+  // console.log(sellerCreateProductRedux?.error);
 
   let subcategoriesRedux = useSelector(
     (state: ReducersType) => state?.userGetProductsCategories

@@ -12,3 +12,4 @@ export { default as SellerServiceOrderDetails } from "./SellerServiceOrderDetail
 export { default as SellerServices } from "./SellerServices";
 export { default as SellerSettings } from "./SellerSettings";
 export { default as SellerWithdrawal } from "./SellerWithdrawal";
+export { default as SellerWithdrawalDetails } from "./SellerWithdrawalDetails";

@@ -2,13 +2,13 @@ import { format } from "date-fns";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { adminGetWithdrawalByIdAction } from "../../../redux/actions/admin/withdrawal.actions";
+import { sellerGetWithdrawalByIdAction } from "../../../redux/actions/seller/seller-withdrawal.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { WithdrawalResponseType } from "../../../redux/types/withdrawal.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
-const AdminWithdrawalDetailsBody = () => {
+const SellerWithdrawalDetails = () => {
   // fetch withdrawal detail
   const dispatch = useDispatch();
   const params = useParams();
@@ -16,7 +16,7 @@ const AdminWithdrawalDetailsBody = () => {
   const id = String(params.id);
 
   const withdrawalDetailsRedux = useSelector(
-    (state: ReducersType) => state?.adminGetWithdrawalById
+    (state: ReducersType) => state?.sellerGetWithdrawalById
   ) as ReduxResponseType<WithdrawalResponseType>;
 
   const withdrawalData = useMemo(() => {
@@ -24,7 +24,7 @@ const AdminWithdrawalDetailsBody = () => {
   }, [withdrawalDetailsRedux]);
 
   useEffect(() => {
-    dispatch(adminGetWithdrawalByIdAction({ id }) as any);
+    dispatch(sellerGetWithdrawalByIdAction({ id }) as any);
   }, [dispatch, id]);
 
   const dateString = withdrawalData?.createdAt ? withdrawalData?.createdAt : "";
@@ -33,7 +33,6 @@ const AdminWithdrawalDetailsBody = () => {
     const dateObject = new Date(dateString);
     formattedDate = format(dateObject, "MMMM d, yyyy");
   }
-
   return (
     <section className="border w-full">
       <div className="flex flex-row justify-center font-[600] py-3 px-6">
@@ -104,7 +103,6 @@ const AdminWithdrawalDetailsBody = () => {
                 Amount
               </td>
               <td className=" py-2 px-8 font-[600] text-[#475156]">
-                {" "}
                 $
                 {withdrawalData?.withdrawal_amount && (
                   <FormatNumber price={withdrawalData?.withdrawal_amount} />
@@ -118,4 +116,4 @@ const AdminWithdrawalDetailsBody = () => {
   );
 };
 
-export default AdminWithdrawalDetailsBody;
+export default SellerWithdrawalDetails;

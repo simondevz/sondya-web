@@ -23,20 +23,20 @@ import {
   homeGetProductCategoryAction,
   homeGetProductsAction,
 } from "../../redux/actions/home.actions";
-import { ReducersType } from "../../redux/store";
-import { AdminGetCategoryType } from "../../redux/types/categories.types";
-import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
-import { AdminGetProductType } from "../../redux/types/products.types";
-import { DropdownProducts } from "../shareables/Dropdown";
-import { FormatNumber } from "../shareables/FormatNumber";
-import { Ratings } from "../shareables/Ratings";
-import { Like } from "../shareables/like";
-import { WishlistItemType } from "../../redux/types/wishlist.types";
 import {
   addToWishlistAction,
   removeFromWishlistAction,
 } from "../../redux/actions/wishlist.actions";
+import { ReducersType } from "../../redux/store";
+import { AdminGetCategoryType } from "../../redux/types/categories.types";
+import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
+import { AdminGetProductType } from "../../redux/types/products.types";
+import { WishlistItemType } from "../../redux/types/wishlist.types";
 import inWishlist from "../../utils/checkWhishlist";
+import { DropdownProducts } from "../shareables/Dropdown";
+import { FormatNumber } from "../shareables/FormatNumber";
+import { Ratings } from "../shareables/Ratings";
+import { Like } from "../shareables/like";
 
 type QueryType = {
   // page: number;
@@ -98,7 +98,7 @@ const Products = () => {
     }, 1000);
   }, [query, updateQueryString]);
 
-  //admin get categories
+  //seller get categories
   const homeGetCategoriesRedux = useSelector(
     (state: ReducersType) => state?.homeGetProductCategory
   ) as ReduxResponseType<AdminGetCategoryType[]>;
@@ -241,6 +241,7 @@ const Products = () => {
                           : productImage1
                       }
                       alt=""
+                      loading="lazy"
                     />
                     <div className="flex flex-row gap-2">
                       <Ratings rating={4} />
