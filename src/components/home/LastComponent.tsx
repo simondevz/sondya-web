@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { FormatNumber } from "../shareables/FormatNumber";
 import { useDispatch, useSelector } from "react-redux";
-import { userGetServicesAction } from "../../redux/actions/userDashboard/services.actions";
-import { ReducersType } from "../../redux/store";
-import { ReduxResponseType } from "../../redux/types/general.types";
-import {
-  UserGetServiceType,
-  userGetServicesType,
-} from "../../redux/types/services.types";
 import { productImageA } from "../../images/products";
 import { userGetProductsAction } from "../../redux/actions/userDashboard/products.action";
+import { userGetServicesAction } from "../../redux/actions/userDashboard/services.actions";
+import { USER_GET_PRODUCTS_RESET } from "../../redux/constants/userDashboard/products.constants";
+import { USER_GET_SERVICES_RESET } from "../../redux/constants/userDashboard/services.constants";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
 import {
   UserGetProductType,
   userGetProductsType,
 } from "../../redux/types/products.types";
-import { USER_GET_PRODUCTS_RESET } from "../../redux/constants/userDashboard/products.constants";
-import { USER_GET_SERVICES_RESET } from "../../redux/constants/userDashboard/services.constants";
+import {
+  UserGetServiceType,
+  userGetServicesType,
+} from "../../redux/types/services.types";
+import { FormatNumber } from "../shareables/FormatNumber";
 
 const LastComponent = () => {
   const dispatch = useDispatch();
@@ -110,14 +110,14 @@ const LastComponent = () => {
                 return (
                   <div
                     key={service?._id}
-                    className="flex flex-row border p-3 justify-between gap-2"
+                    className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
                     <img
-                      className="w-1/2 h-[5rem] object-cover"
+                      className="w-1/2 h-[8rem] object-cover rounded-md"
                       src={service?.image?.[0]?.url || productImageA}
                       alt=""
                     />
-                    <div className="flex flex-col justify-around">
+                    <div className="flex flex-col justify-evenly flex-1">
                       <div className="font-[600] text-[11px] md:text-[13px]">
                         {service?.name}
                       </div>
@@ -151,14 +151,14 @@ const LastComponent = () => {
                 return (
                   <div
                     key={t?._id}
-                    className="flex flex-row border p-3 justify-between gap-2"
+                    className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
                     <img
-                      className="w-1/2 h-[5rem] object-cover"
+                      className="w-1/2 h-[8rem] object-cover rounded-md"
                       src={t?.image?.[0]?.url || productImageA}
                       alt=""
                     />
-                    <div className="flex flex-col justify-around">
+                    <div className="flex flex-col  justify-evenly flex-1">
                       <div className="font-[600] text-[11px] md:text-[13px]">
                         {t.name}
                       </div>
@@ -190,14 +190,14 @@ const LastComponent = () => {
                 return (
                   <div
                     key={service?._id}
-                    className="flex flex-row border p-3 justify-between gap-2"
+                    className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
                     <img
-                      className="w-1/2 h-[5rem] object-cover"
+                      className="w-1/2 h-[8rem] object-cover rounded-md"
                       src={service?.image?.[0]?.url || productImageA}
                       alt=""
                     />
-                    <div className="flex flex-col justify-around">
+                    <div className="flex flex-col  justify-evenly flex-1">
                       <div className="font-[600] text-[11px] md:text-[13px]">
                         {service?.name}
                       </div>
@@ -231,14 +231,14 @@ const LastComponent = () => {
                 return (
                   <div
                     key={t?._id}
-                    className="flex flex-row border p-3 justify-between gap-2"
+                    className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
                     <img
-                      className="w-1/2 h-[5rem] object-cover"
+                      className="w-1/2 h-[8rem] object-cover rounded-md"
                       src={t?.image?.[0]?.url || productImageA}
                       alt=""
                     />
-                    <div className="flex flex-col justify-around">
+                    <div className="flex flex-col  justify-evenly flex-1">
                       <div className="font-[600] text-[11px] md:text-[13px]">
                         {t.name}
                       </div>

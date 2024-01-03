@@ -79,9 +79,9 @@ export const DropdownProducts = ({
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-40">
+        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-10">
           <div className="py-1">
-            {options.map((option, index) => (
+            {options.slice(0, 4).map((option, index) => (
               <button
                 key={index}
                 className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-t"
@@ -124,7 +124,7 @@ export const DropdownServices = ({
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-40">
+        <div className="origin-top-right absolute right-0 w-full border-x-[2px]  bg-white font-[700] z-10">
           <div className="py-1">
             {options.slice(0, 6).map((option, index) => (
               <button

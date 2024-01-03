@@ -389,11 +389,11 @@ const Products = () => {
                       SOLD OUT
                     </div>
                   )}
-                  {t.discount_percentage && (
+                  {t.discount_percentage && t.discount_percentage > 0 ? (
                     <div className="absolute bg-[#EDB842] text-white p-1">
-                      {t.discount_percentage}% off
+                      {t.discount_percentage} % off
                     </div>
-                  )}
+                  ) : null}
                 </div>
               );
             })}

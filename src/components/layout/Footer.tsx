@@ -1,36 +1,56 @@
 import { BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import { MdMailOutline, MdOutlineLocationOn, MdPhone } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { LogoSide } from "../../images/logo";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="bg-[#F8F9FA] text-[#77808B] flex flex-col gap-5 p-5 md:p-10">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-between">
         <div className="col-span-2 md:col-span-1">
-          <img src={LogoSide} alt="" />
+          <img onClick={() => navigate("/")} src={LogoSide} alt="" />
           <div className="">
             Sondya is an E-commerce platform designed and developed for buyers
-            and sellers located in Nigeria, Africa.
+            and sellers located in Worldwide
           </div>
-          <div className="">Copyright Sondya Corp.</div>
+          <div className="text-[#EDB842]">Copyright Sondya Limited.</div>
         </div>
         <div className="">
-          <div className="text-[#EDB842]">Service</div>
-          <div className="">Whole-sell</div>
-          <div className="">Retail</div>
-          <div className="">EDI</div>
-          <div className="">Supply Chain</div>
-          <div className="">Development</div>
-          <div className="">Internet Marketing</div>
+          <div className="text-[#EDB842]">Our Service</div>
+          <div onClick={() => navigate("/products")} className="">
+            Products
+          </div>
+          <div onClick={() => navigate("/services")} className="">
+            Services
+          </div>
+          <div onClick={() => navigate("/groupchat/list")} className="">
+            Group Chat
+          </div>
+          <div onClick={() => navigate("/wishlist")} className="">
+            Wishlist
+          </div>
+          <div onClick={() => navigate("/register")} className="">
+            Sign Up
+          </div>
         </div>
         <div className="">
-          <div className="">Company</div>
-          <div className="">Service</div>
-          <div className="">Features</div>
-          <div className="">Our Team</div>
-          <div className="">Portfolio</div>
-          <div className="">Blog</div>
-          <div className="">Contact Us</div>
+          <div className="text-[#EDB842]">Company</div>
+          <div onClick={() => navigate("/about-us")} className="">
+            About us
+          </div>
+          <div onClick={() => navigate("/contact-us")} className="">
+            Contact us
+          </div>
+          <div onClick={() => navigate("/terms")} className="">
+            Terms & Conditions
+          </div>
+          <div onClick={() => navigate("/terms")} className="">
+            Privacy Policy
+          </div>
+          <div onClick={() => navigate("")} className="">
+            Delete Account
+          </div>
         </div>
         <div className="flex flex-col gap-3 justify-around col-span-2 md:col-span-1">
           <div className="">Join a Newsletter</div>
@@ -59,7 +79,17 @@ const Footer = () => {
         </div>
       </div>
       <div className="flex flex-wrap justify-between gap-4 border-t-2 border-t-[#76AEFF] py-5">
-        <div className="">Copyright Sondya Corp.</div>
+        <div className="">
+          Powered by{" "}
+          <a
+            className="text-[#EDB842]"
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.snappy-fix.com/"
+          >
+            Snappy-fix technologies
+          </a>
+        </div>
         <div className="flex flex-wrap gap-5">
           <div className="flex flex-row gap-1 items-center">
             <span className="text-[#EDB842]">
@@ -71,7 +101,7 @@ const Footer = () => {
             <span className="text-[#EDB842]">
               <MdMailOutline />
             </span>{" "}
-            <span>sondya@hello.com</span>
+            <span>support@sondya.com</span>
           </div>
           <div className="flex flex-row gap-1 items-center">
             <span className="text-[#EDB842]">
