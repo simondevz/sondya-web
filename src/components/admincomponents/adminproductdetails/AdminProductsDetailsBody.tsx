@@ -33,6 +33,7 @@ const AdminProductsDetailsBody = () => {
   const { id } = useParams();
 
   const [products, setProducts] = useState<AdminGetProductType | null>(null);
+  const [, setSelectedVariants] = useState<Array<[string, string]>>();
   const adminGetProductByIdRedux = useSelector(
     (state: ReducersType) => state?.adminGetByIdProduct
   ) as ReduxResponseType<AdminGetProductType>;
@@ -44,6 +45,17 @@ const AdminProductsDetailsBody = () => {
 
   useEffect(() => {
     if (adminGetProductByIdRedux?.serverResponse.data) {
+      const variant_keys = Object.keys(
+        adminGetProductByIdRedux?.serverResponse?.data?.variants
+      );
+      setSelectedVariants(
+        variant_keys.map((key) => {
+          return [
+            key,
+            adminGetProductByIdRedux?.serverResponse?.data?.variants[key][0],
+          ];
+        })
+      );
       setProducts({
         ...adminGetProductByIdRedux?.serverResponse?.data,
       });
@@ -139,7 +151,10 @@ const AdminProductsDetailsBody = () => {
             </button>
           </div>
           <hr />
-          <SelectVariant variants={products?.variants || {}} />
+          <SelectVariant
+            variants={products?.variants || {}}
+            setSelectedVariants={setSelectedVariants}
+          />
           <div className="flex flex-row gap-2 w-full justify-between">
             <div className="flex flex-row gap-2 border-2 p-2 rounded-md w-3/12 justify-center">
               <button onClick={() => setCount(--count)}>-</button>

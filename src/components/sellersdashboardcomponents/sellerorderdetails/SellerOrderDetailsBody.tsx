@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BiSolidTruck } from "react-icons/bi";
 import {
   BsBox2Fill,
@@ -26,21 +26,88 @@ import { ReducersType } from "../../../redux/store";
 import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
+import UpdateLocationModal from "./components/updateLocationModal";
+import UpdateOrderStatusModal from "./components/updateServiceOrderModal";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import {
+  SELLER_GET_PRODUCTS_ORDER_BYID_RESET,
+  SELLER_UPDATE_PRODUCTS_ORDER_RESET,
+} from "../../../redux/constants/seller/seller-orders.constants";
 
 const SellerOrderDetailsBody = () => {
   // fetch product detail
   const dispatch = useDispatch();
   const params = useParams();
 
-  const id = String(params.id);
+  const [showLocationModal, setShowLocationModal] = useState<boolean>(false);
+  const [showOrderStatusModal, setShowOrderStatusModal] =
+    useState<boolean>(false);
 
+  const id = String(params.id);
   const productOrderDetailsRedux = useSelector(
     (state: ReducersType) => state?.sellerGetProductsOrderByID
   ) as ReduxResponseType<GetProductOrder>;
 
-  const productOrder = useMemo(() => {
-    return productOrderDetailsRedux?.serverResponse?.data;
-  }, [productOrderDetailsRedux]);
+  const UpdateProductOrderRedux = useSelector(
+    (state: ReducersType) => state?.sellerUpdateProductsOrder
+  ) as ReduxResponseType<GetProductOrder>;
+
+  const [productOrder, setProductOrder] = useState<GetProductOrder>();
+
+  useMemo(() => {
+    if (UpdateProductOrderRedux?.success) return;
+
+    if (productOrderDetailsRedux?.success)
+      return productOrderDetailsRedux?.serverResponse?.data;
+  }, [productOrderDetailsRedux, UpdateProductOrderRedux]);
+
+  useEffect(() => {
+    if (productOrderDetailsRedux?.success) {
+      setProductOrder(productOrderDetailsRedux?.serverResponse?.data);
+      setTimeout(() => {
+        dispatch({ type: SELLER_GET_PRODUCTS_ORDER_BYID_RESET });
+      }, 1000);
+    }
+  }, [
+    dispatch,
+    productOrderDetailsRedux?.success,
+    productOrderDetailsRedux?.serverResponse?.data,
+  ]);
+
+  useEffect(() => {
+    if (UpdateProductOrderRedux?.success) {
+      setProductOrder(UpdateProductOrderRedux?.serverResponse?.data);
+      toast(UpdateProductOrderRedux?.serverResponse?.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setTimeout(() => {
+        dispatch({ type: SELLER_UPDATE_PRODUCTS_ORDER_RESET });
+      }, 1000);
+    }
+
+    if (UpdateProductOrderRedux?.error)
+      Swal.fire({
+        title: "Error!!!",
+        text: UpdateProductOrderRedux?.error,
+        icon: "error",
+        timer: 5000,
+        confirmButtonText: "Okay",
+      });
+  }, [
+    dispatch,
+    UpdateProductOrderRedux?.success,
+    UpdateProductOrderRedux?.error,
+    UpdateProductOrderRedux?.serverResponse?.message,
+    UpdateProductOrderRedux?.serverResponse?.data,
+  ]);
 
   useEffect(() => {
     dispatch(sellerGetProductsOrderByIdAction({ id }) as any);
@@ -61,11 +128,17 @@ const SellerOrderDetailsBody = () => {
         <div className="flex flex-row justify-between">
           <div className="font-[600] text-lg">Order Details </div>
           <div className="flex gap-2">
-            <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+            <button
+              onClick={() => setShowLocationModal(true)}
+              className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md"
+            >
               <MdEdit />
-              <span>Update Destination</span>
+              <span>Update Location</span>
             </button>
-            <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+            <button
+              onClick={() => setShowOrderStatusModal(true)}
+              className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md"
+            >
               <MdEdit />
               <span>Update Order status</span>
             </button>
@@ -198,11 +271,17 @@ const SellerOrderDetailsBody = () => {
               <span className="p-2 bg-[#E9FAF7] text-[#1A9882] rounded-md">
                 +{productOrder?.checkout_items?.order_quantity} Orders
               </span>
-              <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+              <button
+                onClick={() => setShowLocationModal(true)}
+                className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md"
+              >
                 <MdEdit />
-                <span>Update Destination</span>
+                <span>Update Location</span>
               </button>
-              <button className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md">
+              <button
+                onClick={() => setShowOrderStatusModal(true)}
+                className="flex gap-2 items-center bg-[#EDB842] text-white p-2 rounded-md"
+              >
                 <MdEdit />
                 <span>Update Order status</span>
               </button>
@@ -322,6 +401,46 @@ const SellerOrderDetailsBody = () => {
                       )}
                     </td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="w-full">
+              <table className="table-auto w-full">
+                <thead className="bg-[#F0F1F3]">
+                  <tr className="text-[#1D1F2C] font-[600]">
+                    <th className="py-2 px-3 text-start">Country</th>
+                    <th className="py-2 px-3 text-start">State</th>
+                    <th className="py-2 px-3 text-start">City</th>
+                    <th className="py-2 px-3 text-start">Zip Code</th>
+                    <th className="py-2 px-3 text-start">Order status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productOrder?.order_location?.length ? (
+                    productOrder?.order_location?.map((location, index) => {
+                      return (
+                        <tr key={index} className="border">
+                          <td className="text-[#1D1F2C] py-2 px-3">
+                            {location?.country}
+                          </td>
+                          <td className="text-[#1D1F2C] py-2 px-3">
+                            {location?.state}
+                          </td>
+                          <td className="text-[#1D1F2C] py-2 px-3">
+                            {location?.city}
+                          </td>
+                          <td className="text-[#1D1F2C] py-2 px-3">
+                            {location?.zip_code}
+                          </td>
+                          <td className="text-[#1D1F2C] py-2 px-3">
+                            {location?.order_status}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <div>No Update in Location Yet</div>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -480,6 +599,16 @@ const SellerOrderDetailsBody = () => {
           </div>
         </div>
       </div>
+      <UpdateLocationModal
+        showModal={showLocationModal}
+        handleClose={() => setShowLocationModal(false)}
+        order={productOrder}
+      />
+      <UpdateOrderStatusModal
+        showModal={showOrderStatusModal}
+        handleClose={() => setShowOrderStatusModal(false)}
+        order={productOrder}
+      />
     </section>
   );
 };

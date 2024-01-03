@@ -128,7 +128,15 @@ const Products = () => {
   const addToCart = useCallback(
     (product: AdminGetProductType) => {
       setTimeout(() => {
-        dispatch(addToCartAction(product) as any);
+        const variant_keys = Object.keys(product?.variants);
+        dispatch(
+          addToCartAction({
+            ...product,
+            selected_variants: variant_keys.map((key) => {
+              return [key, product?.variants[key][0]];
+            }),
+          }) as any
+        );
 
         // send toast message
         toast("🛒 Added to cart!", {

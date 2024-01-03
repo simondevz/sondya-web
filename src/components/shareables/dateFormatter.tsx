@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 const FormatDate = ({
   dateString,
   className,
@@ -63,16 +65,24 @@ export const TimeLeft = ({
   utcDateString: string;
   className?: string;
 }) => {
+  const [tick, setTick] = useState<boolean>();
+  useEffect(() => {
+    if (utcDateString) setInterval(() => setTick(!tick), 1000);
+  }, [tick, utcDateString]);
+
   if (utcDateString === "")
     return <span className={className}>No set time</span>;
-  const dateNow = new Date();
   const date = new Date(utcDateString);
-  const timeDiff = (date.getTime() - dateNow.getUTCMilliseconds()) / 1000;
+  const currentTime = Math.floor(Date.now() / 1000);
+  const timeDiff = Math.floor(date.getTime() / 1000) - currentTime;
 
-  const secondsLeft = Math.round(timeDiff) % 60; // seconds left in a minute
-  const minutesLeft = Math.round(timeDiff / 60) % 60; // minute left in an hour
-  const hoursLeft = Math.round(timeDiff / (60 * 60)) % 24; // hours left in a day
-  const daysLeft = Math.round(timeDiff / (60 * 60 * 24)); // days left
+  if (timeDiff < 0) return <span className={className}>0h 0m 00s</span>;
+
+  // Convert time left into days, hours, minutes, and seconds
+  const daysLeft = Math.floor(timeDiff / (60 * 60 * 24));
+  const hoursLeft = Math.floor((timeDiff % (60 * 60 * 24)) / (60 * 60));
+  const minutesLeft = Math.floor((timeDiff % (60 * 60)) / 60);
+  const secondsLeft = timeDiff % 60;
 
   let returnString: string = `${
     daysLeft < 0 ? daysLeft + "d" : ""
