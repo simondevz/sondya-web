@@ -1,7 +1,6 @@
 import {
   DealAndOffer,
   Enhance,
-  FeatureBrand,
   Hero,
   LastComponent,
   Products,
@@ -18,7 +17,6 @@ const Home = () => {
       <Enhance />
       <Services />
       <DealAndOffer />
-      <FeatureBrand />
       <LastComponent />
       <Footer />
     </div>

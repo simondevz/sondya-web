@@ -1,31 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  AiOutlineArrowRight,
-  AiOutlineEye,
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import slugify from "slugify";
 import { serviceImage1 } from "../../images/serviceimages";
 import {
   homeGetServiceCategoryAction,
   homeGetServicesAction,
 } from "../../redux/actions/home.actions";
-import { ReducersType } from "../../redux/store";
-import { AdminGetCategoryType } from "../../redux/types/categories.types";
-import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
-import { AdminGetServiceType } from "../../redux/types/services.types";
-import { DropdownServices } from "../shareables/Dropdown";
-import { FormatNumber } from "../shareables/FormatNumber";
-import { Like } from "../shareables/like";
 import {
   addToWishlistAction,
   removeFromWishlistAction,
 } from "../../redux/actions/wishlist.actions";
-import { toast } from "react-toastify";
+import { ReducersType } from "../../redux/store";
+import { AdminGetCategoryType } from "../../redux/types/categories.types";
+import { Paginator, ReduxResponseType } from "../../redux/types/general.types";
+import { AdminGetServiceType } from "../../redux/types/services.types";
 import { WishlistItemType } from "../../redux/types/wishlist.types";
 import inWishlist from "../../utils/checkWhishlist";
+import { DropdownServices } from "../shareables/Dropdown";
+import { FormatNumber } from "../shareables/FormatNumber";
+import { Like } from "../shareables/like";
 
 type QueryType = {
   // page: number;
@@ -199,6 +195,7 @@ const Services = () => {
                         : serviceImage1
                     }
                     alt=""
+                    loading="lazy"
                   />
                   <div className="absolute gap-1  inset-0 bg-black bg-opacity-50 flex flex-row justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                     <div
@@ -214,9 +211,6 @@ const Services = () => {
                       <Like
                         defaultValue={inWishlist({ ...t, isProduct: false })}
                       />
-                    </div>
-                    <div className="text-xl text-[#000000] bg-white p-1 rounded-full">
-                      <AiOutlineShoppingCart />
                     </div>
                     <div
                       onClick={() =>
@@ -260,7 +254,10 @@ const Services = () => {
       </div>
 
       <div className="flex self-center w-1/2 md:w1/3 max-w-[100px]">
-        <button className="flex flex-row gap-2 items-center whitespace-nowrap bg-[#EDB842C9] text-white p-3 rounded-md">
+        <button
+          onClick={() => navigate("/services")}
+          className="flex flex-row gap-2 items-center whitespace-nowrap bg-[#EDB842C9] text-white p-3 rounded-md"
+        >
           {" "}
           <span>Explore all items</span>{" "}
           <span>

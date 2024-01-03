@@ -29,7 +29,7 @@ import { lazy } from "react";
 import Acknowledgement from "./screens/Acknowledgement";
 import GroupChat from "./screens/GroupChat";
 import GroupChatDetails from "./screens/GroupChatDetails";
-import GroupChatList from "./screens/GroupChatList";
+// import GroupChatList from "./screens/GroupChatList";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import ServiceCheckout from "./screens/ServiceCheckout";
 import TermsAndServices from "./screens/TermsAndServices";
@@ -109,6 +109,7 @@ import {
 } from "./utils/checkAuth.utils";
 
 const Home = lazy(() => import("./screens/Home"));
+const GroupChatList = lazy(() => import("./screens/GroupChatList"));
 
 const App = createBrowserRouter([
   {

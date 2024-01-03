@@ -1,13 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { BsBoxSeam, BsTruck } from "react-icons/bs";
-import { FaHome, FaUser } from "react-icons/fa";
-import { GoVerified } from "react-icons/go";
-import {
-  MdFavoriteBorder,
-  MdLocationPin,
-  MdPersonOutline,
-} from "react-icons/md";
+import { BsBoxSeam } from "react-icons/bs";
+import { FaComments, FaHome, FaUser } from "react-icons/fa";
+import { MdFavoriteBorder, MdPersonOutline, MdSell } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/Nav.css";
@@ -90,14 +85,28 @@ const Nav = () => {
     }, 600); // Adjust animation duration as needed
   }, [totalCartItems]);
 
+  const [isChecked, setChecked] = useState(false);
+
+  const toggleSwitch = () => {
+    setChecked((prevState) => !prevState);
+  };
+
+  useEffect(() => {
+    // navigate to seller dashboard
+    setTimeout(() => {
+      if (isChecked) {
+        navigate("/seller/dashboard");
+      }
+    }, 2000);
+  }, [isChecked, navigate]);
+
   return (
     <div className="z-40 bg-white w-full flex flex-col flex-grow shadow-sm">
-      <div
+      {/* <div
         className={` ${
           isScrolled ? "hidden" : "flex"
-        } flex-wrap gap-3 justify-center md:justify-between bg-[#EDB842] py-2 px-10`}
+        } flex-wrap gap-3 justify-center bg-[#EDB842] py-2 px-10`}
       >
-        <div className="text-[#666666]">Delivery in 10 minutes</div>
         <div className="flex space-x-3">
           <div className="flex items-center space-x-1">
             <span className="text-white">
@@ -120,7 +129,7 @@ const Nav = () => {
             <span className="text-[#666666]">All Offers</span>
           </div>
         </div>
-      </div>
+      </div> */}
       <div
         className={`${
           isScrolled ? "fixed py-2 bg-[#F8F9FA]" : "bg-white py-2"
@@ -199,22 +208,49 @@ const Nav = () => {
           <DropdownMenuForLargeScreen />
         </div>
         <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
+          <Link to={"/groupchat/list"}>Groupchat</Link>
+        </div>
+        <div className="px-5">
+          <Link to={"/seller/dashboard"}>Join Sellers</Link>
+        </div>
+
+        {/* <div className="border-r-[0.4px] px-5 border-[#afa9a9]">
           <Link to={"/contact-us"}>Contact</Link>
         </div>
         <div className="px-5">
           <Link to={"/about-us"}>About Us</Link>
-        </div>
+        </div> */}
       </div>
-      <div className="flex flex-row justify-around text-[#1C1C1C] playfair-display p-2">
+      <div className="flex flex-row justify-around text-[#282828] playfair-display py-4 px-2 bg-[#f1f1f2] ">
         <div className="flex flex-row gap-2">
-          <div className="">All category</div>
-          <div className="">Hot offers</div>
-          <div className="">Hot offers</div>
-          <div className="">Affiliate</div>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="hidden"
+                checked={isChecked}
+                onChange={toggleSwitch}
+              />
+              <div className="toggle__line w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div
+                className={`toggle__dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition-transform ${
+                  isChecked ? "transform translate-x-full bg-green-500" : ""
+                }`}
+              ></div>
+            </div>
+            <div className="ml-3 text-gray-700 font-medium whitespace-nowrap">
+              Switch to seller page
+            </div>
+          </label>
         </div>
         <div className="flex flex-row gap-2">
+          <div
+            onClick={() => navigate("/wishlist")}
+            className="flex gap-2 items-center"
+          >
+            <MdFavoriteBorder /> Wishlist
+          </div>
           <div className="">English,USD</div>
-          <div className="">Ship to</div>
         </div>
       </div>
       <div
@@ -223,7 +259,7 @@ const Nav = () => {
         // style={{ display: isScrolled ? "hidden !important" : "visible" }}
       >
         <div className="fixed animate__animated animate__slideInRight z-20 flex flex-col items-start pt-5 space-y-12 font-bold  sm:w-auto sm:self-center top-0 left-44 right-0 bottom-0 bg-[#000000] text-white rounded-b-lg">
-          <div className="flex space-x-2 items-center py-4 border-b-[0.5px] ps-8">
+          <div className="flex space-x-2 items-center py-4 ps-8">
             <img className="w-44 object-contain" src={LogoSideBlack} alt="" />
           </div>
           <Link
@@ -245,22 +281,22 @@ const Nav = () => {
           <Link
             className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
-            to={"/about-us"}
+            to={"/groupchat/list"}
           >
             <span>
-              <MdFavoriteBorder />
+              <FaComments />
             </span>
-            <span>About Us</span>
+            <span>Group Chat</span>
           </Link>
           <Link
             className="text-xl flex space-x-3 items-center ps-8"
             onClick={skrill}
-            to={"/contact-us"}
+            to={"/seller/dashboard"}
           >
             <span>
-              <MdFavoriteBorder />
+              <MdSell />
             </span>
-            <span>Contact Us</span>
+            <span>Join Sellers</span>
           </Link>
           {!login.serverResponse.success && (
             <div className=" border-y-2  border-[#5F6C72] flex flex-row w-full justify-around">
