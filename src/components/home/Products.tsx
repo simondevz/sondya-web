@@ -232,7 +232,10 @@ const Products = () => {
               // .filter((item) => item.product_status === "hot")
               .map((t, i) => {
                 return (
-                  <div key={i} className="w-full relative flex flex-col gap-3">
+                  <div
+                    key={i}
+                    className="w-full relative flex flex-col gap-3 items-center"
+                  >
                     <img
                       className="object-cover"
                       src={
@@ -372,20 +375,34 @@ const Products = () => {
                     </div>
                   </div>
                   <div className="">{t.name && t.name}</div>
-                  <div className="flex gap-1">
-                    <span className="text-[#929FA5] line-through">
-                      {t.current_price && (
-                        <span>
-                          ${t.old_price && <FormatNumber price={t.old_price} />}
-                        </span>
-                      )}
-                    </span>
-                    <span className="text-[#EDB842]">
-                      $
-                      {t.current_price && (
-                        <FormatNumber price={t.current_price} />
-                      )}
-                    </span>
+                  <div className="flex flex-row justify-between gap-1">
+                    <div className="">
+                      <span className="text-[#929FA5] line-through">
+                        {t.current_price && (
+                          <span>
+                            $
+                            {t.old_price && (
+                              <FormatNumber price={t.old_price} />
+                            )}
+                          </span>
+                        )}
+                      </span>
+                      <span className="text-[#EDB842] font-[600]">
+                        $
+                        {t.current_price && (
+                          <FormatNumber price={t.current_price} />
+                        )}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() =>
+                        navigate(`/product/details/${t._id}/${slugify(t.name)}`)
+                      }
+                      className=" text-[#EDB842] font-[600] whitespace-nowrap"
+                    >
+                      view
+                    </button>
                   </div>
                   {t.product_status === "hot" && (
                     <div className="absolute bg-[#EE5858] text-white p-1">
@@ -401,7 +418,9 @@ const Products = () => {
                     <div className="absolute bg-[#EDB842] text-white p-1">
                       {t.discount_percentage} % off
                     </div>
-                  ) : null}
+                  ) : (
+                    <div className="hidden">i</div>
+                  )}
                 </div>
               );
             })}

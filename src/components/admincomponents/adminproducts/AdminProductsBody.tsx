@@ -226,12 +226,7 @@ const AdminProductsBody = () => {
               {products.data &&
                 products.data.map((t, i) => {
                   return (
-                    <tr
-                      onClick={() =>
-                        navigate("/admin/product/details/" + t?._id)
-                      }
-                      key={i}
-                    >
+                    <tr key={i}>
                       <td>
                         <div className="flex flex-col md:flex-row gap-2">
                           <img

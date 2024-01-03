@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { BsCart } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,7 +49,7 @@ const SellerProductDetailsBody = () => {
   useEffect(() => {
     if (sellerGetProductByIdRedux?.serverResponse.data) {
       const variant_keys = Object.keys(
-        sellerGetProductByIdRedux?.serverResponse?.data?.variants
+        sellerGetProductByIdRedux?.serverResponse?.data?.variants || {}
       );
       setSelectedVariants(
         variant_keys.map((key) => {
@@ -195,24 +194,6 @@ const SellerProductDetailsBody = () => {
             variants={products?.variants || {}}
             setSelectedVariants={setSelectedVariants}
           />
-          <div className="flex flex-row gap-2 w-full justify-between">
-            <div className="flex flex-row gap-2 border-2 p-2 rounded-md w-3/12 justify-center">
-              <button onClick={() => setCount(--count)}>-</button>
-              <input
-                className="outline-none outline-0 border-none border-0 w-10 text-center"
-                type="number"
-                value={count}
-              />
-              <button onClick={() => setCount(++count)}>+</button>
-            </div>
-            <button className="bg-[#EDB842] text-white p-2 flex gap-2 rounded-md items-center w-5/12 justify-center">
-              <span>Add to card</span>
-              <BsCart />
-            </button>
-            <button className="border-2 border-[#EDB842] p-2 rounded-md text-[#EDB842] w-3/12">
-              Buy now
-            </button>
-          </div>
         </div>
       </div>
       <SellerProductsDetailsTab

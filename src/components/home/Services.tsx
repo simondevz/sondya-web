@@ -223,20 +223,30 @@ const Services = () => {
                   </div>
                 </div>
                 <div className="">{t.name && t.name}</div>
-                <div className="flex gap-1">
-                  <span className="text-[#929FA5] line-through">
-                    {t.current_price && (
-                      <span>
-                        ${t.old_price && <FormatNumber price={t.old_price} />}
-                      </span>
-                    )}
-                  </span>
-                  <span className="text-[#EDB842]">
-                    $
-                    {t.current_price && (
-                      <FormatNumber price={t.current_price} />
-                    )}
-                  </span>
+                <div className="flex justify-between gap-1">
+                  <div className="">
+                    <span className="text-[#929FA5] line-through">
+                      {t.current_price && (
+                        <span>
+                          ${t.old_price && <FormatNumber price={t.old_price} />}
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-[#EDB842] font-[600]">
+                      $
+                      {t.current_price && (
+                        <FormatNumber price={t.current_price} />
+                      )}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() =>
+                      navigate(`/service/details/${t._id}/${slugify(t.name)}`)
+                    }
+                    className="text-[#EDB842] font-[600]"
+                  >
+                    view
+                  </button>
                 </div>
                 {t.service_status === "hot" && (
                   <div className="absolute bg-[#EE5858] text-white p-1">

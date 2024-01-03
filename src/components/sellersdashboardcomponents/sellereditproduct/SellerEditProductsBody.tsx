@@ -41,7 +41,7 @@ const SellerEditProductsBody = () => {
     discount_percentage: 0,
     vat_percentage: 0,
     total_variants: 0,
-    quantity: 0,
+    // quantity: 0,
 
     id: id as string,
 
@@ -256,6 +256,7 @@ const SellerEditProductsBody = () => {
                     onChange={onChange}
                     autoFocus={true}
                     value={formData.name}
+                    required
                   />
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm">
@@ -479,6 +480,7 @@ const SellerEditProductsBody = () => {
                     id=""
                     onChange={onChange}
                     value={formData.category}
+                    required
                   >
                     <option value="">Select a category</option>
                     {subcategoriesRedux.success ? (
@@ -498,15 +500,14 @@ const SellerEditProductsBody = () => {
                 </div>
                 <div className="text-[#777980] flex flex-col gap-2 text-sm w-full">
                   <label htmlFor="">Product Tags</label>
-                  <select
+                  <input
                     className="border p-2 rounded-md bg-[#F9F9FC]"
+                    type="text"
+                    placeholder="Type tags"
                     name="tag"
-                    id=""
                     onChange={onChange}
                     value={formData.tag}
-                  >
-                    <option value="">Select tags</option>
-                  </select>
+                  />
                 </div>
               </div>
               <div className="flex flex-col gap-3 shadow-md rounded-md p-2 w-full">
@@ -523,7 +524,6 @@ const SellerEditProductsBody = () => {
                     name="product_status"
                     onChange={onChange}
                     id=""
-                    // value={"draft"}
                     value={formData.product_status}
                     required
                   >
@@ -625,61 +625,9 @@ const SellerEditProductsBody = () => {
                 value={formData.total_variants}
               />
             </div>
-            <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[16rem]">
-              <label htmlFor="">Quantity</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                name="quantity"
-                type="number"
-                placeholder="Type product quantity here. . ."
-                onChange={onChange}
-              />
-            </div>
           </div>
         </div>
         <InputVariants setFormData={setFormData} />
-        <div className="flex flex-col gap-3 shadow-md rounded-md p-3">
-          <div className="font-[600] text-lg text-[#1D1F2C]">Shiping</div>
-          <div className="flex flex-row gap-3">
-            {" "}
-            <input type="checkbox" />{" "}
-            <span className="text-[#EDB842]">This is a physical product</span>
-          </div>
-          <div className="flex flex-wrap gap-3 items-stretch">
-            <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
-              <label htmlFor="">Weight</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
-                placeholder="Product weight. . ."
-              />
-            </div>
-            <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
-              <label htmlFor="">Height</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
-                placeholder="Height (cm). . ."
-              />
-            </div>
-            <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
-              <label htmlFor="">Length</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
-                placeholder="Length (cm). . ."
-              />
-            </div>
-            <div className="text-[#777980] flex flex-col gap-2 text-sm min-w-[13rem]">
-              <label htmlFor="">Width</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
-                placeholder="Width (cm). . ."
-              />
-            </div>
-          </div>
-        </div>
         <button
           type="submit"
           className="p-2 border text-white bg-[#EDB842] rounded-md"
