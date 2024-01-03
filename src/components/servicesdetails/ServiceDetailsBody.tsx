@@ -1,36 +1,39 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  AiOutlineArrowRight,
-  AiOutlineRight,
-  AiOutlineShareAlt,
-} from "react-icons/ai";
-import { FaFlag, FaHome } from "react-icons/fa";
-import { MdEmail, MdFavorite, MdFavoriteBorder, MdMenu } from "react-icons/md";
+import { AiOutlineArrowRight, AiOutlineRight } from "react-icons/ai";
+import { BsFacebook, BsTwitter, BsWhatsapp } from "react-icons/bs";
+import { FaHome } from "react-icons/fa";
+import { FiCopy } from "react-icons/fi";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { Service2 } from "../../images";
-import { Facebook, Twitter, Whatsapp } from "../../images/dashboard";
 import { user2 } from "../../images/users";
 import { homeGetServiceDetailsAction } from "../../redux/actions/home.actions";
-import { ReducersType } from "../../redux/store";
-import { ReduxResponseType } from "../../redux/types/general.types";
-import { AdminGetServiceType } from "../../redux/types/services.types";
-import { Ratings } from "../shareables/Ratings";
-import Swal from "sweetalert2";
-import Reviews from "../shareables/reviews";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
+import { createServiceOrderAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
 import {
   addToWishlistAction,
   removeFromWishlistAction,
 } from "../../redux/actions/wishlist.actions";
+import { CREATE_SERVICE_ORDER_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import { ServiceOrderType } from "../../redux/types/serviceOrders.types";
+import { AdminGetServiceType } from "../../redux/types/services.types";
+import { adminUGetUserType } from "../../redux/types/users.types";
 import { WishlistItemType } from "../../redux/types/wishlist.types";
 import inWishlist from "../../utils/checkWhishlist";
-import { createServiceOrderAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
-import { ServiceOrderType } from "../../redux/types/serviceOrders.types";
-import { PulseLoader } from "react-spinners";
-import { CREATE_SERVICE_ORDER_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
-import { adminUGetUserType } from "../../redux/types/users.types";
-import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
+import {
+  copyToClipboard,
+  shareOnFacebook,
+  shareOnTwitter,
+  shareOnWhatsApp,
+} from "../../utils/copytoClipboard.utils";
+import { Ratings } from "../shareables/Ratings";
+import Reviews from "../shareables/reviews";
 import { ServiceDetailsChat } from "../shareables/serviceChatBox";
 
 const ServiceDetailsBody = () => {
@@ -151,30 +154,18 @@ const ServiceDetailsBody = () => {
 
   return (
     <section className="p-3 flex flex-col gap-4">
-      <div className="text-[#5F6C72] flex flex-row justify-between">
+      <div className="text-[#5F6C72] flex flex-row justify-start">
         <div className="hidden md:flex flex-row items-center gap-1">
           <FaHome /> <span>Home</span> <AiOutlineRight /> <span>Category</span>{" "}
-          <AiOutlineRight /> <span>Product</span> <AiOutlineRight />{" "}
-          <span>Electronics Devices</span>
-          <AiOutlineRight /> <span>Macbook Pro</span>{" "}
-        </div>
-        <div className="flex flex-row items-center gap-3 ms-auto">
-          <MdMenu />
-          <MdFavoriteBorder />
-          <span className="border border-[#DADBDD] p-1 rounded-md">2,767</span>
-          <span className="border border-[#DADBDD] p-2 rounded-md">
-            <FaFlag />
-          </span>
-          <span className="border border-[#DADBDD] p-2 rounded-md text-[#EDB842]">
-            {" "}
-            <AiOutlineShareAlt />
-          </span>
+          <AiOutlineRight /> <span>Service</span> <AiOutlineRight />{" "}
+          <span>{service?.sub_category}</span>
+          <AiOutlineRight /> <span>{service?.name}</span>{" "}
         </div>
       </div>
       <div className="flex flex-col lg:flex-row gap-3 justify-start">
         <div className="flex flex-col gap-3 w-full md:w-3/5">
           <div className="font-[700] text-xl">{service?.name}</div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 w-full">
             <img className="w-5 object-contain" src={user2} alt="" />
             <div className="text-[#404145] font-[500]">
               {service.owner?.username}
@@ -322,17 +313,40 @@ const ServiceDetailsBody = () => {
         <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
       <div className="">
-        <div className="flex gap-3 items-center">
-          share on:{" "}
-          <span className="text-[#7A7D85] text-xl">
-            <MdEmail />
-          </span>{" "}
-          <img src={Whatsapp} alt="" />
-          <img src={Facebook} alt="" />
-          <img src={Twitter} alt="" />
-        </div>
+        <span className="flex flex-col items-center gap-2 ms-auto justify-center">
+          <span className="text-3xl">share to:</span>
+          <div className="flex flex-wrap text-lg gap-2">
+            <FiCopy onClick={() => copyToClipboard(window.location.href)} />{" "}
+            <BsFacebook
+              onClick={() =>
+                shareOnFacebook("check out this product", window.location.href)
+              }
+            />{" "}
+            <BsTwitter
+              onClick={() =>
+                shareOnTwitter("check out this product", window.location.href)
+              }
+            />{" "}
+            <BsWhatsapp
+              onClick={() =>
+                shareOnWhatsApp("check out this product", window.location.href)
+              }
+            />
+          </div>
+        </span>
       </div>
-      <AboutSellerServceDetails />
+      <AboutSellerServceDetails
+        owner={service?.owner}
+        location_description={service?.location_description}
+        phone_number={service?.phone_number}
+        phone_number_backup={service?.phone_number_backup}
+        email={service?.email}
+        website_link={service?.website_link}
+        country={service?.country}
+        state={service?.state}
+        city={service?.city}
+        map_location_link={service?.map_location_link}
+      />
       <ServiceDetailsChat
         owner_id={service?.owner?.id || ""}
         service_id={service?._id || ""}
@@ -342,7 +356,18 @@ const ServiceDetailsBody = () => {
   );
 };
 
-const AboutSellerServceDetails = () => {
+const AboutSellerServceDetails = ({
+  owner,
+  location_description,
+  phone_number,
+  phone_number_backup,
+  email,
+  website_link,
+  country,
+  state,
+  city,
+  map_location_link,
+}: any) => {
   return (
     <div className="flex flex-col gap-4 max-w-[50rem]">
       <div className="font-[700] text-2xl">About The Seller</div>
@@ -352,15 +377,10 @@ const AboutSellerServceDetails = () => {
         </div>
         <div className="flex flex-col gap-1">
           <div className="text-lg font-[700] text-[#0E0E0F]">
-            Marjorie Asturias
+            {owner?.username || "N/A"}, {owner?.email || "N/A"}
           </div>
           <div className="font-[400] text-[#95979D] ">
-            WordPress expert with 10+ years working with business owners,
-            influencers and bloggers to expand their online audience.
-          </div>
-          <div className="flex items-center gap-3 text-[#95979D]">
-            <Ratings rating={4} />
-            (974)
+            {location_description || "Not Available"}
           </div>
         </div>
       </div>
@@ -369,43 +389,54 @@ const AboutSellerServceDetails = () => {
           <div className="flex flex-col gap-3">
             <div className="">
               <div className="text-[#74767E] font-[400]">From</div>
-              <div className="text-[#62646A] font-[600]">Sri Lanka</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">
-                Avg. response time
+              <div className="text-[#62646A] font-[600]">
+                {country || "N/A"}
               </div>
-              <div className="text-[#62646A] font-[600]">1 hour</div>
             </div>
             <div className="">
-              <div className="text-[#74767E] font-[400]">Languages</div>
-              <div className="text-[#62646A] font-[600]">English</div>
+              <div className="text-[#74767E] font-[400]">State</div>
+              <div className="text-[#62646A] font-[600]">{state || "N/A"}</div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">City</div>
+              <div className="text-[#62646A] font-[600]">{city || "N/A"}</div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">Website link</div>
+              <div className="text-[#62646A] font-[600]">
+                {website_link || "N/A"}
+              </div>
             </div>
           </div>
           <div className="flex flex-col gap-3">
             <div className="">
-              <div className="text-[#74767E] font-[400]">Member since</div>
-              <div className="text-[#62646A] font-[600]">Aug 2019</div>
+              <div className="text-[#74767E] font-[400]">Email</div>
+              <div className="text-[#62646A] font-[600]">{email || "N/A"}</div>
             </div>
             <div className="">
-              <div className="text-[#74767E] font-[400]">Aug 2019</div>
-              <div className="text-[#62646A] font-[600]">about 3 hours</div>
+              <div className="text-[#74767E] font-[400]">Phone Number</div>
+              <div className="text-[#62646A] font-[600]">
+                {phone_number || "N/A"}
+              </div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">
+                Phone Number Backup
+              </div>
+              <div className="text-[#62646A] font-[600]">
+                {phone_number_backup || "N/A"}
+              </div>
+            </div>
+            <div className="">
+              <div className="text-[#74767E] font-[400]">Map Location link</div>
+              <div className="text-[#62646A] font-[600]">
+                {map_location_link || "N/A"}
+              </div>
             </div>
           </div>
         </div>
         <hr />
-        <div className="py-3">
-          At Airbluesoft Premium Digital Studio we create all kinds of creative
-          videos, specializing in Creating Promos( Website, Apps, Fashion, Real
-          Estate, Youtube, NFT) and all other promos and all instructional
-          videos.
-          <br />
-          <br />
-          We Create Basic To High-End Videos.
-          <br />
-          <br />
-          Creativity Beyond the Limits. -Airbluesoft Premium Digital Studio-
-        </div>
+        {/* map location */}
       </div>
     </div>
   );

@@ -86,7 +86,10 @@ import {
   homeGetServiceCategoryReducer,
   homeGetServiceDetailReducer,
   homeGetServicesReducer,
+  youMayLikeProductsReducer,
+  youMayLikeServicesReducer,
 } from "./reducers/home.reducers";
+import { getSellerServiceOrdersReducer } from "./reducers/seller/seler-service-orders";
 import {
   sellerAddBankAccountReducer,
   sellerAddPayoneerReducer,
@@ -200,7 +203,6 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
-import { getSellerServiceOrdersReducer } from "./reducers/seller/seler-service-orders";
 
 export type ReducersType = {
   //cart system
@@ -228,6 +230,8 @@ export type ReducersType = {
   homeGetServices: ReduxResponseType;
   homeGetProductDetails: ReduxResponseType;
   homeGetServiceDetails: ReduxResponseType;
+  youMayLikeProducts: ReduxResponseType;
+  youMayLikeServices: ReduxResponseType;
 
   //contact us
   contactus: ReduxResponseType;
@@ -433,6 +437,8 @@ const reducer = combineReducers<ReducersType>({
   homeGetServices: homeGetServicesReducer,
   homeGetProductDetails: homeGetProductDetailReducer,
   homeGetServiceDetails: homeGetServiceDetailReducer,
+  youMayLikeProducts: youMayLikeProductsReducer,
+  youMayLikeServices: youMayLikeServicesReducer,
 
   //contact us
   contactus: CreateContactUsReducer,

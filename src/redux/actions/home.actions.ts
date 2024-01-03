@@ -19,6 +19,12 @@ import {
   HOME_SERVICES_FAIL,
   HOME_SERVICES_REQUEST,
   HOME_SERVICES_SUCCESS,
+  YOU_MAY_LIKE_PRODUCTS_FAIL,
+  YOU_MAY_LIKE_PRODUCTS_REQUEST,
+  YOU_MAY_LIKE_PRODUCTS_SUCCESS,
+  YOU_MAY_LIKE_SERVICES_FAIL,
+  YOU_MAY_LIKE_SERVICES_REQUEST,
+  YOU_MAY_LIKE_SERVICES_SUCCESS,
 } from "../constants/home.constants";
 import { API_ROUTES } from "../routes";
 
@@ -219,6 +225,72 @@ export const homeGetProductCategoryAction =
     } catch (error: any) {
       dispatch({
         type: HOME_PRODUCTS_CATEGORY_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const youMayLikeProductsAction =
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: YOU_MAY_LIKE_PRODUCTS_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.home?.products + "?" + query.toString(),
+        config
+      );
+
+      dispatch({
+        type: YOU_MAY_LIKE_PRODUCTS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: YOU_MAY_LIKE_PRODUCTS_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const youMayLikeServicesAction =
+  (query: string) => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: YOU_MAY_LIKE_SERVICES_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.home?.services + "?" + query.toString(),
+        config
+      );
+
+      dispatch({
+        type: YOU_MAY_LIKE_SERVICES_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: YOU_MAY_LIKE_SERVICES_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

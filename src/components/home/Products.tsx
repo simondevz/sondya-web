@@ -111,7 +111,7 @@ const Products = () => {
     dispatch(homeGetProductCategoryAction() as any);
   }, [dispatch, queryString]);
 
-  //admin get products
+  //home get products
   const homeGetProductsRedux = useSelector(
     (state: ReducersType) => state?.homeGetProducts
   ) as ReduxResponseType<Paginator<AdminGetProductType[]>>;

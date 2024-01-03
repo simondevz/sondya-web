@@ -59,6 +59,7 @@ export type AdminGetServiceType = {
   user?: string; //
   owner?: Owner;
   category: string;
+  sub_category: string;
   brief_description: string;
   description: string;
   service_status: string;
