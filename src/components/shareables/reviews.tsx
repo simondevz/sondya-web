@@ -15,7 +15,11 @@ import {
   reviewStatAction,
   listReviewsAction,
 } from "../../redux/actions/userDashboard/reviews.actions";
-import { USER_CREATE_REVIEW_RESET } from "../../redux/constants/userDashboard/review.constants";
+import {
+  USER_CREATE_REVIEW_RESET,
+  USER_LIST_REVIEW_RESET,
+  USER_REVIEW_STAT_RESET,
+} from "../../redux/constants/userDashboard/review.constants";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import {
@@ -41,10 +45,12 @@ const Reviews = ({
   const limit: number = 10;
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
+  const [moreReviews, setMoreReviews] = useState<boolean>(true);
 
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>("");
   const [reviews, setReviews] = useState<userReviewType[]>([]);
+  const [reviewStat, setReviewStat] = useState<reviewStatType>();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -139,7 +145,7 @@ const Reviews = ({
 
   useEffect(() => {
     if (reviewsListRedux?.success) {
-      if (reviewsListRedux?.serverResponse?.data?.length)
+      if (reviewsListRedux?.serverResponse?.data?.length) {
         if (page > 1) {
           setReviews((prev) => {
             return prev.concat(reviewsListRedux?.serverResponse?.data);
@@ -147,22 +153,35 @@ const Reviews = ({
         } else {
           setReviews(reviewsListRedux?.serverResponse?.data);
         }
+      } else {
+        setMoreReviews(false);
+      }
+      dispatch({ type: USER_LIST_REVIEW_RESET });
     }
-  }, [reviewsListRedux?.serverResponse?.data, reviewsListRedux?.success, page]);
+  }, [
+    reviewsListRedux?.serverResponse?.data,
+    reviewsListRedux?.success,
+    dispatch,
+    page,
+  ]);
+
+  useEffect(() => {
+    if (reviewStatRedux?.success) {
+      setReviewStat(reviewStatRedux?.serverResponse?.data);
+      dispatch({ type: USER_REVIEW_STAT_RESET });
+    }
+  }, [
+    reviewStatRedux?.serverResponse?.data,
+    reviewStatRedux?.success,
+    dispatch,
+  ]);
 
   return (
     <div className="flex flex-col gap-4 p-5 w-full md:w-3/5">
       <div className="">Reviews</div>
       <div className="flex flex-row gap-5">
-        <span>
-          {reviewStatRedux?.serverResponse?.data?.totalReviews || 0} reviews for
-          this Product
-        </span>
-        <Ratings
-          rating={Math.round(
-            reviewStatRedux?.serverResponse?.data?.averageRating || 0
-          )}
-        />
+        <span>{reviewStat?.totalReviews || 0} reviews for this Product</span>
+        <Ratings rating={Math.round(reviewStat?.averageRating || 0)} />
       </div>
       <div className="flex flex-row items-center">
         <input
@@ -235,8 +254,9 @@ const Reviews = ({
       ) : (
         <div>No Reviews yet</div>
       )}
-      {reviewsListRedux?.serverResponse?.data?.length === 0 &&
-        reviews?.length !== 0 && <div>No More Reviews Found</div>}
+      {!moreReviews && reviews?.length !== 0 && (
+        <div>No More Reviews Found</div>
+      )}
       <div
         onClick={() => {
           setSearch("");

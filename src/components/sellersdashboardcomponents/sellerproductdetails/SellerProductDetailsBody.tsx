@@ -28,7 +28,7 @@ import Reviews from "../../shareables/reviews";
 import SelectVariant from "../../shareables/selectVariants";
 
 const SellerProductDetailsBody = () => {
-  let [count, setCount] = useState<number>(2);
+  // let [count, setCount] = useState<number>(2);
 
   // fetch data
   const dispatch = useDispatch();
@@ -155,9 +155,13 @@ const SellerProductDetailsBody = () => {
         <div className="flex flex-col gap-4 p-3">
           <div className="flex flex-row gap-4">
             {" "}
-            <Ratings rating={4.7} />
-            <span className="text-[#191C1F]">4.7 Star Rating</span>
-            <span className="text-[#5F6C72]">(21,671 User feedback)</span>
+            <Ratings rating={products?.rating} />
+            <span className="text-[#191C1F]">
+              {products?.rating} Star Rating
+            </span>
+            <span className="text-[#5F6C72]">
+              ({products?.total_rating} User feedback)
+            </span>
           </div>
           <div className="">{products?.name}</div>
           <div className="grid grid-cols-2 gap-2">

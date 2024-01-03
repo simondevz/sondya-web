@@ -418,22 +418,22 @@ const DeliverWorkModal = ({
           {order_status === "COMPLETED" &&
             "This order has been completed your money has been sent to your account."}
         </span>
-        {order_status !== "DELIVERED" && order_status !== "COMPLETED" && (
-          <button
-            onClick={handledeliver}
-            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
-          >
-            Devliver
-          </button>
-        )}
-        {(order_status === "DELIVERED" || order_status === "COMPLETED") && (
+        <div className="flex gap-3">
+          {order_status !== "DELIVERED" && order_status !== "COMPLETED" && (
+            <button
+              onClick={handledeliver}
+              className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+            >
+              Devliver
+            </button>
+          )}
           <button
             onClick={handleClose}
             className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
           >
             Close
           </button>
-        )}
+        </div>
       </div>
     </Modal>
   );

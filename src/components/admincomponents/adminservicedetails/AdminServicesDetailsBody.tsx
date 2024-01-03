@@ -9,7 +9,6 @@ import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetServiceType } from "../../../redux/types/services.types";
 import { Ratings } from "../../shareables/Ratings";
-import Reviews from "../../shareables/reviews";
 
 const AdminServicesDetailsBody = () => {
   // fetch data
@@ -44,8 +43,8 @@ const AdminServicesDetailsBody = () => {
             <img className="w-5 object-contain" src={user2} alt="" />
             <div className="text-[#404145] font-[500]">airb123</div>
             <div className="flex gap-2">
-              <Ratings rating={4} />{" "}
-              <span className="text-[#95979D]">(904)</span>
+              <Ratings rating={service?.rating} />{" "}
+              <span className="text-[#95979D]">({service?.total_rating})</span>
             </div>
           </div>
           <div className="">
@@ -115,17 +114,16 @@ const AdminServicesDetailsBody = () => {
         <div className="text-xl font-[600]">About Gig</div>
         <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
-      <Reviews
-        product_type={"service"}
-        product_id={service?._id || ""}
-        owner_id={service?.owner?.id}
-      />
-      <AboutAdminServceDetails />
+      {service && <AboutAdminServceDetails service={service} />}
     </section>
   );
 };
 
-const AboutAdminServceDetails = () => {
+const AboutAdminServceDetails = ({
+  service,
+}: {
+  service: AdminGetServiceType;
+}) => {
   return (
     <div className="flex flex-col gap-4 max-w-[50rem]">
       <div className="font-[700] text-2xl">About The Seller</div>
@@ -142,8 +140,7 @@ const AboutAdminServceDetails = () => {
             influencers and bloggers to expand their online audience.
           </div>
           <div className="flex items-center gap-3 text-[#95979D]">
-            <Ratings rating={4} />
-            (974)
+            <Ratings rating={service?.rating} />({service?.total_rating})
           </div>
         </div>
       </div>

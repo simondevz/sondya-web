@@ -115,8 +115,8 @@ const SellerServiceDetailsBody = () => {
                 : service?.owner?.email}
             </div>
             <div className="flex gap-2">
-              <Ratings rating={4} />{" "}
-              <span className="text-[#95979D]">(904)</span>
+              <Ratings rating={service?.rating} />{" "}
+              <span className="text-[#95979D]">({service?.total_rating})</span>
             </div>
           </div>
           <div className="">

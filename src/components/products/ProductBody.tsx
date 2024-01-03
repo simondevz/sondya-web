@@ -285,9 +285,6 @@ const ProductBodyMain = ({
             return (
               <div
                 key={product._id}
-                onClick={() =>
-                  navigate(`/product/details/${product?._id}/${product?.name}`)
-                }
                 className="p-3 flex flex-col gap-3 hover:p-2"
               >
                 <img
