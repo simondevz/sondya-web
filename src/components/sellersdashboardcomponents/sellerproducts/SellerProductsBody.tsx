@@ -153,7 +153,7 @@ const SellerProductsBody = () => {
   const productsRedux = useSelector(
     (state: ReducersType) => state?.sellerGetAllProducts
   ) as ReduxResponseType<sellerGetProductsType>;
-  console.log(productsRedux);
+  // console.log(productsRedux);
 
   useEffect(() => {
     if (productsRedux.success)
@@ -235,10 +235,7 @@ const SellerProductsBody = () => {
           <tbody>
             {products?.map((t, i) => {
               return (
-                <tr
-                  onClick={() => navigate("/seller/products/details/" + t._id)}
-                  key={i}
-                >
+                <tr key={i}>
                   <td className="p-2 text-start">
                     <div className="flex flex-col md:flex-row gap-2 items-center">
                       <img
@@ -250,43 +247,43 @@ const SellerProductsBody = () => {
                         }
                         alt=""
                       />
-                      <span className="w-52">{t.name}</span>
+                      <span className="w-52">{t?.name}</span>
                     </div>
                   </td>
                   <td className="p-2 text-start text-[#767E94] text-sm font-[600] whitespace-nowrap">
-                    {t.total_stock}
+                    {t?.total_stock}
                   </td>
                   <td className="p-2 text-start text-[#636A80] text-sm font-[600]">
-                    $<FormatNumber price={t.current_price} />
+                    $<FormatNumber price={t?.current_price} />
                   </td>
                   <td className="p-2 text-[#292929] font-[400] whitespace-nowrap text-start">
-                    {t.product_status === "available" ? (
+                    {t?.product_status === "available" ? (
                       <div className="text-[#2DB224] flex gap-2 items-center">
                         <span>
                           <TiTick />
                         </span>
-                        {t.product_status}
+                        {t?.product_status}
                       </div>
-                    ) : t.product_status === "sold" ? (
+                    ) : t?.product_status === "sold" ? (
                       <div className="text-[#EE5858] flex gap-2 items-center">
                         <span>
                           <TiTick />
                         </span>
-                        {t.product_status}
+                        {t?.product_status}
                       </div>
                     ) : t.product_status === "draft" ? (
                       <div className="text-[#3b3939] flex gap-2 items-center">
                         <span>
                           <TiTick />
                         </span>
-                        {t.product_status}
+                        {t?.product_status}
                       </div>
                     ) : (
                       <div className="text-[#EE5858] flex gap-2 items-center">
                         <span>
                           <FaTimes />
                         </span>
-                        {t.product_status}
+                        {t?.product_status}
                       </div>
                     )}
                   </td>
@@ -321,7 +318,7 @@ const SellerProductsBody = () => {
                       <div className="absolute top-12 right-9 bg-white border z-10 p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
                         <div
                           onClick={() =>
-                            navigate(`/seller/products/details/${t._id}`)
+                            navigate(`/seller/products/details/${t?._id}`)
                           }
                           className="flex gap-4 items-center"
                         >
@@ -332,7 +329,7 @@ const SellerProductsBody = () => {
                         </div>
                         <div
                           onClick={() =>
-                            navigate(`/seller/products/edit/${t._id}`)
+                            navigate(`/seller/products/edit/${t?._id}`)
                           }
                           className="flex gap-4 items-center text-[#27C200]"
                         >
@@ -340,7 +337,7 @@ const SellerProductsBody = () => {
                           <span className="whitespace-nowrap">Edit</span>
                         </div>
                         <div
-                          onClick={() => handleDelete(t._id)}
+                          onClick={() => handleDelete(t?._id)}
                           className="flex gap-4 items-center"
                         >
                           <MdDelete />{" "}

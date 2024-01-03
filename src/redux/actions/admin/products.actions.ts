@@ -42,7 +42,6 @@ export const adminCreateProductAction =
     discount_percentage,
     vat_percentage,
     total_variants,
-    quantity,
     image,
 
     country,
@@ -73,7 +72,6 @@ export const adminCreateProductAction =
       FD.append("discount_percentage", discount_percentage.toString());
       FD.append("vat_percentage", vat_percentage.toString());
       FD.append("total_variants", total_variants.toString());
-      FD.append("quantity", quantity.toString());
 
       // location
       FD.append("country", country);
@@ -182,7 +180,6 @@ export const adminUpdateProductAction =
       FD.append("zip_code", zip_code);
 
       FD.append("deleteImageId", JSON.stringify(deleteImageId));
-      // FD.append("quantity", quantity.toString());
       if (image && Array.isArray(image) && image.length >= 1) {
         image.forEach((file) => FD.append("image", file as File));
       }

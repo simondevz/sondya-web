@@ -16,7 +16,7 @@ export type AdminCreateProduct = {
   vat_percentage: number;
   total_variants: number;
   variants?: any;
-  quantity: number;
+  // quantity: number;
   image?: File[] | ImageType[];
 
   owner?: Owner;
@@ -44,7 +44,7 @@ export type AdminUpdateProduct = {
   vat_percentage: number;
   total_variants: number;
   variants?: any;
-  quantity: number;
+  // quantity: number;
   image?: File[] | ImageType[];
 
   owner?: Owner;
@@ -78,7 +78,7 @@ export type AdminGetProductType = {
   vat_percentage: number;
   total_variants: number;
   variants?: any;
-  quantity: number;
+  // quantity: number;
   image?: ImageType[];
 
   owner?: Owner;
@@ -107,7 +107,7 @@ export type UserGetProductType = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
-  quantity: number;
+  // quantity: number;
   image?: ImageType[];
   rating: number;
   total_rating: number;

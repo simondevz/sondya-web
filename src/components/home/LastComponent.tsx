@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import slugify from "slugify";
 import { productImageA } from "../../images/products";
 import { userGetProductsAction } from "../../redux/actions/userDashboard/products.action";
 import { userGetServicesAction } from "../../redux/actions/userDashboard/services.actions";
@@ -19,6 +21,7 @@ import { FormatNumber } from "../shareables/FormatNumber";
 
 const LastComponent = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [newServices, setNewServices] = useState<UserGetServiceType[]>();
   const [newProducts, setNewProducts] = useState<UserGetProductType[]>();
 
@@ -109,6 +112,13 @@ const LastComponent = () => {
               {newServices?.map((service) => {
                 return (
                   <div
+                    onDoubleClick={() =>
+                      navigate(
+                        `/service/details/${service._id}/${slugify(
+                          service.name
+                        )}`
+                      )
+                    }
                     key={service?._id}
                     className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
@@ -150,6 +160,9 @@ const LastComponent = () => {
               {newProducts?.map((t) => {
                 return (
                   <div
+                    onDoubleClick={() =>
+                      navigate(`/product/details/${t._id}/${slugify(t.name)}`)
+                    }
                     key={t?._id}
                     className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
@@ -189,6 +202,13 @@ const LastComponent = () => {
               {mostRatedServices?.map((service) => {
                 return (
                   <div
+                    onDoubleClick={() =>
+                      navigate(
+                        `/service/details/${service._id}/${slugify(
+                          service.name
+                        )}`
+                      )
+                    }
                     key={service?._id}
                     className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
@@ -230,6 +250,9 @@ const LastComponent = () => {
               {mostRatedProducts?.map((t) => {
                 return (
                   <div
+                    onDoubleClick={() =>
+                      navigate(`/product/details/${t._id}/${slugify(t.name)}`)
+                    }
                     key={t?._id}
                     className="flex flex-row border p-3 justify-between gap-2 rounded-md"
                   >
