@@ -1,9 +1,12 @@
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { bgWhoAreWe } from "../../../images/whoarewe";
+import { useState } from "react";
 
 const TrackOrderBody = () => {
   const navigate = useNavigate();
+  const [orderId, setOrderId] = useState<string>("");
+
   return (
     <section className="p-12">
       <div
@@ -27,6 +30,8 @@ const TrackOrderBody = () => {
               className="border p-2 rounded-md"
               type="text"
               placeholder="ID..."
+              value={orderId}
+              onChange={(event) => setOrderId(event.target.value)}
             />
             <small className="text-[#5F6C72] font-[400]">
               &#9432; Order ID that we sended to your in your email address.
@@ -34,7 +39,7 @@ const TrackOrderBody = () => {
           </div>
         </div>
         <button
-          onClick={() => navigate("/user/track/details/96459761")}
+          onClick={() => navigate("/user/track/details/" + orderId)}
           className="flex flex-row gap-2 p-2 bg-[#EDB842] text-white items-center rounded-md max-w-[13rem] justify-center"
         >
           <span>Track Order</span>

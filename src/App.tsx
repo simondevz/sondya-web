@@ -344,7 +344,7 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
-    path: "/user/track/details/:id",
+    path: "/user/track/details/:order_id",
     element: <TrackDetails />,
     errorElement: <ErrorPage />,
     loader: dashboardCheck,

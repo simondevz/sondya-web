@@ -22,6 +22,7 @@ import {
   ProductPopularTags,
   ProductPriceRange,
 } from "./FilterProductsNav";
+import { USER_GET_PRODUCTS_RESET } from "../../redux/constants/userDashboard/products.constants";
 
 export type QueryType = {
   page: number;
@@ -70,6 +71,7 @@ const ProductBodyMain = ({
   const [queryString, setQueryString] = useState<string>("");
   const [dotIndex, setDotIndex] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [productsState, setProductsState] = useState<userGetProductsType>();
 
   // update query and url
   const updateQueryString = useCallback(
@@ -137,11 +139,14 @@ const ProductBodyMain = ({
   ) as ReduxResponseType<userGetProductsType>;
 
   useEffect(() => {
-    if (productsRedux.success)
+    if (productsRedux.success) {
       setTotalPages(
         Math.ceil(Number(productsRedux?.serverResponse?.data?.count) / limit)
       );
-  }, [productsRedux?.success, productsRedux?.serverResponse?.data?.count]);
+      setProductsState(productsRedux?.serverResponse?.data);
+      dispatch({ type: USER_GET_PRODUCTS_RESET });
+    }
+  }, [productsRedux?.success, productsRedux?.serverResponse?.data, dispatch]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -270,65 +275,66 @@ const ProductBodyMain = ({
           )}
         </div>
         <div className="whitespace-nowrap">
-          {productsRedux?.serverResponse?.data?.count} Results found.
+          {productsState?.count} Results found.
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {productsRedux.success ? (
-          productsRedux?.serverResponse?.data?.products?.map(
-            (product: UserGetProductType) => {
-              return (
-                <div
-                  key={product._id}
-                  className="p-3 flex flex-col gap-3 hover:p-2"
-                >
-                  <img
-                    className="h-[12rem] object-cover rounded-md"
-                    src={
-                      (product.image && product.image[0]?.url) || productImage7
-                    }
-                    alt=""
-                  />
-                  <div className="flex flex-row gap-1 justify-between">
-                    <Ratings rating={product.rating} />
-                    <span className="text-[#A2A6B0] whitespace-nowrap">
-                      Reviews ({product.total_rating})
-                    </span>
+        {productsState ? (
+          productsState?.products?.map((product: UserGetProductType) => {
+            return (
+              <div
+                key={product._id}
+                onClick={() =>
+                  navigate(`/product/details/${product?._id}/${product?.name}`)
+                }
+                className="p-3 flex flex-col gap-3 hover:p-2"
+              >
+                <img
+                  className="h-[12rem] object-cover rounded-md"
+                  src={
+                    (product.image && product.image[0]?.url) || productImage7
+                  }
+                  alt=""
+                />
+                <div className="flex flex-row gap-1 justify-between">
+                  <Ratings rating={product.rating} />
+                  <span className="text-[#A2A6B0] whitespace-nowrap">
+                    Reviews ({product.total_rating})
+                  </span>
+                </div>
+                <div className="h-[3rem]">{product.name}</div>
+                <div className="flex flex-row gap-1">
+                  <div className="text-lg font-[700]">
+                    $<FormatNumber price={product.current_price} />
                   </div>
-                  <div className="h-[3rem]">{product.name}</div>
-                  <div className="flex flex-row gap-1">
-                    <div className="text-lg font-[700]">
-                      $<FormatNumber price={product.current_price} />
-                    </div>
-                    <div className="text-[#666666] line-through">
-                      {product.old_price && "$"}
-                      {product.old_price ? (
-                        <FormatNumber price={product.old_price} />
-                      ) : (
-                        <div className="invisible">hi</div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex flex-row gap-1 justify-between">
-                    <button
-                      onClick={() =>
-                        navigate(
-                          `/product/details/${product._id}/${slugify(
-                            product.name
-                          )}`
-                        )
-                      }
-                      className="flex flex-row gap-1 font-[600] whitespace-nowrap text-[#EDB842] items-center"
-                    >
-                      Shop now
-                    </button>
-                    <ProductLikeButton product={product} />
+                  <div className="text-[#666666] line-through">
+                    {product.old_price && "$"}
+                    {product.old_price ? (
+                      <FormatNumber price={product.old_price} />
+                    ) : (
+                      <div className="invisible">hi</div>
+                    )}
                   </div>
                 </div>
-              );
-            }
-          )
+                <div className="flex flex-row gap-1 justify-between">
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/product/details/${product._id}/${slugify(
+                          product.name
+                        )}`
+                      )
+                    }
+                    className="flex flex-row gap-1 font-[600] whitespace-nowrap text-[#EDB842] items-center"
+                  >
+                    Shop now
+                  </button>
+                  <ProductLikeButton product={product} />
+                </div>
+              </div>
+            );
+          })
         ) : (
           <></>
         )}

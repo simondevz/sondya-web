@@ -6,11 +6,17 @@ import { TiTick } from "react-icons/ti";
 import { ImgExample } from "../../../images";
 import { trackRod1 } from "../../../images/cart";
 import ReviewTerms from "../../shareables/reviewTerms";
-import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
+import { ServiceDetailsChat } from "../../shareables/serviceChatBox";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getServiceOrderByIdAction } from "../../../redux/actions/userDashboard/serviceOrder.actions";
-import { GET_SERVICE_ORDER_BYID_RESET } from "../../../redux/constants/userDashboard/serviceOrder.constants";
+import {
+  getServiceOrderByIdAction,
+  updateServiceOrderAction,
+} from "../../../redux/actions/userDashboard/serviceOrder.actions";
+import {
+  GET_SERVICE_ORDER_BYID_RESET,
+  UPDATE_SERVICE_ORDERS_RESET,
+} from "../../../redux/constants/userDashboard/serviceOrder.constants";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
@@ -18,6 +24,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FormatNumber } from "../../shareables/FormatNumber";
 import Swal from "sweetalert2";
 import { TimeLeft } from "../../shareables/dateFormatter";
+import { toast } from "react-toastify";
+import { Modal } from "react-overlays";
 // import Swal from "sweetalert2";
 
 const ServiceOrderDetailsBody = () => {
@@ -82,6 +90,55 @@ const ServiceOrderDetailsBody = () => {
     currentOrder?.order_id,
     moveToPayment,
     navigate,
+  ]);
+
+  const [showConfirmDialogue, setShowConfirmDialogue] = useState<boolean>();
+  const [confirm, setConfirm] = useState<boolean>(false);
+  const updatedServiceOrderRedux = useSelector(
+    (state: ReducersType) => state.updateServiceOrders
+  ) as ReduxResponseType<ServiceOrderType>;
+
+  // confirm the service.
+  useEffect(() => {
+    if (confirm && currentOrder && currentOrder.order_status !== "COMPLETED") {
+      dispatch(
+        updateServiceOrderAction({
+          ...currentOrder,
+          order_status: "COMPLETED",
+        }) as any
+      );
+    }
+  }, [confirm, dispatch, currentOrder, currentOrder?.order_status]);
+
+  // update service after calling updateserviceorderaction
+  useEffect(() => {
+    if (updatedServiceOrderRedux.success) {
+      setCurrentOrder(updatedServiceOrderRedux.serverResponse?.data);
+      toast("Order Status Updated", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      dispatch({ type: UPDATE_SERVICE_ORDERS_RESET });
+    }
+
+    if (updatedServiceOrderRedux?.error)
+      Swal.fire({
+        title: "Error!!",
+        text: updatedServiceOrderRedux?.error,
+        icon: "error",
+        timer: 3000,
+        confirmButtonText: "Okay",
+      }).finally(() => dispatch({ type: UPDATE_SERVICE_ORDERS_RESET }));
+  }, [
+    dispatch,
+    updatedServiceOrderRedux?.success,
+    updatedServiceOrderRedux?.serverResponse?.data,
+    updatedServiceOrderRedux?.error,
   ]);
 
   return (
@@ -200,12 +257,33 @@ const ServiceOrderDetailsBody = () => {
               "p-1 h-fit w-fit rounded-full -mt-4"
             }
           >
-            <span className="text-white text-xl invisible">
+            <span
+              className={
+                (currentOrder?.order_status === "DELIVERED" ||
+                currentOrder?.order_status === "COMPLETED"
+                  ? ""
+                  : " invisible ") + "text-white text-xl"
+              }
+            >
               <TiTick />
             </span>
           </span>
-          <span className="p-1 border-[#EDB842] bg-white border-2 h-fit w-fit rounded-full -mt-4">
-            <span className="text-white text-xl invisible">
+          <span
+            className={
+              (currentOrder?.order_status === "DELIVERED" ||
+              currentOrder?.order_status === "COMPLETED"
+                ? " bg-[#EDB842] "
+                : " bg-white border-[#EDB842] border-2 ") +
+              "p-1 h-fit w-fit rounded-full -mt-4"
+            }
+          >
+            <span
+              className={
+                (currentOrder?.order_status === "COMPLETED"
+                  ? ""
+                  : " invisible ") + "text-white text-xl"
+              }
+            >
               <TiTick />
             </span>
           </span>
@@ -285,20 +363,56 @@ const ServiceOrderDetailsBody = () => {
             <MdArrowDropDown />
           </span>
         </button>
-        <button
-          className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
-          onClick={() => {
-            dispatch(
-              getServiceOrderByIdAction({
-                order_id: params?.order_id || "",
-              }) as any
-            );
-            setMoveToPayment(true);
-          }}
-        >
-          <span className="my-auto">Proceed to Checkout</span>
-        </button>
+        {currentOrder?.order_status === "DELIVERED" ||
+        currentOrder?.order_status === "COMPLETED" ? (
+          <button
+            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+            onClick={() => {
+              if (
+                !(
+                  currentOrder?.checkout_items?.terms?.acceptedByBuyer &&
+                  currentOrder?.checkout_items?.terms?.acceptedBySeller
+                )
+              ) {
+                Swal.fire({
+                  title: "Error!!",
+                  icon: "error",
+                  text: "You both have to agree to set terms before you can deliver the work...",
+                  confirmButtonText: "okay",
+                });
+                return;
+              }
+
+              setShowConfirmDialogue(true);
+            }}
+          >
+            <span className="my-auto">Confirm Delivery</span>
+          </button>
+        ) : (
+          <button
+            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+            onClick={() => {
+              dispatch(
+                getServiceOrderByIdAction({
+                  order_id: params?.order_id || "",
+                }) as any
+              );
+              setMoveToPayment(true);
+            }}
+          >
+            <span className="my-auto">Proceed to Checkout</span>
+          </button>
+        )}
       </div>
+      <ConfirmDeliveryModal
+        showModal={showConfirmDialogue}
+        order_status={currentOrder?.order_status || ""}
+        handleClose={() => setShowConfirmDialogue(false)}
+        handleConfirm={() => {
+          setConfirm(true);
+          setShowConfirmDialogue(false);
+        }}
+      />
       <ReviewTerms
         currentOrder={currentOrder}
         showModal={showReviewTerms}
@@ -311,6 +425,57 @@ const ServiceOrderDetailsBody = () => {
         />
       </div>
     </section>
+  );
+};
+
+const ConfirmDeliveryModal = ({
+  showModal,
+  handleClose,
+  handleConfirm,
+  order_status,
+}: {
+  showModal: any;
+  handleClose: any;
+  handleConfirm: any;
+  order_status: string;
+}) => {
+  // Backdrop JSX code
+  const renderBackdrop = (props: any) => (
+    <div className="backdrop" {...props} />
+  );
+
+  return (
+    <Modal
+      className="modal top-[20%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"
+      show={showModal}
+      onHide={handleClose}
+      renderBackdrop={renderBackdrop}
+    >
+      <div className="flex flex-col gap-6 p-6 font-[600] text-[#667085] text-sm text-center ">
+        <span>
+          {order_status !== "COMPLETED" &&
+            "Click the 'Confirm Button' below when the seller delivers. Note that if you do not confirm the sellers work within seven days and no complaint is filed the money will be released automatically."}
+          {order_status === "COMPLETED" &&
+            "This order has been completed your money has been sent to the seller's account."}
+        </span>
+        {order_status !== "COMPLETED" && (
+          <button
+            onClick={handleConfirm}
+            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+          >
+            Confirm
+          </button>
+        )}
+        {order_status === "COMPLETED" && (
+          <button
+            onClick={handleClose}
+            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+          >
+            Close
+          </button>
+        )}
+      </div>
+    </Modal>
   );
 };
 

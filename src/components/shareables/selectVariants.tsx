@@ -1,7 +1,15 @@
 import { useMemo } from "react";
 import slugify from "slugify";
 
-const SelectVariant = ({ variants }: { variants: any }) => {
+const SelectVariant = ({
+  variants,
+  setSelectedVariants,
+}: {
+  variants: any;
+  setSelectedVariants: React.Dispatch<
+    React.SetStateAction<[string, string][] | undefined>
+  >;
+}) => {
   const labels = useMemo(() => {
     return Object.keys(variants);
   }, [variants]);
@@ -14,7 +22,18 @@ const SelectVariant = ({ variants }: { variants: any }) => {
             <div key={index} className="flex flex-col gap-2">
               <label htmlFor={labelStr}>{slugify(labelStr, " ")}</label>
               <div className="border-2 p-1 rounded-md overflow-x-hidden">
-                <select name="" id={labelStr}>
+                <select
+                  onChange={(event) =>
+                    setSelectedVariants((prev) => {
+                      return prev?.map(([label, value]) => {
+                        if (label === labelStr) value = event?.target?.value;
+                        return [label, value];
+                      });
+                    })
+                  }
+                  name=""
+                  id={labelStr}
+                >
                   {variants[labelStr].map((option: string, index: number) => {
                     return (
                       <option key={index} className="" value={option}>

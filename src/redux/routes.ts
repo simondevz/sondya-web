@@ -182,6 +182,7 @@ export const API_ROUTES = {
     createProductsOrders: BASE + "/user/order/products/create", // GET
     getProductsOrders: BASE + "/user/order/products/", // GET :user_id
     ProductOrdersById: BASE + "/user/order/products/details/", // GET :id
+    ProductOrdersByOrderId: BASE + "/user/order/products/details/byorderid/", // GET :order_id
   },
 
   // admin && products order
@@ -195,6 +196,7 @@ export const API_ROUTES = {
   sellerProductsOrders: {
     getProductsOrders: BASE + "/seller/order/products/", // GET :user_id
     getProductOrdersById: BASE + "/seller/order/product/details/", // GET :id
+    updateProductOrders: BASE + "/seller/order/products/update", // POST :getProductOrder Type
     deleteProductOrdersById: BASE + "/seller/order/products/", // GET :id
   },
 

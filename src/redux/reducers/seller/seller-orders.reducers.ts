@@ -12,6 +12,10 @@ import {
   SELLER_GET_PRODUCTS_ORDER_BYID_REQUEST,
   SELLER_GET_PRODUCTS_ORDER_BYID_RESET,
   SELLER_GET_PRODUCTS_ORDER_BYID_SUCCESS,
+  SELLER_UPDATE_PRODUCTS_ORDER_FAIL,
+  SELLER_UPDATE_PRODUCTS_ORDER_REQUEST,
+  SELLER_UPDATE_PRODUCTS_ORDER_RESET,
+  SELLER_UPDATE_PRODUCTS_ORDER_SUCCESS,
 } from "../../constants/seller/seller-orders.constants";
 import { initialState } from "../../initial.state";
 import { ActionType, ReduxResponseType } from "../../types/general.types";
@@ -38,6 +42,36 @@ export const sellerGetProductsOrdersReducer = (
         error: action.payload,
       };
     case SELLER_GET_PRODUCTS_ORDERS_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const sellerUpdateProductsOrderReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case SELLER_UPDATE_PRODUCTS_ORDER_REQUEST:
+      return { ...initialState, loading: true };
+    case SELLER_UPDATE_PRODUCTS_ORDER_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case SELLER_UPDATE_PRODUCTS_ORDER_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case SELLER_UPDATE_PRODUCTS_ORDER_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

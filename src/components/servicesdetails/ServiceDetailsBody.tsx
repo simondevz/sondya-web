@@ -1,16 +1,9 @@
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AiOutlineArrowRight,
   AiOutlineRight,
   AiOutlineShareAlt,
 } from "react-icons/ai";
-import { BsSend } from "react-icons/bs";
 import { FaFlag, FaHome } from "react-icons/fa";
 import { MdEmail, MdFavorite, MdFavoriteBorder, MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,17 +15,10 @@ import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { AdminGetServiceType } from "../../redux/types/services.types";
 import { Ratings } from "../shareables/Ratings";
-import { LoginResponseType } from "../../redux/types/auth.types";
-import { chatMessageType } from "../../redux/types/chats.types";
-import { API_ROUTES } from "../../redux/routes";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { userGeChatMessagesAction } from "../../redux/actions/userDashboard/chats.actions";
 import Swal from "sweetalert2";
 import { reviewStatType } from "../../redux/types/review.types";
 import Reviews from "../shareables/reviews";
 import { useNavigate, useParams } from "react-router-dom";
-import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
-import { AdminGetProductType } from "../../redux/types/products.types";
 import { toast } from "react-toastify";
 import {
   addToWishlistAction,
@@ -46,6 +32,7 @@ import { PulseLoader } from "react-spinners";
 import { CREATE_SERVICE_ORDER_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
+import { ServiceDetailsChat } from "../shareables/serviceChatBox";
 
 const ServiceDetailsBody = () => {
   // fetch service detail
@@ -361,233 +348,6 @@ const ServiceDetailsBody = () => {
       />
       <Reviews product_id={service?._id} product_type={"service"} />
     </section>
-  );
-};
-
-export const ServiceDetailsChat = ({
-  owner_id,
-  service_id,
-}: {
-  owner_id: string;
-  service_id: string;
-}) => {
-  // Websockets related logic
-  const [message, setMessage] = useState<string>("");
-  const [sending, setSending] = useState<boolean>(false);
-
-  const socketUrl = API_ROUTES.websocket.personal;
-  const [messageHistory, setMessageHistory] = useState<chatMessageType[]>([]);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    shouldReconnect: (closeEvent) => {
-      return true;
-    },
-    reconnectAttempts: 5,
-    reconnectInterval: 3000,
-  });
-
-  const dispatch = useDispatch();
-  const loginRedux = useSelector(
-    (state: ReducersType) => state?.login
-  ) as ReduxResponseType<LoginResponseType>;
-
-  const chatMessagesRedux = useSelector(
-    (state: ReducersType) => state?.userGetChatMessages
-  ) as ReduxResponseType;
-
-  useEffect(() => {
-    if (lastMessage !== null) {
-      const data = JSON.parse(lastMessage?.data);
-      console.log("data ==>> ", data);
-      setMessageHistory((prev: chatMessageType[]) => {
-        setSending(false);
-        setMessage("");
-        return prev.concat(data);
-      });
-    }
-  }, [lastMessage, setMessageHistory]);
-
-  // Clear last messages when receiver changes
-  useEffect(() => {
-    setMessageHistory([]);
-  }, [owner_id]);
-
-  // Effect to join websocket
-  useEffect(() => {
-    sendMessage(
-      JSON.stringify({
-        meta: "join_conversation",
-        room_id: "",
-        sender_id: loginRedux?.serverResponse?.data?.id || "",
-        receiver_id: owner_id,
-        message: "",
-      })
-    );
-  }, [loginRedux?.serverResponse?.data?.id, sendMessage, owner_id]);
-
-  // Effect to get the list of users online.
-  // Todo: make this function to be getting if the person is online or not
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     sendMessage(
-  //       JSON.stringify({
-  //         meta: "user_online_check",
-  //         room_id: "",
-  //         user_id: loginRedux?.serverResponse?.data?.id,
-  //         message: "",
-  //       })
-  //     );
-  //   }, 10000); // checks every 10 seconds
-  // }, [loginRedux?.serverResponse?.data?.id, sendMessage]);
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
-
-  const handleSendMesage = async () => {
-    setSending(true);
-    if (connectionStatus !== "Open") {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        timer: 5000,
-        text: "Please check your Internet Connection and Reload the page...",
-      });
-      setSending(false);
-      return;
-    }
-
-    if (!loginRedux?.serverResponse?.data?.id) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        timer: 5000,
-        text: "Please login to send messages...",
-      });
-      setSending(false);
-      return;
-    }
-
-    // Can only send images in actual chat
-    let images: any[] = [];
-    sendMessage(
-      JSON.stringify({
-        room_id: "",
-        sender_id: loginRedux?.serverResponse?.data?.id,
-        receiver_id: owner_id,
-        message,
-        images,
-        service_id: service_id,
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (owner_id) {
-      dispatch(
-        userGeChatMessagesAction(
-          `receiver_id=${owner_id}&sender_id=${loginRedux?.serverResponse?.data?.id}&service_id=${service_id}`
-        ) as any
-      );
-    }
-  }, [dispatch, owner_id, loginRedux?.serverResponse?.data?.id, service_id]);
-
-  return (
-    <div className="p-3 max-w-[50rem] max-h-[25rem] flex flex-col gap-4 border-2 rounded-md shadow-md overflow-y-scroll">
-      <div className="p-2 shadow-md">Away. Avg. response time:1 Hour</div>
-      <div className="p-3 border max-w-[30rem] mx-auto rounded-lg">
-        Ask Extreme Design a question or share your project details
-        (requirements, timeline, budget, etc.)
-      </div>
-      <div className="rounded-2xl border p-2">
-        👋 Hey Extreme Design, can you help me with...
-      </div>
-      <div className="rounded-2xl border p-2">
-        Would it be possible to get a custom offer for...
-      </div>
-      <div className="rounded-2xl border p-2">
-        Do you think you can deliver an order by...
-      </div>
-      <div>
-        {/* messages from database */}
-        {chatMessagesRedux?.success ? (
-          chatMessagesRedux?.serverResponse?.data?.length ? (
-            chatMessagesRedux?.serverResponse?.data?.map(
-              (message: chatMessageType) => {
-                return (
-                  <ChatMessage
-                    key={message?._id}
-                    message={message}
-                    setAttachment={function (
-                      value: SetStateAction<
-                        | ((AdminGetServiceType | AdminGetProductType) & {
-                            isProduct: boolean;
-                          })
-                        | undefined
-                      >
-                    ): void {
-                      throw new Error("Function not implemented.");
-                    }}
-                  />
-                );
-              }
-            )
-          ) : (
-            <></>
-          )
-        ) : chatMessagesRedux?.loading ? (
-          <div>loading...</div>
-        ) : (
-          <></>
-        )}
-
-        {/* messages from the websocket */}
-        {messageHistory.map((message: chatMessageType) => {
-          return (
-            <ChatMessage
-              key={message?._id}
-              message={message}
-              setAttachment={function (
-                value: SetStateAction<
-                  | ((AdminGetServiceType | AdminGetProductType) & {
-                      isProduct: boolean;
-                    })
-                  | undefined
-                >
-              ): void {
-                throw new Error("Function not implemented.");
-              }}
-            />
-          );
-        })}
-
-        {/* message ends */}
-        {sending ? <>sending...</> : <></>}
-      </div>
-      <div className="">
-        <div className="bg-[#EDB84233] p-2 h-fit rounded-2xl flex gap-2 items-center">
-          <span
-            onClick={handleSendMesage}
-            className="text-white cusor-pointer text-2xl"
-          >
-            <BsSend />
-          </span>
-          <textarea
-            className="p-2 bg-[#EDB84209] outline-none w-full"
-            name=""
-            id=""
-            cols={30}
-            rows={1}
-            placeholder="Send message"
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-          ></textarea>
-        </div>
-      </div>
-    </div>
   );
 };
 

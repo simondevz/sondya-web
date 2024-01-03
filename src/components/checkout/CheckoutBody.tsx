@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,6 +52,7 @@ import {
 } from "../../redux/types/shippingdestination.types";
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
+import { LoginResponseType } from "../../redux/types/auth.types";
 
 type TotalingType = {
   SubTotalPrice: number;
@@ -264,6 +265,7 @@ const CheckoutBody = () => {
             id: userData._id,
             username: userData.username,
             email: userData.email,
+            phone_number: userData?.phone_number,
           },
           shipping_destination: shippingAddress,
           payment_method: paymentMethod,
@@ -284,13 +286,8 @@ const CheckoutBody = () => {
     (state: ReducersType) => state?.userCreateProductOrder
   ) as ReduxResponseType<CheckoutType>;
 
-  const {
-    checkout_items,
-    shipping_destination,
-    total_amount,
-    // redirect_url,
-    buyer,
-  } = checkoutOrder;
+  const { checkout_items, shipping_destination, total_amount, buyer } =
+    checkoutOrder;
 
   useEffect(() => {
     checkoutOrderRedux?.error &&
@@ -476,9 +473,13 @@ const CheckoutBody = () => {
     (state: ReducersType) => state?.verifyPayments
   ) as ReduxResponseType<any>;
 
-  const verifyPaymentData = useMemo(() => {
-    return verifyPaymentRedux?.serverResponse?.data;
-  }, [verifyPaymentRedux]);
+  // const verifyPaymentData = useMemo(() => {
+  //   return verifyPaymentRedux?.serverResponse?.data;
+  // }, [verifyPaymentRedux]);
+
+  const loginRedux = useSelector(
+    (state: ReducersType) => state.login
+  ) as ReduxResponseType<LoginResponseType>;
 
   // verify payment
   useEffect(() => {
@@ -492,22 +493,6 @@ const CheckoutBody = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //useCallback function
-  const handleSubmitCheckout = useCallback(() => {
-    setTimeout(() => {
-      if (
-        checkout_items &&
-        shipping_destination &&
-        total_amount &&
-        // redirect_url &&
-        buyer
-      ) {
-        dispatch(userCreateProductOrderAction(checkoutOrder) as any);
-      }
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [verifyPaymentData]);
-
   useEffect(() => {
     verifyPaymentRedux?.error &&
       Swal.fire({
@@ -516,19 +501,33 @@ const CheckoutBody = () => {
         timer: 5000,
         text: verifyPaymentRedux?.error,
       });
-    // verifyPaymentRedux?.success &&
-    //   Swal.fire({
-    //     icon: "success",
-    //     title: "Successful",
-    //     timer: 5000,
-    //     text: verifyPaymentRedux?.serverResponse?.message,
-    //   });
-    if (verifyPaymentRedux?.success && paymentStatus !== true) {
+    if (
+      verifyPaymentRedux?.success &&
+      paymentStatus !== true &&
+      !getProfileDetailsRedux?.loading
+    ) {
       setTimeout(() => {
         if (
           verifyPaymentRedux.serverResponse?.data?.data?.status === "successful"
         ) {
-          handleSubmitCheckout();
+          setTimeout(() => {
+            if (checkout_items && shipping_destination && total_amount) {
+              if (!buyer?.id)
+                checkoutOrder.buyer = {
+                  id: userData?._id || loginRedux?.serverResponse?.data?.id,
+                  email:
+                    userData?.email || loginRedux?.serverResponse?.data?.email,
+                  username:
+                    userData?.username ||
+                    loginRedux?.serverResponse?.data?.username ||
+                    "",
+                  phone_number: userData?.phone_number,
+                };
+              console.log("dispatched order ===> ", checkoutOrder);
+              dispatch(userCreateProductOrderAction(checkoutOrder) as any);
+            }
+          }, 1000);
+
           setPaymentStatus(true);
           if (typeof window !== "undefined") {
             window.localStorage.removeItem(CART_SESSION);
@@ -546,11 +545,26 @@ const CheckoutBody = () => {
       setTimeout(() => {
         dispatch({ type: INITIALIZE_PAYMENTS_RESET });
         dispatch({ type: VERIFY_PAYMENTS_RESET });
-        // navigate("/checkout");
       }, 2000);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [verifyPaymentRedux]);
+  }, [
+    verifyPaymentRedux,
+    buyer?.id,
+    checkoutOrder,
+    checkout_items,
+    dispatch,
+    loginRedux?.serverResponse?.data?.email,
+    loginRedux?.serverResponse?.data?.id,
+    loginRedux?.serverResponse?.data?.username,
+    paymentStatus,
+    shipping_destination,
+    total_amount,
+    getProfileDetailsRedux?.loading,
+    userData?._id,
+    userData?.username,
+    userData?.email,
+    userData?.phone_number,
+  ]);
 
   return (
     <>

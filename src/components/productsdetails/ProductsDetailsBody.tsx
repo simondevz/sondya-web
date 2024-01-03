@@ -37,9 +37,11 @@ import { WishlistItemType } from "../../redux/types/wishlist.types";
 const ProductsDetailsBody = () => {
   let [count, setCount] = useState<number>(2);
   const navigate = useNavigate();
+  const [selectedVariants, setSelectedVariants] =
+    useState<Array<[string, string]>>();
+  console.log(selectedVariants);
 
   // fetch product detail
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -55,6 +57,19 @@ const ProductsDetailsBody = () => {
   ) as ReduxResponseType<reviewStatType>;
 
   const product = useMemo(() => {
+    if (homeGetProductDetailsRedux?.serverResponse?.data?.variants) {
+      const variant_keys = Object.keys(
+        homeGetProductDetailsRedux?.serverResponse?.data?.variants
+      );
+      setSelectedVariants(
+        variant_keys.map((key) => {
+          return [
+            key,
+            homeGetProductDetailsRedux?.serverResponse?.data?.variants[key][0],
+          ];
+        })
+      );
+    }
     return homeGetProductDetailsRedux?.serverResponse?.data;
   }, [homeGetProductDetailsRedux]);
 
@@ -70,7 +85,12 @@ const ProductsDetailsBody = () => {
   const addToCart = useCallback(
     (product: AdminGetProductType) => {
       setTimeout(() => {
-        dispatch(addToCartAction(product) as any);
+        dispatch(
+          addToCartAction({
+            ...product,
+            selected_variants: selectedVariants!,
+          }) as any
+        );
         // send toast message
         toast("🛒 Added to cart!", {
           position: "top-center",
@@ -85,7 +105,7 @@ const ProductsDetailsBody = () => {
         dispatch(totalCartAction() as any);
       }, 1000);
     },
-    [dispatch]
+    [dispatch, selectedVariants]
   );
 
   useEffect(() => {
@@ -245,7 +265,10 @@ const ProductsDetailsBody = () => {
             </button>
           </div>
           <hr />
-          <SelectVariant variants={product?.variants || {}} />
+          <SelectVariant
+            variants={product?.variants || {}}
+            setSelectedVariants={setSelectedVariants}
+          />
           <div className="flex flex-row gap-2 w-full justify-between">
             <div className="flex flex-row gap-2 border-2 p-2 rounded-md w-3/12 justify-center">
               <button onClick={() => setCount(--count)}>-</button>
