@@ -21,7 +21,6 @@ import {
 import { CREATE_SERVICE_ORDER_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
-import { reviewStatType } from "../../redux/types/review.types";
 import { ServiceOrderType } from "../../redux/types/serviceOrders.types";
 import { AdminGetServiceType } from "../../redux/types/services.types";
 import { adminUGetUserType } from "../../redux/types/users.types";
@@ -62,10 +61,6 @@ const ServiceDetailsBody = () => {
   const [currentImage, setCurrentImage] = useState<string>(
     service.image && service.image.length > 0 ? service.image[0].url : Service2
   );
-
-  const reviewStatRedux = useSelector(
-    (state: ReducersType) => state?.reviewStat
-  ) as ReduxResponseType<reviewStatType>;
 
   const serviceOrderRedux = useSelector(
     (state: ReducersType) => state?.createServiceOrder
@@ -176,13 +171,9 @@ const ServiceDetailsBody = () => {
               {service.owner?.username}
             </div>
             <div className="flex gap-2">
-              <Ratings
-                rating={
-                  reviewStatRedux?.serverResponse?.data?.averageRating || 0
-                }
-              />{" "}
+              <Ratings rating={service?.rating || 0} />{" "}
               <span className="text-[#95979D]">
-                ({reviewStatRedux?.serverResponse?.data?.totalReviews || 0})
+                ({service?.total_rating || 0})
               </span>
             </div>
           </div>

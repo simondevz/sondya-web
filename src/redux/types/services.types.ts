@@ -69,6 +69,8 @@ export type AdminGetServiceType = {
   current_price: number;
   percentage_price_off?: number;
   duration: string;
+  rating: number;
+  total_rating: number;
 
   location_description: string;
   phone_number: string;

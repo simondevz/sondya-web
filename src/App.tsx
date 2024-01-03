@@ -1,105 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import {
-  AboutUs,
-  Cart,
-  Checkout,
-  ContactUs,
-  ErrorPage,
-  GiftBoxes,
-  HotOffers,
-  ProductDetails,
-  Products,
-  Referal,
-  ServiceDetails,
-  Services,
-  WishList,
-} from "./screens";
-// Auth Import
-import {
-  AuthError,
-  AuthSuccess,
-  EmailVerification,
-  ForgotPassword,
-  ResetPassword,
-  SignIn,
-  SignUp,
-} from "./screens/auth";
-// dashboard Import
 import { lazy } from "react";
-import Acknowledgement from "./screens/Acknowledgement";
-import GroupChat from "./screens/GroupChat";
-import GroupChatDetails from "./screens/GroupChatDetails";
-// import GroupChatList from "./screens/GroupChatList";
-import PrivacyPolicy from "./screens/PrivacyPolicy";
-import ServiceCheckout from "./screens/ServiceCheckout";
-import TermsAndServices from "./screens/TermsAndServices";
-import {
-  AdminAccountPayment,
-  AdminAddCategory,
-  AdminAddProduct,
-  AdminAddService,
-  AdminCategory,
-  AdminCreateGroupChat,
-  AdminDashboard,
-  AdminEditCategory,
-  AdminEditProduct,
-  AdminEditService,
-  AdminEditUser,
-  AdminGroupChatList,
-  AdminOrderDetails,
-  AdminOrders,
-  AdminPaymentDetails,
-  AdminPayments,
-  AdminProductDetails,
-  AdminProducts,
-  AdminSalesAnalytics,
-  AdminServiceDetails,
-  AdminServices,
-  AdminTestimonial,
-  AdminUpdateTestimonial,
-  AdminUserDetails,
-  AdminUserManagement,
-  AdminWithdrawalDetails,
-  AdminWithdrawalOrders,
-} from "./screens/admin";
-import AdminInbox from "./screens/admin/AdminInbox";
-import {
-  BrowseHistory,
-  Dashboard,
-  DashboardSettings,
-  Inbox,
-  OrderConfirmation,
-  OrderDetails,
-  OrderHistory,
-  Payment,
-  PaymentDetails,
-  ServiceOrderDetails,
-  TrackDetails,
-  TrackOrder,
-} from "./screens/dashboard";
-import Notifications from "./screens/dashboard/Notifications";
-import ServiceOrderHistory from "./screens/dashboard/ServiceOrderHistory";
-import UserTestimony from "./screens/dashboard/UserTestimony";
-import {
-  SellerBusinessAnalytics,
-  SellerDashboard,
-  SellerEditService,
-  SellerInbox,
-  SellerOrder,
-  SellerOrderDetails,
-  SellerPostProducts,
-  SellerPostService,
-  SellerProducts,
-  SellerServiceDetails,
-  SellerServiceOrderDetails,
-  SellerServices,
-  SellerSettings,
-  SellerWithdrawal,
-  SellerWithdrawalDetails,
-} from "./screens/seller";
-import SellerEditProducts from "./screens/seller/SellerEditProducts";
-import SellerProductDetails from "./screens/seller/SellerProductDetails";
-import SellerServiceOrder from "./screens/seller/SellerServiceOrder";
 import {
   adminDashboardCheck,
   authCheck,
@@ -109,7 +9,160 @@ import {
 } from "./utils/checkAuth.utils";
 
 const Home = lazy(() => import("./screens/Home"));
+const AboutUs = lazy(() => import("./screens/AboutUs"));
+const Cart = lazy(() => import("./screens/Cart"));
+const Checkout = lazy(() => import("./screens/Checkout"));
+const ContactUs = lazy(() => import("./screens/ContactUs"));
+const ErrorPage = lazy(() => import("./screens/ErrorPage"));
+const GiftBoxes = lazy(() => import("./screens/GiftBoxes"));
+const HotOffers = lazy(() => import("./screens/HotOffers"));
+const ProductDetails = lazy(() => import("./screens/ProductsDetails"));
+const Products = lazy(() => import("./screens/Products"));
+const Referal = lazy(() => import("./screens/Referal"));
+const ServiceDetails = lazy(() => import("./screens/ServicesDetails"));
+const Services = lazy(() => import("./screens/Services"));
+const WishList = lazy(() => import("./screens/dashboard/WishList"));
 const GroupChatList = lazy(() => import("./screens/GroupChatList"));
+
+const AdminAccountPayment = lazy(
+  () => import("./screens/admin/AdminAccountPayment")
+);
+const AdminAddCategory = lazy(() => import("./screens/admin/AdminAddCategory"));
+const AdminAddProduct = lazy(() => import("./screens/admin/AdminAddProduct"));
+const AdminAddService = lazy(() => import("./screens/admin/AdminAddService"));
+const AdminCategory = lazy(() => import("./screens/admin/AdminCategory"));
+const AdminCreateGroupChat = lazy(
+  () => import("./screens/admin/AdminCreateGroupChat")
+);
+const AdminDashboard = lazy(() => import("./screens/admin/AdminDashboard"));
+const AdminEditCategory = lazy(
+  () => import("./screens/admin/AdminEditCategory")
+);
+const AdminEditProduct = lazy(() => import("./screens/admin/AdminEditProduct"));
+const AdminEditService = lazy(() => import("./screens/admin/AdminEditService"));
+const AdminEditUser = lazy(() => import("./screens/admin/AdminEditUser"));
+const AdminGroupChatList = lazy(
+  () => import("./screens/admin/AdminGroupChatList")
+);
+const AdminOrderDetails = lazy(
+  () => import("./screens/admin/AdminOrderDetails")
+);
+const AdminOrders = lazy(() => import("./screens/admin/AdminOrders"));
+const AdminPaymentDetails = lazy(
+  () => import("./screens/admin/AdminPaymentDetails")
+);
+const AdminPayments = lazy(() => import("./screens/admin/AdminPayments"));
+const AdminProductDetails = lazy(
+  () => import("./screens/admin/AdminProductDetails")
+);
+const AdminProducts = lazy(() => import("./screens/admin/AdminProducts"));
+const AdminSalesAnalytics = lazy(
+  () => import("./screens/admin/AdminSalesAnalytics")
+);
+const AdminServiceDetails = lazy(
+  () => import("./screens/admin/AdminServiceDetails")
+);
+const AdminServices = lazy(() => import("./screens/admin/AdminServices"));
+const AdminTestimonial = lazy(() => import("./screens/admin/AdminTestimonial"));
+const AdminUpdateTestimonial = lazy(
+  () => import("./screens/admin/AdminUpdateTestimonial")
+);
+const AdminUserDetails = lazy(() => import("./screens/admin/AdminUserDetails"));
+const AdminUserManagement = lazy(
+  () => import("./screens/admin/AdminUserManagement")
+);
+const AdminWithdrawalDetails = lazy(
+  () => import("./screens/admin/AdminWithdrawalDetails")
+);
+const AdminWithdrawalOrders = lazy(
+  () => import("./screens/admin/AdminWithdrawalOrders")
+);
+
+// Auth Import
+const AuthError = lazy(() => import("./screens/auth/AuthError"));
+const AuthSuccess = lazy(() => import("./screens/auth/AuthSuccess"));
+const ForgotPassword = lazy(() => import("./screens/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("./screens/auth/ResetPassword"));
+const SignIn = lazy(() => import("./screens/auth/SignIn"));
+const SignUp = lazy(() => import("./screens/auth/SignUp"));
+const EmailVerification = lazy(
+  () => import("./screens/auth/EmailVerification")
+);
+
+const BrowseHistory = lazy(() => import("./screens/dashboard/BrowseHistory"));
+const Dashboard = lazy(() => import("./screens/dashboard/Dashboard"));
+const DashboardSettings = lazy(
+  () => import("./screens/dashboard/DashboardSettings")
+);
+const Inbox = lazy(() => import("./screens/dashboard/Inbox"));
+const OrderConfirmation = lazy(
+  () => import("./screens/dashboard/OrderConfirmation")
+);
+const OrderDetails = lazy(() => import("./screens/dashboard/OrderDetails"));
+const OrderHistory = lazy(() => import("./screens/dashboard/OrderHistory"));
+const Payment = lazy(() => import("./screens/dashboard/Payment"));
+const PaymentDetails = lazy(() => import("./screens/dashboard/PaymentDetails"));
+const ServiceOrderDetails = lazy(
+  () => import("./screens/dashboard/ServiceOrderDetails")
+);
+const TrackDetails = lazy(() => import("./screens/dashboard/TrackDetails"));
+const TrackOrder = lazy(() => import("./screens/dashboard/TrackOrder"));
+
+const SellerBusinessAnalytics = lazy(
+  () => import("./screens/seller/SellerBusinessAnalytics")
+);
+const SellerDashboard = lazy(() => import("./screens/seller/SellerDashboard"));
+const SellerEditService = lazy(
+  () => import("./screens/seller/SellerEditService")
+);
+const SellerInbox = lazy(() => import("./screens/seller/SellerInbox"));
+const SellerOrder = lazy(() => import("./screens/seller/SellerOrder"));
+const SellerOrderDetails = lazy(
+  () => import("./screens/seller/SellerOrderDetails")
+);
+const SellerPostProducts = lazy(
+  () => import("./screens/seller/SellerPostProducts")
+);
+const SellerPostService = lazy(
+  () => import("./screens/seller/SellerPostService")
+);
+const SellerProducts = lazy(() => import("./screens/seller/SellerProducts"));
+const SellerServiceDetails = lazy(
+  () => import("./screens/seller/SellerServiceDetails")
+);
+const SellerServiceOrderDetails = lazy(
+  () => import("./screens/seller/SellerServiceOrderDetails")
+);
+const SellerServices = lazy(() => import("./screens/seller/SellerServices"));
+const SellerSettings = lazy(() => import("./screens/seller/SellerSettings"));
+const SellerWithdrawal = lazy(
+  () => import("./screens/seller/SellerWithdrawal")
+);
+const SellerWithdrawalDetails = lazy(
+  () => import("./screens/seller/SellerWithdrawalDetails")
+);
+
+const Acknowledgement = lazy(() => import("./screens/Acknowledgement"));
+const GroupChat = lazy(() => import("./screens/GroupChat"));
+const GroupChatDetails = lazy(() => import("./screens/GroupChatDetails"));
+const PrivacyPolicy = lazy(() => import("./screens/PrivacyPolicy"));
+const ServiceCheckout = lazy(() => import("./screens/ServiceCheckout"));
+const TermsAndServices = lazy(() => import("./screens/TermsAndServices"));
+const AdminInbox = lazy(() => import("./screens/admin/AdminInbox"));
+const Notifications = lazy(() => import("./screens/dashboard/Notifications"));
+const UserTestimony = lazy(() => import("./screens/dashboard/UserTestimony"));
+const ServiceOrderHistory = lazy(
+  () => import("./screens/dashboard/ServiceOrderHistory")
+);
+const SellerEditProducts = lazy(
+  () => import("./screens/seller/SellerEditProducts")
+);
+const SellerProductDetails = lazy(
+  () => import("./screens/seller/SellerProductDetails")
+);
+const SellerServiceOrder = lazy(
+  () => import("./screens/seller/SellerServiceOrder")
+);
 
 const App = createBrowserRouter([
   {

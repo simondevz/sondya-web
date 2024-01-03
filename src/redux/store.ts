@@ -157,9 +157,11 @@ import {
   userGetProductsOrdersReducer,
 } from "./reducers/userDashboard/productOrder.reducers";
 import {
+  userGetNewProductsReducer,
   userGetProductByIdReducer,
   userGetProductCategoriesReducer,
   userGetProductsReducer,
+  userGetTopRatedProductsReducer,
 } from "./reducers/userDashboard/products.reducers";
 import {
   GetUserProfileReducer,
@@ -181,9 +183,11 @@ import {
   updateTermsReducer,
 } from "./reducers/userDashboard/serviceOrder.reducers";
 import {
+  userGetNewServicesReducer,
   userGetServiceByIdReducer,
   userGetServiceCategoriesReducer,
   userGetServicesReducer,
+  userGetTopRatedServicesReducer,
 } from "./reducers/userDashboard/services.reducers";
 import {
   getApprovedTestimonialReducer,
@@ -371,11 +375,15 @@ export type ReducersType = {
 
   // user && services
   userGetServices: ReduxResponseType;
+  userGetNewServices: ReduxResponseType;
+  userGetTopRatedServices: ReduxResponseType;
   userGetServiceById: ReduxResponseType;
   userGetServiceCategories: ReduxResponseType;
 
   // user && products
   userGetProducts: ReduxResponseType;
+  userGetNewProducts: ReduxResponseType;
+  userGetTopRatedProducts: ReduxResponseType;
   userGetProductById: ReduxResponseType;
   userGetProductsCategories: ReduxResponseType;
 
@@ -574,11 +582,15 @@ const reducer = combineReducers<ReducersType>({
 
   // user && services
   userGetServices: userGetServicesReducer,
+  userGetNewServices: userGetNewServicesReducer,
+  userGetTopRatedServices: userGetTopRatedServicesReducer,
   userGetServiceById: userGetServiceByIdReducer,
   userGetServiceCategories: userGetServiceCategoriesReducer,
 
   // User && Products
   userGetProducts: userGetProductsReducer,
+  userGetNewProducts: userGetNewProductsReducer,
+  userGetTopRatedProducts: userGetTopRatedProductsReducer,
   userGetProductById: userGetProductByIdReducer,
   userGetProductsCategories: userGetProductCategoriesReducer,
 
