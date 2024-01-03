@@ -80,7 +80,8 @@ export type AdminGetProductType = {
   variants?: any;
   // quantity: number;
   image?: ImageType[];
-
+  rating: number;
+  total_rating: number;
   owner?: Owner;
 
   //location

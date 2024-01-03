@@ -3,10 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import slugify from "slugify";
 import { productImageA } from "../../images/products";
-import { userGetProductsAction } from "../../redux/actions/userDashboard/products.action";
-import { userGetServicesAction } from "../../redux/actions/userDashboard/services.actions";
-import { USER_GET_PRODUCTS_RESET } from "../../redux/constants/userDashboard/products.constants";
-import { USER_GET_SERVICES_RESET } from "../../redux/constants/userDashboard/services.constants";
+import {
+  userGetNewServicesAction,
+  userGetTopRatedServicesAction,
+} from "../../redux/actions/userDashboard/services.actions";
+import {
+  USER_GET_NEW_SERVICES_RESET,
+  USER_GET_TOP_RATED_SERVICES_RESET,
+} from "../../redux/constants/userDashboard/services.constants";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import {
@@ -18,6 +22,14 @@ import {
   userGetServicesType,
 } from "../../redux/types/services.types";
 import { FormatNumber } from "../shareables/FormatNumber";
+import {
+  userGetNewProductsAction,
+  userGetTopRatedProductsAction,
+} from "../../redux/actions/userDashboard/products.action";
+import {
+  USER_GET_NEW_PRODUCTS_RESET,
+  USER_GET_TOP_RATED_PRODUCTS_RESET,
+} from "../../redux/constants/userDashboard/products.constants";
 
 const LastComponent = () => {
   const dispatch = useDispatch();
@@ -31,54 +43,68 @@ const LastComponent = () => {
     useState<UserGetProductType[]>();
 
   const servicesRedux = useSelector(
-    (state: ReducersType) => state.userGetServices
+    (state: ReducersType) => state.userGetNewServices
+  ) as ReduxResponseType<userGetServicesType>;
+
+  const topRatedServicesRedux = useSelector(
+    (state: ReducersType) => state.userGetTopRatedServices
   ) as ReduxResponseType<userGetServicesType>;
 
   const productsRedux = useSelector(
-    (state: ReducersType) => state.userGetProducts
+    (state: ReducersType) => state.userGetNewProducts
+  ) as ReduxResponseType<userGetProductsType>;
+
+  const topRatedProductsRedux = useSelector(
+    (state: ReducersType) => state.userGetTopRatedProducts
   ) as ReduxResponseType<userGetProductsType>;
 
   useEffect(() => {
-    dispatch(userGetServicesAction("limit=3") as any);
+    dispatch(userGetNewServicesAction("limit=3") as any);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(userGetTopRatedServicesAction("limit=3&sortBy=mostRated") as any);
   }, [dispatch]);
 
   // Get and set new services then get mostRated
   useEffect(() => {
-    if (servicesRedux?.success && !newServices?.length) {
+    if (servicesRedux?.success) {
       setNewServices(servicesRedux?.serverResponse?.data?.services);
-      dispatch({ type: USER_GET_SERVICES_RESET });
-      dispatch(userGetServicesAction("limit=3&sortBy=mostRated") as any);
+      dispatch({ type: USER_GET_NEW_SERVICES_RESET });
     }
   }, [
     dispatch,
     servicesRedux?.serverResponse?.data?.services,
     servicesRedux?.success,
-    newServices?.length,
   ]);
 
   // set mostRated services
   useEffect(() => {
-    if (servicesRedux?.success && newServices?.length) {
-      setMostRatedServices(servicesRedux?.serverResponse?.data?.services);
-      dispatch({ type: USER_GET_SERVICES_RESET });
+    if (topRatedServicesRedux?.success) {
+      setMostRatedServices(
+        topRatedServicesRedux?.serverResponse?.data?.services
+      );
+      dispatch({ type: USER_GET_TOP_RATED_SERVICES_RESET });
     }
   }, [
     dispatch,
-    servicesRedux?.serverResponse?.data?.services,
-    newServices?.length,
-    servicesRedux?.success,
+    topRatedServicesRedux?.serverResponse?.data?.services,
+    topRatedServicesRedux?.success,
   ]);
 
   useEffect(() => {
-    dispatch(userGetProductsAction("limit=3") as any);
+    dispatch(userGetNewProductsAction("limit=3") as any);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(userGetTopRatedProductsAction("limit=3&sortBy=mostRated") as any);
   }, [dispatch]);
 
   // Get and set new products then get mostRated
   useEffect(() => {
-    if (productsRedux?.success && !newProducts?.length) {
+    if (productsRedux?.success) {
       setNewProducts(productsRedux?.serverResponse?.data?.products);
-      dispatch({ type: USER_GET_PRODUCTS_RESET });
-      dispatch(userGetProductsAction("limit=3&sortBy=mostRated") as any);
+      dispatch({ type: USER_GET_NEW_PRODUCTS_RESET });
     }
   }, [
     dispatch,
@@ -89,15 +115,17 @@ const LastComponent = () => {
 
   // set mostRated products
   useEffect(() => {
-    if (productsRedux?.success && newProducts?.length) {
-      setMostRatedProducts(productsRedux?.serverResponse?.data?.products);
-      dispatch({ type: USER_GET_PRODUCTS_RESET });
+    if (topRatedProductsRedux?.success) {
+      setMostRatedProducts(
+        topRatedProductsRedux?.serverResponse?.data?.products
+      );
+      dispatch({ type: USER_GET_TOP_RATED_PRODUCTS_RESET });
     }
   }, [
     dispatch,
-    productsRedux?.serverResponse?.data?.products,
+    topRatedProductsRedux?.serverResponse?.data?.products,
     newProducts?.length,
-    productsRedux?.success,
+    topRatedProductsRedux?.success,
   ]);
 
   return (

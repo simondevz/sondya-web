@@ -18,17 +18,6 @@ const InputVariants = ({
   const [numberOfVariations, setNumberOfVariations] = useState<number>(2);
   const [variations, setVariations] = useState<any>({});
 
-  // const existingVariantsKeys = useMemo(() => {
-  //   return Object.keys(existingVariants || {});
-  // }, [existingVariants]);
-
-  // useEffect(() => {
-  //   if (existingVariantsKeys.length > 0) {
-  //     setNumberOfVariations(existingVariantsKeys.length);
-  //     setVariations(existingVariants);
-  //   }
-  // }, [existingVariantsKeys.length, existingVariants]);
-
   useEffect(() => {
     console.log("variations ==> ", variations);
 

@@ -20,7 +20,6 @@ import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetProductType } from "../../../redux/types/products.types";
 import { Ratings } from "../../shareables/Ratings";
-import Reviews from "../../shareables/reviews";
 import SelectVariant from "../../shareables/selectVariants";
 
 const AdminProductsDetailsBody = () => {
@@ -115,9 +114,13 @@ const AdminProductsDetailsBody = () => {
         <div className="flex flex-col gap-4 p-3">
           <div className="flex flex-row gap-4">
             {" "}
-            <Ratings rating={4.7} />
-            <span className="text-[#191C1F]">4.7 Star Rating</span>
-            <span className="text-[#5F6C72]">(21,671 User feedback)</span>
+            <Ratings rating={products?.rating} />
+            <span className="text-[#191C1F]">
+              {products?.rating} Star Rating
+            </span>
+            <span className="text-[#5F6C72]">
+              ({products?.total_rating} User feedback)
+            </span>
           </div>
           <div className="">{products?.name}</div>
           <div className="grid grid-cols-2 gap-2">
@@ -156,7 +159,7 @@ const AdminProductsDetailsBody = () => {
           />
         </div>
       </div>
-      <AdminProductsDetailsTab product={products} />
+      <AdminProductsDetailsTab />
       <AdminAboutSeller />
     </section>
   );
@@ -231,11 +234,7 @@ const AdminAboutSeller = () => {
   );
 };
 
-export const AdminProductsDetailsTab = ({
-  product,
-}: {
-  product: AdminGetProductType | null;
-}) => {
+export const AdminProductsDetailsTab = () => {
   const [TabItem, setTabItem] = useState<string>("item1");
   return (
     <div className="flex flex-row gap-2 p-3 justify-evenly">
@@ -286,7 +285,7 @@ export const AdminProductsDetailsTab = ({
           {TabItem === "item1" ? (
             <ProductsTab1 />
           ) : TabItem === "item2" ? (
-            <ProductsTab2 product={product} />
+            <ProductsTab2 />
           ) : TabItem === "item3" ? (
             <ProductsTab3 />
           ) : (
@@ -371,16 +370,8 @@ const ProductsTab1 = () => {
     </div>
   );
 };
-const ProductsTab2 = ({ product }: { product: AdminGetProductType | null }) => {
-  return (
-    <div className="flex w-full">
-      <Reviews
-        product_id={product?._id || ""}
-        owner_id={product?.owner?.id}
-        product_type={"product"}
-      />
-    </div>
-  );
+const ProductsTab2 = () => {
+  return <div className="">Tab 3</div>;
 };
 const ProductsTab3 = () => {
   return <div>Tab 3</div>;

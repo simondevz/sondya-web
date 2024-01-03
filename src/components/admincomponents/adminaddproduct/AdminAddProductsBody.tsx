@@ -2,7 +2,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
-import { MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -15,6 +14,7 @@ import { LoginResponseType } from "../../../redux/types/auth.types";
 import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateProduct } from "../../../redux/types/products.types";
+import InputVariants from "../../shareables/inputVariants";
 
 const AdminAddProductsBody = () => {
   // handle images
@@ -522,59 +522,7 @@ const AdminAddProductsBody = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-3 shadow-md rounded-md p-3">
-          <div className="font-[600] text-lg text-[#1D1F2C]">Variation</div>
-          <div className="w-full flex flex-row gap-3 items-end">
-            <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
-              <label htmlFor="">Variation Type</label>
-              <select
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                name=""
-                id=""
-              >
-                <option value="">Select a variation</option>
-              </select>
-            </div>
-            <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
-              <label htmlFor="">Variation</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
-                placeholder="Variation. . ."
-              />
-            </div>
-            <button className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md">
-              <MdOutlineAdd />
-            </button>
-          </div>
-          <div className="w-full flex flex-row gap-3 items-end">
-            <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
-              <label htmlFor="">Variation Type</label>
-              <select
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                name=""
-                id=""
-              >
-                <option value="">Select a variation</option>
-              </select>
-            </div>
-            <div className="text-[#777980] flex flex-col gap-2 text-sm w-1/2">
-              <label htmlFor="">Variation</label>
-              <input
-                className="border p-2 rounded-md bg-[#F9F9FC]"
-                type="text"
-                placeholder="Variation. . ."
-              />
-            </div>
-            <button className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md">
-              <MdOutlineAdd />
-            </button>
-          </div>
-          <button className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md flex flex-row gap-2 items-center">
-            <MdOutlineAdd />
-            <span>Add Variant</span>
-          </button>
-        </div>
+        <InputVariants setFormData={setFormData} />
         <button
           type="submit"
           className="p-2 border text-white bg-[#EDB842] rounded-md"
