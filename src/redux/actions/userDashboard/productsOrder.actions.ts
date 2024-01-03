@@ -10,6 +10,9 @@ import {
   GET_PRODUCTS_ORDER_BYID_FAIL,
   GET_PRODUCTS_ORDER_BYID_REQUEST,
   GET_PRODUCTS_ORDER_BYID_SUCCESS,
+  GET_PRODUCTS_ORDER_BYORDERID_FAIL,
+  GET_PRODUCTS_ORDER_BYORDERID_REQUEST,
+  GET_PRODUCTS_ORDER_BYORDERID_SUCCESS,
 } from "../../constants/userDashboard/productsOrder.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
@@ -99,7 +102,7 @@ export const userGetProductsOrdersAction =
       const { data } = await axios.get(
         API_ROUTES?.userProductsOrders?.getProductsOrders +
           login?.serverResponse?.data?.id +
-          "/?" +
+          "?" +
           query.toString(),
         config
       );
@@ -147,6 +150,43 @@ export const userGetProductsOrderByIdAction =
     } catch (error: any) {
       dispatch({
         type: GET_PRODUCTS_ORDER_BYID_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const userGetProductsOrderByOrderIdAction =
+  ({ order_id }: any) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: GET_PRODUCTS_ORDER_BYORDERID_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.userProductsOrders?.ProductOrdersByOrderId + order_id,
+        config
+      );
+      dispatch({
+        type: GET_PRODUCTS_ORDER_BYORDERID_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: GET_PRODUCTS_ORDER_BYORDERID_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

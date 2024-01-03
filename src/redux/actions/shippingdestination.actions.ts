@@ -203,6 +203,7 @@ export const trackDistanceTimeAction =
         payload: data,
       });
     } catch (error: any) {
+      console.log("the error ==> ", error);
       dispatch({
         type: TRACK_DISTANCE_TIME_FAIL,
         payload:

@@ -100,6 +100,7 @@ import {
   sellerDeleteProductOrderByIDReducer,
   sellerGetProductOrderByIDReducer,
   sellerGetProductsOrdersReducer,
+  sellerUpdateProductsOrderReducer,
 } from "./reducers/seller/seller-orders.reducers";
 import {
   sellerCreateProductReducer,
@@ -149,6 +150,7 @@ import {
 import {
   userCreateProductOrderReducer,
   userGetProductOrderByIDReducer,
+  userGetProductsOrderByOrderIdReducer,
   userGetProductsOrdersReducer,
 } from "./reducers/userDashboard/productOrder.reducers";
 import {
@@ -244,6 +246,7 @@ export type ReducersType = {
   userCreateProductOrder: ReduxResponseType;
   userGetProductOrders: ReduxResponseType;
   userGetProductOrderById: ReduxResponseType;
+  userGetProductOrderByOrderId: ReduxResponseType;
 
   // user && SERVICE orders
   updateTerms: ReduxResponseType;
@@ -271,6 +274,7 @@ export type ReducersType = {
   sellerGetProductsOrders: ReduxResponseType;
   sellerGetProductsOrderByID: ReduxResponseType;
   sellerDeleteProductsOrderById: ReduxResponseType;
+  sellerUpdateProductsOrder: ReduxResponseType;
 
   // seller && service orders
   getSellerServiceOrders: ReduxResponseType;
@@ -443,6 +447,7 @@ const reducer = combineReducers<ReducersType>({
   userCreateProductOrder: userCreateProductOrderReducer,
   userGetProductOrders: userGetProductsOrdersReducer,
   userGetProductOrderById: userGetProductOrderByIDReducer,
+  userGetProductOrderByOrderId: userGetProductsOrderByOrderIdReducer,
 
   // user && SERVICE orders
   updateTerms: updateTermsReducer,
@@ -470,6 +475,7 @@ const reducer = combineReducers<ReducersType>({
   sellerGetProductsOrders: sellerGetProductsOrdersReducer,
   sellerGetProductsOrderByID: sellerGetProductOrderByIDReducer,
   sellerDeleteProductsOrderById: sellerDeleteProductOrderByIDReducer,
+  sellerUpdateProductsOrder: sellerUpdateProductsOrderReducer,
 
   // seller and service orders
   getSellerServiceOrders: getSellerServiceOrdersReducer,

@@ -18,6 +18,7 @@ export type ProductOrderType = {
   discount_percentage: number;
   vat_percentage: number;
   total_variants: number;
+  selected_variants?: Array<[string, string]>;
   image?: ImageType[];
 
   owner?: Owner;
@@ -41,4 +42,24 @@ export type ProductOrderType = {
 
   //shipping address
   track_distance_time?: TrackDistanceTimeType;
+};
+
+export type TrackOrderType = {
+  _id: string;
+  batch_id: string;
+  order_id: string;
+  checkout_items: ProductOrderType;
+  shipping_destination: {
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    zipcode: string;
+    phone_number: string;
+  };
+  payment_id: string;
+  payment_status: string;
+  order_status: string;
+  order_location: [];
+  createdAt: string;
 };

@@ -16,14 +16,17 @@ const ChatBoxInput = ({
     ".png, .jpg, .jpeg, .mp4, .webm, .mkv, .avi, .mov, .wav, .mp3, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt";
   return (
     <div className="flex flex-row border-t p-3 mt-auto">
-      <input
-        className="p-2 outline-none flex-1"
-        type="text"
-        placeholder="Type your message..."
+      <textarea
+        className="p-2 bg-[#EDB84209] outline-none w-full rounded-3xl"
+        name=""
+        id=""
+        cols={30}
+        rows={1}
+        placeholder="Send message"
         value={message}
-        onChange={(event) => setMessage(event?.target.value)}
-      />
-      <button className="text-2xl text-white bg-[#EDB842] relative rounded-md mx-2">
+        onChange={(event) => setMessage(event.target.value)}
+      ></textarea>
+      <button className="text-2xl text-white bg-[#EDB842] relative rounded-md mx-2 my-auto">
         <label className="p-2 flex cusor-pointer" htmlFor="files_input">
           <MdOutlineAttachFile />
         </label>
@@ -40,7 +43,7 @@ const ChatBoxInput = ({
       />
       <button
         onClick={handleSendMesage}
-        className="p-2 text-2xl text-white bg-[#EDB842] rounded-md"
+        className="p-2 text-2xl text-white bg-[#EDB842] rounded-md my-auto"
       >
         <AiOutlineSend />
       </button>

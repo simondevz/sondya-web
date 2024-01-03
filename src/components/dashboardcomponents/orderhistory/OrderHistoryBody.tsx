@@ -22,6 +22,7 @@ const OrderHistoryBody = () => {
   const productOrderData = useMemo(() => {
     return getProductOrdersRedux?.serverResponse?.data;
   }, [getProductOrdersRedux]);
+  console.log(getProductOrdersRedux);
 
   useEffect(() => {
     dispatch(userGetProductsOrdersAction("") as any);
@@ -54,6 +55,8 @@ const OrderHistoryBody = () => {
                 const dateString = t.createdAt ? t.createdAt : "";
                 const dateObject = new Date(dateString);
                 const formattedDate = format(dateObject, "MMMM d, yyyy");
+                console.log(t);
+
                 return (
                   <tr key={i}>
                     <td className="py-4 px-6 text-[#000000] font-[700] whitespace-nowrap">

@@ -12,9 +12,43 @@ import {
   GET_PRODUCTS_ORDER_BYID_REQUEST,
   GET_PRODUCTS_ORDER_BYID_RESET,
   GET_PRODUCTS_ORDER_BYID_SUCCESS,
+  GET_PRODUCTS_ORDER_BYORDERID_FAIL,
+  GET_PRODUCTS_ORDER_BYORDERID_REQUEST,
+  GET_PRODUCTS_ORDER_BYORDERID_RESET,
+  GET_PRODUCTS_ORDER_BYORDERID_SUCCESS,
 } from "../../constants/userDashboard/productsOrder.constants";
 import { initialState } from "../../initial.state";
 import { ActionType, ReduxResponseType } from "../../types/general.types";
+
+export const userGetProductsOrderByOrderIdReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case GET_PRODUCTS_ORDER_BYORDERID_REQUEST:
+      return { ...initialState, loading: true };
+    case GET_PRODUCTS_ORDER_BYORDERID_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case GET_PRODUCTS_ORDER_BYORDERID_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case GET_PRODUCTS_ORDER_BYORDERID_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
 
 export const userCreateProductOrderReducer = (
   state: ReduxResponseType = initialState,

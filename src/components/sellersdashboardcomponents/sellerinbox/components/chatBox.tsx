@@ -335,16 +335,18 @@ const ChatBox = ({
   };
 
   useEffect(() => {
-    if (loginRedux?.serverResponse?.data?.id && receiver?._id)
-      sendMessage(
-        JSON.stringify({
-          room_id: "",
-          meta: "testing_connection",
-          sender_id: loginRedux?.serverResponse?.data?.id,
-          receiver_id: receiver?._id,
-          message: "",
-        })
-      );
+    setInterval(() => {
+      if (loginRedux?.serverResponse?.data?.id && receiver?._id)
+        sendMessage(
+          JSON.stringify({
+            room_id: "",
+            meta: "testing_connection",
+            sender_id: loginRedux?.serverResponse?.data?.id,
+            receiver_id: receiver?._id,
+            message: "",
+          })
+        );
+    }, 60 * 1000);
   }, [loginRedux?.serverResponse?.data?.id, receiver?._id, sendMessage]);
 
   useEffect(() => {

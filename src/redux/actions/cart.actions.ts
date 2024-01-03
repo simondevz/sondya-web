@@ -25,17 +25,20 @@ import { AdminGetProductType } from "../types/products.types";
 import { TrackDistanceTimeType } from "../types/shippingdestination.types";
 
 export const addToCartAction =
-  (product: AdminGetProductType) =>
+  (product: AdminGetProductType & { selected_variants: any[] }) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
         type: ADD_TO_CART_REQUEST,
       });
 
+      console.log(product?.selected_variants);
+
       const cartOrderItem: ProductOrderType = {
         ...product,
         _id: product._id,
         order_quantity: 1,
+        selected_variants: product?.selected_variants,
 
         sub_total: product.current_price,
         shipping_fee: 21,

@@ -9,27 +9,89 @@ import ReviewTerms from "../../shareables/reviewTerms";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getServiceOrderByIdAction } from "../../../redux/actions/userDashboard/serviceOrder.actions";
-import { GET_SERVICE_ORDER_BYID_RESET } from "../../../redux/constants/userDashboard/serviceOrder.constants";
+import {
+  getServiceOrderByIdAction,
+  updateServiceOrderAction,
+} from "../../../redux/actions/userDashboard/serviceOrder.actions";
+import {
+  GET_SERVICE_ORDER_BYID_RESET,
+  UPDATE_SERVICE_ORDERS_RESET,
+} from "../../../redux/constants/userDashboard/serviceOrder.constants";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
-import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
+import { ServiceDetailsChat } from "../../shareables/serviceChatBox";
 import { FormatNumber } from "../../shareables/FormatNumber";
 import { MdArrowDropDown } from "react-icons/md";
 import Swal from "sweetalert2";
 import { TimeLeft } from "../../shareables/dateFormatter";
-// import { ServiceDetailsChat } from "../../servicesdetails/ServiceDetailsBody";
+import { Modal } from "react-overlays";
+import { toast } from "react-toastify";
 
 const SellerServiceOrderDetailsBody = () => {
   const [showReviewTerms, setShowReviewTerms] = useState<boolean>(false);
   const [currentOrder, setCurrentOrder] = useState<ServiceOrderType>();
+  const [showDeliverDialogue, setShowDevliverDialogue] = useState<boolean>();
+
+  const [deliver, setDeliver] = useState<boolean>(false);
   const dispatch = useDispatch();
   const params = useParams();
 
   const serviceOrderById = useSelector(
     (state: ReducersType) => state.getServiceOrderById
   ) as ReduxResponseType<ServiceOrderType>;
+
+  const updatedServiceOrderRedux = useSelector(
+    (state: ReducersType) => state.updateServiceOrders
+  ) as ReduxResponseType<ServiceOrderType>;
+
+  // deliver the service.
+  useEffect(() => {
+    if (
+      deliver &&
+      currentOrder &&
+      currentOrder.order_status !== "DELIVERED" &&
+      currentOrder.order_status !== "COMPLETED"
+    ) {
+      dispatch(
+        updateServiceOrderAction({
+          ...currentOrder,
+          order_status: "DELIVERED",
+        }) as any
+      );
+    }
+  }, [deliver, dispatch, currentOrder, currentOrder?.order_status]);
+
+  // update service after calling updateserviceorderaction
+  useEffect(() => {
+    if (updatedServiceOrderRedux.success) {
+      setCurrentOrder(updatedServiceOrderRedux.serverResponse?.data);
+      toast("Order Status Updated", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      dispatch({ type: UPDATE_SERVICE_ORDERS_RESET });
+    }
+
+    if (updatedServiceOrderRedux?.error)
+      Swal.fire({
+        title: "Error!!",
+        text: updatedServiceOrderRedux?.error,
+        icon: "error",
+        timer: 3000,
+        confirmButtonText: "Okay",
+      }).finally(() => dispatch({ type: UPDATE_SERVICE_ORDERS_RESET }));
+  }, [
+    dispatch,
+    updatedServiceOrderRedux?.success,
+    updatedServiceOrderRedux?.serverResponse?.data,
+    updatedServiceOrderRedux?.error,
+  ]);
 
   // Get service order details
   useEffect(() => {
@@ -169,12 +231,31 @@ const SellerServiceOrderDetailsBody = () => {
               "p-1 h-fit w-fit rounded-full -mt-4"
             }
           >
-            <span className="text-white text-xl invisible">
+            <span
+              className={
+                (currentOrder?.order_status === "DELIVERED"
+                  ? ""
+                  : " invisible ") + "text-white text-xl"
+              }
+            >
               <TiTick />
             </span>
           </span>
-          <span className="p-1 border-[#EDB842] bg-white border-2 h-fit w-fit rounded-full -mt-4">
-            <span className="text-white text-xl invisible">
+          <span
+            className={
+              (currentOrder?.order_status === "DELIVERED"
+                ? " bg-[#EDB842] "
+                : " bg-white border-[#EDB842] border-2 ") +
+              "p-1 h-fit w-fit rounded-full -mt-4"
+            }
+          >
+            <span
+              className={
+                (currentOrder?.order_status === "COMPLETED"
+                  ? ""
+                  : " invisible ") + "text-white text-xl"
+              }
+            >
               <TiTick />
             </span>
           </span>
@@ -270,11 +351,22 @@ const SellerServiceOrderDetailsBody = () => {
               });
               return;
             }
+
+            setShowDevliverDialogue(true);
           }}
         >
           <span className="my-auto">Deliver Work</span>
         </button>
       </div>
+      <DeliverWorkModal
+        showModal={showDeliverDialogue}
+        order_status={currentOrder?.order_status || ""}
+        handleClose={() => setShowDevliverDialogue(false)}
+        handledeliver={() => {
+          setDeliver(true);
+          setShowDevliverDialogue(false);
+        }}
+      />
       <ReviewTerms
         currentOrder={currentOrder}
         showModal={showReviewTerms}
@@ -290,6 +382,60 @@ const SellerServiceOrderDetailsBody = () => {
         />
       </div>
     </section>
+  );
+};
+
+const DeliverWorkModal = ({
+  showModal,
+  handleClose,
+  handledeliver,
+  order_status,
+}: {
+  showModal: any;
+  handleClose: any;
+  handledeliver: any;
+  order_status: string;
+}) => {
+  // Backdrop JSX code
+  const renderBackdrop = (props: any) => (
+    <div className="backdrop" {...props} />
+  );
+
+  return (
+    <Modal
+      className="modal top-[20%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"
+      show={showModal}
+      onHide={handleClose}
+      renderBackdrop={renderBackdrop}
+    >
+      <div className="flex flex-col gap-6 p-6 font-[600] text-[#667085] text-sm text-center ">
+        <span>
+          {order_status !== "DELIVERED" &&
+            order_status !== "COMPLETED" &&
+            "You can submit the work you did in the chat below then click the deliver button. Note that The Buy will confirm your work before the money is released."}
+          {order_status === "DELIVERED" &&
+            "Your work has been delivered. We are waiting for the buyer to confirm."}
+          {order_status === "COMPLETED" &&
+            "This order has been completed your money has been sent to your account."}
+        </span>
+        {order_status !== "DELIVERED" && order_status !== "COMPLETED" && (
+          <button
+            onClick={handledeliver}
+            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+          >
+            Devliver
+          </button>
+        )}
+        {(order_status === "DELIVERED" || order_status === "COMPLETED") && (
+          <button
+            onClick={handleClose}
+            className="flex px-6 py-2 bg-[#EDB842] text-[#fff] font-semibold text-[0.875rem] rounded-md justify-between w-fit gap-2"
+          >
+            Close
+          </button>
+        )}
+      </div>
+    </Modal>
   );
 };
 

@@ -50,5 +50,14 @@ export type GetProductOrder = {
   batch_id: string;
   order_id: string;
   shipping_destination: shippingDestinationType;
+  order_location: orderLocationType[];
   createdAt: Date;
+};
+
+export type orderLocationType = {
+  country: string;
+  state: string;
+  city: string;
+  zip_code: string;
+  order_status: string;
 };
