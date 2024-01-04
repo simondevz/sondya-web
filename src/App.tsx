@@ -1,5 +1,5 @@
-import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
+import { createBrowserRouter } from "react-router-dom";
 import {
   adminDashboardCheck,
   authCheck,
@@ -14,8 +14,7 @@ const Cart = lazy(() => import("./screens/Cart"));
 const Checkout = lazy(() => import("./screens/Checkout"));
 const ContactUs = lazy(() => import("./screens/ContactUs"));
 const ErrorPage = lazy(() => import("./screens/ErrorPage"));
-const GiftBoxes = lazy(() => import("./screens/GiftBoxes"));
-const HotOffers = lazy(() => import("./screens/HotOffers"));
+
 const ProductDetails = lazy(() => import("./screens/ProductsDetails"));
 const Products = lazy(() => import("./screens/Products"));
 const Referal = lazy(() => import("./screens/Referal"));
@@ -89,7 +88,6 @@ const EmailVerification = lazy(
   () => import("./screens/auth/EmailVerification")
 );
 
-const BrowseHistory = lazy(() => import("./screens/dashboard/BrowseHistory"));
 const Dashboard = lazy(() => import("./screens/dashboard/Dashboard"));
 const DashboardSettings = lazy(
   () => import("./screens/dashboard/DashboardSettings")
@@ -249,18 +247,7 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: homeCheck,
   },
-  {
-    path: "/giftboxes",
-    element: <GiftBoxes />,
-    errorElement: <ErrorPage />,
-    loader: homeCheck,
-  },
-  {
-    path: "/hotoffers",
-    element: <HotOffers />,
-    errorElement: <ErrorPage />,
-    loader: homeCheck,
-  },
+
   {
     path: "/acknowledgement",
     element: <Acknowledgement />,
@@ -330,12 +317,6 @@ const App = createBrowserRouter([
   },
 
   // User DasboardRoutes
-  {
-    path: "/browse-history",
-    element: <BrowseHistory />,
-    errorElement: <ErrorPage />,
-    loader: dashboardCheck,
-  },
   {
     path: "/dashboard",
     element: <Dashboard />,

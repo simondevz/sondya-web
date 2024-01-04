@@ -1,19 +1,15 @@
 import { format } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
-import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { MdOutlineMoreHoriz } from "react-icons/md";
+import { useEffect, useMemo } from "react";
+import { AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getSellerServiceOrdersAction } from "../../../redux/actions/seller/seller-service-orders.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { FormatNumber } from "../../shareables/FormatNumber";
-import { getSellerServiceOrdersAction } from "../../../redux/actions/seller/seller-service-orders.actions";
 import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 
 const SellerServiceOrderBody = () => {
-  const [click, setClick] = useState<string>("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,46 +24,6 @@ const SellerServiceOrderBody = () => {
   useEffect(() => {
     dispatch(getSellerServiceOrdersAction() as any);
   }, [dispatch]);
-
-  console.log(serviceOrderData);
-
-  // delete user
-  //   const sellerDeleteOrderByIDRedux = useSelector(
-  //     (state: ReducersType) => state?.sellerDeleteProductsOrderById
-  //   ) as ReduxResponseType<GetProductOrder>;
-
-  //   const handleDelete = useCallback(
-  //     (id: string) => {
-  //       // console.log(id);
-  //       Swal.fire({
-  //         title: "Are you sure?",
-  //         text: "You won't be able to revert this!",
-  //         icon: "warning",
-  //         showCancelButton: true,
-  //         confirmButtonColor: "#3085d6",
-  //         cancelButtonColor: "#d33",
-  //         confirmButtonText: "Yes, delete it!",
-  //       }).then((result) => {
-  //         if (result.isConfirmed) {
-  //           dispatch(sellerDeleteProductsOrderByIdAction({ id }) as any);
-
-  //           if (!sellerDeleteOrderByIDRedux.error) {
-  //             Swal.fire(
-  //               "Deleted!",
-  //               sellerDeleteOrderByIDRedux.serverResponse.message,
-  //               "success"
-  //             );
-  //             setTimeout(() => {
-  //               dispatch(sellerGetProductsOrdersAction("") as any);
-  //             }, 1000);
-  //           } else {
-  //             Swal.fire("Deleted!", sellerDeleteOrderByIDRedux?.error, "error");
-  //           }
-  //         }
-  //       });
-  //     },
-  //     [sellerDeleteOrderByIDRedux, dispatch]
-  //   );
 
   return (
     <section className="flex flex-row gap-3 p-1">
@@ -138,59 +94,17 @@ const SellerServiceOrderBody = () => {
                           />
                         )}
                       </td>
-                      <td
-                        className={`flex ${
-                          click === t.order_id
-                            ? "justify-start"
-                            : "justify-center"
-                        } relative gap-2`}
-                      >
-                        {click === t.order_id && (
-                          <div className="bg-[#F5F7FA] flex flex-row gap-2 items-center p-2 rounded-md">
-                            {" "}
-                            <AiOutlineEdit /> <span>Edit</span>
-                          </div>
-                        )}
-                        <button
-                          onClick={() => {
-                            click === "" ? setClick(t.order_id) : setClick("");
-                          }}
-                          className="flex rounded-md"
+                      <td className={`flex justify-center gap-2`}>
+                        <div
+                          onClick={() =>
+                            navigate(
+                              `/seller/service/order/details/${t.order_id}`
+                            )
+                          }
+                          className="flex gap-4 items-center"
                         >
-                          <span
-                            className={`p-2 w-fit h-fit ${
-                              click === t.order_id &&
-                              "text-white bg-[#EDB842] rounded-md"
-                            }`}
-                          >
-                            <MdOutlineMoreHoriz />
-                          </span>
-                        </button>
-
-                        {click === t.order_id && (
-                          <div className="absolute top-12 right-9 bg-white border z-[50] p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
-                            <div
-                              onClick={() =>
-                                navigate(
-                                  `/seller/service/order/details/${t.order_id}`
-                                )
-                              }
-                              className="flex gap-4 items-center"
-                            >
-                              <AiOutlineEye />{" "}
-                              <span className="whitespace-nowrap">
-                                View Order Details
-                              </span>
-                            </div>
-                            <div
-                              //   onClick={() => handleDelete(t._id)}
-                              className="flex gap-4 items-center"
-                            >
-                              <AiOutlineEye />{" "}
-                              <span className="whitespace-nowrap">Delete</span>
-                            </div>
-                          </div>
-                        )}
+                          <AiOutlineEye />{" "}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -200,20 +114,6 @@ const SellerServiceOrderBody = () => {
               )}
             </tbody>
           </table>
-        </div>
-        <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
-          <span className="bg-[#EDB84233] p-2 rounded-md">
-            <BiSolidLeftArrow />
-          </span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
-          <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
-          <span className="bg-[#EDB84233] p-2 rounded-md">
-            <BiSolidRightArrow />
-          </span>
         </div>
       </div>
     </section>

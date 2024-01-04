@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { BiMap, BiMoneyWithdraw } from "react-icons/bi";
+import { BiCog, BiLogOut, BiMoneyWithdraw } from "react-icons/bi";
 import { BsCart } from "react-icons/bs";
 import { GoChecklist } from "react-icons/go";
 import {
+  MdChat,
   MdOutlineMiscellaneousServices,
-  MdPayment,
+  MdShoppingCart,
   MdStorefront,
 } from "react-icons/md";
-import { PiClockClockwiseLight, PiStackBold } from "react-icons/pi";
+import { PiStackBold } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
 import { logoutAction } from "../../redux/actions/auth.actions";
@@ -58,34 +59,6 @@ const SellerDashboardNav = () => {
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-orders-products" && "bg-[#EDB842] text-white"
-        }`}
-        onClick={() => {
-          navigate("/seller/orders/products");
-          setIndex("seller-orders-products");
-        }}
-      >
-        <span>
-          <MdPayment />
-        </span>
-        <span className="whitespace-nowrap">Product Orders</span>
-      </div>
-      <div
-        className={`flex flex-row gap-2 items-center py-2 px-6 ${
-          index === "seller-orders-services" && "bg-[#EDB842] text-white"
-        }`}
-        onClick={() => {
-          navigate("/seller/orders/services");
-          setIndex("seller-orders-services");
-        }}
-      >
-        <span>
-          <GoChecklist />
-        </span>
-        <span className="whitespace-nowrap">Service Orders</span>
-      </div>
-      <div
-        className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "seller-products" && "bg-[#EDB842] text-white"
         }`}
         onClick={() => {
@@ -114,6 +87,35 @@ const SellerDashboardNav = () => {
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "seller-orders-products" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          navigate("/seller/orders/products");
+          setIndex("seller-orders-products");
+        }}
+      >
+        <span>
+          <MdShoppingCart />
+        </span>
+        <span className="whitespace-nowrap">Product Orders</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "seller-orders-services" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          navigate("/seller/orders/services");
+          setIndex("seller-orders-services");
+        }}
+      >
+        <span>
+          <GoChecklist />
+        </span>
+        <span className="whitespace-nowrap">Service Orders</span>
+      </div>
+
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "inbox" && "bg-[#EDB842] text-white"
         }`}
         onClick={() => {
@@ -122,7 +124,7 @@ const SellerDashboardNav = () => {
         }}
       >
         <span>
-          <BiMap />
+          <MdChat />
         </span>
         <Link to={"/track-Order"}>
           <span className="whitespace-nowrap">Inbox </span>
@@ -152,7 +154,7 @@ const SellerDashboardNav = () => {
         }}
       >
         <span>
-          <PiClockClockwiseLight />
+          <BiCog />
         </span>
         <span className="whitespace-nowrap">Settings</span>
       </div>
@@ -166,7 +168,7 @@ const SellerDashboardNav = () => {
         }}
       >
         <span>
-          <PiClockClockwiseLight />
+          <BiLogOut />
         </span>
         <span className="whitespace-nowrap">Log out</span>
       </div>

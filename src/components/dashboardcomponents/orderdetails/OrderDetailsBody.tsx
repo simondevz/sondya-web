@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { FaUserAlt } from "react-icons/fa";
+import { FaJediOrder } from "react-icons/fa6";
 import { MdEmail, MdLocationOn, MdPhoneEnabled } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -18,8 +19,6 @@ import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const OrderDetailsBody = () => {
-  // const navigate = useNavigate();
-
   // fetch product detail
   const dispatch = useDispatch();
   const params = useParams();
@@ -46,6 +45,9 @@ const OrderDetailsBody = () => {
           <span className="p-2 font-[#1A9882]">Order List</span>
           <span className="p-2 bg-[#E9FAF7] text-[#1A9882] rounded-md">
             +{productOrder?.checkout_items?.order_quantity} Orders
+          </span>
+          <span className="font-[700] playfair-display text-2xl">
+            #{productOrder?.order_id}
           </span>
         </div>
         <div className="w-full">
@@ -198,6 +200,17 @@ const OrderDetailsBody = () => {
           {/* address part */}
           <div className="flex flex-col gap-3 shadow-md p-4 rounded-md max-w-[20rem]">
             <div className="font-[600]">Address</div>
+            <div className="flex flex-row w-full justify-start gap-3 items-center">
+              <div className="flex flex-row gap-1 items-center">
+                <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">
+                  <FaJediOrder />
+                </span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="">Order ID:</div>
+                <div className="">{productOrder?.order_id}</div>
+              </div>
+            </div>
             <div className="flex flex-row w-full justify-start gap-3 items-center">
               <div className="flex flex-row gap-1 items-center">
                 <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">

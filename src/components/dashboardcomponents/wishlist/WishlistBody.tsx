@@ -1,10 +1,9 @@
-import { BsDot } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
-import { FormatNumber } from "../../shareables/FormatNumber";
-import { Ratings } from "../../shareables/Ratings";
-import EmptyWishlisBody from "./EmptyWishlisBody";
 import { useCallback, useEffect, useState } from "react";
+import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { productImage1 } from "../../../images/products";
 import {
   removeFromWishlistAction,
   viewWishlistAction,
@@ -12,9 +11,8 @@ import {
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { WishlistItemType } from "../../../redux/types/wishlist.types";
-import { productImage1 } from "../../../images/products";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { FormatNumber } from "../../shareables/FormatNumber";
+import EmptyWishlisBody from "./EmptyWishlisBody";
 
 const WishlistBody = () => {
   const dispatch = useDispatch();
@@ -78,29 +76,13 @@ const WishlistBody = () => {
                       />
                       <div className="md:w-2/3 gap-2 h-full flex flex-col justify-around items-start">
                         <div className="font-[600] text-[#1C1C1C]">
-                          {item.name}
+                          {item.name || "N/A"}
                         </div>
                         <div className="font-[600] text-[#1C1C1C]">
                           $<FormatNumber price={item?.current_price || 0} />
                         </div>
-                        <div className="flex flex-row gap-0 text-sm">
-                          <Ratings rating={0} starColor={"text-[#FF9017]"} />
-                          <span className="font-[400] text-[#FF9017]">{0}</span>
-                          <span className="font-[400] text-[#8B96A5]">
-                            <BsDot />
-                          </span>
-                          <span className="font-[400] text-[#8B96A5] whitespace-nowrap">
-                            <FormatNumber price={5} /> orders
-                          </span>
-                          <span className="font-[400] text-[#8B96A5]">
-                            <BsDot />
-                          </span>
-                          <span className="font-[400] text-[#00B517] whitespace-nowrap">
-                            Free shipping
-                          </span>
-                        </div>
                         <div className="text-[#505050] font-[400]">
-                          {item?.description}
+                          {item?.description || "N/A"}
                         </div>
                         <button
                           onClick={() =>

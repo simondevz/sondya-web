@@ -243,11 +243,18 @@ const DashboardSettingsBody = () => {
             <BsYoutube />
           </a>
         </div>
+        <div className="font-[600] text-[#191F33] text-xl mt-5">
+          Edit socials
+        </div>
+        <div className="text-[#767E94]">
+          Here you can edit your socials account. It includes where on can get
+          you on all social media pages.
+        </div>
         <button
           onClick={() => setEditSocialMedia(true)}
           className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3"
         >
-          Edit Account
+          Edit Socials
         </button>
       </div>
       <div className="w-full py-2 font-[600] text-lg gap-3 text-left">
@@ -263,15 +270,14 @@ const DashboardSettingsBody = () => {
       <div className="flex flex-col gap-2 max-w-[40rem]">
         <div className="font-[600] text-[#191F33] text-xl">Change Password</div>
         <div className="text-[#767E94]">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan
-          felis nunc, ut sagittis augue imperdiet quis. Vestibulum bibendum
-          ultricies ipsum.
+          Here you can change the password of your account. You have to know
+          your previous password to use the change password modal
         </div>
         <button
           onClick={() => setEditPassword(true)}
           className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3"
         >
-          Verify Now
+          Change password
         </button>
       </div>
       <div className="overflow-y-scroll">

@@ -1,4 +1,3 @@
-export { default as BrowseHistory } from "./BrowseHistory";
 export { default as Dashboard } from "./Dashboard";
 export { default as DashboardSettings } from "./DashboardSettings";
 export { default as Inbox } from "./Inbox";
