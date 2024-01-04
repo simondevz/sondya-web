@@ -12,14 +12,6 @@ import {
   serviceImage8,
   serviceImage9,
 } from "../images/serviceimages";
-import {
-  cameraService,
-  carRepair,
-  deliveryService,
-  laundryService,
-  pickupService,
-  tvInstallation,
-} from "../images/services";
 
 export type serviceItemsType = {
   image?: string;
@@ -35,33 +27,6 @@ export type serviceItemsType = {
   like?: boolean;
   user?: string;
 };
-
-export const serviceItemsdata: Array<serviceItemsType> = [
-  {
-    image: carRepair,
-    name: "Car Repairs",
-  },
-  {
-    image: deliveryService,
-    name: "Delivery",
-  },
-  {
-    image: pickupService,
-    name: "Pickup",
-  },
-  {
-    image: laundryService,
-    name: "Laundry",
-  },
-  {
-    image: cameraService,
-    name: "Camera & Photo",
-  },
-  {
-    image: tvInstallation,
-    name: "TV Installation",
-  },
-];
 
 export const serviceItemsdata2: Array<serviceItemsType> = [
   {

@@ -106,7 +106,7 @@ const DashboardHero = () => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="font-[700] playfair-display">154</div>
-              <div className="font-[400]">Total Orders</div>
+              <div className="font-[400]">Total Product Orders</div>
             </div>
           </div>
           <div className="flex flex-row items-center gap-2 bg-[#FFF3EB] py-3 px-5 rounded-md w-[16rem]">
@@ -115,7 +115,7 @@ const DashboardHero = () => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="font-[700] playfair-display">05</div>
-              <div className="font-[400]">Total Orders</div>
+              <div className="font-[400]">Total Service Orders</div>
             </div>
           </div>
           <div className="flex flex-row items-center gap-2 bg-[#EAF7E9] py-3 px-5 rounded-md w-[16rem]">
@@ -124,7 +124,7 @@ const DashboardHero = () => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="font-[700] playfair-display">149</div>
-              <div className="font-[400]">Total Orders</div>
+              <div className="font-[400]">Total Balance</div>
             </div>
           </div>
         </div>

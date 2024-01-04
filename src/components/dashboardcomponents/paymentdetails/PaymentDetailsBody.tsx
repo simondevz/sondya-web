@@ -45,10 +45,12 @@ const PaymentDetailsBody = () => {
         <table className="table-auto w-full">
           <thead className="w-full">
             <tr>
-              <th className="bg-[#E4E7E9] py-2 px-8 font-[600] text-[#475156]">
+              <th className="bg-[#E4E7E9] px-8 text-left py-2 font-[600] text-[#475156]">
                 Title
               </th>
-              <th className=" py-2 px-8 font-[600] text-[#475156]">value</th>
+              <th className=" py-2 font-[600] px-8 text-left text-[#475156]">
+                value
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -108,7 +110,15 @@ const PaymentDetailsBody = () => {
               <td className="bg-[#E4E7E9] py-2 px-8 font-[600] text-[#475156]">
                 Status
               </td>
-              <td className=" py-2 px-8 font-[600] text-[#475156]">
+              <td
+                className={`${
+                  paymentData?.payment_status === "cancelled"
+                    ? "text-[#FA8232]"
+                    : paymentData?.payment_status === "successful"
+                    ? "text-[#2DB224]"
+                    : "text-[#EE5858]"
+                } py-4 px-6 font-[600] whitespace-nowrap`}
+              >
                 {paymentData?.payment_status}
               </td>
             </tr>

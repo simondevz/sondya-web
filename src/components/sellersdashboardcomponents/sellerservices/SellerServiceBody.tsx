@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsEye, BsSearch, BsThreeDots } from "react-icons/bs";
 import { MdDelete, MdEdit, MdMoreVert, MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -170,12 +170,6 @@ const SellerServiceBody = () => {
             Services
           </div>
           <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB84233] gap-2">
-              <span className="text-[#EDB842]">
-                <BiExport />
-              </span>
-              <span className="whitespace-nowrap text-[#EDB842]">Export</span>
-            </button>
             <Link
               to={"/seller/service/post"}
               className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
@@ -202,30 +196,13 @@ const SellerServiceBody = () => {
               }}
             />
           </div>
-          <div className="flex gap-2">
-            <select className="border p-3 rounded-md" name="" id="">
-              <option className="" value="">
-                Category
-              </option>
-            </select>
-            <select className="border p-3 rounded-md" name="" id="">
-              <option className="" value="">
-                Recently posted
-              </option>
-            </select>
-            <select className="border p-3 rounded-md" name="" id="">
-              <option className="" value="">
-                All
-              </option>
-            </select>
-          </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {services?.map((t: AdminGetServiceType, i: number) => {
             return (
               <div
                 key={i}
-                onClick={() => navigate("/seller/service/details/" + t?._id)}
+                // onClick={() => navigate("/seller/service/details/" + t?._id)}
                 className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
               >
                 <img
@@ -236,6 +213,7 @@ const SellerServiceBody = () => {
                       : serviceImage1
                   }
                   alt=""
+                  loading="lazy"
                 />
                 <div className="flex gap-3 px-3">
                   <div className="p-3 rounded-full bg-[#EDB842] w-fit h-fit"></div>
@@ -287,9 +265,7 @@ const SellerServiceBody = () => {
             );
           })}
         </div>
-        <div className="flex flex-row justify-between items-center">
-          <div className="text-[#667085]">Showing 1-10 from 100</div>
-
+        <div className="flex flex-row justify-center items-center">
           <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
             <button
               disabled={query.page <= 1}

@@ -356,7 +356,7 @@ const ServiceDetailsBody = () => {
   );
 };
 
-const AboutSellerServceDetails = ({
+export const AboutSellerServceDetails = ({
   owner,
   location_description,
   phone_number,

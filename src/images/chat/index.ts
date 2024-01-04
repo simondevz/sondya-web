@@ -1,11 +1,1 @@
 export { default as Chat1 } from "./chat_1.png";
-export { default as Chat10 } from "./chat_10.png";
-export { default as Chat2 } from "./chat_2.png";
-export { default as Chat3 } from "./chat_3.png";
-export { default as Chat4 } from "./chat_4.png";
-export { default as Chat5 } from "./chat_5.png";
-export { default as Chat6 } from "./chat_6.png";
-export { default as Chat7 } from "./chat_7.png";
-export { default as Chat8 } from "./chat_8.png";
-export { default as Chat9 } from "./chat_9.png";
-export { default as OnlineImg } from "./online-img.png";

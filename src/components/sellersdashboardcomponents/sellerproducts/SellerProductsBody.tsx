@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
@@ -44,21 +44,26 @@ const SellerProductsBody = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [products, setProducts] = useState<AdminGetProductType[]>([]);
+  // const [products, setProducts] = useState<AdminGetProductType[]>([]);
 
+  // useEffect(() => {
+  //   if (sellerGetProductsRedux?.serverResponse.data) {
+  //     setProducts(sellerGetProductsRedux?.serverResponse?.data?.products);
+  //   }
+  // }, [sellerGetProductsRedux?.serverResponse, dispatch]);
+
+  // get products
   const sellerGetProductsRedux = useSelector(
     (state: ReducersType) => state?.sellerGetAllProducts
   ) as ReduxResponseType<sellerGetProductsType>;
 
+  const products = useMemo(() => {
+    return sellerGetProductsRedux?.serverResponse?.data?.products;
+  }, [sellerGetProductsRedux]);
+
   useEffect(() => {
     dispatch(sellerGetProductsAction(queryString as string) as any);
   }, [dispatch, queryString]);
-
-  useEffect(() => {
-    if (sellerGetProductsRedux?.serverResponse.data) {
-      setProducts(sellerGetProductsRedux?.serverResponse?.data?.products);
-    }
-  }, [sellerGetProductsRedux?.serverResponse, dispatch]);
 
   // delete products
   const sellerDeleteProductsByIDRedux = useSelector(
@@ -175,12 +180,6 @@ const SellerProductsBody = () => {
           Products
         </div>
         <div className="flex flex-row gap-2">
-          <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB84233] gap-2">
-            <span className="text-[#EDB842]">
-              <BiExport />
-            </span>
-            <span className="whitespace-nowrap text-[#EDB842]">Export</span>
-          </button>
           <button
             onClick={() => {
               navigate("/seller/products/post");
@@ -209,24 +208,13 @@ const SellerProductsBody = () => {
             }}
           />
         </div>
-        <div className="flex gap-2">
-          <select className="border py-2 px-3 rounded-md" name="" id="">
-            <option value="">All Category</option>
-          </select>
-          <select className="border py-2 px-3 rounded-md" name="" id="">
-            <option value="">Recently posted</option>
-          </select>
-          <select className="border py-2 px-3 rounded-md" name="" id="">
-            <option value="">All </option>
-          </select>
-        </div>
       </div>
       <div className="flex flex-col gap-3 w-full overflow-x-scroll">
         <table className="table-auto w-full">
           <thead className="border-b">
             <tr>
               <th className="p-2 pb-3 text-start">Products</th>
-              <th className="p-2 text-start">Stock</th>
+              <th className="p-2 text-start">Total Stock</th>
               <th className="p-2 text-start">Prices</th>
               <th className="p-2 text-start">Status</th>
               <th className="p-2 text-start">Action</th>
@@ -251,10 +239,13 @@ const SellerProductsBody = () => {
                     </div>
                   </td>
                   <td className="p-2 text-start text-[#767E94] text-sm font-[600] whitespace-nowrap">
-                    {t?.total_stock}
+                    {t?.total_stock} qty
                   </td>
                   <td className="p-2 text-start text-[#636A80] text-sm font-[600]">
-                    $<FormatNumber price={t?.current_price} />
+                    $
+                    {t?.current_price && (
+                      <FormatNumber price={t?.current_price} />
+                    )}
                   </td>
                   <td className="p-2 text-[#292929] font-[400] whitespace-nowrap text-start">
                     {t?.product_status === "available" ? (
@@ -402,10 +393,6 @@ const SellerProductsBody = () => {
             <BiSolidRightArrow />
           </button>
         </div>
-
-        <button className="px-4 py-2 text-white bg-[#EDB842] rounded-md w-fit self-center font-[700]">
-          ADD PRODUCT
-        </button>
       </div>
     </section>
   );
