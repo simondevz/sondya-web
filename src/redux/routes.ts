@@ -18,6 +18,8 @@ export const API_ROUTES = {
     products: BASE + "/products", // GET
     servicesCategory: BASE + "/services/categories", // GET
     productsCategory: BASE + "/products/categories", // GET
+    subscribers: BASE + "/subscribe/post",
+    getSubscribers: BASE + "/subscribe/get",
   },
 
   // Authentication

@@ -30,6 +30,7 @@ const AdminAddCategory = lazy(() => import("./screens/admin/AdminAddCategory"));
 const AdminAddProduct = lazy(() => import("./screens/admin/AdminAddProduct"));
 const AdminAddService = lazy(() => import("./screens/admin/AdminAddService"));
 const AdminCategory = lazy(() => import("./screens/admin/AdminCategory"));
+const AdminSubscribers = lazy(() => import("./screens/admin/AdminSubscribers"));
 const AdminCreateGroupChat = lazy(
   () => import("./screens/admin/AdminCreateGroupChat")
 );
@@ -81,6 +82,12 @@ const AdminWithdrawalOrders = lazy(
 const AuthError = lazy(() => import("./screens/auth/AuthError"));
 const AuthSuccess = lazy(() => import("./screens/auth/AuthSuccess"));
 const ForgotPassword = lazy(() => import("./screens/auth/ForgotPassword"));
+const SellerProductsPostingRules = lazy(
+  () => import("./screens/seller/SellerProductsPostingRules")
+);
+const SellerServicePostingRules = lazy(
+  () => import("./screens/seller/SellerServicePostingRules")
+);
 const ResetPassword = lazy(() => import("./screens/auth/ResetPassword"));
 const SignIn = lazy(() => import("./screens/auth/SignIn"));
 const SignUp = lazy(() => import("./screens/auth/SignUp"));
@@ -452,6 +459,12 @@ const App = createBrowserRouter([
     loader: sellerDashboardCheck,
   },
   {
+    path: "/seller/products/posting-rules",
+    element: <SellerProductsPostingRules />,
+    errorElement: <ErrorPage />,
+    loader: sellerDashboardCheck,
+  },
+  {
     path: "/seller/products/edit/:id",
     element: <SellerEditProducts />,
     errorElement: <ErrorPage />,
@@ -496,6 +509,12 @@ const App = createBrowserRouter([
   {
     path: "/seller/service/post",
     element: <SellerPostService />,
+    errorElement: <ErrorPage />,
+    loader: sellerDashboardCheck,
+  },
+  {
+    path: "/seller/service/posting-rules",
+    element: <SellerServicePostingRules />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
   },
@@ -624,6 +643,12 @@ const App = createBrowserRouter([
   {
     path: "/admin/service/details/:id",
     element: <AdminServiceDetails />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/subscribers",
+    element: <AdminSubscribers />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },

@@ -43,3 +43,8 @@ export type chatImageType = {
   fileSize: any;
   fileContent: any;
 };
+
+export type getGroupChatType = {
+  groupChats: adminGroupChatType;
+  count: number;
+};

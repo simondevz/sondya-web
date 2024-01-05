@@ -30,34 +30,35 @@ import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
 import { ReduxResponseType } from "../../types/general.types";
 
-export const userGetGroupchatsAction = () => async (dispatch: Dispatch) => {
-  dispatch({ type: USER_GET_GROUPCHATS_REQUEST });
-  try {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+export const userGetGroupchatsAction =
+  (query: string) => async (dispatch: Dispatch) => {
+    dispatch({ type: USER_GET_GROUPCHATS_REQUEST });
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    const { data } = await axios.get(
-      API_ROUTES?.userGroupChats?.getChats,
-      config
-    );
+      const { data } = await axios.get(
+        API_ROUTES?.userGroupChats?.getChats + "?" + query,
+        config
+      );
 
-    dispatch({
-      type: USER_GET_GROUPCHATS_SUCCESS,
-      payload: data,
-    });
-  } catch (error: any) {
-    dispatch({
-      type: USER_GET_GROUPCHATS_FAIL,
-      payload:
-        error?.response && error.response?.data?.message
-          ? error?.response?.data?.message
-          : error?.message,
-    });
-  }
-};
+      dispatch({
+        type: USER_GET_GROUPCHATS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: USER_GET_GROUPCHATS_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
 
 export const getUserGroupChatsAction =
   () => async (dispatch: Dispatch, getState: any) => {
