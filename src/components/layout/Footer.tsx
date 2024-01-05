@@ -2,9 +2,53 @@ import { BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import { MdMailOutline, MdOutlineLocationOn, MdPhone } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { LogoSide } from "../../images/logo";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { subscribeAction } from "../../redux/actions/subscribers.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import Swal from "sweetalert2";
+import {
+  ADMIN_GET_SUBSCRIBERS_RESET,
+  USER_SUBSCRIBE_RESET,
+} from "../../redux/constants/subscribers.constants";
 
 const Footer = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState<string>();
+
+  const subscribeRedux = useSelector(
+    (state: ReducersType) => state.subscribe
+  ) as ReduxResponseType;
+
+  useEffect(() => {
+    if (subscribeRedux?.success) {
+      Swal.fire({
+        timer: 4000,
+        title: "Successful",
+        icon: "success",
+        text: subscribeRedux?.serverResponse?.message,
+        confirmButtonText: "Okay",
+      }).finally(() => dispatch({ type: USER_SUBSCRIBE_RESET }));
+    }
+
+    if (subscribeRedux?.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!!",
+        text: subscribeRedux?.error,
+        confirmButtonText: "Okay",
+        timer: 4000,
+      }).finally(() => dispatch({ type: ADMIN_GET_SUBSCRIBERS_RESET }));
+    }
+  }, [
+    dispatch,
+    subscribeRedux?.success,
+    subscribeRedux?.serverResponse?.message,
+    subscribeRedux?.error,
+  ]);
+
   return (
     <footer className="bg-[#F8F9FA] text-[#77808B] flex flex-col gap-5 p-5 md:p-10">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-between">
@@ -59,9 +103,15 @@ const Footer = () => {
               className="p-2 border rounded-md"
               type="text"
               placeholder="Input Your email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
 
-            <button className="bg-[#EDB842] text-white p-2 rounded-md">
+            <button
+              onClick={() => dispatch(subscribeAction(email || "") as any)}
+              className="bg-[#EDB842] text-white p-2 rounded-md"
+              disabled={email ? false : true}
+            >
               Subscribe
             </button>
           </div>

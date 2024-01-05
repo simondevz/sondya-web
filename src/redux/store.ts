@@ -203,6 +203,10 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import {
+  getSubscribersReducer,
+  subscribeReducer,
+} from "./reducers/subscribers.reducer";
 
 export type ReducersType = {
   //cart system
@@ -232,6 +236,8 @@ export type ReducersType = {
   homeGetServiceDetails: ReduxResponseType;
   youMayLikeProducts: ReduxResponseType;
   youMayLikeServices: ReduxResponseType;
+  subscribe: ReduxResponseType;
+  getSubscribers: ReduxResponseType;
 
   //contact us
   contactus: ReduxResponseType;
@@ -439,6 +445,8 @@ const reducer = combineReducers<ReducersType>({
   homeGetServiceDetails: homeGetServiceDetailReducer,
   youMayLikeProducts: youMayLikeProductsReducer,
   youMayLikeServices: youMayLikeServicesReducer,
+  subscribe: subscribeReducer,
+  getSubscribers: getSubscribersReducer,
 
   //contact us
   contactus: CreateContactUsReducer,

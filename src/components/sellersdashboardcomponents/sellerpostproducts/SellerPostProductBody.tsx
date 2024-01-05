@@ -425,7 +425,12 @@ const SellerPostProductBody = () => {
                   {/* location for products ends */}
 
                   <div className="flex w-full justify-end gap-3">
-                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                    <button
+                      onClick={() => {
+                        navigate("/seller/products/posting-rules");
+                      }}
+                      className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+                    >
                       View posting rules
                     </button>
                     <button
@@ -571,7 +576,12 @@ const SellerPostProductBody = () => {
                     </div>
                   </div>
                   <div className="flex w-full justify-end gap-3">
-                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                    <button
+                      onClick={() => {
+                        navigate("/seller/products/posting-rules");
+                      }}
+                      className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+                    >
                       View posting rules
                     </button>
                     <button
@@ -626,7 +636,13 @@ const SellerPostProductBody = () => {
                     </div>
                   </div>
                   <div className="flex w-full justify-end gap-3">
-                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                    <button
+                      onClick={() => {
+                        navigate("/seller/products/posting-rules");
+                      }}
+                      type="button"
+                      className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+                    >
                       View posting rules
                     </button>
                     <button

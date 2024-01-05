@@ -339,7 +339,10 @@ const SellerPostServiceBody = () => {
                   </div>
 
                   <div className="flex w-full justify-end gap-3">
-                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                    <button
+                      onClick={() => navigate("/seller/service/posting-rules")}
+                      className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+                    >
                       View posting rules
                     </button>
                     <button
@@ -500,7 +503,10 @@ const SellerPostServiceBody = () => {
                     </div>
                   </div>
                   <div className="flex w-full justify-end gap-3">
-                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                    <button
+                      onClick={() => navigate("/seller/service/posting-rules")}
+                      className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+                    >
                       View posting rules
                     </button>
                     <button
@@ -617,7 +623,10 @@ const SellerPostServiceBody = () => {
                     {error && <div className="text-[#DB4444]">{error}</div>}
                   </div>
                   <div className="flex w-full justify-end gap-3">
-                    <button className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]">
+                    <button
+                      onClick={() => navigate("/seller/service/posting-rules")}
+                      className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md font-[700]"
+                    >
                       View posting rules
                     </button>
                     <button

@@ -174,6 +174,22 @@ const AdminDashboardNav = () => {
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-subscribers" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("admin-subscribers");
+          navigate("/admin/subscribers", {
+            state: { index: "admin-subscribers" },
+          });
+        }}
+      >
+        <span>
+          <BiSolidBadgeCheck />
+        </span>{" "}
+        <span className="whitespace-nowrap">Subscribers</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "admin-testimonial" && "bg-[#EDB842] text-white"
         }`}
         onClick={() => {
