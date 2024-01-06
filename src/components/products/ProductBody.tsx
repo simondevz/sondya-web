@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import slugify from "slugify";
 import { productImage7 } from "../../images/products";
 import { userGetProductsAction } from "../../redux/actions/userDashboard/products.action";
+import { USER_GET_PRODUCTS_RESET } from "../../redux/constants/userDashboard/products.constants";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import {
@@ -22,7 +23,6 @@ import {
   ProductPopularTags,
   ProductPriceRange,
 } from "./FilterProductsNav";
-import { USER_GET_PRODUCTS_RESET } from "../../redux/constants/userDashboard/products.constants";
 
 export type QueryType = {
   page: number;
@@ -35,7 +35,7 @@ export type QueryType = {
 
 const ProductBody = () => {
   const [query, setQuery] = useState<QueryType>({
-    page: 1,
+    page: 0,
     search: "",
     subcategory: "",
     priceRange: "",
@@ -73,6 +73,24 @@ const ProductBodyMain = ({
   const [totalPages, setTotalPages] = useState<number>(0);
   const [productsState, setProductsState] = useState<userGetProductsType>();
 
+  useEffect(() => {
+    setTimeout(() => {
+      const searchParams = new URLSearchParams(location.search);
+      const isEmpty = searchParams.entries().next().done;
+
+      if (!isEmpty) {
+        const queryObj = Object.fromEntries(searchParams.entries());
+        setQuery((prev: QueryType) => {
+          return {
+            ...prev,
+            ...queryObj,
+          };
+        });
+      }
+    }, 500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // update query and url
   const updateQueryString = useCallback(
     (newParams: QueryType) => {
@@ -83,7 +101,8 @@ const ProductBodyMain = ({
           value !== undefined &&
           value !== null &&
           value !== "" &&
-          (value as string[]).length !== 0
+          (value as string[]).length !== 0 &&
+          value !== 0
         ) {
           searchParams.set(key, String(value));
         } else {

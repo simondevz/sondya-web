@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsFillEyeFill, BsSearch, BsThreeDots } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
@@ -173,7 +173,7 @@ const AdminProductsBody = () => {
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Product</div>
           <div className="flex flex-row gap-2">
-            <button
+            {/* <button
               onClick={() => navigate("/admin/product/add")}
               className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2"
             >
@@ -181,7 +181,7 @@ const AdminProductsBody = () => {
                 <BiExport />
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
-            </button>
+            </button> */}
             <button
               onClick={() => navigate("/admin/product/add")}
               className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
@@ -245,7 +245,7 @@ const AdminProductsBody = () => {
                         </div>
                       </td>
                       <td className="p-2 text-[#A3A9B6]">{t.model}</td>
-                      <td className="text-[#A3A9B6]">{t.category}</td>
+                      <td className="text-[#A3A9B6]">{t.sub_category}</td>
                       <td className="text-[#A3A9B6]">{t.total_stock}</td>
                       <td className="text-[#A3A9B6]">
                         $

@@ -100,6 +100,24 @@ const Nav = () => {
     }, 2000);
   }, [isChecked, navigate]);
 
+  // search button
+  // const history = useHistory();
+  const [categorySelect, setCategorySelect] = useState("products");
+  const [search, setSearch] = useState("");
+
+  const handleSearch = () => {
+    console.log(categorySelect, search);
+    if (search !== "") {
+      if (categorySelect === "products") {
+        // window.location.href = `/products?page=1&search=${search}`;
+        window.location.replace(`/products?page=1&search=${search}`);
+      } else if (categorySelect === "services") {
+        // window.location.href = `/services?page=1&search=${search}`;
+        window.location.replace(`/services?page=1&search=${search}`);
+      }
+    }
+  };
+
   return (
     <div className="z-40 bg-white w-full flex flex-col flex-grow shadow-sm">
       {/* <div
@@ -152,9 +170,19 @@ const Nav = () => {
           alt=""
         />
         <div className="hidden md:flex border-[2px] border-[#EDB842] rounded-md">
-          <input className="border-0 p-2 outline-none font-[600]" type="text" />
-          <Dropdown options={Category} />
-          <button className="bg-[#EDB842] text-white p-2 font-[700]">
+          <input
+            name="search"
+            onChange={(e) => setSearch(e.target.value)}
+            className="border-0 p-2 outline-none font-[600]"
+            type="text"
+            placeholder="Search"
+            value={search}
+          />
+          <Dropdown options={Category} setCategorySelect={setCategorySelect} />
+          <button
+            onClick={handleSearch}
+            className="bg-[#EDB842] text-white p-2 font-[700]"
+          >
             Search
           </button>
         </div>
@@ -190,11 +218,19 @@ const Nav = () => {
         </div>
         <div className="flex flex-row md:hidden border-[2px] border-[#EDB842] rounded-md w-full">
           <input
+            name="search"
+            onChange={(e) => setSearch(e.target.value)}
             className="border-0 p-2 outline-none font-[600] flex-1"
             type="text"
+            placeholder="Search"
+            value={search}
           />
-          <Dropdown options={Category} />
-          <button className="bg-[#EDB842] text-white py-2 font-[700] px-5">
+          <Dropdown options={Category} setCategorySelect={setCategorySelect} />
+          <button
+            onClick={handleSearch}
+            type="button"
+            className="bg-[#EDB842] text-white py-2 font-[700] px-5"
+          >
             Search
           </button>
         </div>

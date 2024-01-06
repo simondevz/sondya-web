@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { DeleteAccount } from "./screens";
 import {
   adminDashboardCheck,
   authCheck,
@@ -245,6 +246,12 @@ const App = createBrowserRouter([
   {
     path: "/groupchat/details",
     element: <GroupChatDetails />,
+    errorElement: <ErrorPage />,
+    loader: homeCheck,
+  },
+  {
+    path: "/delete/account",
+    element: <DeleteAccount />,
     errorElement: <ErrorPage />,
     loader: homeCheck,
   },

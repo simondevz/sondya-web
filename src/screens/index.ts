@@ -10,4 +10,5 @@ export { default as Services } from "./Services";
 export { default as ServiceDetails } from "./ServicesDetails";
 export { default as WishList } from "./dashboard/WishList";
 
+export { default as DeleteAccount } from "./DeleteAccount";
 export { default as Referal } from "./Referal";

@@ -7,14 +7,19 @@ import { AdminGetCategoryType } from "../../redux/types/categories.types";
 interface DropdownProps<T> {
   options: T[];
   click?: Function;
+  setCategorySelect?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
+export const Dropdown = ({
+  options,
+  setCategorySelect,
+}: DropdownProps<categoryType>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
+    setCategorySelect && setCategorySelect(option);
     setIsOpen(false);
   };
 
@@ -26,7 +31,7 @@ export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
           className="inline-flex justify-center w-full border-x-[2px] border-[#EDB842] px-4 py-2 items-center font-[700]"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {selectedOption || "All Category "}{" "}
+          {selectedOption || "select category"}{" "}
           <span className="text-2xl">
             <MdExpandMore />
           </span>
@@ -50,6 +55,51 @@ export const Dropdown = ({ options }: DropdownProps<categoryType>) => {
     </div>
   );
 };
+
+// export const Dropdown = ({
+//   options,
+//   setCategorySelect,
+// }: DropdownProps<categoryType>) => {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+//   const handleOptionClick = (option: string) => {
+//     setSelectedOption(option);
+//     setIsOpen(false);
+//   };
+
+//   return (
+//     <div className="relative inline-block text-left">
+//       <div>
+//         <button
+//           type="button"
+//           className="inline-flex justify-center w-full border-x-[2px] border-[#EDB842] px-4 py-2 items-center font-[700]"
+//           onClick={() => setIsOpen(!isOpen)}
+//         >
+//           {selectedOption || "All Category "}{" "}
+//           <span className="text-2xl">
+//             <MdExpandMore />
+//           </span>
+//         </button>
+//       </div>
+//       {isOpen && (
+//         <div className="origin-top-right absolute right-0 w-full border-x-[2px] border-b-[2px] border-[#EDB842] bg-white font-[700]">
+//           <div className="py-1">
+//             {options.map((option, index) => (
+//               <button
+//                 key={index}
+//                 className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-t"
+//                 onClick={() => handleOptionClick(option.category)}
+//               >
+//                 {option.category}
+//               </button>
+//             ))}
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 export const DropdownProducts = ({
   options,

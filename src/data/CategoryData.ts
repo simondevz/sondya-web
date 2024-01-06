@@ -4,9 +4,9 @@ export type categoryType = {
 
 export const Category: Array<categoryType> = [
   {
-    category: "Products",
+    category: "products",
   },
   {
-    category: "Services",
+    category: "services",
   },
 ];
