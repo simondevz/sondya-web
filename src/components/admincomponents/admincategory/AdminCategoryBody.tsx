@@ -26,7 +26,7 @@ type QueryType = {
 const AdminCategory = () => {
   const limit: number = 5;
   const [query, setQuery] = useState<QueryType>({
-    page: 1,
+    page: 0,
     category: "",
     search: "",
   });
@@ -44,13 +44,20 @@ const AdminCategory = () => {
   const updateQueryString = useCallback(
     (newParams: QueryType) => {
       const searchParams = new URLSearchParams(location.search);
+
       // Update or add new parameters
       Object.entries(newParams).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          value !== 0
+        ) {
           searchParams.set(key, String(value));
-        } else {
-          searchParams.delete(key);
         }
+        //  else {
+        //   searchParams.delete(key);
+        // }
       });
 
       // Build the new search string
@@ -218,7 +225,7 @@ const AdminCategory = () => {
             </select>
           </div>
           <div className="font-[600] p-2">
-            Total Services: {categories.count}
+            Total Services: {categories?.count}
           </div>
         </div>
         <div className="">
@@ -269,9 +276,9 @@ const AdminCategory = () => {
         <div className="flex flex-row justify-between items-center">
           <div className="text-[#667085]">
             Showing {(query.page - 1) * limit} -{" "}
-            {categories.count && categories.count > limit
+            {categories?.count && categories?.count > limit
               ? query.page * limit
-              : categories.count}{" "}
+              : categories?.count}{" "}
             from page {query.page}
           </div>
           <div className="flex flex-row gap-2 items-center text-[#EDB842] my-5">
@@ -301,7 +308,11 @@ const AdminCategory = () => {
                     </button>
                   );
                 }
-                return <div className="hidden">...</div>;
+                return (
+                  <div key={i} className="hidden">
+                    ...
+                  </div>
+                );
               })}
             {Number.isInteger(totalPages) && totalPages > 3 && (
               <button

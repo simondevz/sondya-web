@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { BiRefresh } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Service1, Service2, ServiceMain } from "../../../images";
+import { Service2 } from "../../../images";
 import { user2 } from "../../../images/users";
 import { adminGetServiceByIdAction } from "../../../redux/actions/admin/services.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetServiceType } from "../../../redux/types/services.types";
+import { AboutSellerServceDetails } from "../../servicesdetails/ServiceDetailsBody";
 import { Ratings } from "../../shareables/Ratings";
 
 const AdminServicesDetailsBody = () => {
@@ -26,6 +27,11 @@ const AdminServicesDetailsBody = () => {
     dispatch(adminGetServiceByIdAction({ id }) as any);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // image slider
+  const [currentImage, setCurrentImage] = useState<string>(
+    service?.image && service.image.length > 0 ? service.image[0].url : Service2
+  );
 
   useEffect(() => {
     if (adminGetServiceByIdRedux?.serverResponse.data) {
@@ -47,44 +53,31 @@ const AdminServicesDetailsBody = () => {
               <span className="text-[#95979D]">({service?.total_rating})</span>
             </div>
           </div>
-          <div className="">
-            <img src={Service2} alt="" />
+          <div className="flex flex-col gap-2 w-4/5">
+            <img
+              style={{ height: "70vh" }}
+              className="w-full object-cover border border-yellow-950 cursor-pointer"
+              src={currentImage}
+              alt=""
+              loading="lazy"
+            />
             <div className="flex gap-1 overflow-y-auto">
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={Service1}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
-              <img
-                className="rounded-sm object-contain"
-                src={ServiceMain}
-                alt=""
-              />
+              {service?.image && service.image?.length > 0 ? (
+                service?.image?.map((image, index) => {
+                  return (
+                    <img
+                      onClick={() => setCurrentImage(image.url)}
+                      className="wrounded-sm object-contain h-20 border-2 border-yellow-950 cursor-pointer animate__animated animate__slideInLeft"
+                      src={image.url}
+                      alt=""
+                      key={index}
+                      loading="lazy"
+                    />
+                  );
+                })
+              ) : (
+                <div>hello</div>
+              )}
             </div>
           </div>
         </div>
@@ -114,80 +107,21 @@ const AdminServicesDetailsBody = () => {
         <div className="text-xl font-[600]">About Gig</div>
         <div className="font-[400] text-[#62646A]">{service?.description}</div>
       </div>
-      {service && <AboutAdminServceDetails service={service} />}
+      {service && (
+        <AboutSellerServceDetails
+          owner={service?.owner}
+          location_description={service?.location_description}
+          phone_number={service?.phone_number}
+          phone_number_backup={service?.phone_number_backup}
+          email={service?.email}
+          website_link={service?.website_link}
+          country={service?.country}
+          state={service?.state}
+          city={service?.city}
+          map_location_link={service?.map_location_link}
+        />
+      )}
     </section>
-  );
-};
-
-const AboutAdminServceDetails = ({
-  service,
-}: {
-  service: AdminGetServiceType;
-}) => {
-  return (
-    <div className="flex flex-col gap-4 max-w-[50rem]">
-      <div className="font-[700] text-2xl">About The Seller</div>
-      <div className="flex flex-row gap-4 items-center md:w-full">
-        <div className="">
-          <img src={user2} alt="" />
-        </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-lg font-[700] text-[#0E0E0F]">
-            Marjorie Asturias
-          </div>
-          <div className="font-[400] text-[#95979D] ">
-            WordPress expert with 10+ years working with business owners,
-            influencers and bloggers to expand their online audience.
-          </div>
-          <div className="flex items-center gap-3 text-[#95979D]">
-            <Ratings rating={service?.rating} />({service?.total_rating})
-          </div>
-        </div>
-      </div>
-      <div className="border p-5 rounded-md text-[#62646A] font-[400] text-sm md:w-full">
-        <div className="flex flex-row gap-3 justify-between py-3">
-          <div className="flex flex-col gap-3">
-            <div className="">
-              <div className="text-[#74767E] font-[400]">From</div>
-              <div className="text-[#62646A] font-[600]">Sri Lanka</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">
-                Avg. response time
-              </div>
-              <div className="text-[#62646A] font-[600]">1 hour</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">Languages</div>
-              <div className="text-[#62646A] font-[600]">English</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="">
-              <div className="text-[#74767E] font-[400]">Member since</div>
-              <div className="text-[#62646A] font-[600]">Aug 2019</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">Aug 2019</div>
-              <div className="text-[#62646A] font-[600]">about 3 hours</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div className="py-3">
-          At Airbluesoft Premium Digital Studio we create all kinds of creative
-          videos, specializing in Creating Promos( Website, Apps, Fashion, Real
-          Estate, Youtube, NFT) and all other promos and all instructional
-          videos.
-          <br />
-          <br />
-          We Create Basic To High-End Videos.
-          <br />
-          <br />
-          Creativity Beyond the Limits. -Airbluesoft Premium Digital Studio-
-        </div>
-      </div>
-    </div>
   );
 };
 

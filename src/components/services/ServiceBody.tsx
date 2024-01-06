@@ -1,6 +1,18 @@
+import { useCallback, useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BsThreeDots } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { serviceImage11 } from "../../images/serviceimages";
+import { userGetServicesAction } from "../../redux/actions/userDashboard/services.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import {
+  UserGetServiceType,
+  userGetServicesType,
+} from "../../redux/types/services.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 import {
   ServicesNav,
@@ -8,18 +20,6 @@ import {
   ServicesPopularTags,
   ServicesPriceRange,
 } from "./FilterServiceNav";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ReducersType } from "../../redux/store";
-import { ReduxResponseType } from "../../redux/types/general.types";
-import { userGetServicesAction } from "../../redux/actions/userDashboard/services.actions";
-import {
-  UserGetServiceType,
-  userGetServicesType,
-} from "../../redux/types/services.types";
-import { serviceImage11 } from "../../images/serviceimages";
-import { BsThreeDots } from "react-icons/bs";
 
 export type QueryType = {
   page: number;
@@ -32,7 +32,7 @@ export type QueryType = {
 
 const ServiceBody = () => {
   const [query, setQuery] = useState<QueryType>({
-    page: 1,
+    page: 0,
     search: "",
     subcategory: "",
     priceRange: "",
@@ -69,6 +69,24 @@ const ServiceBodyMain = ({
   const [dotIndex, setDotIndex] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
 
+  useEffect(() => {
+    setTimeout(() => {
+      const searchParams = new URLSearchParams(location.search);
+      const isEmpty = searchParams.entries().next().done;
+
+      if (!isEmpty) {
+        const queryObj = Object.fromEntries(searchParams.entries());
+        setQuery((prev: QueryType) => {
+          return {
+            ...prev,
+            ...queryObj,
+          };
+        });
+      }
+    }, 500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // update query and url
   const updateQueryString = useCallback(
     (newParams: QueryType) => {
@@ -79,7 +97,8 @@ const ServiceBodyMain = ({
           value !== undefined &&
           value !== null &&
           value !== "" &&
-          (value as string[]).length !== 0
+          (value as string[]).length !== 0 &&
+          value !== 0
         ) {
           searchParams.set(key, String(value));
         } else {

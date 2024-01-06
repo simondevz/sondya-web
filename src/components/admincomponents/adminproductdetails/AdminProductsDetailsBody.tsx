@@ -1,24 +1,15 @@
 import { useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ProductdetailImage1,
-  ProductdetailImage2,
-  ProductdetailImage3,
-  ProductdetailImage4,
-  ProductdetailImage5,
-  ProductdetailImage6,
-  ProductdetailImageMain,
-} from "../../../images/productdetails";
-import { user2 } from "../../../images/users";
-import { bgWhoAreWe } from "../../../images/whoarewe";
+import { ProductdetailImageMain } from "../../../images/productdetails";
 import { adminGetProductByIdAction } from "../../../redux/actions/admin/products.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminGetProductType } from "../../../redux/types/products.types";
+import { ProductsDetailsTab } from "../../productsdetails/ProductsDetailsBody";
+import { FormatNumber } from "../../shareables/FormatNumber";
 import { Ratings } from "../../shareables/Ratings";
 import SelectVariant from "../../shareables/selectVariants";
 
@@ -40,6 +31,21 @@ const AdminProductsDetailsBody = () => {
     dispatch(adminGetProductByIdAction({ id }) as any);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // image slider
+  const [currentImage, setCurrentImage] = useState<string>(
+    products?.image && products?.image.length > 0
+      ? products?.image[0].url
+      : ProductdetailImageMain
+  );
+
+  useEffect(() => {
+    setCurrentImage(
+      products?.image && products.image.length > 0
+        ? products.image[0].url
+        : ProductdetailImageMain
+    );
+  }, [products?.image]);
 
   useEffect(() => {
     if (adminGetProductByIdRedux?.serverResponse.data) {
@@ -88,27 +94,27 @@ const AdminProductsDetailsBody = () => {
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <div className="flex flex-col gap-2">
-          <img src={ProductdetailImageMain} alt="" />
+        <div className="flex flex-col gap-2 w-full md:w-4/5">
+          <img
+            style={{ height: "70vh" }}
+            className="w-full object-cover border border-yellow-950 cursor-pointer"
+            src={currentImage}
+            alt=""
+          />
           <div className="flex flex-row gap-2 overflow-x-scroll">
-            <span>
-              <img src={ProductdetailImage1} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage2} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage3} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage4} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage5} alt="" />
-            </span>
-            <span>
-              <img src={ProductdetailImage6} alt="" />
-            </span>
+            {products?.image && products?.image?.length > 0
+              ? products?.image?.map((image, index) => {
+                  return (
+                    <img
+                      onClick={() => setCurrentImage(image.url)}
+                      className="wrounded-sm object-contain h-20 border-2 border-yellow-950 cursor-pointer animate__animated animate__slideInLeft"
+                      src={image.url}
+                      alt=""
+                      key={index}
+                    />
+                  );
+                })
+              : null}
           </div>
         </div>
         <div className="flex flex-col gap-4 p-3">
@@ -143,14 +149,29 @@ const AdminProductsDetailsBody = () => {
           </div>
           <div className="flex flex-row gap-4 items-baseline">
             <span className="text-[#EDB842] font-[600]">
-              ${products?.current_price}
+              $
+              {products?.current_price && (
+                <FormatNumber price={products?.current_price} />
+              )}
             </span>
-            <span className="text-[#5F6C72] font-[400]">
-              ${products?.old_price}
-            </span>
-            <button className="p-2 bg-[#EDB842] rounded-md">
-              {products?.discount_percentage}% OFF
-            </button>
+            {products?.old_price && products?.old_price > 0 ? (
+              <span className="text-[#5F6C72] font-[400] line-through">
+                $
+                {products?.old_price && (
+                  <FormatNumber price={products?.old_price} />
+                )}
+              </span>
+            ) : (
+              <div className="hidden">i</div>
+            )}
+            {products?.discount_percentage &&
+            products?.discount_percentage > 0 ? (
+              <button className="p-2 bg-[#EDB842] rounded-md">
+                {products.discount_percentage}% OFF
+              </button>
+            ) : (
+              <div className="hidden">i</div>
+            )}
           </div>
           <hr />
           <SelectVariant
@@ -159,225 +180,21 @@ const AdminProductsDetailsBody = () => {
           />
         </div>
       </div>
-      <AdminProductsDetailsTab />
-      <AdminAboutSeller />
+      <ProductsDetailsTab
+        description={products?.description}
+        owner={products?.owner} // owner
+        address={products?.address}
+        country={products?.country}
+        state={products?.state}
+        city={products?.city}
+        zip_code={products?.zip_code}
+        sub_category={products?.sub_category}
+        model={products?.model}
+        brand={products?.brand}
+      />
+      {/* <AdminAboutSeller /> */}
     </section>
   );
-};
-
-const AdminAboutSeller = () => {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="font-[700] text-2xl">About The Seller</div>
-      <div className="flex flex-row gap-4 items-center md:w-2/3 max-w-[60rem]">
-        <div className="">
-          <img src={user2} alt="" />
-        </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-lg font-[700] text-[#0E0E0F]">
-            Marjorie Asturias
-          </div>
-          <div className="font-[400] text-[#95979D] ">
-            WordPress expert with 10+ years working with business owners,
-            influencers and bloggers to expand their online audience.
-          </div>
-          <div className="flex items-center gap-3 text-[#95979D]">
-            <Ratings rating={4} />
-            (974)
-          </div>
-        </div>
-      </div>
-      <div className="border p-5 rounded-md text-[#62646A] font-[400] text-sm md:w-2/3 max-w-[60rem]">
-        <div className="flex flex-row gap-3 justify-between py-3">
-          <div className="flex flex-col gap-3">
-            <div className="">
-              <div className="text-[#74767E] font-[400]">From</div>
-              <div className="text-[#62646A] font-[600]">Sri Lanka</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">
-                Avg. response time
-              </div>
-              <div className="text-[#62646A] font-[600]">1 hour</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">Languages</div>
-              <div className="text-[#62646A] font-[600]">English</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="">
-              <div className="text-[#74767E] font-[400]">Member since</div>
-              <div className="text-[#62646A] font-[600]">Aug 2019</div>
-            </div>
-            <div className="">
-              <div className="text-[#74767E] font-[400]">Aug 2019</div>
-              <div className="text-[#62646A] font-[600]">about 3 hours</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div className="py-3">
-          At Airbluesoft Premium Digital Studio we create all kinds of creative
-          videos, specializing in Creating Promos( Website, Apps, Fashion, Real
-          Estate, Youtube, NFT) and all other promos and all instructional
-          videos.
-          <br />
-          <br />
-          We Create Basic To High-End Videos.
-          <br />
-          <br />
-          Creativity Beyond the Limits. -Airbluesoft Premium Digital Studio-
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const AdminProductsDetailsTab = () => {
-  const [TabItem, setTabItem] = useState<string>("item1");
-  return (
-    <div className="flex flex-row gap-2 p-3 justify-evenly">
-      <div className="flex flex-col gap-2 w-full lg:w-3/5">
-        <div className="flex gap-2 border-b-2 px-2">
-          <button
-            className={`p-2 ${
-              TabItem === "item1"
-                ? "text-[#000000] border-b-4 border-[#EDB842]"
-                : "text-[#505050]"
-            }`}
-            onClick={() => setTabItem("item1")}
-          >
-            Description
-          </button>
-          <button
-            className={`p-2 ${
-              TabItem === "item2"
-                ? "text-[#000000] border-b-4 border-[#EDB842]"
-                : "text-[#505050]"
-            }`}
-            onClick={() => setTabItem("item2")}
-          >
-            Reviews
-          </button>
-          <button
-            className={`p-2 ${
-              TabItem === "item3"
-                ? "text-[#000000] border-b-4 border-[#EDB842]"
-                : "text-[#505050]"
-            }`}
-            onClick={() => setTabItem("item3")}
-          >
-            Shipping
-          </button>
-          <button
-            className={`p-2 ${
-              TabItem === "item4"
-                ? "text-[#000000] border-b-4 border-[#EDB842]"
-                : "text-[#505050]"
-            }`}
-            onClick={() => setTabItem("item4")}
-          >
-            About seller
-          </button>
-        </div>
-        <div className="">
-          {TabItem === "item1" ? (
-            <ProductsTab1 />
-          ) : TabItem === "item2" ? (
-            <ProductsTab2 />
-          ) : TabItem === "item3" ? (
-            <ProductsTab3 />
-          ) : (
-            <ProductsTab4 />
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProductsTab1 = () => {
-  return (
-    <div
-      className="border bg-no-repeat bg-contain bg-center text-[#505050] p-3 flex flex-col gap-3"
-      style={{ backgroundImage: `url(${bgWhoAreWe})` }}
-    >
-      <div className="">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit
-        amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Ut enim ad minim veniam, Quis nostrud
-        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-        dolore eu fugiat nulla pariatur.{" "}
-      </div>
-      <div className="text-[#505050]">
-        <table className="table-auto w-full md:w-2/3">
-          <tbody className="">
-            <tr className="">
-              <td className="border p-2 bg-[#EFF2F4]">Model</td>
-              <td className="border p-2">#8786867</td>
-            </tr>
-            <tr className="">
-              <td className="border p-2 bg-[#EFF2F4]">Style</td>
-              <td className="border p-2">Classic style</td>
-            </tr>
-            <tr className="">
-              <td className="border p-2 bg-[#EFF2F4]">Certificate</td>
-              <td className="border p-2">ISO-898921212</td>
-            </tr>
-            <tr className="">
-              <td className="border p-2 bg-[#EFF2F4]">Size</td>
-              <td className="border p-2">34mm x 450mm x 19mm</td>
-            </tr>
-            <tr className="">
-              <td className="border p-2 bg-[#EFF2F4]">Memory</td>
-              <td className="border p-2">36GB RAM</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className="flex flex-col space-y-3 p-3">
-        <div className="flex space-x-3">
-          <span className="text-2xl">
-            <TiTick />
-          </span>
-          <span>Some great feature name here</span>
-        </div>
-        <div className="flex space-x-3">
-          <span className="text-2xl">
-            <TiTick />
-          </span>
-          <span>Lorem ipsum dolor sit amet, consectetur </span>
-        </div>
-        <div className="flex space-x-3">
-          <span className="text-2xl">
-            <TiTick />
-          </span>
-          <span>Duis aute irure dolor in reprehenderit</span>
-        </div>
-        <div className="flex space-x-3">
-          <span className="text-2xl">
-            <TiTick />
-          </span>
-          <span>Some great feature name here</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-const ProductsTab2 = () => {
-  return <div className="">Tab 3</div>;
-};
-const ProductsTab3 = () => {
-  return <div>Tab 3</div>;
-};
-const ProductsTab4 = () => {
-  return <div>Tab 4</div>;
 };
 
 export default AdminProductsDetailsBody;

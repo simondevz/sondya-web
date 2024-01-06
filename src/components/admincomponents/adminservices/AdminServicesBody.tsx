@@ -209,7 +209,7 @@ const AdminServicesBody = () => {
               return (
                 <div
                   key={i}
-                  onClick={() => navigate("/admin/service/details/" + t?._id)}
+                  // onClick={() => navigate("/admin/service/details/" + t?._id)}
                   className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
                 >
                   <img

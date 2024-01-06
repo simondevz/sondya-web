@@ -48,7 +48,7 @@ const Footer = () => {
           <div onClick={() => navigate("/terms")} className="">
             Privacy Policy
           </div>
-          <div onClick={() => navigate("")} className="">
+          <div onClick={() => navigate("/delete/account")} className="">
             Delete Account
           </div>
         </div>
