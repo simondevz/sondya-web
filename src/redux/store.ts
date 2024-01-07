@@ -207,6 +207,12 @@ import {
   getSubscribersReducer,
   subscribeReducer,
 } from "./reducers/subscribers.reducer";
+import { orderEmailNotificationReducer } from "./reducers/userDashboard/emailNotification.reducers";
+import {
+  adminDeleteServiceOrderByIDReducer,
+  adminGetServiceOrderByIDReducer,
+  adminGetServiceOrdersReducer,
+} from "./reducers/admin/serviceOrder.reducers";
 
 export type ReducersType = {
   //cart system
@@ -248,6 +254,9 @@ export type ReducersType = {
   login: ReduxResponseType;
   forgotPassword: ReduxResponseType;
   resetPassword: ReduxResponseType;
+
+  // user && Email notification
+  orderEmailNotification: ReduxResponseType;
 
   //user profile
   getProfile: ReduxResponseType;
@@ -328,6 +337,11 @@ export type ReducersType = {
   sellerDeleteService: ReduxResponseType;
   sellerGetByIdService: ReduxResponseType;
   sellerGetAllService: ReduxResponseType;
+
+  //admin && services orders
+  adminGetServiceOrders: ReduxResponseType;
+  adminGetServiceOrderById: ReduxResponseType;
+  adminDeleteServiceOrderByIds: ReduxResponseType;
 
   //admin && users
   adminCreateUser: ReduxResponseType;
@@ -457,6 +471,9 @@ const reducer = combineReducers<ReducersType>({
   login: loginReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+
+  // user && Email notification
+  orderEmailNotification: orderEmailNotificationReducer,
 
   //user profile
   getProfile: GetUserProfileReducer,
@@ -594,6 +611,11 @@ const reducer = combineReducers<ReducersType>({
   userGetTopRatedServices: userGetTopRatedServicesReducer,
   userGetServiceById: userGetServiceByIdReducer,
   userGetServiceCategories: userGetServiceCategoriesReducer,
+
+  //admin && services orders
+  adminGetServiceOrders: adminGetServiceOrdersReducer,
+  adminGetServiceOrderById: adminGetServiceOrderByIDReducer,
+  adminDeleteServiceOrderByIds: adminDeleteServiceOrderByIDReducer,
 
   // User && Products
   userGetProducts: userGetProductsReducer,

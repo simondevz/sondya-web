@@ -37,7 +37,6 @@ const OrderDetailsBody = () => {
     dispatch(userGetProductsOrderByIdAction({ id }) as any);
   }, [dispatch, id]);
 
-  console.log(productOrder);
   return (
     <>
       <section className="flex flex-col gap-3 shadow-md">

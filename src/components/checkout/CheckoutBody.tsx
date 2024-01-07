@@ -53,6 +53,8 @@ import {
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { LoginResponseType } from "../../redux/types/auth.types";
+import { orderEmailNotificationAction } from "../../redux/actions/userDashboard/emailNotification.actions";
+import { format } from "date-fns";
 
 type TotalingType = {
   SubTotalPrice: number;
@@ -504,7 +506,8 @@ const CheckoutBody = () => {
     if (
       verifyPaymentRedux?.success &&
       paymentStatus !== true &&
-      !getProfileDetailsRedux?.loading
+      !getProfileDetailsRedux?.loading &&
+      checkoutOrder?.checkout_items?.length > 0
     ) {
       setTimeout(() => {
         if (
@@ -523,8 +526,33 @@ const CheckoutBody = () => {
                     "",
                   phone_number: userData?.phone_number,
                 };
-              console.log("dispatched order ===> ", checkoutOrder);
+
+              const dateString = checkoutOrder.createdAt
+                ? checkoutOrder.createdAt
+                : "";
+              const dateObject = new Date(dateString);
+              const formattedDate = format(dateObject, "MMMM d, yyyy");
+
               dispatch(userCreateProductOrderAction(checkoutOrder) as any);
+              dispatch(
+                orderEmailNotificationAction({
+                  email: checkoutOrder?.buyer?.email || userData?.email,
+                  username:
+                    checkoutOrder?.buyer?.username ||
+                    userData?.username ||
+                    "Esteemed User",
+                  order_status: checkoutOrder?.order_status,
+                  product: checkoutOrder?.checkout_items?.map((item) => {
+                    return {
+                      product_name: item.name,
+                      qty: item.order_quantity,
+                      seller_name: item?.owner?.username || "",
+                    };
+                  }),
+                  date_ordered: formattedDate,
+                  total_cost: checkoutOrder?.total_amount,
+                }) as any
+              );
             }
           }, 1000);
 

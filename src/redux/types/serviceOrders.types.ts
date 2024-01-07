@@ -58,6 +58,7 @@ export type CreateServiceOrderType = {
 };
 
 export type ServiceOrderType = {
+  _id?: string;
   buyer: {
     id: string;
     username: string;

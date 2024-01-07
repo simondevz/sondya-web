@@ -4,6 +4,7 @@ import { Modal } from "react-overlays";
 import { GetProductOrder } from "../../../../redux/types/checkout.types";
 import { sellerUpdateProductsOrderAction } from "../../../../redux/actions/seller/seller-orders.actions";
 import { useDispatch } from "react-redux";
+import "../../../../css/modal.css";
 
 const UpdateOrderStatusModal = ({
   showModal,
@@ -68,6 +69,7 @@ const UpdateOrderStatusModal = ({
                   <option value={"Packed"}>Packed</option>
                   <option value={"Shipping"}>Shipping</option>
                   <option value={"Delivered"}>Delivered</option>
+                  <option value={"Cancelled"}>Cancelled</option>
                 </select>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import { ProductOrderType } from "./productOrders.types";
+import { ServiceOrderType } from "./serviceOrders.types";
 import { Owner } from "./services.types";
 import { shippingDestinationType } from "./shippingdestination.types";
 
@@ -52,6 +53,16 @@ export type GetProductOrder = {
   shipping_destination: shippingDestinationType;
   order_location: orderLocationType[];
   createdAt: Date;
+};
+
+export type AdminGetProductOrder = {
+  count: number;
+  orders: GetProductOrder[];
+};
+
+export type AdminGetServiceOrder = {
+  count: number;
+  orders: ServiceOrderType[];
 };
 
 export type orderLocationType = {

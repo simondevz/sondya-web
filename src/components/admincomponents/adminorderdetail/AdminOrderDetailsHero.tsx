@@ -9,24 +9,26 @@ import {
   BsFillPhoneFill,
   BsTrophyFill,
 } from "react-icons/bs";
-import { FaFileInvoice, FaReceipt, FaUserAlt } from "react-icons/fa";
+import {
+  FaClipboardCheck,
+  FaFileInvoice,
+  FaReceipt,
+  FaTruck,
+  FaUserAlt,
+} from "react-icons/fa";
 import { MdEdit, MdLocationOn } from "react-icons/md";
 import { PiExport } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Divider, ImgExample } from "../../../images";
-import {
-  trackDelivered,
-  trackOrderPlaced,
-  trackPacked,
-  trackProcessing,
-  trackShipping,
-} from "../../../images/cart";
+import { trackOrderPlaced } from "../../../images/cart";
 import { adminGetProductsOrderByIdAction } from "../../../redux/actions/admin/productsOrder.actions";
 import { ReducersType } from "../../../redux/store";
 import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
+import { IoTimer } from "react-icons/io5";
+import { LuPackageCheck } from "react-icons/lu";
 
 const AdminOrderDetailsHero = () => {
   // const navigate = useNavigate();
@@ -56,7 +58,6 @@ const AdminOrderDetailsHero = () => {
     formattedDate = format(dateObject, "MMMM d, yyyy");
   }
 
-  console.log(productOrder);
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-row justify-between">
@@ -339,6 +340,46 @@ const AdminOrderDetailsHero = () => {
               </tbody>
             </table>
           </div>
+          <div className="w-full">
+            <table className="table-auto w-full">
+              <thead className="bg-[#F0F1F3]">
+                <tr className="text-[#1D1F2C] font-[600]">
+                  <th className="py-2 px-3 text-start">Country</th>
+                  <th className="py-2 px-3 text-start">State</th>
+                  <th className="py-2 px-3 text-start">City</th>
+                  <th className="py-2 px-3 text-start">Zip Code</th>
+                  <th className="py-2 px-3 text-start">Order status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productOrder?.order_location?.length ? (
+                  productOrder?.order_location?.map((location, index) => {
+                    return (
+                      <tr key={index} className="border">
+                        <td className="text-[#1D1F2C] py-2 px-3">
+                          {location?.country}
+                        </td>
+                        <td className="text-[#1D1F2C] py-2 px-3">
+                          {location?.state}
+                        </td>
+                        <td className="text-[#1D1F2C] py-2 px-3">
+                          {location?.city}
+                        </td>
+                        <td className="text-[#1D1F2C] py-2 px-3">
+                          {location?.zip_code}
+                        </td>
+                        <td className="text-[#1D1F2C] py-2 px-3">
+                          {location?.order_status}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <div>No Update in Location Yet</div>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="flex flex-col gap-3">
           {/* address */}
@@ -402,8 +443,17 @@ const AdminOrderDetailsHero = () => {
               </div>
               <div className="flex flex-row gap-3 items-start">
                 <div className="flex flex-col items-center">
-                  <span className="p-2 bg-[#EDB84233] rounded-full text-[#EDB842]">
-                    <img src={trackProcessing} alt="" />
+                  <span
+                    className={
+                      (productOrder?.order_status === "Delivered" ||
+                      productOrder?.order_status === "Shipping" ||
+                      productOrder?.order_status === "Packed" ||
+                      productOrder?.order_status === "Processing"
+                        ? "bg-[#EDB84233]  text-[#EDB842] "
+                        : "bg-[#F0F1F3] text-[#858D9D] ") + "p-2 rounded-full"
+                    }
+                  >
+                    <IoTimer />
                   </span>
                   <img className="w-[0.16rem] h-[2rem]" src={Divider} alt="" />
                 </div>
@@ -412,7 +462,7 @@ const AdminOrderDetailsHero = () => {
                     Processing
                   </div>
                   <div className="text-[#4A4C56] font-[400] text-[14px]">
-                    Seller has proccessed your order.
+                    Seller is proccessing your order.
                   </div>
                   <div className="text-[#858D9D] font-[400] text-[12px]">
                     12/12/2022, 03:15
@@ -421,8 +471,16 @@ const AdminOrderDetailsHero = () => {
               </div>
               <div className="flex flex-row gap-3 items-start">
                 <div className="flex flex-col items-center">
-                  <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">
-                    <img src={trackPacked} alt="" />
+                  <span
+                    className={
+                      (productOrder?.order_status === "Delivered" ||
+                      productOrder?.order_status === "Shipping" ||
+                      productOrder?.order_status === "Packed"
+                        ? "bg-[#EDB84233] text-[#EDB842] "
+                        : "bg-[#F0F1F3] text-[#858D9D] ") + "p-2 rounded-full"
+                    }
+                  >
+                    <LuPackageCheck />
                   </span>
                   <img className="w-[0.16rem] h-[2rem]" src={Divider} alt="" />
                 </div>
@@ -431,7 +489,7 @@ const AdminOrderDetailsHero = () => {
                     Packed
                   </div>
                   <div className="text-[#4A4C56] font-[400] text-[14px]">
-                    Seller has proccessed your order.
+                    Seller has packaged your order.
                   </div>
                   <div className="text-[#858D9D] font-[400] text-[12px]">
                     12/12/2022, 03:15
@@ -440,8 +498,15 @@ const AdminOrderDetailsHero = () => {
               </div>
               <div className="flex flex-row gap-3 items-start">
                 <div className="flex flex-col items-center">
-                  <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">
-                    <img src={trackShipping} alt="" />
+                  <span
+                    className={
+                      (productOrder?.order_status === "Delivered" ||
+                      productOrder?.order_status === "Shipping"
+                        ? "bg-[#EDB84233] text-[#EDB842] "
+                        : "bg-[#F0F1F3] text-[#858D9D] ") + "p-2 rounded-full "
+                    }
+                  >
+                    <FaTruck />
                   </span>
                   <img className="w-[0.16rem] h-[2rem]" src={Divider} alt="" />
                 </div>
@@ -450,7 +515,7 @@ const AdminOrderDetailsHero = () => {
                     Shipping
                   </div>
                   <div className="text-[#4A4C56] font-[400] text-[14px]">
-                    Seller has proccessed your order.
+                    Your order is on the road.
                   </div>
                   <div className="text-[#858D9D] font-[400] text-[12px]">
                     12/12/2022, 03:15
@@ -459,8 +524,14 @@ const AdminOrderDetailsHero = () => {
               </div>
               <div className="flex flex-row gap-3 items-start">
                 <div className="flex flex-col items-center">
-                  <span className="p-2 bg-[#F0F1F3] rounded-full text-[#EDB842]">
-                    <img src={trackDelivered} alt="" />
+                  <span
+                    className={
+                      (productOrder?.order_status === "Delivered"
+                        ? "bg-[#EDB84233] text-[#EDB842] "
+                        : "bg-[#F0F1F3] text-[#858D9D] ") + "p-2 rounded-full "
+                    }
+                  >
+                    <FaClipboardCheck />
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -468,7 +539,7 @@ const AdminOrderDetailsHero = () => {
                     Delivered
                   </div>
                   <div className="text-[#4A4C56] font-[400] text-[14px]">
-                    Seller has proccessed your order.
+                    The order has been delivered.
                   </div>
                   <div className="text-[#858D9D] font-[400] text-[12px]">
                     12/12/2022, 03:15
