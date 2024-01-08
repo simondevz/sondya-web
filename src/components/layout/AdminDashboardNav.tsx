@@ -114,15 +114,31 @@ const AdminDashboardNav = () => {
         }`}
         onClick={() => {
           setIndex("admin-orders");
-          navigate("/admin/orders", { state: { index: "admin-orders" } });
+          navigate("/admin/product/orders", {
+            state: { index: "admin-orders" },
+          });
         }}
       >
         <span>
           <BsBookmarkCheck />
         </span>
-        <Link to={"/track-Order"}>
-          <span className="whitespace-nowrap">Orders</span>
-        </Link>
+        <span className="whitespace-nowrap">Product Orders</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "admin-service-orders" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("admin-service-orders");
+          navigate("/admin/service/orders", {
+            state: { index: "admin-service-orders" },
+          });
+        }}
+      >
+        <span>
+          <BsBookmarkCheck />
+        </span>
+        <span className="whitespace-nowrap">Service Orders</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

@@ -39,6 +39,8 @@ import {
   INITIALIZE_PAYMENTS_RESET,
   VERIFY_PAYMENTS_RESET,
 } from "../../redux/constants/userDashboard/payments.constants";
+import { orderEmailNotificationAction } from "../../redux/actions/userDashboard/emailNotification.actions";
+import { format } from "date-fns";
 
 const ServiceCheckoutBody = () => {
   const [serviceOrder, setServiceOrder] = useState<ServiceOrderType>();
@@ -212,6 +214,7 @@ const ServiceCheckoutBody = () => {
                 serviceOrder?.checkout_items?.terms?.duration * convertionValue
             );
           })();
+
           dispatch(
             updateServiceOrderAction({
               ...serviceOrder,
@@ -221,6 +224,28 @@ const ServiceCheckoutBody = () => {
                 delivery_time: delivery_time.toUTCString(),
               },
             } as ServiceOrderType) as any
+          );
+
+          const dateString = serviceOrder.createdAt
+            ? serviceOrder.createdAt
+            : "";
+          const dateObject = new Date(dateString);
+          const formattedDate = format(dateObject, "MMMM d, yyyy");
+
+          dispatch(
+            orderEmailNotificationAction({
+              email: serviceOrder?.buyer?.email,
+              username: serviceOrder?.buyer?.username || "Esteemed User",
+              order_id: serviceOrder.order_id,
+              order_status: serviceOrder?.order_status,
+              service: {
+                name: serviceOrder?.checkout_items?.name,
+                seller_name:
+                  serviceOrder?.checkout_items?.owner?.username || "",
+              },
+              date_ordered: formattedDate,
+              total_cost: serviceOrder?.checkout_items?.total_price,
+            }) as any
           );
         } else {
           Swal.fire({

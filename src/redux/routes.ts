@@ -143,6 +143,11 @@ export const API_ROUTES = {
     update: BASE + "/admin/groupchat/update", // PUT
   },
 
+  // Users && email notifications
+  emailNotification: {
+    orders: BASE + "/user/payments/email_notification",
+  },
+
   // Users
   users: {
     createTestimonial: BASE + "/user/testimonial/create", // POST: UserTestimonialType
@@ -192,6 +197,13 @@ export const API_ROUTES = {
     getProductsOrders: BASE + "/admin/order/products", // GET
     getProductOrdersById: BASE + "/admin/order/product/", // GET :id
     deleteProductOrdersById: BASE + "/admin/order/products/", // GET :id
+  },
+
+  // admin && service order
+  adminServiceOrders: {
+    getServiceOrders: BASE + "/admin/order/service", // GET
+    getServiceOrdersById: BASE + "/admin/order/service/", // GET :id
+    deleteServiceOrdersById: BASE + "/admin/order/service/", // GET :id
   },
 
   // admin && products order

@@ -7,6 +7,7 @@ import {
 } from "../../../../redux/types/checkout.types";
 import { sellerUpdateProductsOrderAction } from "../../../../redux/actions/seller/seller-orders.actions";
 import { useDispatch } from "react-redux";
+import "../../../../css/modal.css";
 
 const UpdateLocationModal = ({
   showModal,

@@ -20,13 +20,7 @@ import { MdEdit, MdLocationOn } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Divider, ImgExample } from "../../../images";
-import {
-  trackDelivered,
-  trackOrderPlaced,
-  trackPacked,
-  trackProcessing,
-  trackShipping,
-} from "../../../images/cart";
+import { trackOrderPlaced } from "../../../images/cart";
 import { sellerGetProductsOrderByIdAction } from "../../../redux/actions/seller/seller-orders.actions";
 import { ReducersType } from "../../../redux/store";
 import { GetProductOrder } from "../../../redux/types/checkout.types";
@@ -127,8 +121,6 @@ const SellerOrderDetailsBody = () => {
     const dateObject = new Date(dateString);
     formattedDate = format(dateObject, "MMMM d, yyyy");
   }
-
-  console.log(productOrder);
 
   return (
     <section className="p-2">
@@ -638,17 +630,17 @@ const SellerOrderDetailsBody = () => {
             </div>
           </div>
         </div>
+        <UpdateLocationModal
+          showModal={showLocationModal}
+          handleClose={() => setShowLocationModal(false)}
+          order={productOrder}
+        />
+        <UpdateOrderStatusModal
+          showModal={showOrderStatusModal}
+          handleClose={() => setShowOrderStatusModal(false)}
+          order={productOrder}
+        />
       </div>
-      <UpdateLocationModal
-        showModal={showLocationModal}
-        handleClose={() => setShowLocationModal(false)}
-        order={productOrder}
-      />
-      <UpdateOrderStatusModal
-        showModal={showOrderStatusModal}
-        handleClose={() => setShowOrderStatusModal(false)}
-        order={productOrder}
-      />
     </section>
   );
 };

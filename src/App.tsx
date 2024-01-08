@@ -48,6 +48,9 @@ const AdminGroupChatList = lazy(
 const AdminOrderDetails = lazy(
   () => import("./screens/admin/AdminOrderDetails")
 );
+const AdminServiceOrderDetails = lazy(
+  () => import("./screens/admin/AdminServiceOrderDetails")
+);
 const AdminOrders = lazy(() => import("./screens/admin/AdminOrders"));
 const AdminPaymentDetails = lazy(
   () => import("./screens/admin/AdminPaymentDetails")
@@ -77,6 +80,9 @@ const AdminWithdrawalDetails = lazy(
 );
 const AdminWithdrawalOrders = lazy(
   () => import("./screens/admin/AdminWithdrawalOrders")
+);
+const AdminServiceOrders = lazy(
+  () => import("./screens/admin/AdminServiceOrders")
 );
 
 // Auth Import
@@ -678,14 +684,26 @@ const App = createBrowserRouter([
     loader: adminDashboardCheck,
   },
   {
-    path: "/admin/orders",
+    path: "/admin/product/orders",
     element: <AdminOrders />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/service/orders",
+    element: <AdminServiceOrders />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },
   {
     path: "/admin/order/details/:id",
     element: <AdminOrderDetails />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/service/order/details/:id",
+    element: <AdminServiceOrderDetails />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },

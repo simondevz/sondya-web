@@ -5,15 +5,20 @@ import { BsFillEyeFill, BsSearch, BsThreeDots } from "react-icons/bs";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { adminGetProductsOrdersAction } from "../../../redux/actions/admin/productsOrder.actions";
 import { ReducersType } from "../../../redux/store";
-import {
-  AdminGetProductOrder,
-  GetProductOrder,
-} from "../../../redux/types/checkout.types";
+import { AdminGetServiceOrder } from "../../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
-import { ADMIN_GET_PRODUCTS_ORDERS_RESET } from "../../../redux/constants/admin/ProductOrder.constants";
+import {
+  adminDeleteServiceOrderByIdAction,
+  adminGetServiceOrdersAction,
+} from "../../../redux/actions/admin/serviceOrder.actions";
+import {
+  ADMIN_DELETE_SERVICE_ORDER_BYID_RESET,
+  ADMIN_GET_SERVICE_ORDERS_RESET,
+} from "../../../redux/constants/admin/serviceOrder.constants";
+import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
+import Swal from "sweetalert2";
 
 export type QueryType = {
   limit: number;
@@ -32,7 +37,8 @@ const AdminOrdersBody = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const [productOrderData, setProductOrderData] = useState<GetProductOrder[]>();
+  const [serviceOrderData, setServiceOrderData] =
+    useState<ServiceOrderType[]>();
   const [total, setTotal] = useState<number>(0);
 
   const [queryString, setQueryString] = useState<string>("");
@@ -109,31 +115,62 @@ const AdminOrdersBody = () => {
     });
   };
 
-  const getProductOrdersRedux = useSelector(
-    (state: ReducersType) => state?.adminGetProductsOrders
-  ) as ReduxResponseType<AdminGetProductOrder>;
+  const getServiceOrdersRedux = useSelector(
+    (state: ReducersType) => state?.adminGetServiceOrders
+  ) as ReduxResponseType<AdminGetServiceOrder>;
+
+  const deleteServiceOrdersRedux = useSelector(
+    (state: ReducersType) => state?.adminDeleteServiceOrderByIds
+  ) as ReduxResponseType;
 
   useEffect(() => {
-    if (getProductOrdersRedux?.success) {
-      setTotalPages(
-        Math.ceil(
-          Number(getProductOrdersRedux?.serverResponse?.data?.count) / limit
-        )
+    if (deleteServiceOrdersRedux?.success)
+      Swal.fire({
+        title: "Successful",
+        text: deleteServiceOrdersRedux?.serverResponse?.message,
+        icon: "success",
+        timer: 4000,
+        confirmButtonText: "Okay",
+      })
+        .then(() => dispatch({ type: ADMIN_DELETE_SERVICE_ORDER_BYID_RESET }))
+        .finally(() => window.location.reload());
+
+    if (deleteServiceOrdersRedux?.error)
+      Swal.fire({
+        title: "Error",
+        text: deleteServiceOrdersRedux?.error,
+        icon: "error",
+        timer: 4000,
+        confirmButtonText: "Okay",
+      }).finally(() =>
+        dispatch({ type: ADMIN_DELETE_SERVICE_ORDER_BYID_RESET })
       );
-      setTotal(getProductOrdersRedux?.serverResponse?.data?.count);
-      setProductOrderData(getProductOrdersRedux?.serverResponse?.data?.orders);
-      dispatch({ type: ADMIN_GET_PRODUCTS_ORDERS_RESET });
-    }
   }, [
     dispatch,
-    getProductOrdersRedux?.success,
-    getProductOrdersRedux?.serverResponse?.data,
+    deleteServiceOrdersRedux?.error,
+    deleteServiceOrdersRedux?.serverResponse?.message,
+    deleteServiceOrdersRedux?.success,
   ]);
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(adminGetProductsOrdersAction(queryString) as any);
-    }, 500);
+    if (getServiceOrdersRedux?.success) {
+      setTotalPages(
+        Math.ceil(
+          Number(getServiceOrdersRedux?.serverResponse?.data?.count) / limit
+        )
+      );
+      setTotal(getServiceOrdersRedux?.serverResponse?.data?.count);
+      setServiceOrderData(getServiceOrdersRedux?.serverResponse?.data?.orders);
+      dispatch({ type: ADMIN_GET_SERVICE_ORDERS_RESET });
+    }
+  }, [
+    dispatch,
+    getServiceOrdersRedux?.success,
+    getServiceOrdersRedux?.serverResponse?.data,
+  ]);
+
+  useEffect(() => {
+    dispatch(adminGetServiceOrdersAction(queryString) as any);
   }, [dispatch, queryString]);
 
   return (
@@ -167,51 +204,51 @@ const AdminOrdersBody = () => {
                 whichTab === "#1" && "text-[#883DCF] bg-[#F4ECFB]"
               } p-2 rounded-md whitespace-nowrap`}
             >
-              All Status
+              ALL STATUS
             </button>
             <button
               onClick={() => {
                 setwhichTab("#2");
-                setQuery({ ...query, page: 1, status: "Processing" });
+                setQuery({ ...query, page: 1, status: "IN PROGRESS" });
               }}
               className={` ${
                 whichTab === "#2" && "text-[#883DCF] bg-[#F4ECFB]"
               } p-2 rounded-md`}
             >
-              Processing
+              IN PROGRESS
             </button>
             <button
               onClick={() => {
                 setwhichTab("#3");
-                setQuery({ ...query, page: 1, status: "Shipping" });
+                setQuery({ ...query, page: 1, status: "DELIVERED" });
               }}
               className={` ${
                 whichTab === "#3" && "text-[#883DCF] bg-[#F4ECFB]"
               } p-2 rounded-md`}
             >
-              Shipping
+              DELIVERED
             </button>
             <button
               onClick={() => {
                 setwhichTab("#4");
-                setQuery({ ...query, page: 1, status: "Delivered" });
+                setQuery({ ...query, page: 1, status: "COMPLETED" });
               }}
               className={` ${
                 whichTab === "#4" && "text-[#883DCF] bg-[#F4ECFB]"
               } p-2 rounded-md`}
             >
-              Delivered
+              COMPLETED
             </button>
             <button
               onClick={() => {
                 setwhichTab("#5");
-                setQuery({ ...query, page: 1, status: "Cancelled" });
+                setQuery({ ...query, page: 1, status: "CANCELLED" });
               }}
               className={` ${
                 whichTab === "#5" && "text-[#883DCF] bg-[#F4ECFB]"
               } p-2 rounded-md`}
             >
-              Cancelled
+              CANCELLED
             </button>
           </div>
           <div className="flex flex-row gap-2">
@@ -244,8 +281,7 @@ const AdminOrdersBody = () => {
           <table className="table-auto w-full">
             <thead>
               <tr>
-                <th className="text-[#1D1F2C] text-start">Product</th>
-                <th className="text-[#1D1F2C] text-start">Total products</th>
+                <th className="text-[#1D1F2C] text-start">Service</th>
                 <th className="text-[#1D1F2C] text-start">Total Price</th>
                 <th className="text-[#1D1F2C] text-start">Order Status</th>
                 <th className="text-[#1D1F2C] text-start">Added</th>
@@ -253,8 +289,8 @@ const AdminOrdersBody = () => {
               </tr>
             </thead>
             <tbody>
-              {productOrderData && productOrderData.length > 0
-                ? productOrderData.map((t, i) => {
+              {serviceOrderData && serviceOrderData.length > 0
+                ? serviceOrderData.map((t, i) => {
                     const dateString = t.createdAt ? t.createdAt : "";
                     const dateObject = new Date(dateString);
                     const formattedDate = format(dateObject, "MMMM d, yyyy");
@@ -268,13 +304,13 @@ const AdminOrdersBody = () => {
                           </div>
                         </td>
                         <td className="text-[#A3A9B6]">
-                          {t?.checkout_items?.order_quantity}
-                        </td>
-                        <td className="text-[#A3A9B6]">
-                          {}
                           $
                           <FormatNumber
-                            price={t?.checkout_items?.total_price}
+                            price={
+                              t?.checkout_items?.total_price ||
+                              t?.checkout_items?.terms?.amount ||
+                              0
+                            }
                           />
                         </td>
                         <td>
@@ -302,12 +338,33 @@ const AdminOrdersBody = () => {
                             <button
                               type="button"
                               onClick={() =>
-                                navigate(`/admin/order/details/${t._id}`)
+                                navigate(
+                                  `/admin/service/order/details/${t._id}`
+                                )
                               }
                             >
                               <BsFillEyeFill />
                             </button>
-                            <button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                Swal.fire({
+                                  title: "Delete Order Confirmation",
+                                  text: "Are you sure you want to delete this Order, This action can not be reversed.",
+                                  icon: "warning",
+                                  confirmButtonText: "Delete",
+                                  cancelButtonText: "Cancel",
+                                  showCancelButton: true,
+                                }).then((result) => {
+                                  if (result.isConfirmed)
+                                    dispatch(
+                                      adminDeleteServiceOrderByIdAction({
+                                        id: t._id,
+                                      }) as any
+                                    );
+                                });
+                              }}
+                            >
                               <MdDelete />
                             </button>
                           </div>
