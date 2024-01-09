@@ -1,23 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AiOutlineEye } from "react-icons/ai";
-import { BiExport, BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import { BsCalendar2, BsSearch, BsThreeDots, BsXCircle } from "react-icons/bs";
+import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
+import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { MdEdit, MdOutlineAdd, MdOutlineMoreVert } from "react-icons/md";
-import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
 import Swal from "sweetalert2";
+import "../../../css/modal.css";
 import { defaultUser } from "../../../images";
 import {
   adminDeleteUserAction,
   adminGetUsersAction,
 } from "../../../redux/actions/admin/users.actions";
 import { ReducersType } from "../../../redux/store";
-import { Paginator, ReduxResponseType, AdminUsersFilterStatus } from "../../../redux/types/general.types";
+import {
+  AdminUsersFilterStatus,
+  Paginator,
+  ReduxResponseType,
+} from "../../../redux/types/general.types";
 import { adminUGetUserType } from "../../../redux/types/users.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
-// import AdminCreateUserModal from "./AdminCreateUserModal";
+import AdminCreateUserModal from "./AdminCreateUserModal";
 
 type QueryType = {
   page: number;
@@ -33,7 +37,7 @@ const AdminUsersBody = () => {
   const [query, setQuery] = useState<QueryType>({
     page: 1,
     search: "",
-    status: ""
+    status: "",
   });
 
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -70,10 +74,9 @@ const AdminUsersBody = () => {
       });
     },
     [location.pathname, location.search, navigate]
-  )
+  );
 
   // const [users, setUsers] = useState<adminUGetUserType[]>([]);
-
 
   // Admin get users
   const adminGetUsersRedux = useSelector(
@@ -82,8 +85,7 @@ const AdminUsersBody = () => {
 
   const users = useMemo(() => {
     return adminGetUsersRedux?.serverResponse?.data;
-  }, [adminGetUsersRedux])
-
+  }, [adminGetUsersRedux]);
 
   useEffect(() => {
     dispatch(adminGetUsersAction(queryString) as any);
@@ -101,39 +103,44 @@ const AdminUsersBody = () => {
     (state: ReducersType) => state?.adminDeleteUser
   ) as ReduxResponseType<adminUGetUserType>;
 
-  const handleDelete = useCallback((id: string) => {
-    // console.log(id);
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(adminDeleteUserAction({ id }) as any);
+  const handleDelete = useCallback(
+    (id: string) => {
+      // console.log(id);
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(adminDeleteUserAction({ id }) as any);
 
-        if (!adminDeleteUserByIDRedux.error) {
-          Swal.fire(
-            "Deleted!",
-            adminDeleteUserByIDRedux.serverResponse.message,
-            "success"
-          );
-          setTimeout(() => {
-            dispatch(adminGetUsersAction(queryString) as any);
-          }, 1000)
-        } else {
-          Swal.fire("Deleted!", adminDeleteUserByIDRedux?.error, "error");
+          if (!adminDeleteUserByIDRedux.error) {
+            Swal.fire(
+              "Deleted!",
+              adminDeleteUserByIDRedux.serverResponse.message,
+              "success"
+            );
+            setTimeout(() => {
+              dispatch(adminGetUsersAction(queryString) as any);
+            }, 1000);
+          } else {
+            Swal.fire("Deleted!", adminDeleteUserByIDRedux?.error, "error");
+          }
         }
-      }
-    });
-  },
+      });
+    },
     [adminDeleteUserByIDRedux, dispatch, queryString]
   );
 
-  const search = (e: | React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLButtonElement>) => {
+  const search = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLButtonElement>
+  ) => {
     setQuery({
       ...query,
       page: 1,
@@ -143,14 +150,14 @@ const AdminUsersBody = () => {
   };
 
   // button func----------
-  const updateUsersFilterStatus = (status: AdminUsersFilterStatus) =>  {
-    setwhichTab(status)
+  const updateUsersFilterStatus = (status: AdminUsersFilterStatus) => {
+    setwhichTab(status);
     setQuery({
       ...query,
       page: 1,
-      status: status === AdminUsersFilterStatus.all ? '' : status
-    })
-  }
+      status: status === AdminUsersFilterStatus.all ? "" : status,
+    });
+  };
 
   const prevPage = () => {
     setQuery((prev) => {
@@ -175,7 +182,7 @@ const AdminUsersBody = () => {
       return {
         ...prev,
         page: page,
-      }; // const [CreateAccountModal, setCreateAccountModal] = useState(false);
+      };
     });
   };
 
@@ -190,30 +197,31 @@ const AdminUsersBody = () => {
       setTotalPages(
         Math.ceil(adminGetUsersRedux?.serverResponse?.data?.count / limit)
       );
-  }, [adminGetUsersRedux?.serverResponse?.data?.count, query, setQuery])
+  }, [adminGetUsersRedux?.serverResponse?.data?.count, query, setQuery]);
 
   // console.log(users.count)
   // React state to control Modal visibility
-  // const [CreateAccountModal, setCreateAccountModal] = useState(false);
+  const [CreateAccountModal, setCreateAccountModal] = useState(false);
 
   return (
-    <section>
-      <div className="flex flex-col gap-5">
+    <section className="flex flex-col gap-6 w-full p-3">
+      <div className="flex flex-col gap-5 ">
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Users</div>
           <div className="flex flex-row gap-2">
-            <button
-              onClick={() => navigate("/admin/user/add")}
+            {/* <button
+              onClick={() => setCreateAccountModal}
               className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2"
             >
               <span className="text-[#EDB842]">
                 <BiExport />
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
-            </button>
+            </button> */}
             <button
               type="button"
-              onClick={() => navigate("/admin/user/add")}
+              // onClick={() => navigate("/admin/user/add")}
+              onClick={() => setCreateAccountModal(true)}
               className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
             >
               <span className="text-2xl">
@@ -227,25 +235,34 @@ const AdminUsersBody = () => {
           <div className="flex flex-row border rounded-md p-1 text-[#667085] gap-2 w-fit overflow-x-auto">
             <button
               type="button"
-              onClick={() => updateUsersFilterStatus(AdminUsersFilterStatus.all)}
-              className={` ${whichTab === "all" && "text-[#EDB842] bg-[#EDB84233]"
-                } p-2 rounded-md whitespace-nowrap`}
+              onClick={() =>
+                updateUsersFilterStatus(AdminUsersFilterStatus.all)
+              }
+              className={` ${
+                whichTab === "all" && "text-[#EDB842] bg-[#EDB84233]"
+              } p-2 rounded-md whitespace-nowrap`}
             >
               All Status
             </button>
             <button
               type="button"
-              onClick={() => updateUsersFilterStatus(AdminUsersFilterStatus.active)}
-              className={` ${whichTab === "active" && "text-[#EDB842] bg-[#EDB84233]"
-                } p-2 rounded-md`}
+              onClick={() =>
+                updateUsersFilterStatus(AdminUsersFilterStatus.active)
+              }
+              className={` ${
+                whichTab === "active" && "text-[#EDB842] bg-[#EDB84233]"
+              } p-2 rounded-md`}
             >
               Active
             </button>
             <button
               type="button"
-              onClick={() => updateUsersFilterStatus(AdminUsersFilterStatus.blocked)}             
-              className={` ${whichTab === "blocked" && "text-[#EDB842] bg-[#EDB84233]"
-                } p-2 rounded-md`}
+              onClick={() =>
+                updateUsersFilterStatus(AdminUsersFilterStatus.blocked)
+              }
+              className={` ${
+                whichTab === "blocked" && "text-[#EDB842] bg-[#EDB84233]"
+              } p-2 rounded-md`}
             >
               Blocked
             </button>
@@ -262,12 +279,8 @@ const AdminUsersBody = () => {
                 placeholder="Search users. . ."
               />
             </div>
-            <div className="flex flex-row items-center border h-fit p-2 rounded-md gap-2">
-              <BsCalendar2 />
-              <input className="p-1" type="text" placeholder="Search Date" />
-            </div>
           </div>
-          <div className="font-[600] p-2">Total Users: {users.count}</div>
+          <div className="font-[600] p-2">Total Users: {users?.count}</div>
         </div>
         <div className="mx-auto">
           {!adminGetUsersRedux.success && <DotLoader color="#EDB842" />}
@@ -314,25 +327,21 @@ const AdminUsersBody = () => {
                           </div>
                           <div
                             className="flex gap-4 items-center"
-                            onClick={() => navigate(`/admin/user/edit/${t._id}`)}
+                            onClick={() =>
+                              navigate(`/admin/user/edit/${t._id}`)
+                            }
                           >
                             <MdEdit />{" "}
                             <span className="whitespace-nowrap">Edit</span>
-                          </div>
-                          <div className="flex gap-4 items-center text-[#27C200]">
-                            <TiTick />{" "}
-                            <span className="whitespace-nowrap">Active</span>
-                          </div>
-                          <div className="flex gap-4 items-center text-[#FB5B01]">
-                            <BsXCircle />{" "}
-                            <span className="whitespace-nowrap">pending</span>
                           </div>
                           <div
                             className="flex gap-4 items-center"
                             onClick={() => handleDelete(t._id)}
                           >
                             <AiOutlineEye />{" "}
-                            <span className="whitespace-nowrap">Delete User</span>
+                            <span className="whitespace-nowrap">
+                              Delete User
+                            </span>
                           </div>
                         </div>
                       )}
@@ -342,25 +351,26 @@ const AdminUsersBody = () => {
                     {t.first_name + " " + t.last_name}
                   </div>
                   <div
-                    className={`${t.status === "active"
-                      ? "bg-[#E9FAF7] text-[#1A9882]"
-                      : "bg-[#FEECEE] text-[#EB3D4D]"
-                      } w-fit p-1 mx-auto rounded-md`}
+                    className={`${
+                      t.status === "active"
+                        ? "bg-[#E9FAF7] text-[#1A9882]"
+                        : "bg-[#FEECEE] text-[#EB3D4D]"
+                    } w-fit p-1 mx-auto rounded-md`}
                   >
                     {t.status}
                   </div>
                   <div className="border-b border-dashed"></div>
                   <div className="flex flex-row justify-around">
                     <div className="">
-                      <div className="text-[#667085] font-[400]">Orders</div>
-                      <div className="text-[#1D1F2C] font-[600]">
-                        <FormatNumber price={787} />
+                      <div className="text-[#667085] font-[400]">Type</div>
+                      <div className="text-[#1D1F2C] font-[600] capitalize">
+                        {t?.type}
                       </div>
                     </div>
                     <div className="">
                       <div className="text-[#667085] font-[400]">Balance</div>
                       <div className="text-[#1D1F2C] font-[600]">
-                        <FormatNumber price={9876} />
+                        ${t?.balance && <FormatNumber price={t?.balance} />}
                       </div>
                     </div>
                   </div>
@@ -369,11 +379,13 @@ const AdminUsersBody = () => {
             })}
         </div>
         <div className="flex flex-row justify-between items-center">
-          <div className="text-[#667085]">Showing {(query.page - 1) * limit} -{" "}
+          <div className="text-[#667085]">
+            Showing {(query.page - 1) * limit} -{" "}
             {users.count && users.count > limit
               ? query.page * limit
               : users.count}{" "}
-            from page {query.page}</div>
+            from page {query.page}
+          </div>
           <div className="flex flex-row gap-2 items-center text-    [#EDB842] my-5">
             <button
               disabled={query.page <= 1}
@@ -393,8 +405,9 @@ const AdminUsersBody = () => {
                     <button
                       key={i}
                       onClick={() => goToPage(i + 1)}
-                      className={`${query.page === i + 1 && "bg-[#EDB84233]"
-                        } p-2 rounded-md`}
+                      className={`${
+                        query.page === i + 1 && "bg-[#EDB84233]"
+                      } p-2 rounded-md`}
                     >
                       {i + 1}
                     </button>
@@ -425,6 +438,11 @@ const AdminUsersBody = () => {
           </div>
         </div>
       </div>
+      {/* <div className="flex justify-center w-full"> */}
+      <AdminCreateUserModal
+        showModal={CreateAccountModal}
+        handleClose={() => setCreateAccountModal(false)}
+      />
     </section>
   );
 };

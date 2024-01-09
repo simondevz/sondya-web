@@ -15,6 +15,10 @@ import {
   ADMIN_GET_ALL_USERS_REQUEST,
   ADMIN_GET_ALL_USERS_RESET,
   ADMIN_GET_ALL_USERS_SUCCESS,
+  ADMIN_GET_USER_ORDERS_FAIL,
+  ADMIN_GET_USER_ORDERS_REQUEST,
+  ADMIN_GET_USER_ORDERS_RESET,
+  ADMIN_GET_USER_ORDERS_SUCCESS,
   ADMIN_UPDATE_USER_FAIL,
   ADMIN_UPDATE_USER_REQUEST,
   ADMIN_UPDATE_USER_RESET,
@@ -167,6 +171,36 @@ export const adminGetUsersReducer = (
         error: action.payload,
       };
     case ADMIN_GET_ALL_USERS_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const adminGetUsersOrdersReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case ADMIN_GET_USER_ORDERS_REQUEST:
+      return { ...initialState, loading: true };
+    case ADMIN_GET_USER_ORDERS_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case ADMIN_GET_USER_ORDERS_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case ADMIN_GET_USER_ORDERS_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

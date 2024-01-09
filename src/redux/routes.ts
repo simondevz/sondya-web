@@ -94,6 +94,7 @@ export const API_ROUTES = {
     delete: BASE + "/admin/user/delete/", // DELETE :id
     getByID: BASE + "/admin/user/get/", // GET :id
     getAll: BASE + "/admin/users", // GET
+    getUserOrders: BASE + "/admin/order/user/", // GET :id - user's Id
   },
 
   //Admin

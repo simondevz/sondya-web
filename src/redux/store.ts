@@ -44,6 +44,11 @@ import {
   adminUpdateProductReducer,
 } from "./reducers/admin/products.reducers";
 import {
+  adminDeleteServiceOrderByIDReducer,
+  adminGetServiceOrderByIDReducer,
+  adminGetServiceOrdersReducer,
+} from "./reducers/admin/serviceOrder.reducers";
+import {
   adminCreateServiceReducer,
   adminDeleteServiceReducer,
   adminGetServiceByIdReducer,
@@ -60,6 +65,7 @@ import {
   adminCreateUserReducer,
   adminDeleteUserReducer,
   adminGetUserByIdReducer,
+  adminGetUsersOrdersReducer,
   adminGetUsersReducer,
   adminUpdateUserReducer,
 } from "./reducers/admin/users.reducers";
@@ -132,10 +138,15 @@ import {
   viewShippingDestinationReducer,
 } from "./reducers/shippingdestination.reducers";
 import {
+  getSubscribersReducer,
+  subscribeReducer,
+} from "./reducers/subscribers.reducer";
+import {
   getUserChatsReducer,
   userGetChatMessagesReducer,
   userSendChatMessageReducer,
 } from "./reducers/userDashboard/chats.reducers";
+import { orderEmailNotificationReducer } from "./reducers/userDashboard/emailNotification.reducers";
 import {
   getUserGroupChatsReducer,
   userGetGroupchatDetailsReducer,
@@ -203,16 +214,6 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
-import {
-  getSubscribersReducer,
-  subscribeReducer,
-} from "./reducers/subscribers.reducer";
-import { orderEmailNotificationReducer } from "./reducers/userDashboard/emailNotification.reducers";
-import {
-  adminDeleteServiceOrderByIDReducer,
-  adminGetServiceOrderByIDReducer,
-  adminGetServiceOrdersReducer,
-} from "./reducers/admin/serviceOrder.reducers";
 
 export type ReducersType = {
   //cart system
@@ -349,6 +350,7 @@ export type ReducersType = {
   adminDeleteUser: ReduxResponseType;
   adminGetByIdUser: ReduxResponseType;
   adminGetAllUser: ReduxResponseType;
+  adminGetUserOrders: ReduxResponseType;
 
   //admin && category
   adminCreateCategory: ReduxResponseType;
@@ -560,6 +562,7 @@ const reducer = combineReducers<ReducersType>({
   adminUpdateUser: adminUpdateUserReducer,
   adminDeleteUser: adminDeleteUserReducer,
   adminGetByIdUser: adminGetUserByIdReducer,
+  adminGetUserOrders: adminGetUsersOrdersReducer,
   adminGetAllUser: adminGetUsersReducer,
 
   //admin && category

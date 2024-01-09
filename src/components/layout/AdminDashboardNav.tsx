@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { BiMap, BiSolidBadgeCheck } from "react-icons/bi";
+import { BiSolidBadgeCheck } from "react-icons/bi";
+import { BsCart, BsFillChatSquareTextFill } from "react-icons/bs";
+import { FaInbox, FaUsers } from "react-icons/fa";
 import {
-  BsBookmarkCheck,
-  BsCart,
-  BsFillChatSquareTextFill,
-} from "react-icons/bs";
-import { FaUsers } from "react-icons/fa";
-import {
+  MdCircleNotifications,
+  MdContentPaste,
   MdLogout,
   MdOutlineCategory,
   MdOutlineMiscellaneousServices,
+  MdPayments,
   MdProductionQuantityLimits,
+  MdSend,
 } from "react-icons/md";
 import { PiStackBold } from "react-icons/pi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -120,7 +120,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BsBookmarkCheck />
+          <MdContentPaste />
         </span>
         <span className="whitespace-nowrap">Product Orders</span>
       </div>
@@ -136,7 +136,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BsBookmarkCheck />
+          <MdContentPaste />
         </span>
         <span className="whitespace-nowrap">Service Orders</span>
       </div>
@@ -150,7 +150,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BsBookmarkCheck />
+          <MdPayments />
         </span>
         <Link to={"/admin/payments"}>
           <span className="whitespace-nowrap">Deposits</span>
@@ -168,7 +168,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BsBookmarkCheck />
+          <MdSend />
         </span>
         <Link to={"/admin/withdrawals"}>
           <span className="whitespace-nowrap">Payments & Withdrawals</span>
@@ -200,7 +200,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BiSolidBadgeCheck />
+          <MdCircleNotifications />
         </span>{" "}
         <span className="whitespace-nowrap">Subscribers</span>
       </div>
@@ -230,7 +230,7 @@ const AdminDashboardNav = () => {
         }}
       >
         <span>
-          <BiMap />
+          <FaInbox />
         </span>
         <span className="whitespace-nowrap">Inbox </span>
       </div>

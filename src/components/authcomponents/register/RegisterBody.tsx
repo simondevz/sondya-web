@@ -137,7 +137,7 @@ const RegisterBody = () => {
                 <input
                   name="email"
                   className="border-b-2 outline-none w-full md:w-2/3 focus:border-b-[#EDB842]"
-                  placeholder="Email Name"
+                  placeholder="Email"
                   type="text"
                   value={email}
                   onChange={onChange}
@@ -196,7 +196,7 @@ const RegisterBody = () => {
                 <input
                   name="referrer"
                   className="border-b-2 outline-none w-full md:w-2/3 focus:border-b-[#EDB842] text-[#5F6C72]"
-                  placeholder="sre@gmail.com"
+                  placeholder="empty referrer"
                   type="text"
                   value={formData.referrer}
                   onChange={onChange}
