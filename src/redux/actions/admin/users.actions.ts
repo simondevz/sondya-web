@@ -13,6 +13,9 @@ import {
   ADMIN_GET_ALL_USERS_FAIL,
   ADMIN_GET_ALL_USERS_REQUEST,
   ADMIN_GET_ALL_USERS_SUCCESS,
+  ADMIN_GET_USER_ORDERS_FAIL,
+  ADMIN_GET_USER_ORDERS_REQUEST,
+  ADMIN_GET_USER_ORDERS_SUCCESS,
   ADMIN_UPDATE_USER_FAIL,
   ADMIN_UPDATE_USER_REQUEST,
   ADMIN_UPDATE_USER_SUCCESS,
@@ -27,7 +30,14 @@ import {
 } from "../../types/users.types";
 
 export const adminCreateUserAction =
-  ({ first_name, last_name, email, password, username }: adminCreateUserType) =>
+  ({
+    first_name,
+    last_name,
+    email,
+    password,
+    username,
+    country,
+  }: adminCreateUserType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
       dispatch({
@@ -46,7 +56,7 @@ export const adminCreateUserAction =
 
       const { data } = await axios.post(
         API_ROUTES?.adminUsers?.create,
-        { first_name, last_name, email, username, password },
+        { first_name, last_name, email, username, password, country },
         config
       );
       dispatch({
@@ -91,6 +101,9 @@ export const adminUpdateUserAction =
     city,
     currency,
     language,
+
+    //company details
+    company_details,
 
     // id for query
     id,
@@ -139,6 +152,9 @@ export const adminUpdateUserAction =
           instagram_url,
           twitter_url,
           tiktok_url,
+
+          //company details
+          company_details,
         },
         config
       );
@@ -258,6 +274,43 @@ export const adminGetUsersAction =
     } catch (error: any) {
       dispatch({
         type: ADMIN_GET_ALL_USERS_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminGetUserOrdersAction =
+  (userId: string) => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_GET_USER_ORDERS_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.adminUsers?.getUserOrders + userId,
+        config
+      );
+
+      dispatch({
+        type: ADMIN_GET_USER_ORDERS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_GET_USER_ORDERS_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

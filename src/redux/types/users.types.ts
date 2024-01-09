@@ -1,9 +1,12 @@
+import { GetProductOrder } from "./checkout.types";
 import { CompanyDetailsType } from "./company_details.types";
+import { ServiceOrderType } from "./serviceOrders.types";
 
 export type adminCreateUserType = {
   first_name: string;
   last_name: string;
   username: string;
+  country: string;
   email: string;
   password: string;
 };
@@ -38,6 +41,8 @@ export type adminUpdateUserType = {
   city: string;
   currency: string;
   language: string;
+
+  company_details: CompanyDetailsType;
 };
 
 export type adminUsersId = {
@@ -75,6 +80,10 @@ export type adminUGetUserType = {
   language: string;
 
   company_details: CompanyDetailsType;
+
+  // balance
+  balance?: number;
+  order_total?: number;
 };
 
 export type ImageType = {
@@ -136,4 +145,9 @@ export type socialsUpdateType = {
   instagram_url: string;
   twitter_url: string;
   tiktok_url: string;
+};
+
+export type AdminGetUserOrder = {
+  ProductOrders: GetProductOrder[];
+  ServiceOrders: ServiceOrderType[];
 };

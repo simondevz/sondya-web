@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
+import countryData from "../../../data/countries.json";
 import { adminCreateUserAction } from "../../../redux/actions/admin/users.actions";
 import { ADMIN_CREATE_USER_RESET } from "../../../redux/constants/admin/users.constants";
 import { ReducersType } from "../../../redux/store";
@@ -26,12 +27,17 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
     last_name: "",
     username: "",
     email: "",
+    country: "",
     password: "",
   });
 
   const { first_name, last_name, username, email, password } = formData;
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -79,7 +85,7 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
 
   return (
     <Modal
-      className="modal top-[30%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"
+      className="modal top-[17%] w-[90%] left-[5%] md:left-[30%] md:w-3/5 md:max-w-[36rem] rounded-md"
       show={showModal}
       onHide={handleClose}
       renderBackdrop={renderBackdrop}
@@ -150,6 +156,22 @@ const AdminCreateUserModal = ({ showModal, handleClose }: any) => {
               autoComplete="off"
               required
             />
+          </div>
+          <div className="flex flex-col w-full">
+            <label className="font-[400] text-sm" htmlFor="">
+              Country
+            </label>
+            <select
+              className="border p-2 rounded-md bg-[#D9D9D970]"
+              name="country"
+              id="country"
+              onChange={onChange}
+              required
+            >
+              {countryData.map((t, i) => {
+                return <option value={t.label}>{t.label}</option>;
+              })}
+            </select>
           </div>
           <div className="flex flex-col w-full">
             <label className="font-[400] text-sm" htmlFor="">

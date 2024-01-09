@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BiExport } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
 import { defaultUser } from "../../../images";
@@ -19,6 +19,7 @@ import {
 const AdminEditUsersBody = () => {
   // fetch data
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [formData, setFormData] = useState<adminUpdateUserType>({
@@ -49,6 +50,15 @@ const AdminEditUsersBody = () => {
     city: "",
     currency: "",
     language: "",
+
+    // company details
+    company_details: {
+      company_name: "",
+      company_website: "",
+      company_email: "",
+      contact_person_name: "",
+      contact_person_number: "",
+    },
   });
 
   const adminGetUsersRedux = useSelector(
@@ -80,6 +90,20 @@ const AdminEditUsersBody = () => {
     }));
   };
 
+  const onChangeCompany = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      company_details: {
+        ...prevState.company_details,
+        [e.target.name]: e.target.value,
+      },
+    }));
+  };
+
   const adminUpdateUserRedux = useSelector(
     (state: ReducersType) => state?.adminUpdateUser
   ) as ReduxResponseType;
@@ -90,7 +114,7 @@ const AdminEditUsersBody = () => {
       dispatch(adminUpdateUserAction(formData) as any);
     }
   };
-  console.log(adminUpdateUserRedux?.error);
+  // console.log(adminUpdateUserRedux?.error);
   useEffect(() => {
     adminUpdateUserRedux?.error &&
       Swal.fire({
@@ -125,7 +149,11 @@ const AdminEditUsersBody = () => {
               </span>
               <span className="whitespace-nowrap text-[#EDB842]">Export</span>
             </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
+            <button
+              type="button"
+              onClick={() => navigate(`/admin/user/details/${formData?.id}`)}
+              className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2"
+            >
               <span className="whitespace-nowrap">Users Details</span>
             </button>
           </div>
@@ -333,48 +361,50 @@ const AdminEditUsersBody = () => {
           </div>
         </div>
         <div className="flex flex-col gap-5 border p-3">
-          <div className="px-3">Billing Address</div>
+          <div className="px-3">Company Details</div>
           <div className="flex flex-col md:flex-row gap-3 border-t p-3">
             <div className="flex flex-row gap-3 w-full">
               <div className="w-1/2">
                 <div className="flex flex-col w-full gap-1">
                   <label className="font-[400] text-sm" htmlFor="">
-                    First Name
+                    Company details
                   </label>
                   <input
+                    name="company_name"
                     className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
                     type="text"
-                    placeholder="First Name"
+                    placeholder="Company name"
+                    onChange={onChangeCompany}
+                    value={formData?.company_details?.company_name}
+                    autoComplete="off"
                   />
                 </div>
                 <div className="flex flex-col w-full gap-1">
                   <label className="font-[400] text-sm" htmlFor="">
-                    Last Name
+                    Company Website
                   </label>
                   <input
+                    name="company_website"
                     className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
                     type="text"
-                    placeholder="Last Name"
+                    placeholder="Company Website"
+                    onChange={onChangeCompany}
+                    value={formData?.company_details?.company_website}
+                    autoComplete="off"
                   />
                 </div>
                 <div className="flex flex-col w-full gap-1">
                   <label className="font-[400] text-sm" htmlFor="">
-                    Email
+                    Company Email
                   </label>
                   <input
+                    name="company_email"
                     className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
                     type="text"
-                    placeholder="email"
-                  />
-                </div>
-                <div className="flex flex-col w-full gap-1">
-                  <label className="font-[400] text-sm" htmlFor="">
-                    Phone Number
-                  </label>
-                  <input
-                    className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
-                    type="text"
-                    placeholder="phone number"
+                    placeholder="Company Email"
+                    onChange={onChangeCompany}
+                    value={formData?.company_details?.company_email}
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -382,42 +412,30 @@ const AdminEditUsersBody = () => {
               <div className="w-1/2">
                 <div className="flex flex-col w-full gap-1">
                   <label className="font-[400] text-sm" htmlFor="">
-                    Address
+                    Contact Person Name
                   </label>
                   <input
+                    name="contact_person_name"
                     className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
                     type="text"
-                    placeholder="address"
+                    placeholder="Contact person name"
+                    onChange={onChangeCompany}
+                    value={formData?.company_details?.contact_person_name}
+                    autoComplete="off"
                   />
                 </div>
                 <div className="flex flex-col w-full gap-1">
                   <label className="font-[400] text-sm" htmlFor="">
-                    Country
+                    Contact Person Number
                   </label>
                   <input
+                    name="contact_person_number"
                     className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
                     type="text"
-                    placeholder="country"
-                  />
-                </div>
-                <div className="flex flex-col w-full gap-1">
-                  <label className="font-[400] text-sm" htmlFor="">
-                    State/Province
-                  </label>
-                  <input
-                    className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
-                    type="text"
-                    placeholder="state"
-                  />
-                </div>
-                <div className="flex flex-col w-full gap-1">
-                  <label className="font-[400] text-sm" htmlFor="">
-                    Zip Code
-                  </label>
-                  <input
-                    className="border p-2 rounded-md bg-[#D9D9D970] outline-none"
-                    type="text"
-                    placeholder="Zip code"
+                    placeholder="Contact Person Email"
+                    onChange={onChangeCompany}
+                    value={formData?.company_details?.contact_person_number}
+                    autoComplete="off"
                   />
                 </div>
               </div>

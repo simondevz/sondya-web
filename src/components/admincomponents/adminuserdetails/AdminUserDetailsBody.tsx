@@ -1,36 +1,19 @@
 import { useEffect, useState } from "react";
-import {
-  BiExport,
-  BiSolidLeftArrow,
-  BiSolidRightArrow,
-  BiSolidUpArrow,
-} from "react-icons/bi";
-import {
-  BsCalendar2,
-  BsCart2,
-  BsFillClockFill,
-  BsSearch,
-  BsTrophyFill,
-} from "react-icons/bs";
+import { BiSolidUpArrow } from "react-icons/bi";
+import { BsCart2, BsFillClockFill } from "react-icons/bs";
 import { FaIdBadge, FaRegMoneyBillAlt } from "react-icons/fa";
-import {
-  MdEmail,
-  MdLocationPin,
-  MdOutlineAdd,
-  MdSmartphone,
-} from "react-icons/md";
+import { MdEmail, MdLocationPin, MdSmartphone } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { ProductsItemsdata } from "../../../data/productsItemsData";
 import { user4, userBackground } from "../../../images/users";
 import { adminGetUserByIdAction } from "../../../redux/actions/admin/users.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { adminUGetUserType } from "../../../redux/types/users.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
+import AdminUsersTransactionHistory from "./AdminUsersTransactionHistory";
 
 const AdminUserDetailsBody = () => {
-  const [whichTab, setwhichTab] = useState<string>("#1");
   const [status] = useState<string>("Active");
 
   // fetch data
@@ -51,63 +34,8 @@ const AdminUserDetailsBody = () => {
       <div className="flex flex-col gap-5">
         <div className="flex flex-wrap gap-3 justify-between">
           <div className="font-[600] text-xl w-auto">Users</div>
-          <div className="flex flex-row gap-2">
-            <button className="flex flex-row items-center p-2 rounded-md border border-[#EDB842] gap-2">
-              <span className="text-[#EDB842]">
-                <BiExport />
-              </span>
-              <span className="whitespace-nowrap text-[#EDB842]">Export</span>
-            </button>
-            <button className="flex flex-row items-center p-2 rounded-md bg-[#EDB842] text-white gap-2">
-              <span className="text-2xl">
-                <MdOutlineAdd />
-              </span>
-              <span className="whitespace-nowrap">Create Users</span>
-            </button>
-          </div>
         </div>
-        <div className="flex flex-wrap justify-between gap-3">
-          <div className="flex flex-row border rounded-md p-1 text-[#667085] gap-2 w-fit overflow-x-auto">
-            <button
-              onClick={() => setwhichTab("#1")}
-              className={` ${
-                whichTab === "#1" && "text-[#EDB842] bg-[#EDB84233]"
-              } p-2 rounded-md whitespace-nowrap`}
-            >
-              All Status
-            </button>
-            <button
-              onClick={() => setwhichTab("#2")}
-              className={` ${
-                whichTab === "#2" && "text-[#EDB842] bg-[#EDB84233]"
-              } p-2 rounded-md`}
-            >
-              Active
-            </button>
-            <button
-              onClick={() => setwhichTab("#3")}
-              className={` ${
-                whichTab === "#3" && "text-[#EDB842] bg-[#EDB84233]"
-              } p-2 rounded-md`}
-            >
-              Blocked
-            </button>
-          </div>
-          <div className="flex flex-row gap-2">
-            <div className="flex flex-row items-center border h-fit p-2 rounded-md gap-2">
-              <BsSearch />
-              <input
-                className="p-1"
-                type="text"
-                placeholder="Search orders. . ."
-              />
-            </div>
-            <div className="flex flex-row items-center border h-fit p-2 rounded-md gap-2">
-              <BsCalendar2 />
-              <input className="p-1" type="text" placeholder="Search Date" />
-            </div>
-          </div>
-        </div>
+
         <div className="flex flex-col md:flex-row gap-5">
           <div className="flex flex-col gap-3 p-3 md:max-w-[19rem] shadow-md w-full">
             <div className="">
@@ -117,7 +45,7 @@ const AdminUserDetailsBody = () => {
                 alt=""
               />
               <img
-                className="object-cover mx-auto -m-10"
+                className="object-cover mx-auto h-20 -m-10"
                 src={
                   userDetail && userDetail.image && userDetail.image.length > 0
                     ? userDetail?.image[0].url
@@ -149,9 +77,11 @@ const AdminUserDetailsBody = () => {
                 </div>
                 <div className="">
                   <div className="text-[#667085] font-[400] text-sm">
-                    Customer ID
+                    Username
                   </div>
-                  <div className="text-[#1D1F2C] font-[600]">ID-011221</div>
+                  <div className="text-[#1D1F2C] font-[600]">
+                    {userDetail?.username}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-row gap-2 items-center">
@@ -176,7 +106,7 @@ const AdminUserDetailsBody = () => {
                     Address
                   </div>
                   <div className="text-[#1D1F2C] font-[600]">
-                    1833 Bel Meadow Drive, Fontana, California 92335, USA
+                    {userDetail?.address}
                   </div>
                 </div>
               </div>
@@ -188,7 +118,9 @@ const AdminUserDetailsBody = () => {
                   <div className="text-[#667085] font-[400] text-sm">
                     Phone Number
                   </div>
-                  <div className="text-[#1D1F2C] font-[600]">050 414 8778</div>
+                  <div className="text-[#1D1F2C] font-[600]">
+                    {userDetail?.phone_number}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-row gap-2 items-center">
@@ -196,11 +128,9 @@ const AdminUserDetailsBody = () => {
                   <BsCart2 />
                 </div>
                 <div className="">
-                  <div className="text-[#667085] font-[400] text-sm">
-                    Last Transaction
-                  </div>
-                  <div className="text-[#1D1F2C] font-[600]">
-                    12 December 2022
+                  <div className="text-[#667085] font-[400] text-sm">Type</div>
+                  <div className="text-[#1D1F2C] font-[600] capitalize">
+                    {userDetail?.type}
                   </div>
                 </div>
               </div>
@@ -240,7 +170,9 @@ const AdminUserDetailsBody = () => {
                     <BsCart2 />
                   </span>
                 </div>
-                <div className="text-2xl text-[#1D1F2C] font-[600]">2,400</div>
+                <div className="text-2xl text-[#1D1F2C] font-[600]">
+                  {userDetail?.order_total}
+                </div>
                 <div className="flex gap-2">
                   <div className="whitespace-nowrap flex gap-1 items-center text-[#1A9882]">
                     1% <BiSolidUpArrow />
@@ -261,7 +193,10 @@ const AdminUserDetailsBody = () => {
                   </span>
                 </div>
                 <div className="text-2xl text-[#1D1F2C] font-[600]">
-                  $100.00
+                  $
+                  {userDetail?.balance && (
+                    <FormatNumber price={userDetail?.balance} />
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <div className="whitespace-nowrap flex gap-1 items-center text-[#1A9882]">
@@ -270,127 +205,8 @@ const AdminUserDetailsBody = () => {
                   <div className="font-[400] text-[#858D9D]">+$10 today</div>
                 </div>
               </div>
-              {/* nos 3 */}
-              <div className="flex flex-col gap-3 shadow-md p-5 rounded-xl w-[13rem] md:w-[16rem] max-w-[18rem]">
-                <div className="flex justify-between items-center">
-                  <span className="font-[400] text-[#777980]">
-                    Reward Points
-                  </span>{" "}
-                  <span className="text-[#22CAAD] p-2 rounded-full bg-[#E9FAF7]">
-                    <BsTrophyFill />
-                  </span>
-                </div>
-                <div className="text-2xl text-[#1D1F2C] font-[600]">1,200</div>
-                <div className="flex gap-2">
-                  <div className="whitespace-nowrap flex gap-1 items-center text-[#1A9882]">
-                    10% <BiSolidUpArrow />
-                  </div>
-                  <div className="font-[400] text-[#858D9D]">+120 today</div>
-                </div>
-              </div>
             </div>
-            <div className="flex flex-row justify-between items-center">
-              <div className="text-xl font-[700]">Transaction History</div>
-              <div className="flex flex-row gap-2">
-                <div className="flex flex-row items-center border h-fit p-2 rounded-md gap-2">
-                  <BsSearch />
-                  <input
-                    className="p-1"
-                    type="text"
-                    placeholder="Search orders. . ."
-                  />
-                </div>
-                <div className="flex flex-row items-center border h-fit p-2 rounded-md gap-2">
-                  <BsCalendar2 />
-                  <input
-                    className="p-1"
-                    type="text"
-                    placeholder="Search Date"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full overflow-x-auto">
-              <table className="table-auto w-[50rem]">
-                <thead className="bg-[#F0F1F3] rounded-md">
-                  <tr>
-                    <th className="p-2 text-start text-[#1D1F2C] text-lg">
-                      Order ID
-                    </th>
-                    <th className="text-[#1D1F2C] text-start text-lg">
-                      Product
-                    </th>
-                    <th className="text-[#1D1F2C] text-start text-lg">Price</th>
-                    <th className="text-[#1D1F2C] text-start text-lg">
-                      Status
-                    </th>
-                    <th className="text-[#1D1F2C] text-start text-lg">Added</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ProductsItemsdata.map((t, i) => {
-                    return (
-                      <tr className="border-b" key={i}>
-                        <td className="p-2 text-[#A3A9B6]">{t.sku}</td>
-                        <td>
-                          <div className="flex flex-col md:flex-row gap-2">
-                            <img
-                              className="object-contain w-16"
-                              src={t.image}
-                              alt=""
-                            />
-                            <div className="flex flex-col gap-2 text-sm">
-                              <div className="">{t.name?.slice(0, 18)}...</div>
-                              <div className="">{t.variants} Variants</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="text-[#A3A9B6]">
-                          $<FormatNumber price={t.pricenow} />
-                        </td>
-                        <td>
-                          {t.availablestatus === "Low Stock" ? (
-                            <div className="p-1 text-[#F86624] bg-[#FFF0EA] w-fit h-fit rounded-lg">
-                              {t.availablestatus}
-                            </div>
-                          ) : t.availablestatus === "Published" ? (
-                            <div className="p-1 text-[#1A9882] bg-[#E9FAF7] w-fit h-fit rounded-lg">
-                              {t.availablestatus}
-                            </div>
-                          ) : t.availablestatus === "Draft" ? (
-                            <div className="p-1 text-[#667085] bg-[#F0F1F3] w-fit h-fit rounded-lg">
-                              {t.availablestatus}
-                            </div>
-                          ) : (
-                            <div className="p-1 text-[#EB3D4D] bg-[#FEECEE] w-fit h-fit rounded-lg">
-                              {t.availablestatus}
-                            </div>
-                          )}
-                        </td>
-                        <td className="text-[#A3A9B6]">{t.date}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div className="flex flex-row justify-between items-center">
-              <div className="text-[#667085]">Showing 1-10 from 100</div>
-              <div className="flex flex-row gap-2 items-center text-[#EDB842] my-5">
-                <span className="bg-[#EDB84233] p-2 rounded-md">
-                  <BiSolidLeftArrow />
-                </span>
-                <span className="bg-[#EDB84233] px-3 py-2 rounded-md">1</span>
-                <span className="bg-[#EDB84233] px-3 py-2 rounded-md">2</span>
-                <span className="bg-[#EDB84233] px-3 py-2 rounded-md">3</span>
-                <span className="bg-[#EDB84233] px-3 py-2 rounded-md">4</span>
-                <span className="bg-[#EDB84233] px-3 py-2 rounded-md">5</span>
-                <span className="bg-[#EDB84233] px-3 py-2 rounded-md">...</span>
-                <span className="bg-[#EDB84233] p-2 rounded-md">
-                  <BiSolidRightArrow />
-                </span>
-              </div>
-            </div>
+            <AdminUsersTransactionHistory id={userDetail?._id} />
           </div>
         </div>
       </div>

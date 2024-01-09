@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import "../../../css/modal.css";
 import { adminGetWithdrawalByIdAction } from "../../../redux/actions/admin/withdrawal.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
