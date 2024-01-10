@@ -5,6 +5,7 @@ import { FaComments, FaHome, FaUser } from "react-icons/fa";
 import { MdFavoriteBorder, MdPersonOutline, MdSell } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import "../../css/translate.css";
 import { Category } from "../../data/CategoryData";
 import { LogoSideBlack } from "../../images/logo";
 import { totalCartAction } from "../../redux/actions/cart.actions";
@@ -99,6 +100,20 @@ export const NavCartAndLogin = ({
   );
 };
 
+declare global {
+  interface Window {
+    google: {
+      translate: {
+        TranslateElement: new (
+          options: { pageLanguage: string; autoDisplay: boolean },
+          id: string
+        ) => void;
+      };
+    };
+    googleTranslateElementInit: any;
+  }
+}
+
 export const SellerSwitchNav = () => {
   const navigate = useNavigate();
   // toggle switch to seller dashboard after login start
@@ -108,18 +123,37 @@ export const SellerSwitchNav = () => {
     setChecked((prevState) => !prevState);
   };
 
+  const googleTranslateElementInit = () => {
+    new window.google.translate.TranslateElement(
+      {
+        pageLanguage: "en",
+        autoDisplay: false,
+      },
+      "google_translate_element"
+    );
+    // Style the "Powered by Google Translate" element
+  };
+
+  const [isGoogleTranslateLoaded, setIsGoogleTranslateLoaded] = useState(false);
   useEffect(() => {
-    // navigate to seller dashboard
-    setTimeout(() => {
-      if (isChecked) {
-        navigate("/seller/dashboard");
-      }
-    }, 2000);
-  }, [isChecked, navigate]);
-  // toggle switch to seller dashboard after login end
+    if (!isGoogleTranslateLoaded) {
+      setIsGoogleTranslateLoaded(true);
+      setTimeout(() => {
+        var addScript = document.createElement("script");
+        addScript.setAttribute(
+          "src",
+          "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+        );
+        document.body.appendChild(addScript);
+        window.googleTranslateElementInit = googleTranslateElementInit;
+      }, 1000);
+    }
+    // Check for script availability before initialization
+  }, [isGoogleTranslateLoaded]);
+
   return (
-    <div className="flex flex-row justify-around text-[#282828] playfair-display py-4 px-2 bg-[#f1f1f2] ">
-      <div className="flex flex-row gap-2">
+    <div className="flex flex-row justify-around text-[#282828] playfair-display py-4 px-2 bg-[#f1f1f2] overflow-x-auto">
+      <div className="hidden md:flex flex-row gap-2">
         <label className="flex items-center cursor-pointer">
           <div className="relative">
             <input
@@ -140,14 +174,20 @@ export const SellerSwitchNav = () => {
           </div>
         </label>
       </div>
-      <div className="flex flex-row gap-2">
+
+      <div className="flex flex-row justify-between items-center gap-5 md:gap-2">
         <div
           onClick={() => navigate("/wishlist")}
           className="flex gap-2 items-center"
         >
-          <MdFavoriteBorder /> Wishlist
+          <span className="text-[#EDB842] text-2xl">
+            <MdFavoriteBorder />
+          </span>
+          Wishlist
         </div>
-        <div className="">English,USD</div>
+        {/* make sure u import import "../../css/translate.css"; */}
+        <div id="google_translate_element"></div>
+        {/* <div className="">English,USD</div> */}
       </div>
     </div>
   );
@@ -159,7 +199,7 @@ export const NavSearchInput = ({ isMdScreen }: { isMdScreen: boolean }) => {
   const [search, setSearch] = useState("");
 
   const handleSearch = () => {
-    console.log(categorySelect, search);
+    // console.log(categorySelect, search);
     if (search !== "") {
       if (categorySelect === "products") {
         // window.location.href = `/products?page=1&search=${search}`;

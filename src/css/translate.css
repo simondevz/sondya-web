@@ -1,0 +1,38 @@
+/* Customize the select button's width and background color */
+.goog-te-combo {
+  width: 138px;
+  background-color: #f0f0f0;
+  padding: 8px;
+  border: 2px solid #edb842;
+  border-radius: 5px;
+  font-size: 13px;
+  /* outline: none; */
+}
+
+/* Modify the text color and font size within the button */
+.goog-te-combo option {
+  color: #333; /* Adjust as needed */
+  /* font-size: 16px; */
+}
+
+.goog-te-gadget {
+  font-size: 13px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  /* flex-wrap: wrap; */
+}
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:link,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:visited,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:hover,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
+  font-size: 19px;
+  font-weight: bold;
+  color: #444;
+  text-decoration: none;
+  display: flex;
+}
