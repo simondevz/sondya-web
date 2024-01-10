@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
 const FormatDate = ({
@@ -21,39 +22,9 @@ const FormatDate = ({
   if (minutesAgo > 60) returnString = hoursAgo + "h";
   if (hoursAgo > 24) returnString = daysAgo + "d";
   if (daysAgo > 7) {
-    const months: string[] = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year: string =
-      date.getFullYear() === dateNow.getFullYear()
-        ? ""
-        : ", " + date.getFullYear();
-
-    const remainder = day % 10;
-    const dayEndString: string =
-      remainder === 1
-        ? "st"
-        : remainder === 2
-        ? "nd"
-        : remainder === 3
-        ? "rd"
-        : "th";
-
-    returnString = `${day + dayEndString} ${month}${year}`;
+    const dateObject = new Date(dateString);
+    const formattedDate = format(dateObject, "do MMM, yy");
+    returnString = formattedDate;
   }
   return <span className={className}>{returnString}</span>;
 };

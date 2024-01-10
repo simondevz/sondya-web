@@ -214,6 +214,15 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import {
+  getNotificationsReducer,
+  get4NotificationsReducer,
+  markNotificationSeenReducer,
+  getNotificationUnseenCountReducer,
+  deleteNotificationReducer,
+  createSellerNotificationReducer,
+  createUserNotificationReducer,
+} from "./reducers/notifications.reducers";
 
 export type ReducersType = {
   //cart system
@@ -428,6 +437,15 @@ export type ReducersType = {
   userCreateReview: ReduxResponseType;
   reviewStat: ReduxResponseType;
   reviewsList: ReduxResponseType;
+
+  // USER && NOTIFICATIONS
+  createUserNotification: ReduxResponseType;
+  createSellerNotification: ReduxResponseType;
+  getNotifications: ReduxResponseType;
+  get4Notifications: ReduxResponseType;
+  markNotificationSeen: ReduxResponseType;
+  getNotificationUnseenCount: ReduxResponseType;
+  deleteNotification: ReduxResponseType;
 
   // seller && reviews
   reviewResponse: ReduxResponseType;
@@ -646,6 +664,15 @@ const reducer = combineReducers<ReducersType>({
   userCreateReview: userCreateReviewReducer,
   reviewStat: reviewStatReducer,
   reviewsList: listReviewReducer,
+
+  // USER && NOTIFICATIONS
+  createUserNotification: createUserNotificationReducer,
+  createSellerNotification: createSellerNotificationReducer,
+  getNotifications: getNotificationsReducer,
+  get4Notifications: get4NotificationsReducer,
+  markNotificationSeen: markNotificationSeenReducer,
+  getNotificationUnseenCount: getNotificationUnseenCountReducer,
+  deleteNotification: deleteNotificationReducer,
 
   // seller && revieww
   reviewResponse: sellerRespondReviewReducer,

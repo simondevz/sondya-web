@@ -252,18 +252,23 @@ export const ServiceDetailsChat = ({
   };
 
   useEffect(() => {
-    setInterval(() => {
+    const testConnection = () => {
       if (loginRedux?.serverResponse?.data?.id && owner_id)
         sendMessage(
           JSON.stringify({
-            room_id: "",
             meta: "testing_connection",
-            sender_id: loginRedux?.serverResponse?.data?.id,
             receiver_id: owner_id,
-            message: "",
+            payload: {
+              chat_id: "",
+              sender_id: loginRedux?.serverResponse?.data?.id,
+              message: "connection tested",
+            },
           })
         );
-    }, 60 * 1000);
+    };
+    testConnection();
+    const testConnectionInterval = setInterval(testConnection, 60 * 1000);
+    return clearInterval(testConnectionInterval);
   }, [loginRedux?.serverResponse?.data?.id, owner_id, sendMessage]);
 
   useEffect(() => {

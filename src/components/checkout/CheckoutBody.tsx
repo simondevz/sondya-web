@@ -38,7 +38,10 @@ import {
 } from "../../redux/constants/userDashboard/payments.constants";
 import { CREATE_PRODUCT_ORDER_RESET } from "../../redux/constants/userDashboard/productsOrder.constants";
 import { ReducersType } from "../../redux/store";
-import { CheckoutType } from "../../redux/types/checkout.types";
+import {
+  CheckoutType,
+  GetProductOrder,
+} from "../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import {
   PaymentRequestType,
@@ -55,6 +58,17 @@ import { FormatNumber } from "../shareables/FormatNumber";
 import { LoginResponseType } from "../../redux/types/auth.types";
 import { orderEmailNotificationAction } from "../../redux/actions/userDashboard/emailNotification.actions";
 import { format } from "date-fns";
+import {
+  createSellerNotificationAction,
+  createUserNotificationAction,
+} from "../../redux/actions/notifications.actions";
+import useWebSocket from "react-use-websocket";
+import {
+  CREATE_USER_NOTIFICATION_RESET,
+  CREATE_SELLER_NOTIFICATION_RESET,
+} from "../../redux/constants/notifications.constants";
+import { API_ROUTES } from "../../redux/routes";
+import { NotificationType } from "../../redux/types/notifications.types";
 
 type TotalingType = {
   SubTotalPrice: number;
@@ -592,6 +606,138 @@ const CheckoutBody = () => {
     userData?.username,
     userData?.email,
     userData?.phone_number,
+  ]);
+
+  const productOrderRedux = useSelector(
+    (state: ReducersType) => state.userCreateProductOrder
+  ) as ReduxResponseType<GetProductOrder>;
+  console.log("productOrderRedux ==>> ", productOrderRedux);
+
+  useEffect(() => {
+    if (productOrderRedux?.success && userData?._id) {
+      dispatch(
+        createUserNotificationAction({
+          user: {
+            id: userData?._id,
+            email: userData?.email,
+            username: userData?.username,
+          },
+          title: "Order Sent",
+          message:
+            "You Ordered " +
+            productOrderRedux?.serverResponse?.data?.checkout_items
+              ?.order_quantity +
+            " " +
+            productOrderRedux?.serverResponse?.data?.checkout_items?.name,
+          type: "order_sent",
+          link:
+            "/order/details/" + productOrderRedux?.serverResponse?.data?._id,
+          seen: false,
+        }) as any
+      );
+
+      if (
+        productOrderRedux?.success &&
+        productOrderRedux?.serverResponse?.data?.checkout_items?.owner?.id
+      )
+        dispatch(
+          createSellerNotificationAction({
+            user: {
+              id: productOrderRedux?.serverResponse?.data?.checkout_items?.owner
+                ?.id,
+              email:
+                productOrderRedux?.serverResponse?.data?.checkout_items?.owner
+                  ?.email,
+              username:
+                productOrderRedux?.serverResponse?.data?.checkout_items?.owner
+                  ?.username,
+            },
+            title: "You have a Product Order",
+            message:
+              userData?.username +
+              " Ordered " +
+              productOrderRedux?.serverResponse?.data?.checkout_items
+                ?.order_quantity +
+              " " +
+              productOrderRedux?.serverResponse?.data?.checkout_items?.name,
+            type: "order_recieved",
+            link:
+              "/seller/order/details/" +
+              productOrderRedux?.serverResponse?.data?._id,
+            seen: false,
+          }) as any
+        );
+    }
+  }, [
+    dispatch,
+    userData?._id,
+    userData?.email,
+    userData?.username,
+    productOrderRedux?.serverResponse?.data?.checkout_items?.owner,
+    productOrderRedux?.serverResponse?.data?.checkout_items?.order_quantity,
+    productOrderRedux?.serverResponse?.data?._id,
+    productOrderRedux?.serverResponse?.data?.checkout_items?.name,
+    productOrderRedux?.success,
+  ]);
+
+  // web sockets for notifications
+  const socketUrl = API_ROUTES.websocket.notifications;
+  const userNotificationRedux = useSelector(
+    (state: ReducersType) => state.createUserNotification
+  ) as ReduxResponseType<NotificationType>;
+
+  const sellerNotificationRedux = useSelector(
+    (state: ReducersType) => state.createSellerNotification
+  ) as ReduxResponseType<NotificationType>;
+
+  const { sendMessage: sendNoticication } = useWebSocket(socketUrl, {
+    shouldReconnect: (closeEvent) => {
+      return true;
+    },
+    reconnectAttempts: 5,
+    reconnectInterval: 3000,
+  });
+
+  useEffect(() => {
+    if (userNotificationRedux?.success) {
+      sendNoticication(
+        JSON.stringify({
+          meta: "echo_payload",
+          receiver_id: userNotificationRedux?.serverResponse?.data?.user?.id,
+          payload: {
+            meta: "echo_payload",
+            data: userNotificationRedux?.serverResponse?.data,
+          },
+        })
+      );
+      dispatch({ type: CREATE_USER_NOTIFICATION_RESET });
+    }
+  }, [
+    dispatch,
+    userNotificationRedux?.serverResponse?.data,
+    userNotificationRedux?.success,
+    sendNoticication,
+  ]);
+
+  useEffect(() => {
+    if (sellerNotificationRedux?.success) {
+      sendNoticication(
+        JSON.stringify({
+          meta: "echo_payload",
+          receiver_id: sellerNotificationRedux?.serverResponse?.data?.user?.id,
+          payload: {
+            meta: "echo_payload",
+            data: sellerNotificationRedux?.serverResponse?.data,
+          },
+        })
+      );
+      dispatch({ type: CREATE_SELLER_NOTIFICATION_RESET });
+    }
+  }, [
+    dispatch,
+    sellerNotificationRedux?.serverResponse?.data,
+    sellerNotificationRedux?.success,
+    sendNoticication,
   ]);
 
   return (

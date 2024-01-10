@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { SendMessage, ReadyState } from "react-use-websocket";
+import useWebSocket, { SendMessage, ReadyState } from "react-use-websocket";
 import Swal from "sweetalert2";
 import { Chat1 } from "../../../../images/chat";
 import {
@@ -25,6 +25,10 @@ import Attachment from "./attachment";
 import ChatBoxInput from "./chatBoxInput";
 import ChatMessage from "./chatBoxMessage";
 import SelectedFilesPreview from "./selectedFilePreview";
+import { createUserNotificationAction } from "../../../../redux/actions/notifications.actions";
+import { API_ROUTES } from "../../../../redux/routes";
+import { NotificationType } from "../../../../redux/types/notifications.types";
+import { CREATE_USER_NOTIFICATION_RESET } from "../../../../redux/constants/notifications.constants";
 
 const ChatBox = ({
   receiver,
@@ -143,6 +147,7 @@ const ChatBox = ({
   useEffect(() => {
     if (lastMessage !== null) {
       const data = JSON.parse(lastMessage?.data);
+      console.log(data);
 
       if (data?.meta) {
         if (data?.meta === "users_online") {
@@ -177,9 +182,71 @@ const ChatBox = ({
           setProductId("");
           return prev.concat(data);
         });
+
+        console.log(receiver?._id, data?.sender_id?._id);
+        if (receiver?._id && receiver?._id !== data?.sender_id?._id) {
+          dispatch(
+            createUserNotificationAction({
+              user: {
+                id: receiver?._id,
+                email: receiver?.email,
+                username: receiver?.username,
+              },
+              title:
+                "You recieved a Chat message from " + data?.sender_id?.username,
+              message: data?.message || "Tap to see file attachments",
+              type: "order_recieved",
+              link: "user/inbox",
+              seen: false,
+            }) as any
+          );
+        }
       }
     }
-  }, [lastMessage, setMessageHistory, setProductId]);
+  }, [
+    lastMessage,
+    setMessageHistory,
+    setProductId,
+    dispatch,
+    receiver?._id,
+    receiver?.email,
+    receiver?.username,
+  ]);
+
+  // web sockets for notifications
+  const socketUrl = API_ROUTES.websocket.notifications;
+  const notificationRedux = useSelector(
+    (state: ReducersType) => state.createUserNotification
+  ) as ReduxResponseType<NotificationType>;
+
+  const { sendMessage: sendNoticication } = useWebSocket(socketUrl, {
+    shouldReconnect: (closeEvent) => {
+      return true;
+    },
+    reconnectAttempts: 5,
+    reconnectInterval: 3000,
+  });
+
+  useEffect(() => {
+    if (notificationRedux?.success) {
+      sendNoticication(
+        JSON.stringify({
+          meta: "echo_payload",
+          receiver_id: notificationRedux?.serverResponse?.data?.user?.id,
+          payload: {
+            meta: "echo_payload",
+            data: notificationRedux?.serverResponse?.data,
+          },
+        })
+      );
+      dispatch({ type: CREATE_USER_NOTIFICATION_RESET });
+    }
+  }, [
+    dispatch,
+    notificationRedux?.serverResponse?.data,
+    notificationRedux?.success,
+    sendNoticication,
+  ]);
 
   // Clear last messages when receiver changes
   useEffect(() => {
@@ -208,7 +275,7 @@ const ChatBox = ({
 
   // This function shows if the other person is online or not
   useEffect(() => {
-    setInterval(() => {
+    const checkUsersOnline = () => {
       if (chatId && loginRedux?.serverResponse?.data?.id) {
         sendMessage(
           JSON.stringify({
@@ -219,7 +286,10 @@ const ChatBox = ({
           })
         );
       }
-    }, 10000); // checks every 10 seconds
+    };
+    checkUsersOnline();
+    const checkUsersOnlineInterval = setInterval(checkUsersOnline, 45000); // checks every 10 seconds
+    return clearInterval(checkUsersOnlineInterval);
   }, [
     loginRedux?.serverResponse?.data?.id,
     sendMessage,
@@ -259,70 +329,7 @@ const ChatBox = ({
       return;
     }
 
-    // If there are files to be sent process it so it can be sent in json
-    let file_attachments: any[] = [];
-    if (fileList?.length > 0) {
-      if (fileList?.length > 4) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          timer: 5000,
-          text: "You cannot send more than 4 files at a time...",
-        });
-        setSending(false);
-        return;
-      }
-
-      for (let index = 0; index < fileList.length; index++) {
-        if (fileList[index] > 10485760) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            timer: 5000,
-            text: "File too large, Can't send files more than 10mb...",
-          });
-          setSending(false);
-          return;
-        }
-      }
-
-      dispatch(
-        userSendChatMessageAction({
-          message,
-          reciever_id: receiver?._id || "",
-          file_attachments: files,
-          chat_id: chatId,
-          [attachment?._id
-            ? attachment?.isProduct
-              ? "product_id"
-              : "service_id"
-            : "null"]: attachment?._id,
-        }) as any
-      );
-
-      setMessage("");
-      setFiles([]);
-      setAttachment(undefined);
-      setProductId("");
-      return;
-    }
-
-    if (message) {
-      sendMessage(
-        JSON.stringify({
-          room_id: "",
-          sender_id: loginRedux?.serverResponse?.data?.id,
-          receiver_id: receiver?._id,
-          message,
-          file_attachments,
-          [attachment?._id
-            ? attachment?.isProduct
-              ? "product_id"
-              : "service_id"
-            : "null"]: attachment?._id,
-        })
-      );
-    } else {
+    if (!message && fileList?.length < 1) {
       setSending(false);
       Swal.fire({
         title: "Error",
@@ -331,22 +338,74 @@ const ChatBox = ({
         confirmButtonText: "Okay",
         timer: 5000,
       });
+      return;
     }
+
+    // If there are files to be sent process it so it can be sent in json
+    if (fileList?.length > 4) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        timer: 5000,
+        text: "You cannot send more than 4 files at a time...",
+      });
+      setSending(false);
+      return;
+    }
+
+    for (let index = 0; index < fileList.length; index++) {
+      if (fileList[index] > 10485760) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          timer: 5000,
+          text: "File too large, Can't send files more than 10mb...",
+        });
+        setSending(false);
+        return;
+      }
+    }
+
+    dispatch(
+      userSendChatMessageAction({
+        message,
+        reciever_id: receiver?._id || "",
+        file_attachments: files,
+        chat_id: chatId,
+        [attachment?._id
+          ? attachment?.isProduct
+            ? "product_id"
+            : "service_id"
+          : "null"]: attachment?._id,
+      }) as any
+    );
+
+    setMessage("");
+    setFiles([]);
+    setAttachment(undefined);
+    setProductId("");
+    return;
   };
 
   useEffect(() => {
-    setInterval(() => {
+    const testConnection = () => {
       if (loginRedux?.serverResponse?.data?.id && receiver?._id)
         sendMessage(
           JSON.stringify({
-            room_id: "",
             meta: "testing_connection",
-            sender_id: loginRedux?.serverResponse?.data?.id,
             receiver_id: receiver?._id,
-            message: "",
+            payload: {
+              chat_id: "",
+              sender_id: loginRedux?.serverResponse?.data?.id,
+              message: "connection tested",
+              meta: "testing_connection",
+            },
           })
         );
-    }, 60 * 1000);
+    };
+    testConnection();
+    const testConnectionInterval = setInterval(testConnection, 60 * 1000);
+    return clearInterval(testConnectionInterval);
   }, [loginRedux?.serverResponse?.data?.id, receiver?._id, sendMessage]);
 
   useEffect(() => {
