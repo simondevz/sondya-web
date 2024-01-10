@@ -5,7 +5,7 @@ import { UserDashboardNav } from "../../components/layout/DashboardNav";
 const TrackOrder = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isUserDashBoard />
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <UserDashboardNav />

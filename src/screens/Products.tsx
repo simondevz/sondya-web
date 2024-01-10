@@ -3,8 +3,8 @@ import { ProductBody } from "../components/products";
 
 const Products = () => {
   return (
-    <div className="">
-      <Nav />
+    <div className="flex flex-col gap-3">
+      <Nav isHome />
       <ProductBody />
       <Footer />
     </div>

@@ -8,10 +8,10 @@ import { UserDashboardNav } from "../../components/layout/DashboardNav";
 const Dashboard = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isUserDashBoard />
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
-        <UserDashboardNav />
+        <UserDashboardNav isSmScreen={false} />
         <div className="overflow-x-hidden flex flex-col gap-5">
           <DashboardHero />
           <DashboardRecentOrders />

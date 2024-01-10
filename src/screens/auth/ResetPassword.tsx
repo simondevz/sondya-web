@@ -1,11 +1,10 @@
 import { ResetPasswordBody } from "../../components/authcomponents/resetpassword";
-import { Footer } from "../../components/layout";
-import AuthNav from "../../components/layout/AuthNav";
+import { Footer, Nav } from "../../components/layout";
 
 const ResetPassword = () => {
   return (
     <div>
-      <AuthNav />
+      <Nav isAuth />
       <ResetPasswordBody />
       <Footer />
     </div>

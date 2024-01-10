@@ -1,6 +1,6 @@
 import {
-  AdminDasboardRecentOrders,
   AdminDashboardHero,
+  AdminSalesLatestOrder,
 } from "../../components/admincomponents/admindashboard";
 import {
   AdminDashboardNav,
@@ -12,13 +12,13 @@ import {
 const AdminDashboard = () => {
   return (
     <div>
-      <Nav />
+      <Nav isAdminDasboard />
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5 w-full">
           <AdminDashboardHero />
-          <AdminDasboardRecentOrders />
+          <AdminSalesLatestOrder />
         </div>
       </div>
       <Footer />

@@ -9,7 +9,7 @@ import { Footer, Nav } from "../components/layout";
 const AboutUs = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <AboutUsHero />
       <WhoWeAre />
       <Benefits />

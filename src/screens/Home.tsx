@@ -11,7 +11,7 @@ import { Footer, Nav } from "../components/layout";
 const Home = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <Hero />
       <Products />
       <Enhance />

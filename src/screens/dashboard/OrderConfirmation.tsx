@@ -4,7 +4,7 @@ import { Footer, Nav } from "../../components/layout";
 const OrderConfirmation = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isUserDashBoard />
       <OrderConfirmationBody />
       <Footer />
     </div>

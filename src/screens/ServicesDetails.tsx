@@ -4,7 +4,7 @@ import { ServiceDetailsBody } from "../components/servicesdetails";
 const ServicesDetails = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <ServiceDetailsBody />
       {/* <LastComponent /> */}
       <Footer />

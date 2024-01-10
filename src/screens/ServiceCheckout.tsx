@@ -4,7 +4,7 @@ import { ServiceCheckoutBody } from "../components/servicecheckout";
 const ServiceCheckout = () => {
   return (
     <div className="overflow-x-scroll">
-      <Nav />
+      <Nav isHome />
       <ServiceCheckoutBody />
       <Footer />
     </div>

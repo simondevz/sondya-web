@@ -4,7 +4,7 @@ import { ServiceBody } from "../components/services";
 const Services = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <ServiceBody />
       <Footer />
     </div>

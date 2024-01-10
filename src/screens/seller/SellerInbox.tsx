@@ -9,7 +9,7 @@ import { SellerInboxBody } from "../../components/sellersdashboardcomponents/sel
 const SellerInbox = () => {
   return (
     <div>
-      <Nav />
+      <Nav isSellerDasboard />
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <SellerDashboardNav />

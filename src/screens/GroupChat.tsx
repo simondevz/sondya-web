@@ -4,7 +4,7 @@ import { Footer, Nav } from "../components/layout";
 const GroupChat = () => {
   return (
     <div className="overflow-x-scroll">
-      <Nav />
+      <Nav isHome />
       <GroupChatBody />
       <Footer />
     </div>

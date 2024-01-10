@@ -60,9 +60,7 @@ const AdminProductDetails = lazy(
   () => import("./screens/admin/AdminProductDetails")
 );
 const AdminProducts = lazy(() => import("./screens/admin/AdminProducts"));
-const AdminSalesAnalytics = lazy(
-  () => import("./screens/admin/AdminSalesAnalytics")
-);
+
 const AdminServiceDetails = lazy(
   () => import("./screens/admin/AdminServiceDetails")
 );
@@ -551,12 +549,7 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,
   },
-  {
-    path: "/admin/analytics",
-    element: <AdminSalesAnalytics />,
-    errorElement: <ErrorPage />,
-    loader: adminDashboardCheck,
-  },
+
   {
     path: "/admin/category",
     element: <AdminCategory />,

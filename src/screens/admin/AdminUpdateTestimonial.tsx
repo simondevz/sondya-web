@@ -9,7 +9,7 @@ import {
 const AdminUpdateTestimonial = () => {
   return (
     <div>
-      <Nav />
+      <Nav isAdminDasboard />
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <AdminDashboardNav />
