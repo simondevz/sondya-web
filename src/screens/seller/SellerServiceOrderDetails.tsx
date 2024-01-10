@@ -9,7 +9,7 @@ import { SellerServiceOrderDetailsBody } from "../../components/sellersdashboard
 const SellerServiceOrderDetails = () => {
   return (
     <div>
-      <Nav />
+      <Nav isSellerDasboard />
       <DashboardLocation />
       <div className="flex flex-row p-4 gap-5">
         <SellerDashboardNav />

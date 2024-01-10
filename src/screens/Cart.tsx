@@ -4,7 +4,7 @@ import { Footer, Nav } from "../components/layout";
 const Cart = () => {
   return (
     <div className="overflow-x-scroll">
-      <Nav />
+      <Nav isHome />
       <CartBody />
       <Footer />
     </div>

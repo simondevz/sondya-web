@@ -5,7 +5,7 @@ import { ProductsDetailsBody } from "../components/productsdetails";
 const ProductsDetails = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <ProductsDetailsBody />
       <LastComponent />
       <Footer />

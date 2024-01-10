@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
@@ -17,7 +17,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_SESSION } from "../../extraStorage/storageStore";
 import { logoutAction } from "../../redux/actions/auth.actions";
 
-export const UserDashboardNav = () => {
+export const UserDashboardNav = ({
+  isSmScreen = false,
+  isOpen = false,
+  setIsOpen,
+}: {
+  isSmScreen?: boolean;
+  isOpen?: boolean;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [index, setIndex] = useState<string>("dashboard");
 
   const navigate = useNavigate();
@@ -31,8 +39,48 @@ export const UserDashboardNav = () => {
     navigate("/");
   };
 
+  const menuButtonRef = useRef<any>();
+
+  // handles click outside the navBar
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (
+        menuButtonRef.current &&
+        !menuButtonRef.current.contains(event.target)
+      ) {
+        setIsOpen && setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuButtonRef, setIsOpen]);
+
   return (
-    <div className="text-[#5F6C72] hidden md:flex flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[17rem]">
+    <div
+      ref={menuButtonRef}
+      className={` ${
+        isSmScreen && isOpen
+          ? "flex md:hidden fixed bg-white z-20 animate__animated animate__slideInLeft overflow-y-auto h-full"
+          : !isSmScreen
+          ? "hidden md:flex"
+          : "hidden"
+      } text-[#5F6C72] flex-col gap-3 border py-3 rounded-md w-[17rem] h-fit max-w-[20rem]`}
+    >
+      <button
+        onClick={() => setIsOpen && setIsOpen(false)}
+        id="menu-btn"
+        className={` ${
+          isOpen && "open"
+        } flex hamburger focus:outline-none bg-[#E0E0E0] p-8 md:p-6 rounded-lg md:hidden mx-2`}
+      >
+        <span className="hamburger-top"></span>
+        <span className="hamburger-middle"></span>
+        <span className="hamburger-bottom"></span>
+      </button>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${
           index === "dashboard" && "bg-[#EDB842] text-white"
