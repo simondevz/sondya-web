@@ -149,6 +149,15 @@ export const API_ROUTES = {
     orders: BASE + "/user/payments/email_notification",
   },
 
+  // Users &&  notifications
+  notification: {
+    create: BASE + "/notifications", // POST
+    markSeen: BASE + "/notifications/", // PUT :id
+    getUnseenCount: BASE + "/notifications/unseencount/", // GET :user_id
+    get: BASE + "/notifications/", // GET :user_id
+    delete: BASE + "/notifications/", // DELETE :id
+  },
+
   // Users
   users: {
     createTestimonial: BASE + "/user/testimonial/create", // POST: UserTestimonialType
@@ -265,6 +274,7 @@ export const API_ROUTES = {
   websocket: {
     groupchat: WS_BASE + "/ws/group/chat",
     personal: WS_BASE + "/ws/personal/chat",
+    notifications: WS_BASE + "/ws/notifications",
   },
 
   landingPages: {

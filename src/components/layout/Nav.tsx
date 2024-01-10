@@ -17,6 +17,9 @@ import {
   DropdownMenuBar,
   DropdownMenuForLargeScreen,
 } from "../shareables/Dropdown";
+import { API_ROUTES } from "../../redux/routes";
+import useWebSocket from "react-use-websocket";
+import { toast } from "react-toastify";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -60,7 +63,7 @@ const Nav = () => {
 
   const login = useSelector(
     (state: ReducersType) => state?.login
-  ) as ReduxResponseType<LoginResponseType[]>;
+  ) as ReduxResponseType<LoginResponseType>;
 
   // get cart total
   const totalCartRedux = useSelector(
@@ -117,6 +120,61 @@ const Nav = () => {
       }
     }
   };
+
+  // Websocket for notifications
+  const socketUrl = API_ROUTES.websocket.notifications;
+  const { sendMessage, lastMessage } = useWebSocket(socketUrl, {
+    shouldReconnect: (closeEvent) => {
+      return true;
+    },
+    reconnectAttempts: 5,
+    reconnectInterval: 3000,
+  });
+
+  useEffect(() => {
+    const connectionTesterFunc = () => {
+      if (login?.serverResponse?.data?.id)
+        sendMessage(
+          JSON.stringify({
+            meta: "testing_connection",
+            receiver_id: login?.serverResponse?.data?.id,
+            sender_id: login?.serverResponse?.data?.id,
+            payload: {
+              meta: "testing_connection",
+              message: "connection tested user in rooms",
+            },
+          })
+        );
+    };
+    connectionTesterFunc();
+    const connectionTester = setInterval(connectionTesterFunc, 60 * 1000);
+    return clearInterval(connectionTester);
+  }, [login?.serverResponse?.data?.id, sendMessage]);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      const data = JSON.parse(lastMessage?.data);
+
+      if (data?.meta) {
+        if (data?.meta === "echo_payload") {
+          toast(data?.data?.title || "You Have a new notification", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          // add 1 to the notification count
+        }
+
+        if (data?.meta === "connection_tested") {
+          console.log(data);
+        }
+      }
+    }
+  }, [lastMessage]);
 
   return (
     <div className="z-40 bg-white w-full flex flex-col flex-grow shadow-sm">

@@ -41,6 +41,17 @@ import {
 } from "../../redux/constants/userDashboard/payments.constants";
 import { orderEmailNotificationAction } from "../../redux/actions/userDashboard/emailNotification.actions";
 import { format } from "date-fns";
+import {
+  createSellerNotificationAction,
+  createUserNotificationAction,
+} from "../../redux/actions/notifications.actions";
+import useWebSocket from "react-use-websocket";
+import {
+  CREATE_SELLER_NOTIFICATION_RESET,
+  CREATE_USER_NOTIFICATION_RESET,
+} from "../../redux/constants/notifications.constants";
+import { API_ROUTES } from "../../redux/routes";
+import { NotificationType } from "../../redux/types/notifications.types";
 
 const ServiceCheckoutBody = () => {
   const [serviceOrder, setServiceOrder] = useState<ServiceOrderType>();
@@ -263,6 +274,159 @@ const ServiceCheckoutBody = () => {
       }, 2000);
     }
   }, [verifyPaymentRedux, dispatch, serviceOrder]);
+
+  const updatedServiceOrderRedux = useSelector(
+    (state: ReducersType) => state.updateServiceOrders
+  ) as ReduxResponseType<ServiceOrderType>;
+  console.log("updatedServiceOrderRedux ==>> ", updatedServiceOrderRedux);
+
+  useEffect(() => {
+    if (
+      updatedServiceOrderRedux?.success &&
+      updatedServiceOrderRedux?.serverResponse?.data?.buyer.id
+    ) {
+      dispatch(
+        createUserNotificationAction({
+          user: {
+            id: updatedServiceOrderRedux?.serverResponse?.data?.buyer.id,
+            email: updatedServiceOrderRedux?.serverResponse?.data?.buyer?.email,
+            username:
+              updatedServiceOrderRedux?.serverResponse?.data?.buyer?.username,
+          },
+          title: "Order Sent",
+          message:
+            "You Ordered " +
+            updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+              ?.name +
+            " Services to be delivered in " +
+            updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+              ?.terms?.duration +
+            " " +
+            updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+              ?.terms?.durationUnit,
+          type: "order_sent",
+          link:
+            "/user/order/service/details/" +
+            updatedServiceOrderRedux?.serverResponse?.data?.order_id,
+          seen: false,
+        }) as any
+      );
+
+      if (
+        updatedServiceOrderRedux?.success &&
+        updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.owner
+          ?.id
+      )
+        dispatch(
+          createSellerNotificationAction({
+            user: {
+              id: updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+                ?.owner?.id,
+              email:
+                updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+                  ?.owner?.email,
+              username:
+                updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+                  ?.owner?.username,
+            },
+            title: "You have a Service Order",
+            message:
+              updatedServiceOrderRedux?.serverResponse?.data?.buyer?.username +
+              " Ordered " +
+              updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+                ?.name +
+              " Services to be delivered in " +
+              updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+                ?.terms?.duration +
+              " " +
+              updatedServiceOrderRedux?.serverResponse?.data?.checkout_items
+                ?.terms?.durationUnit,
+            type: "order_recieved",
+            link:
+              "/seller/service/order/details/" +
+              updatedServiceOrderRedux?.serverResponse?.data?.order_id,
+            seen: false,
+          }) as any
+        );
+    }
+  }, [
+    dispatch,
+    updatedServiceOrderRedux?.serverResponse?.data?.buyer?.email,
+    updatedServiceOrderRedux?.serverResponse?.data?.buyer.id,
+    updatedServiceOrderRedux?.serverResponse?.data?.buyer?.username,
+    updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.name,
+    updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.owner
+      ?.email,
+    updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.owner?.id,
+    updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.owner
+      ?.username,
+    updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.terms
+      ?.duration,
+    updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.terms
+      ?.durationUnit,
+    updatedServiceOrderRedux?.serverResponse?.data?.order_id,
+    updatedServiceOrderRedux?.success,
+  ]);
+
+  // web sockets for notifications
+  const socketUrl = API_ROUTES.websocket.notifications;
+  const userNotificationRedux = useSelector(
+    (state: ReducersType) => state.createUserNotification
+  ) as ReduxResponseType<NotificationType>;
+
+  const sellerNotificationRedux = useSelector(
+    (state: ReducersType) => state.createSellerNotification
+  ) as ReduxResponseType<NotificationType>;
+
+  const { sendMessage: sendNoticication } = useWebSocket(socketUrl, {
+    shouldReconnect: (closeEvent) => {
+      return true;
+    },
+    reconnectAttempts: 5,
+    reconnectInterval: 3000,
+  });
+
+  useEffect(() => {
+    if (userNotificationRedux?.success) {
+      sendNoticication(
+        JSON.stringify({
+          meta: "echo_payload",
+          receiver_id: userNotificationRedux?.serverResponse?.data?.user?.id,
+          payload: {
+            meta: "echo_payload",
+            data: userNotificationRedux?.serverResponse?.data,
+          },
+        })
+      );
+      dispatch({ type: CREATE_USER_NOTIFICATION_RESET });
+    }
+  }, [
+    dispatch,
+    userNotificationRedux?.serverResponse?.data,
+    userNotificationRedux?.success,
+    sendNoticication,
+  ]);
+
+  useEffect(() => {
+    if (sellerNotificationRedux?.success) {
+      sendNoticication(
+        JSON.stringify({
+          meta: "echo_payload",
+          receiver_id: sellerNotificationRedux?.serverResponse?.data?.user?.id,
+          payload: {
+            meta: "echo_payload",
+            data: sellerNotificationRedux?.serverResponse?.data,
+          },
+        })
+      );
+      dispatch({ type: CREATE_SELLER_NOTIFICATION_RESET });
+    }
+  }, [
+    dispatch,
+    sellerNotificationRedux?.serverResponse?.data,
+    sellerNotificationRedux?.success,
+    sendNoticication,
+  ]);
 
   return (
     <section className="p-3 md:p-10">

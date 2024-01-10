@@ -136,7 +136,6 @@ const ProductBodyMain = ({
 
   const nextPage = () => {
     setQuery((prev: QueryType) => {
-      alert(prev.page++);
       return {
         ...prev,
         page: prev.page++,

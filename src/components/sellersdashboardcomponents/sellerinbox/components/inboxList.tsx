@@ -76,7 +76,7 @@ const InboxList = ({
 
   // Checks for new rooms(chats).
   useEffect(() => {
-    setInterval(() => {
+    const newRoomCheck = () => {
       if (loginRedux?.serverResponse?.data?.id)
         sendMessage(
           JSON.stringify({
@@ -86,7 +86,10 @@ const InboxList = ({
             message: "",
           })
         );
-    }, 10000); // checks every 10 seconds
+    };
+    newRoomCheck();
+    const newRoomCheckInterval = setInterval(newRoomCheck, 45000); // checks every 10 seconds
+    return clearInterval(newRoomCheckInterval);
   }, [loginRedux?.serverResponse?.data?.id, sendMessage]);
 
   return (

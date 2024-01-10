@@ -1,11 +1,81 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AiOutlineBell, AiOutlineRight } from "react-icons/ai";
 import { FaHome, FaTimes } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
 import { user1 } from "../../images/users";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  get4NotificationsAction,
+  getNotificationsUnseenCountAction,
+  markNotificationSeenAction,
+} from "../../redux/actions/notifications.actions";
+import { ReducersType } from "../../redux/store";
+import { ReduxResponseType } from "../../redux/types/general.types";
+import {
+  GetNotificationType,
+  NotificationType,
+} from "../../redux/types/notifications.types";
+import {
+  GET_NOTIFICATIONS_RESET,
+  MARK_NOTIFICATION_SEEN_RESET,
+} from "../../redux/constants/notifications.constants";
+import FormatDate from "../shareables/dateFormatter";
+import { useNavigate } from "react-router-dom";
 
 const DashboardLocation = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   let [status, setStatus] = useState(false);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+
+  const unseenCountRedux = useSelector(
+    (state: ReducersType) => state.getNotificationUnseenCount
+  ) as ReduxResponseType<number>;
+
+  const unseenCount = useMemo(
+    () => unseenCountRedux?.serverResponse?.data,
+    [unseenCountRedux?.serverResponse?.data]
+  );
+
+  useEffect(() => {
+    dispatch(getNotificationsUnseenCountAction() as any);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(get4NotificationsAction() as any);
+  }, [dispatch]);
+
+  const notificationRedux = useSelector(
+    (state: ReducersType) => state.get4Notifications
+  ) as ReduxResponseType<GetNotificationType>;
+
+  const markedSeenRedux = useSelector(
+    (state: ReducersType) => state.markNotificationSeen
+  ) as ReduxResponseType<NotificationType>;
+
+  useEffect(() => {
+    if (notificationRedux?.success) {
+      setNotifications(notificationRedux?.serverResponse?.data?.notifications);
+      dispatch({ type: GET_NOTIFICATIONS_RESET });
+    }
+  }, [
+    notificationRedux?.serverResponse?.data?.notifications,
+    notificationRedux?.success,
+    dispatch,
+  ]);
+
+  useEffect(() => {
+    if (markedSeenRedux?.success) {
+      dispatch({ type: MARK_NOTIFICATION_SEEN_RESET });
+      navigate("/" + markedSeenRedux?.serverResponse?.data?.link);
+    }
+  }, [
+    dispatch,
+    markedSeenRedux?.serverResponse?.data?.link,
+    markedSeenRedux?.success,
+    navigate,
+  ]);
+
   return (
     <div className="relative flex flex-row justify-between items-center gap-1 bg-[#000000] text-white py-5 px-8">
       <div className="flex flex-row justify-between items-center gap-1">
@@ -15,8 +85,15 @@ const DashboardLocation = () => {
       </div>
       <button
         onClick={() => setStatus(!status)}
-        className="text-xl text-[#EDB842]"
+        className="relative text-xl text-[#EDB842]"
       >
+        <span
+          className={`absolute -top-4 -right-2 rounded-full bg-[#EDB842] text-white p-[0.3rem] w-fit h-fit font-[600] text-sm animate__animated animate__bounce ${
+            unseenCount ? "animate__bounceIn" : ""
+          }`}
+        >
+          {unseenCount < 100 ? unseenCount : "99+"}
+        </span>
         <AiOutlineBell />
       </button>
       {status && (
@@ -27,81 +104,59 @@ const DashboardLocation = () => {
               <FaTimes />
             </button>
           </div>
-          <div className="flex gap-4 justify-between p-2 items-center ">
-            <div className="flex text-sm items-center gap-3">
-              <img className="w-8 h-8 object-contain" src={user1} alt="" />
-              <div className="">
-                <div className="text-[#222529] font-[600] text-[1rem]">
-                  stewiedewie
+          {notifications?.length ? (
+            notifications?.map((notification) => {
+              return (
+                <div
+                  key={notification?._id}
+                  className={
+                    (notification?.seen ? "" : " bg-slate-500/20 ") +
+                    "flex gap-4 justify-between p-2 items-center "
+                  }
+                >
+                  <div className="flex text-sm items-center gap-3">
+                    <img
+                      className="w-8 h-8 object-contain"
+                      src={user1}
+                      alt=""
+                    />
+                    <div className="">
+                      <div className="text-[#222529] font-[600] text-[1rem]">
+                        {notification.title}
+                      </div>
+                      <div className="text-[#4C525A]">
+                        {notification?.title}
+                      </div>
+                      <div className="text-[#4C525A]">
+                        <FormatDate dateString={notification?.createdAt!} />
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        markNotificationSeenAction(notification?._id!) as any
+                      );
+                    }}
+                    className=""
+                  >
+                    <div className=""></div>
+                    <button>
+                      <MdArrowForwardIos />
+                    </button>
+                  </button>
                 </div>
-                <div className="text-[#4C525A]">High fived your workout</div>
-                <div className="text-[#4C525A]">0 min</div>
-              </div>
-            </div>
-            <div className="">
-              <div className=""></div>
-              <button>
-                <MdArrowForwardIos />
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-4 justify-between p-2 items-center ">
-            <div className="flex text-sm items-center gap-3">
-              <img className="w-8 h-8 object-contain" src={user1} alt="" />
-              <div className="">
-                <div className="text-[#222529] font-[600] text-[1rem]">
-                  stewiedewie
-                </div>
-                <div className="text-[#4C525A]">High fived your workout</div>
-                <div className="text-[#4C525A]">0 min</div>
-              </div>
-            </div>
-            <div className="">
-              <div className=""></div>
-              <button>
-                <MdArrowForwardIos />
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-4 justify-between p-2 items-center ">
-            <div className="flex text-sm items-center gap-3">
-              <img className="w-8 h-8 object-contain" src={user1} alt="" />
-              <div className="">
-                <div className="text-[#222529] font-[600] text-[1rem]">
-                  stewiedewie
-                </div>
-                <div className="text-[#4C525A]">High fived your workout</div>
-                <div className="text-[#4C525A]">0 min</div>
-              </div>
-            </div>
-            <div className="">
-              <div className=""></div>
-              <button>
-                <MdArrowForwardIos />
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-4 justify-between p-2 items-center ">
-            <div className="flex text-sm items-center gap-3">
-              <img className="w-8 h-8 object-contain" src={user1} alt="" />
-              <div className="">
-                <div className="text-[#222529] font-[600] text-[1rem]">
-                  stewiedewie
-                </div>
-                <div className="text-[#4C525A]">High fived your workout</div>
-                <div className="text-[#4C525A]">0 min</div>
-              </div>
-            </div>
-            <div className="">
-              <div className=""></div>
-              <button>
-                <MdArrowForwardIos />
-              </button>
-            </div>
-          </div>
-          <div className="text-[#EDB842] p-3 bg-[#EDB84230] text-xl font-[600] text-center">
+              );
+            })
+          ) : (
+            <div>No Notifications Yet</div>
+          )}
+          <button
+            onClick={() => navigate("/user/notifications")}
+            className="text-[#EDB842] p-3 bg-[#EDB84230] text-xl font-[600] text-center"
+          >
             View All
-          </div>
+          </button>
         </div>
       )}
     </div>
