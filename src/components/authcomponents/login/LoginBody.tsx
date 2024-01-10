@@ -123,7 +123,7 @@ const LoginBody = () => {
                   className="border-b-2 outline-none w-2/3 focus:border-b-[#EDB842]"
                   placeholder="Email"
                   type="text"
-                  autoFocus={true}
+                  // autoFocus={true}
                   value={email}
                   onChange={onChange}
                 />

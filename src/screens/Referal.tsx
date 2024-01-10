@@ -4,7 +4,7 @@ import { ReferalBody } from "../components/referal";
 const Referal = () => {
   return (
     <div className="overflow-x-scroll">
-      <Nav />
+      <Nav isHome />
       <ReferalBody />
       <Footer />
     </div>

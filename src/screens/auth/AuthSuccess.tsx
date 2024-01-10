@@ -1,11 +1,10 @@
 import { AuthSuccessBody } from "../../components/authcomponents/authsuccess";
-import { Footer } from "../../components/layout";
-import AuthNav from "../../components/layout/AuthNav";
+import { Footer, Nav } from "../../components/layout";
 
 const AuthSuccess = () => {
   return (
     <div>
-      <AuthNav />
+      <Nav isAuth />
       <AuthSuccessBody />
       <Footer />
     </div>

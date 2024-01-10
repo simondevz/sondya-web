@@ -1,11 +1,17 @@
+import { Helmet } from "react-helmet";
 import { RegisterBody } from "../../components/authcomponents/register";
-import { Footer } from "../../components/layout";
-import AuthNav from "../../components/layout/AuthNav";
+import { Footer, Nav } from "../../components/layout";
 
 const SignUp = () => {
   return (
     <div>
-      <AuthNav />
+      <Helmet>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        />
+      </Helmet>
+      <Nav isAuth />
       <RegisterBody />
       <Footer />
     </div>

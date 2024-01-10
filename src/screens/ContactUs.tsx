@@ -4,7 +4,7 @@ import { Footer, Nav } from "../components/layout";
 const ContactUs = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <ContactUsForm />
       <ContactUsLastPart />
       <Footer />

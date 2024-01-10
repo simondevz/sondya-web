@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
-import { FaTimes } from "react-icons/fa";
+import { FaFilter, FaTimes } from "react-icons/fa";
 import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
+import { RiArrowDownSFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import slugify from "slugify";
@@ -43,15 +44,84 @@ const ProductBody = () => {
     sortBy: "",
   });
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="flex flex-row px-5 py-6">
-      <div className="w-3/12 px-3 py-4 md:flex hidden flex-col gap-3">
-        <ProductNav query={query} setQuery={setQuery} />
-        <ProductPriceRange query={query} setQuery={setQuery} />
-        <ProductPopularBrands query={query} setQuery={setQuery} />
-        <ProductPopularTags />
+    <div className="w-full flex flex-col">
+      <div className="w-full flex gap-2 px-5 justify-between overflow-x-scroll md:hidden py-3">
+        <button
+          type="button"
+          className="flex gap-2 items-center p-2 border-2 text-[#5F6C72] border-[#EDB842] bg-[#EDB84220] rounded-lg w-fit"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="whitespace-nowrap">All Filters</span> <FaFilter />
+        </button>
+        <button
+          type="button"
+          className="flex gap-2 items-center p-2 border-2 text-[#5F6C72] border-[#EDB842] bg-[#EDB84220] rounded-lg w-fit"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="whitespace-nowrap">Category Search</span>{" "}
+          <span className="text-2xl">
+            <RiArrowDownSFill />
+          </span>
+        </button>
+        <button
+          type="button"
+          className="flex gap-2 items-center p-2 border-2 text-[#5F6C72] border-[#EDB842] bg-[#EDB84220] rounded-lg w-fit"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="whitespace-nowrap">Price range</span>
+          <span className="text-2xl">
+            <RiArrowDownSFill />
+          </span>
+        </button>
       </div>
-      <ProductBodyMain query={query} setQuery={setQuery} />
+      <div className="flex flex-row px-5 py-3 md:py-6">
+        <ProductBodyNavMain
+          query={query}
+          setQuery={setQuery}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+        <ProductBodyMain query={query} setQuery={setQuery} />
+      </div>
+    </div>
+  );
+};
+
+export const ProductBodyNavMain = ({
+  query,
+  setQuery,
+  isOpen = false,
+  setIsOpen,
+}: {
+  query: QueryType;
+  setQuery: any;
+  isOpen?: boolean;
+  setIsOpen?: any;
+}) => {
+  return (
+    <div
+      className={`${
+        isOpen
+          ? "flex md:hidden fixed bottom-0 left-0 right-0 bg-white px-4 rounded-t-2xl border-t-4 shadow-md overflow-y-auto h-[100vh] z-50 animate__animated animate__slideInUp"
+          : "md:flex hidden w-3/12 px-3 py-4"
+      } flex-col gap-3`}
+    >
+      <div className="flex p-2 justify-between">
+        <span className="text-2xl font-[600]">Filter results</span>{" "}
+        <button
+          className="absolute top-3 right-3 block md:hidden text-2xl"
+          onClick={() => setIsOpen(false)}
+        >
+          <FaTimes />
+        </button>
+      </div>
+      <ProductNav query={query} setQuery={setQuery} />
+      <ProductPriceRange query={query} setQuery={setQuery} />
+      <ProductPopularBrands query={query} setQuery={setQuery} />
+      <ProductPopularTags />
     </div>
   );
 };
@@ -210,11 +280,11 @@ const ProductBodyMain = ({
       </div>
 
       <div className="bg-[#EDB84233] flex flex-row gap-2 justify-between p-2 rounded-md text-[#5F6C72] font-[600]">
-        <div className="flex flex-row gap-2 items-center">
+        <div className="flex flex-col md:flex-row gap-2 items-center">
           <span className="font-[400] whitespace-nowrap">Active Filters:</span>
           {/* Active subategory filter */}
-          {query.subcategory && (
-            <span className="hidden md:flex items-center gap-2">
+          {query?.subcategory && (
+            <span className="flex items-center gap-2 whitespace-nowrap">
               {query.subcategory}
               <button
                 onClick={() =>
@@ -231,8 +301,8 @@ const ProductBodyMain = ({
           )}
 
           {/* Active price range */}
-          {query.priceRange && (
-            <span className="hidden md:flex items-center gap-2">
+          {query?.priceRange && (
+            <span className="flex items-center gap-2 whitespace-nowrap">
               $
               {Number(query.priceRange.split("_")[0])
                 ? query.priceRange.split("_")[0]
@@ -256,10 +326,13 @@ const ProductBodyMain = ({
           )}
 
           {/* Active popular Brands */}
-          {query.popularBrands.length ? (
+          {query?.popularBrands.length ? (
             query.popularBrands.map((brand: string, index: number) => {
               return (
-                <span key={index} className="hidden md:flex items-center gap-2">
+                <span
+                  key={index}
+                  className="flex items-center gap-2 whitespace-nowrap"
+                >
                   {brand}
                   <button
                     onClick={() =>
@@ -285,7 +358,7 @@ const ProductBodyMain = ({
           {!query.popularBrands.length &&
           !query.priceRange &&
           !query.subcategory ? (
-            <span className="hidden md:flex items-center gap-2">
+            <span className="flex items-center gap-2 whitespace-nowrap">
               No Active Filters
             </span>
           ) : (

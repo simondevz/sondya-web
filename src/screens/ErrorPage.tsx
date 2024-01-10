@@ -6,7 +6,7 @@ import { notFound } from "../images";
 const ErrorPage = () => {
   return (
     <div className="">
-      <Nav />
+      <Nav isHome />
       <div className="w-full h-[80vh]  flex flex-col items-center p-2">
         <div className="flex flex-col gap-3 my-auto mx-auto text-center justify-center items-center">
           <img
