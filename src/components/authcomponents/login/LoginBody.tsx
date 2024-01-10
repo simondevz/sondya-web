@@ -113,14 +113,14 @@ const LoginBody = () => {
               className="flex flex-col text-center md:text-left gap-5"
               onSubmit={handleSubmit}
             >
-              <div className="font-[700] text-[26px]">Log in to Exclusive</div>
+              <div className="font-[700] text-[26px]">Log in to Sondya</div>
               <div className="font-[600] text-[13px]">
                 Enter your details below
               </div>
               <div className="">
                 <input
                   name="email"
-                  className="border-b-2 outline-none w-2/3 focus:border-b-[#EDB842]"
+                  className="border-b-2 outline-none w-full md:w-2/3 focus:border-b-[#EDB842]"
                   placeholder="Email"
                   type="text"
                   // autoFocus={true}
@@ -129,7 +129,7 @@ const LoginBody = () => {
                 />
               </div>
               <div className="">
-                <div className="flex flex-row items-center mx-auto md:ms-0  w-2/3 justify-between border-b-2 focus:border-b-[#EDB842] hover:border-b-[#EDB842]">
+                <div className="flex flex-row items-center mx-auto md:ms-0  w-full md:w-2/3 justify-between border-b-2 focus:border-b-[#EDB842] hover:border-b-[#EDB842]">
                   <input
                     name="password"
                     type={showPassword ? "text" : "password"}
@@ -154,7 +154,7 @@ const LoginBody = () => {
               {loginRedux?.error && (
                 <div className="text-[#DB4444]">{loginRedux?.error}</div>
               )}
-              <div className="flex flex-row items-center justify-between w-2/3 self-center md:self-start">
+              <div className="flex flex-row items-center justify-between w-full md:w-2/3 self-center md:self-start">
                 <button className="px-6 py-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap">
                   {loginRedux?.loading ? (
                     <div className="" style={{ height: "25px" }}>
@@ -174,7 +174,7 @@ const LoginBody = () => {
               <div className="">
                 <button
                   onClick={() => navigate("/register")}
-                  className="text-[#EDB842] px-4 py-2 border border-[#EDB842] rounded-md w-2/3 self-center md:self-start"
+                  className="text-[#EDB842] px-4 py-2 border border-[#EDB842] rounded-md w-full md:w-2/3 self-center md:self-start"
                 >
                   Don't have an account? Sign Up
                 </button>
