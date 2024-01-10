@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../css/Nav.css";
 import { LogoSide } from "../../images/logo";
@@ -19,6 +19,7 @@ import {
   SellerSwitchNav,
 } from "./NavComponents";
 import SellerDashboardNav from "./SellerDashboardNav";
+import { totalCartAction } from "../../redux/actions/cart.actions";
 
 type NavType = {
   isAuth?: boolean;
@@ -38,7 +39,7 @@ const Nav = ({
   isAdminDasboard = false,
 }: NavType) => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   // for the on change scrollable navbar
@@ -82,7 +83,7 @@ const Nav = ({
   // get login
   const login = useSelector(
     (state: ReducersType) => state?.login
-  ) as ReduxResponseType<LoginResponseType>;
+  ) as ReduxResponseType<LoginResponseType[]>;
 
   // get cart total
   const totalCartRedux = useSelector(
@@ -152,12 +153,12 @@ const Nav = ({
 
   useEffect(() => {
     const connectionTesterFunc = () => {
-      if (login?.serverResponse?.data?.id)
+      if (login?.serverResponse?.data?.[0]?.id)
         sendMessage(
           JSON.stringify({
             meta: "testing_connection",
-            receiver_id: login?.serverResponse?.data?.id,
-            sender_id: login?.serverResponse?.data?.id,
+            receiver_id: login?.serverResponse?.data?.[0]?.id,
+            sender_id: login?.serverResponse?.data?.[0]?.id,
             payload: {
               meta: "testing_connection",
               message: "connection tested user in rooms",
@@ -168,7 +169,7 @@ const Nav = ({
     connectionTesterFunc();
     const connectionTester = setInterval(connectionTesterFunc, 60 * 1000);
     return clearInterval(connectionTester);
-  }, [login?.serverResponse?.data?.id, sendMessage]);
+  }, [login?.serverResponse?.data, sendMessage]);
 
   useEffect(() => {
     if (lastMessage !== null) {
