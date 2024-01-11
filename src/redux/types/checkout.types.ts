@@ -24,6 +24,8 @@ export type CheckoutType = {
   total_tax: number;
   total_shipping_fee: number;
   total_discount: number;
+
+  payment_id: string;
 };
 
 export type GetProductOrderPayment = {

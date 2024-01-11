@@ -123,6 +123,17 @@ export const SellerSwitchNav = () => {
     setChecked((prevState) => !prevState);
   };
 
+  useEffect(() => {
+    // navigate to seller dashboard
+    setTimeout(() => {
+      if (isChecked) {
+        navigate("/seller/dashboard");
+      }
+    }, 2000);
+  }, [isChecked, navigate]);
+
+  // toggle switch to seller dashboard after login end
+
   const googleTranslateElementInit = () => {
     new window.google.translate.TranslateElement(
       {

@@ -1,9 +1,12 @@
+import { format } from "date-fns";
+import randomstring from "randomstring";
 import { useEffect, useMemo, useState } from "react";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
+import useWebSocket from "react-use-websocket";
 import Swal from "sweetalert2";
 import { CART_SESSION } from "../../extraStorage/storageStore";
 import { circleWavy } from "../../images";
@@ -22,10 +25,15 @@ import {
   viewCartAction,
 } from "../../redux/actions/cart.actions";
 import {
+  createSellerNotificationAction,
+  createUserNotificationAction,
+} from "../../redux/actions/notifications.actions";
+import {
   trackDistanceTimeAction,
   // trackDistanceTimeAction,
   viewShippingDestinationAction,
 } from "../../redux/actions/shippingdestination.actions";
+import { orderEmailNotificationAction } from "../../redux/actions/userDashboard/emailNotification.actions";
 import {
   initializePaymentsAction,
   verifyPaymentsAction,
@@ -33,16 +41,23 @@ import {
 import { userCreateProductOrderAction } from "../../redux/actions/userDashboard/productsOrder.actions";
 import { GetUserProfileAction } from "../../redux/actions/userDashboard/profile.actions";
 import {
+  CREATE_SELLER_NOTIFICATION_RESET,
+  CREATE_USER_NOTIFICATION_RESET,
+} from "../../redux/constants/notifications.constants";
+import {
   INITIALIZE_PAYMENTS_RESET,
   VERIFY_PAYMENTS_RESET,
 } from "../../redux/constants/userDashboard/payments.constants";
 import { CREATE_PRODUCT_ORDER_RESET } from "../../redux/constants/userDashboard/productsOrder.constants";
+import { API_ROUTES } from "../../redux/routes";
 import { ReducersType } from "../../redux/store";
+import { LoginResponseType } from "../../redux/types/auth.types";
 import {
   CheckoutType,
   GetProductOrder,
 } from "../../redux/types/checkout.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
+import { NotificationType } from "../../redux/types/notifications.types";
 import {
   PaymentRequestType,
   PaymentResponseType,
@@ -55,20 +70,6 @@ import {
 } from "../../redux/types/shippingdestination.types";
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
-import { LoginResponseType } from "../../redux/types/auth.types";
-import { orderEmailNotificationAction } from "../../redux/actions/userDashboard/emailNotification.actions";
-import { format } from "date-fns";
-import {
-  createSellerNotificationAction,
-  createUserNotificationAction,
-} from "../../redux/actions/notifications.actions";
-import useWebSocket from "react-use-websocket";
-import {
-  CREATE_USER_NOTIFICATION_RESET,
-  CREATE_SELLER_NOTIFICATION_RESET,
-} from "../../redux/constants/notifications.constants";
-import { API_ROUTES } from "../../redux/routes";
-import { NotificationType } from "../../redux/types/notifications.types";
 
 type TotalingType = {
   SubTotalPrice: number;
@@ -81,6 +82,11 @@ const CheckoutBody = () => {
   const [tab1, settab1] = useState<boolean>(false);
   const [tab2, settab2] = useState<boolean>(true);
   const [tab3, settab3] = useState<boolean>(true);
+
+  const payment_id: string = randomstring.generate({
+    length: 8,
+    charset: "numeric",
+  });
 
   // import dispatch
   const dispatch = useDispatch();
@@ -266,6 +272,7 @@ const CheckoutBody = () => {
     total_tax: 0,
     total_shipping_fee: 0,
     total_discount: 0,
+    payment_id: payment_id,
   });
 
   // console.log(checkoutOrder);
@@ -611,7 +618,7 @@ const CheckoutBody = () => {
   const productOrderRedux = useSelector(
     (state: ReducersType) => state.userCreateProductOrder
   ) as ReduxResponseType<GetProductOrder>;
-  console.log("productOrderRedux ==>> ", productOrderRedux);
+  // console.log("productOrderRedux ==>> ", productOrderRedux);
 
   useEffect(() => {
     if (productOrderRedux?.success && userData?._id) {
@@ -934,6 +941,7 @@ const CheckoutBody = () => {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       type="radio"
                       name="pay"
+                      disabled
                     />{" "}
                     <span>Mobile wallet</span>
                     <img
