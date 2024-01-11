@@ -33,6 +33,7 @@ export const userCreateProductOrderAction =
     total_tax,
     total_shipping_fee,
     total_discount,
+    payment_id,
   }: CheckoutType) =>
   async (dispatch: Dispatch, getState: any) => {
     try {
@@ -65,6 +66,7 @@ export const userCreateProductOrderAction =
           total_tax,
           total_shipping_fee,
           total_discount,
+          payment_id,
         },
         config
       );

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { BiCopy } from "react-icons/bi";
 import { BsCart, BsGift, BsMessenger, BsSend, BsTwitter } from "react-icons/bs";
 import { MdEmail, MdFacebook } from "react-icons/md";
@@ -10,13 +10,13 @@ import { adminUGetUserType } from "../../redux/types/users.types";
 
 const ReferalBody = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [copied, setCopied] = useState(false);
+  // const [copied, setCopied] = useState(false);
 
   const handleCopyClick = () => {
     if (inputRef.current) {
       inputRef.current.select();
       document.execCommand("copy");
-      setCopied(true);
+      // setCopied(true);
     }
   };
 

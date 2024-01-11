@@ -681,7 +681,10 @@ const SellerPostProductBody = () => {
               >
                 Go Back
               </button>
-              <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
+              <button
+                onClick={() => navigate("/seller/products")}
+                className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]"
+              >
                 {" "}
                 <span>View Ads</span>
                 <AiOutlineArrowRight />
