@@ -134,10 +134,9 @@ export const SellerSwitchNav = () => {
     // Style the "Powered by Google Translate" element
   };
 
-  const [isGoogleTranslateLoaded, setIsGoogleTranslateLoaded] = useState(false);
+  const [isGoogleTranslate, setIsGoogleTranslate] = useState(false);
   useEffect(() => {
-    if (!isGoogleTranslateLoaded) {
-      setIsGoogleTranslateLoaded(true);
+    if (isGoogleTranslate) {
       setTimeout(() => {
         var addScript = document.createElement("script");
         addScript.setAttribute(
@@ -148,8 +147,7 @@ export const SellerSwitchNav = () => {
         window.googleTranslateElementInit = googleTranslateElementInit;
       }, 1000);
     }
-    // Check for script availability before initialization
-  }, [isGoogleTranslateLoaded]);
+  }, [isGoogleTranslate]);
 
   return (
     <div className="flex flex-row justify-around text-[#282828] playfair-display py-4 px-2 bg-[#f1f1f2] overflow-x-auto">
@@ -186,8 +184,19 @@ export const SellerSwitchNav = () => {
           Wishlist
         </div>
         {/* make sure u import import "../../css/translate.css"; */}
-        <div id="google_translate_element"></div>
-        {/* <div className="">English,USD</div> */}
+
+        {!isGoogleTranslate ? (
+          <button
+            className="border border-[#EDB842] bg-[#EDB84222] text-lg p-2 rounded-md whitespace-nowrap"
+            type="button"
+            onClick={() => setIsGoogleTranslate((prev) => !prev)}
+          >
+            Select language
+          </button>
+        ) : (
+          <div id="google_translate_element"></div>
+        )}
+        {!isGoogleTranslate && <div className="">ENG/USD</div>}
       </div>
     </div>
   );

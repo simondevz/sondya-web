@@ -4,6 +4,7 @@ import { BiMap } from "react-icons/bi";
 import { BsCart, BsChat, BsGear } from "react-icons/bs";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import {
+  MdOutlineChangeCircle,
   MdOutlineMiscellaneousServices,
   MdPayment,
   MdStorefront,
@@ -233,6 +234,20 @@ export const UserDashboardNav = ({
           <BsGear />
         </span>{" "}
         <span className="whitespace-nowrap">Setting</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "seller-dashboard" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          setIndex("seller-dashboard");
+          navigate("/seller/dashboard");
+        }}
+      >
+        <span>
+          <MdOutlineChangeCircle />
+        </span>{" "}
+        <span className="whitespace-nowrap">Go to seller page</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

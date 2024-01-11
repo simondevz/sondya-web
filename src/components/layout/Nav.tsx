@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import useWebSocket from "react-use-websocket";
 import "../../css/Nav.css";
 import { LogoSide } from "../../images/logo";
+import { API_ROUTES } from "../../redux/routes";
 import { ReducersType } from "../../redux/store";
 import { LoginResponseType } from "../../redux/types/auth.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import AdminDashboardNav from "./AdminDashboardNav";
 import { UserDashboardNav } from "./DashboardNav";
-import { API_ROUTES } from "../../redux/routes";
-import useWebSocket from "react-use-websocket";
-import { toast } from "react-toastify";
 import {
   HomeNavSmallScreen,
   LargeScreenNav,
@@ -19,7 +19,6 @@ import {
   SellerSwitchNav,
 } from "./NavComponents";
 import SellerDashboardNav from "./SellerDashboardNav";
-import { totalCartAction } from "../../redux/actions/cart.actions";
 
 type NavType = {
   isAuth?: boolean;
@@ -39,7 +38,7 @@ const Nav = ({
   isAdminDasboard = false,
 }: NavType) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   // for the on change scrollable navbar
@@ -86,60 +85,60 @@ const Nav = ({
   ) as ReduxResponseType<LoginResponseType[]>;
 
   // get cart total
-  const totalCartRedux = useSelector(
-    (state: ReducersType) => state?.totalCart
-  ) as ReduxResponseType<number>;
+  // const totalCartRedux = useSelector(
+  //   (state: ReducersType) => state?.totalCart
+  // ) as ReduxResponseType<number>;
 
-  const totalCartItems = useMemo(() => {
-    return totalCartRedux?.serverResponse?.data;
-  }, [totalCartRedux]);
+  // const totalCartItems = useMemo(() => {
+  //   return totalCartRedux?.serverResponse?.data;
+  // }, [totalCartRedux]);
 
-  useEffect(() => {
-    dispatch(totalCartAction() as any);
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(totalCartAction() as any);
+  // }, [dispatch]);
 
-  // bounce cart on change
-  const [totalCartItemsChanged, setTotalCartItemsChanged] = useState(false);
+  // // bounce cart on change
+  // const [totalCartItemsChanged, setTotalCartItemsChanged] = useState(false);
 
-  useEffect(() => {
-    setTotalCartItemsChanged(true);
-    setTimeout(() => {
-      setTotalCartItemsChanged(false);
-    }, 600); // Adjust animation duration as needed
-  }, [totalCartItems]);
+  // useEffect(() => {
+  //   setTotalCartItemsChanged(true);
+  //   setTimeout(() => {
+  //     setTotalCartItemsChanged(false);
+  //   }, 600); // Adjust animation duration as needed
+  // }, [totalCartItems]);
 
-  const [isChecked, setChecked] = useState(false);
+  // const [isChecked, setChecked] = useState(false);
 
-  const toggleSwitch = () => {
-    setChecked((prevState) => !prevState);
-  };
+  // const toggleSwitch = () => {
+  //   setChecked((prevState) => !prevState);
+  // };
 
-  useEffect(() => {
-    // navigate to seller dashboard
-    setTimeout(() => {
-      if (isChecked) {
-        navigate("/seller/dashboard");
-      }
-    }, 2000);
-  }, [isChecked, navigate]);
+  // useEffect(() => {
+  //   // navigate to seller dashboard
+  //   setTimeout(() => {
+  //     if (isChecked) {
+  //       navigate("/seller/dashboard");
+  //     }
+  //   }, 2000);
+  // }, [isChecked, navigate]);
 
-  // search button
-  // const history = useHistory();
-  const [categorySelect, setCategorySelect] = useState("products");
-  const [search, setSearch] = useState("");
+  // // search button
+  // // const history = useHistory();
+  // const [categorySelect, setCategorySelect] = useState("products");
+  // const [search, setSearch] = useState("");
 
-  const handleSearch = () => {
-    console.log(categorySelect, search);
-    if (search !== "") {
-      if (categorySelect === "products") {
-        // window.location.href = `/products?page=1&search=${search}`;
-        window.location.replace(`/products?page=1&search=${search}`);
-      } else if (categorySelect === "services") {
-        // window.location.href = `/services?page=1&search=${search}`;
-        window.location.replace(`/services?page=1&search=${search}`);
-      }
-    }
-  };
+  // const handleSearch = () => {
+  //   console.log(categorySelect, search);
+  //   if (search !== "") {
+  //     if (categorySelect === "products") {
+  //       // window.location.href = `/products?page=1&search=${search}`;
+  //       window.location.replace(`/products?page=1&search=${search}`);
+  //     } else if (categorySelect === "services") {
+  //       // window.location.href = `/services?page=1&search=${search}`;
+  //       window.location.replace(`/services?page=1&search=${search}`);
+  //     }
+  //   }
+  // };
 
   // Websocket for notifications
   const socketUrl = API_ROUTES.websocket.notifications;
