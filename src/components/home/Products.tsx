@@ -228,8 +228,8 @@ const Products = () => {
         <div className="w-full md:w-2/5 border p-2">
           {products.data &&
             products.data
+              .filter((item) => item.product_status === "hot")
               .slice(0, 1)
-              // .filter((item) => item.product_status === "hot")
               .map((t, i) => {
                 return (
                   <div

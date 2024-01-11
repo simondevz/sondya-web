@@ -32,7 +32,7 @@ export const addToCartAction =
         type: ADD_TO_CART_REQUEST,
       });
 
-      console.log(product?.selected_variants);
+      // console.log(product?.selected_variants);
 
       const cartOrderItem: ProductOrderType = {
         ...product,

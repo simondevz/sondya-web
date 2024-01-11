@@ -4,6 +4,7 @@ import { BsCart } from "react-icons/bs";
 import { GoChecklist } from "react-icons/go";
 import {
   MdChat,
+  MdOutlineChangeCircle,
   MdOutlineMiscellaneousServices,
   MdShoppingCart,
   MdStorefront,
@@ -191,6 +192,20 @@ const SellerDashboardNav = ({
           <BiMoneyWithdraw />
         </span>
         <span className="whitespace-nowrap">Withdrawal</span>
+      </div>
+      <div
+        className={`flex flex-row gap-2 items-center py-2 px-6 ${
+          index === "user-page" && "bg-[#EDB842] text-white"
+        }`}
+        onClick={() => {
+          navigate("/dashboard");
+          setIndex("user-page");
+        }}
+      >
+        <span>
+          <MdOutlineChangeCircle />
+        </span>
+        <span className="whitespace-nowrap">Go to User page</span>
       </div>
       <div
         className={`flex flex-row gap-2 items-center py-2 px-6 ${

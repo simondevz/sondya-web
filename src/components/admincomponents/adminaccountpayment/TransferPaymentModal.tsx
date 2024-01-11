@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AiOutlineArrowRight, AiOutlineCloseCircle } from "react-icons/ai";
 import { Modal } from "react-overlays";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import { circleWavy, circleWavyFailure } from "../../../images";
 import {
@@ -34,7 +33,7 @@ const TransferPaymentModal = ({
   );
 
   // create categories
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [status, setStatus] = useState<string>("");

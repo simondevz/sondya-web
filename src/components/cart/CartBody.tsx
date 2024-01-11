@@ -132,6 +132,9 @@ const CartBody = () => {
                           />
                           <div className="w-full md:w-1/2 h-1/2 md:h-full text-[0.85rem] md:text-inherit">
                             {t.name}
+                            <br />
+                            <span className="font-[600]">{t.total_stock} </span>
+                            in stock
                           </div>
                         </div>
                       </td>
@@ -154,14 +157,13 @@ const CartBody = () => {
                           type="number"
                           min={1}
                           defaultValue={t.order_quantity}
-                          // value={t.order_quantity}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setProductChange({
                               ...t,
                               order_quantity: Number(e.target.value),
                             })
                           }
-                          max={t.total_stock}
+                          max={t?.total_stock}
                         />
                       </td>
                       <td className="p-3">
@@ -192,25 +194,18 @@ const CartBody = () => {
             </table>
           </div>
           <div className="flex fle-row justify-between gap-3">
-            <div className="flex flex-row gap-3 items-center">
-              <button
-                onClick={() => navigate("/products")}
-                className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap"
-              >
-                Continue
-              </button>
-              <button
-                onClick={() => clearCart()}
-                className="px-4 py-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap"
-              >
-                Clear cart
-              </button>
-            </div>
-            <div className="">
-              <button className="px-4 py-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap">
-                Update cart
-              </button>
-            </div>
+            <button
+              onClick={() => navigate("/products")}
+              className="px-4 py-2 border-2 border-[#EDB842] text-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap"
+            >
+              Continue
+            </button>
+            <button
+              onClick={() => clearCart()}
+              className="px-4 py-2 text-white bg-[#EDB842] rounded-md self-center md:self-start whitespace-nowrap"
+            >
+              Clear cart
+            </button>
           </div>
           <CartBodySummary cartItems={cartItems} />
           <LastComponent />
@@ -431,10 +426,9 @@ const CartBodySummary = ({ cartItems }: any) => {
                 trackDistanceTimeRedux.serverResponse.data
               ) as any
             );
-            // navigate("/checkout");
+            navigate("/checkout");
           }, 1000);
-        }
-        if (trackDistanceTimeRedux.success || trackDistanceTimeRedux.error) {
+        } else {
           setTimeout(() => {
             navigate("/checkout");
           }, 1500);
