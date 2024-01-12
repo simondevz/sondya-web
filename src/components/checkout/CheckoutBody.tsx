@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import randomstring from "randomstring";
 import { useEffect, useMemo, useState } from "react";
 import { BsFillTicketPerforatedFill } from "react-icons/bs";
 import { PiCaretDownBold, PiCaretUpBold } from "react-icons/pi";
@@ -70,6 +69,7 @@ import {
 } from "../../redux/types/shippingdestination.types";
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
+import randomstring from "randomstring";
 
 type TotalingType = {
   SubTotalPrice: number;
