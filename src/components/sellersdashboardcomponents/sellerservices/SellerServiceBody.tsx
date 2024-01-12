@@ -198,72 +198,83 @@ const SellerServiceBody = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {services?.map((t: AdminGetServiceType, i: number) => {
-            return (
-              <div
-                key={i}
-                // onClick={() => navigate("/seller/service/details/" + t?._id)}
-                className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
-              >
-                <img
-                  className="rounded-t-md h-40"
-                  src={
-                    t.image && t.image.length >= 1
-                      ? t.image[0].url
-                      : serviceImage1
+          {services && services.length > 0 ? (
+            services?.map((t: AdminGetServiceType, i: number) => {
+              return (
+                <div
+                  key={i}
+                  onDoubleClick={() =>
+                    navigate("/seller/service/details/" + t?._id)
                   }
-                  alt=""
-                  loading="lazy"
-                />
-                <div className="flex gap-3 px-3">
-                  <div className="p-3 rounded-full bg-[#EDB842] w-fit h-fit"></div>
-                  <div className="">{t.owner?.username}</div>
-                </div>
-                <div className="h-12 overflow-y-hidden px-3">{t.name}</div>
-                <div className="px-3">
-                  ${t.current_price && <FormatNumber price={t.current_price} />}
-                </div>
-                <div className="relative border-t border-[#EFEFF0] flex justify-between p-2 items-center">
-                  <button
-                    onClick={() => navigate(`/seller/service/edit/${t._id}`)}
-                    className="flex p-2 bg-[#EDB842] text-white items-center rounded-md"
-                  >
-                    <MdEdit />
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      Open === undefined ? setOpen(i) : setOpen(undefined);
-                    }}
-                  >
-                    <MdMoreVert />
-                  </button>
-                  {Open === i && (
-                    <div className="absolute bg-white z-20 p-3 top-10 rounded-md">
-                      <div
-                        onClick={() =>
-                          navigate(`/seller/service/details/${t._id}`)
-                        }
-                        className="flex gap-5 text-[#464D61] items-center"
-                      >
-                        <BsEye />
-                        <div className="whitespace-nowrap">
-                          View Service Details
+                  className="flex flex-col gap-3 border border-[#EFEFF0] rounded-md"
+                >
+                  <img
+                    className="rounded-t-md h-40"
+                    src={
+                      t.image && t.image.length >= 1
+                        ? t.image[0].url
+                        : serviceImage1
+                    }
+                    alt=""
+                    loading="lazy"
+                  />
+                  <div className="flex gap-3 px-3">
+                    <div className="p-3 rounded-full bg-[#EDB842] w-fit h-fit"></div>
+                    <div className="">{t.owner?.username}</div>
+                  </div>
+                  <div className="h-12 overflow-y-hidden px-3">{t.name}</div>
+                  <div className="px-3">
+                    $
+                    {t.current_price && (
+                      <FormatNumber price={t.current_price} />
+                    )}
+                  </div>
+                  <div className="relative border-t border-[#EFEFF0] flex justify-between p-2 items-center">
+                    <button
+                      onClick={() => navigate(`/seller/service/edit/${t._id}`)}
+                      className="flex p-2 bg-[#EDB842] text-white items-center rounded-md"
+                    >
+                      <MdEdit />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        Open === undefined ? setOpen(i) : setOpen(undefined);
+                      }}
+                    >
+                      <MdMoreVert />
+                    </button>
+                    {Open === i && (
+                      <div className="absolute bg-white z-20 p-3 top-10 rounded-md">
+                        <div
+                          onClick={() =>
+                            navigate(`/seller/service/details/${t._id}`)
+                          }
+                          className="flex gap-5 text-[#464D61] items-center"
+                        >
+                          <BsEye />
+                          <div className="whitespace-nowrap">
+                            View Service Details
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => handleDelete(`${t._id}`)}
+                          className="flex gap-5 text-[#464D61] items-center"
+                        >
+                          <MdDelete />
+                          <div className="whitespace-nowrap">
+                            Delete Details
+                          </div>
                         </div>
                       </div>
-                      <div
-                        onClick={() => handleDelete(`${t._id}`)}
-                        className="flex gap-5 text-[#464D61] items-center"
-                      >
-                        <MdDelete />
-                        <div className="whitespace-nowrap">Delete Details</div>
-                      </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="text-center text-lg font-[600]"> No data found</div>
+          )}
         </div>
         <div className="flex flex-row justify-center items-center">
           <div className="flex flex-row gap-2 items-center text-[#EDB842] self-center my-5">
