@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useWebSocket from "react-use-websocket";
 import "../../css/Nav.css";
@@ -19,6 +19,7 @@ import {
   SellerSwitchNav,
 } from "./NavComponents";
 import SellerDashboardNav from "./SellerDashboardNav";
+import ReactGA from "react-ga4";
 
 type NavType = {
   isAuth?: boolean;
@@ -40,9 +41,16 @@ const Nav = ({
   const navigate = useNavigate();
   // const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   // for the on change scrollable navbar
   const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const TRACKING_ID = "G-KNRG61Q4SZ"; // YOUR_OWN_TRACKING_ID
+    ReactGA.initialize(TRACKING_ID);
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
+  }, [location?.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {

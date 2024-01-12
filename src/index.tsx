@@ -10,11 +10,11 @@ import "./App.css";
 import "./index.css";
 import { store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
-import ReactGA from "react-ga4";
+// import ReactGA from "react-ga4";
 
-const TRACKING_ID = "G-KNRG61Q4SZ"; // YOUR_OWN_TRACKING_ID
-ReactGA.initialize(TRACKING_ID);
-ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+// const TRACKING_ID = "G-KNRG61Q4SZ"; // YOUR_OWN_TRACKING_ID
+// ReactGA.initialize(TRACKING_ID);
+// ReactGA.send({ hitType: "pageview", page: window.location.pathname });
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
