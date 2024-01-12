@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import Swal from "sweetalert2";
+import countryData from "../../../data/countries.json";
+import { adminGetServiceCategoriesAction } from "../../../redux/actions/admin/categories.actions";
 import { adminCreateServiceAction } from "../../../redux/actions/admin/services.actions";
 import { ADMIN_CREATE_SERVICE_RESET } from "../../../redux/constants/admin/services.constants";
 import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateService } from "../../../redux/types/services.types";
-import { adminGetServiceCategoriesAction } from "../../../redux/actions/admin/categories.actions";
-import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const AdminAddServiceBody = () => {
   // handle images
@@ -382,8 +383,9 @@ const AdminAddServiceBody = () => {
                 required
               >
                 <option value="">Select...</option>
-                <option value="Nigeria">Nigeria</option>
-                <option value="Nigeria">Sudan</option>
+                <option value="USD" selected>
+                  USD
+                </option>
               </select>
             </div>
             <div className="flex flex-col gap-2 w-1/2">
@@ -408,7 +410,7 @@ const AdminAddServiceBody = () => {
                 onChange={onChange}
               />
             </div>
-            <div className="flex flex-col gap-2 w-1/3">
+            {/* <div className="flex flex-col gap-2 w-1/3">
               <div className="font-[400]">Avg. response time Pending...</div>
               <select
                 className="border p-2 rounded-md text-[#939AAD]"
@@ -427,7 +429,7 @@ const AdminAddServiceBody = () => {
               >
                 <option value="">Select...</option>
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -525,8 +527,9 @@ const AdminAddServiceBody = () => {
                 onChange={onChange}
               >
                 <option value="">Select...</option>
-                <option value="Nigeria">Nigeria</option>
-                <option value="Sudan">Sudan</option>
+                {countryData.map((t, i) => {
+                  return <option value={t.label}>{t.label}</option>;
+                })}
               </select>
             </div>
             <div className="flex flex-col gap-2 w-1/2">

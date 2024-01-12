@@ -62,6 +62,14 @@ const ServiceDetailsBody = () => {
     service.image && service.image.length > 0 ? service.image[0].url : Service2
   );
 
+  useEffect(() => {
+    setCurrentImage(
+      service.image && service.image.length > 0
+        ? service.image[0].url
+        : Service2
+    );
+  }, [service.image]);
+
   const serviceOrderRedux = useSelector(
     (state: ReducersType) => state?.createServiceOrder
   ) as ReduxResponseType<ServiceOrderType>;

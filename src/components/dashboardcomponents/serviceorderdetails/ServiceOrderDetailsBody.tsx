@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import { BiSolidPackage } from "react-icons/bi";
 import { FaHandshake, FaUserAlt } from "react-icons/fa";
 import { MdArrowDropDown, MdEmail, MdPhoneEnabled } from "react-icons/md";
 import { PiNotebookLight } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
+import { Modal } from "react-overlays";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import "../../../css/modal.css";
 import { ImgExample } from "../../../images";
 import { trackRod1 } from "../../../images/cart";
-import ReviewTerms from "../../shareables/reviewTerms";
-import { ServiceDetailsChat } from "../../shareables/serviceChatBox";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   getServiceOrderByIdAction,
   updateServiceOrderAction,
@@ -20,12 +23,10 @@ import {
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
-import { useNavigate, useParams } from "react-router-dom";
 import { FormatNumber } from "../../shareables/FormatNumber";
-import Swal from "sweetalert2";
 import { TimeLeft } from "../../shareables/dateFormatter";
-import { toast } from "react-toastify";
-import { Modal } from "react-overlays";
+import ReviewTerms from "../../shareables/reviewTerms";
+import { ServiceDetailsChat } from "../../shareables/serviceChatBox";
 // import Swal from "sweetalert2";
 
 const ServiceOrderDetailsBody = () => {
@@ -190,6 +191,7 @@ const ServiceOrderDetailsBody = () => {
                 {currentOrder?.checkout_items?.terms?.durationUnit}
               </td>
               <td className="text-[#666666] py-2 px-3">
+                $
                 {currentOrder?.checkout_items?.terms?.amount && (
                   <FormatNumber
                     price={currentOrder?.checkout_items?.terms?.amount}
@@ -197,6 +199,7 @@ const ServiceOrderDetailsBody = () => {
                 )}
               </td>
               <td className="text-[#666666] py-2 px-3">
+                $
                 {(currentOrder?.checkout_items?.total_price ||
                   currentOrder?.checkout_items?.terms?.amount) && (
                   <FormatNumber

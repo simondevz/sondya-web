@@ -44,7 +44,7 @@ import Reviews from "../shareables/reviews";
 import SelectVariant from "../shareables/selectVariants";
 
 const ProductsDetailsBody = () => {
-  let [count, setCount] = useState<number>(2);
+  let [count, setCount] = useState<number>(1);
   const navigate = useNavigate();
   const [selectedVariants, setSelectedVariants] =
     useState<Array<[string, string]>>();
@@ -95,10 +95,13 @@ const ProductsDetailsBody = () => {
     (product: AdminGetProductType) => {
       setTimeout(() => {
         dispatch(
-          addToCartAction({
-            ...product,
-            selected_variants: selectedVariants!,
-          }) as any
+          addToCartAction(
+            {
+              ...product,
+              selected_variants: selectedVariants!,
+            },
+            count
+          ) as any
         );
         // send toast message
         toast("🛒 Added to cart!", {
@@ -114,7 +117,7 @@ const ProductsDetailsBody = () => {
         dispatch(totalCartAction() as any);
       }, 1000);
     },
-    [dispatch, selectedVariants]
+    [count, dispatch, selectedVariants]
   );
 
   useEffect(() => {
@@ -298,7 +301,7 @@ const ProductsDetailsBody = () => {
               onClick={() => addToCart(product)}
               className="bg-[#EDB842] text-white p-2 flex gap-2 rounded-md items-center w-5/12 justify-center"
             >
-              <span>Add to card</span>
+              <span>Add to cart</span>
               <BsCart />
             </button>
             <button
