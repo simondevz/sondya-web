@@ -4,18 +4,18 @@ import {
   CREATE_SERVICE_ORDER_FAIL,
   CREATE_SERVICE_ORDER_REQUEST,
   CREATE_SERVICE_ORDER_SUCCESS,
-  UPDATE_TERMS_SUCCESS,
-  UPDATE_TERMS_FAIL,
-  UPDATE_TERMS_REQUEST,
-  GET_SERVICE_ORDER_BYID_FAIL,
-  GET_SERVICE_ORDER_BYID_REQUEST,
-  GET_SERVICE_ORDER_BYID_SUCCESS,
   GET_SERVICE_ORDERS_FAIL,
   GET_SERVICE_ORDERS_REQUEST,
   GET_SERVICE_ORDERS_SUCCESS,
+  GET_SERVICE_ORDER_BYID_FAIL,
+  GET_SERVICE_ORDER_BYID_REQUEST,
+  GET_SERVICE_ORDER_BYID_SUCCESS,
   UPDATE_SERVICE_ORDERS_FAIL,
   UPDATE_SERVICE_ORDERS_REQUEST,
   UPDATE_SERVICE_ORDERS_SUCCESS,
+  UPDATE_TERMS_FAIL,
+  UPDATE_TERMS_REQUEST,
+  UPDATE_TERMS_SUCCESS,
 } from "../../constants/userDashboard/serviceOrder.constants";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
@@ -191,7 +191,7 @@ export const updateTermsAction =
         payload: data,
       });
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       dispatch({
         type: UPDATE_TERMS_FAIL,
         payload:
@@ -232,7 +232,7 @@ export const updateServiceOrderAction =
         payload: data,
       });
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       dispatch({
         type: UPDATE_SERVICE_ORDERS_FAIL,
         payload:

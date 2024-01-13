@@ -95,7 +95,9 @@ const ServiceOrderHistoryBody = () => {
                 );
               })
             ) : (
-              <div className="w-full">NO orders at this time</div>
+              <tr>
+                <td colSpan={7}>NO orders at this time</td>
+              </tr>
             )}
           </tbody>
         </table>

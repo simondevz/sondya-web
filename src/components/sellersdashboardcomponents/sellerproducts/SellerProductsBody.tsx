@@ -221,125 +221,133 @@ const SellerProductsBody = () => {
             </tr>
           </thead>
           <tbody>
-            {products?.map((t, i) => {
-              return (
-                <tr key={i}>
-                  <td className="p-2 text-start">
-                    <div className="flex flex-col md:flex-row gap-2 items-center">
-                      <img
-                        className="w-32 h-32"
-                        src={
-                          t.image && t.image.length >= 1
-                            ? t.image[0].url
-                            : productImage1
-                        }
-                        alt=""
-                      />
-                      <span className="w-52">{t?.name}</span>
-                    </div>
-                  </td>
-                  <td className="p-2 text-start text-[#767E94] text-sm font-[600] whitespace-nowrap">
-                    {t?.total_stock} qty
-                  </td>
-                  <td className="p-2 text-start text-[#636A80] text-sm font-[600]">
-                    $
-                    {t?.current_price && (
-                      <FormatNumber price={t?.current_price} />
-                    )}
-                  </td>
-                  <td className="p-2 text-[#292929] font-[400] whitespace-nowrap text-start">
-                    {t?.product_status === "available" ? (
-                      <div className="text-[#2DB224] flex gap-2 items-center">
-                        <span>
-                          <TiTick />
-                        </span>
-                        {t?.product_status}
-                      </div>
-                    ) : t?.product_status === "sold" ? (
-                      <div className="text-[#EE5858] flex gap-2 items-center">
-                        <span>
-                          <TiTick />
-                        </span>
-                        {t?.product_status}
-                      </div>
-                    ) : t.product_status === "draft" ? (
-                      <div className="text-[#3b3939] flex gap-2 items-center">
-                        <span>
-                          <TiTick />
-                        </span>
-                        {t?.product_status}
-                      </div>
-                    ) : (
-                      <div className="text-[#EE5858] flex gap-2 items-center">
-                        <span>
-                          <FaTimes />
-                        </span>
-                        {t?.product_status}
-                      </div>
-                    )}
-                  </td>
-                  {/* <td>button</td> */}
-                  <td
-                    className={`flex ${
-                      click === i ? "justify-start" : "justify-center"
-                    } relative gap-2`}
-                  >
-                    {click === i && (
-                      <div className="bg-[#F5F7FA] flex flex-row gap-2 items-center p-2 rounded-md">
-                        {" "}
-                        <AiOutlineEdit /> <span>Edit</span>
-                      </div>
-                    )}
-                    <button
-                      onClick={() => {
-                        click === null ? setClick(i) : setClick(null);
-                      }}
-                      className="flex rounded-md"
-                    >
-                      <span
-                        className={`p-2 w-fit h-fit ${
-                          click === i && "text-white bg-[#EDB842] rounded-md"
-                        }`}
-                      >
-                        <MdOutlineMoreHoriz />
-                      </span>
-                    </button>
-
-                    {click === i && (
-                      <div className="absolute top-12 right-9 bg-white border z-10 p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
-                        <div
-                          onClick={() =>
-                            navigate(`/seller/products/details/${t?._id}`)
+            {products && products.length > 0 ? (
+              products?.map((t, i) => {
+                return (
+                  <tr key={i}>
+                    <td className="p-2 text-start">
+                      <div className="flex flex-col md:flex-row gap-2 items-center">
+                        <img
+                          className="w-32 h-32"
+                          src={
+                            t.image && t.image.length >= 1
+                              ? t.image[0].url
+                              : productImage1
                           }
-                          className="flex gap-4 items-center"
-                        >
-                          <AiOutlineEye />{" "}
-                          <span className="whitespace-nowrap">
-                            View Product Details
+                          alt=""
+                        />
+                        <span className="w-52">{t?.name}</span>
+                      </div>
+                    </td>
+                    <td className="p-2 text-start text-[#767E94] text-sm font-[600] whitespace-nowrap">
+                      {t?.total_stock} qty
+                    </td>
+                    <td className="p-2 text-start text-[#636A80] text-sm font-[600]">
+                      $
+                      {t?.current_price && (
+                        <FormatNumber price={t?.current_price} />
+                      )}
+                    </td>
+                    <td className="p-2 text-[#292929] font-[400] whitespace-nowrap text-start">
+                      {t?.product_status === "available" ? (
+                        <div className="text-[#2DB224] flex gap-2 items-center">
+                          <span>
+                            <TiTick />
                           </span>
+                          {t?.product_status}
                         </div>
-                        <div
-                          onClick={() =>
-                            navigate(`/seller/products/edit/${t?._id}`)
-                          }
-                          className="flex gap-4 items-center text-[#27C200]"
+                      ) : t?.product_status === "sold" ? (
+                        <div className="text-[#EE5858] flex gap-2 items-center">
+                          <span>
+                            <TiTick />
+                          </span>
+                          {t?.product_status}
+                        </div>
+                      ) : t.product_status === "draft" ? (
+                        <div className="text-[#3b3939] flex gap-2 items-center">
+                          <span>
+                            <TiTick />
+                          </span>
+                          {t?.product_status}
+                        </div>
+                      ) : (
+                        <div className="text-[#EE5858] flex gap-2 items-center">
+                          <span>
+                            <FaTimes />
+                          </span>
+                          {t?.product_status}
+                        </div>
+                      )}
+                    </td>
+                    {/* <td>button</td> */}
+                    <td
+                      className={`flex ${
+                        click === i ? "justify-start" : "justify-center"
+                      } relative gap-2`}
+                    >
+                      {click === i && (
+                        <div className="bg-[#F5F7FA] flex flex-row gap-2 items-center p-2 rounded-md">
+                          {" "}
+                          <AiOutlineEdit /> <span>Edit</span>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => {
+                          click === null ? setClick(i) : setClick(null);
+                        }}
+                        className="flex rounded-md"
+                      >
+                        <span
+                          className={`p-2 w-fit h-fit ${
+                            click === i && "text-white bg-[#EDB842] rounded-md"
+                          }`}
                         >
-                          <FiEdit2 />
-                          <span className="whitespace-nowrap">Edit</span>
+                          <MdOutlineMoreHoriz />
+                        </span>
+                      </button>
+
+                      {click === i && (
+                        <div className="absolute top-12 right-9 bg-white border z-10 p-3 rounded-md text-[#464D61] flex flex-col gap-2 shadow-md">
+                          <div
+                            onClick={() =>
+                              navigate(`/seller/products/details/${t?._id}`)
+                            }
+                            className="flex gap-4 items-center"
+                          >
+                            <AiOutlineEye />{" "}
+                            <span className="whitespace-nowrap">
+                              View Product Details
+                            </span>
+                          </div>
+                          <div
+                            onClick={() =>
+                              navigate(`/seller/products/edit/${t?._id}`)
+                            }
+                            className="flex gap-4 items-center text-[#27C200]"
+                          >
+                            <FiEdit2 />
+                            <span className="whitespace-nowrap">Edit</span>
+                          </div>
+                          <div
+                            onClick={() => handleDelete(t?._id)}
+                            className="flex gap-4 items-center"
+                          >
+                            <MdDelete />{" "}
+                            <span className="whitespace-nowrap">Delete</span>
+                          </div>
                         </div>
-                        <div
-                          onClick={() => handleDelete(t?._id)}
-                          className="flex gap-4 items-center"
-                        >
-                          <MdDelete />{" "}
-                          <span className="whitespace-nowrap">Delete</span>
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={5} className="text-center">
+                  No products found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
 

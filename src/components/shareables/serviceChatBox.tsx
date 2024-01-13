@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction, useMemo } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Swal from "sweetalert2";
@@ -6,6 +6,7 @@ import {
   userGeChatMessagesAction,
   userSendChatMessageAction,
 } from "../../redux/actions/userDashboard/chats.actions";
+import { USER_SEND_MESSAGES_RESET } from "../../redux/constants/userDashboard/chats.constants";
 import { API_ROUTES } from "../../redux/routes";
 import { ReducersType } from "../../redux/store";
 import { LoginResponseType } from "../../redux/types/auth.types";
@@ -13,10 +14,9 @@ import { chatMessageType } from "../../redux/types/chats.types";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import { AdminGetProductType } from "../../redux/types/products.types";
 import { AdminGetServiceType } from "../../redux/types/services.types";
-import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
 import ChatBoxInput from "../sellersdashboardcomponents/sellerinbox/components/chatBoxInput";
+import ChatMessage from "../sellersdashboardcomponents/sellerinbox/components/chatBoxMessage";
 import SelectedFilesPreview from "../sellersdashboardcomponents/sellerinbox/components/selectedFilePreview";
-import { USER_SEND_MESSAGES_RESET } from "../../redux/constants/userDashboard/chats.constants";
 
 export const ServiceDetailsChat = ({
   owner_id,
@@ -35,7 +35,7 @@ export const ServiceDetailsChat = ({
     for (let index = 0; index < files?.length; index++) {
       returnList = [...returnList, files[index]];
     }
-    console.log(returnList);
+    // console.log(returnList);
     return returnList;
   }, [files]);
 
@@ -65,7 +65,7 @@ export const ServiceDetailsChat = ({
   useEffect(() => {
     const data = sendChatMessage?.serverResponse?.data;
     setSending(false);
-    console.log(data);
+    // console.log(data);
     if (sendChatMessage?.error)
       Swal.fire({
         title: "Error!!!",
@@ -112,7 +112,7 @@ export const ServiceDetailsChat = ({
 
       if (data?.meta) {
         if (data?.meta === "connection_tested") {
-          console.log(data);
+          // console.log(data);
         }
 
         if (data?.meta === "error_occured") {
@@ -127,7 +127,7 @@ export const ServiceDetailsChat = ({
           });
         }
       } else {
-        console.log("in service chat box ==>> ", data);
+        // console.log("in service chat box ==>> ", data);
         setMessageHistory((prev: chatMessageType[]) => {
           setSending(false);
           setMessage("");
@@ -302,10 +302,11 @@ export const ServiceDetailsChat = ({
         {chatMessagesRedux?.success ? (
           chatMessagesRedux?.serverResponse?.data?.length ? (
             chatMessagesRedux?.serverResponse?.data?.map(
-              (message: chatMessageType) => {
+              (message: chatMessageType, i: number) => {
                 return (
                   <ChatMessage
-                    key={message?._id}
+                    key={i}
+                    // key={message?._id}
                     message={message}
                     setAttachment={function (
                       value: SetStateAction<
@@ -331,10 +332,11 @@ export const ServiceDetailsChat = ({
         )}
 
         {/* messages from the websocket */}
-        {messageHistory.map((message: chatMessageType) => {
+        {messageHistory.map((message: chatMessageType, i: number) => {
           return (
             <ChatMessage
-              key={message?._id}
+              key={i}
+              // key={message?._id}
               message={message}
               setAttachment={function (
                 value: SetStateAction<

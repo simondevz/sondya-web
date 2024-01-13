@@ -1,20 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
+import { Modal } from "react-overlays";
+import { useDispatch, useSelector } from "react-redux";
+import { PulseLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import Swal from "sweetalert2";
+import { updateTermsAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
+import { UPDATE_TERMS_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
+import { API_ROUTES } from "../../redux/routes";
+import { ReducersType } from "../../redux/store";
+import { LoginResponseType } from "../../redux/types/auth.types";
+import { ReduxResponseType } from "../../redux/types/general.types";
 import {
   ServiceOrderType,
   TermsType,
 } from "../../redux/types/serviceOrders.types";
-import { useDispatch, useSelector } from "react-redux";
-import { updateTermsAction } from "../../redux/actions/userDashboard/serviceOrder.actions";
-import { ReducersType } from "../../redux/store";
-import { ReduxResponseType } from "../../redux/types/general.types";
-import { LoginResponseType } from "../../redux/types/auth.types";
-import { PulseLoader } from "react-spinners";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { API_ROUTES } from "../../redux/routes";
-import Swal from "sweetalert2";
-import { UPDATE_TERMS_RESET } from "../../redux/constants/userDashboard/serviceOrder.constants";
-import { toast } from "react-toastify";
-import { Modal } from "react-overlays";
 
 const ReviewTerms = ({
   currentOrder,
@@ -49,7 +49,7 @@ const ReviewTerms = ({
   const updateTermsRedux = useSelector(
     (state: ReducersType) => state.updateTerms
   ) as ReduxResponseType<TermsType>;
-  console.log("updated terms ==> ", updateTermsRedux);
+  // console.log("updated terms ==> ", updateTermsRedux);
 
   const isSeller = useMemo(() => {
     return loginRedux.serverResponse?.data?.id === currentOrder?.seller?.id;
@@ -130,12 +130,12 @@ const ReviewTerms = ({
           },
         })
       );
-      console.log("echoed ==> ", {
-        payload: {
-          terms: updateTermsRedux?.serverResponse?.data,
-          meta: "echo_terms",
-        },
-      });
+      // console.log("echoed ==> ", {
+      //   payload: {
+      //     terms: updateTermsRedux?.serverResponse?.data,
+      //     meta: "echo_terms",
+      //   },
+      // });
       dispatch({ type: UPDATE_TERMS_RESET });
     }
   }, [
@@ -285,7 +285,7 @@ const Terms = ({
       const data = JSON.parse(lastMessage?.data);
 
       if (data?.meta) {
-        if (data.meta === "Test_echo_terms") console.log(data.message);
+        // if (data.meta === "Test_echo_terms") console.log(data.message);
         if (data.meta === "echo_terms") {
           const newTerms: TermsType = data?.terms;
           setTerms(newTerms);

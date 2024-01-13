@@ -6,15 +6,16 @@ import { TiTick } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
+import countryData from "../../../data/countries.json";
 import { circleWavy } from "../../../images";
 import { sellerCreateServiceAction } from "../../../redux/actions/seller/seller-services.actions";
+import { userGetServiceCategoriesAction } from "../../../redux/actions/userDashboard/services.actions";
 import { SELLER_CREATE_SERVICE_RESET } from "../../../redux/constants/seller/seller-services.constants";
 import { ReducersType } from "../../../redux/store";
 import { LoginResponseType } from "../../../redux/types/auth.types";
+import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
 import { AdminCreateService } from "../../../redux/types/services.types";
-import { userGetServiceCategoriesAction } from "../../../redux/actions/userDashboard/services.actions";
-import { AdminGetCategoryType } from "../../../redux/types/categories.types";
 
 const SellerPostServiceBody = () => {
   const [status1] = useState<"closed" | "open" | "done">("done");
@@ -396,8 +397,9 @@ const SellerPostServiceBody = () => {
                         value={formData.currency}
                       >
                         <option value="">Select...</option>
-                        <option value="Nigeria">Nigeria</option>
-                        <option value="Nigeria">Sudan</option>
+                        <option value="USD" selected>
+                          USD
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -426,14 +428,14 @@ const SellerPostServiceBody = () => {
                     </div>
                   </div>
                   <div className="flex flex-row gap-3">
-                    <div className="flex flex-col gap-2 w-1/2">
+                    {/* <div className="flex flex-col gap-2 w-1/2">
                       <div className="font-[400]">Avg Response Time</div>
                       <input
                         className="border p-2 rounded-md "
                         type="text"
                         placeholder="Phone Number"
                       />
-                    </div>
+                    </div> */}
                     <div className="flex flex-col gap-2 w-1/2">
                       <div className="font-[400]">Location of service</div>
                       <textarea
@@ -580,10 +582,12 @@ const SellerPostServiceBody = () => {
                         id=""
                         onChange={onChange}
                         value={formData.country}
+                        required
                       >
                         <option value="">Select...</option>
-                        <option value="Nigeria">Nigeria</option>
-                        <option value="Sudan">Sudan</option>
+                        {countryData.map((t, i) => {
+                          return <option value={t.label}>{t.label}</option>;
+                        })}
                       </select>
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
@@ -666,7 +670,10 @@ const SellerPostServiceBody = () => {
               >
                 Go Back
               </button>
-              <button className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]">
+              <button
+                onClick={() => navigate("/seller/services")}
+                className="px-4 py-2  bg-[#EDB842] flex flex-row gap-2 rounded-md items-center text-white font-[700]"
+              >
                 {" "}
                 <span>View Ads</span>
                 <AiOutlineArrowRight />
