@@ -264,197 +264,197 @@ export const ServicesPriceRange = ({
   );
 };
 
-export const ServicesPopularBrands = ({
-  query,
-  setQuery,
-}: {
-  query: QueryType;
-  setQuery: any;
-}) => {
-  const [openServices, setOpenServices] = useState(true);
-  const ClickOpenServices = () => setOpenServices((prev) => !prev);
+// export const ServicesPopularBrands = ({
+//   query,
+//   setQuery,
+// }: {
+//   query: QueryType;
+//   setQuery: any;
+// }) => {
+//   const [openServices, setOpenServices] = useState(true);
+//   const ClickOpenServices = () => setOpenServices((prev) => !prev);
 
-  const handleCheckboxChange = (event: any, brand: string) =>
-    setQuery((prev: QueryType) => {
-      const checkArray: string[] = prev.popularBrands.filter(
-        (prevBrand) => prevBrand !== brand
-      );
+//   const handleCheckboxChange = (event: any, brand: string) =>
+//     setQuery((prev: QueryType) => {
+//       const checkArray: string[] = prev.popularBrands.filter(
+//         (prevBrand) => prevBrand !== brand
+//       );
 
-      if (checkArray.length === prev.popularBrands.length)
-        return {
-          ...prev,
-          popularBrands: [...prev.popularBrands, brand],
-          page: 1,
-        };
+//       if (checkArray.length === prev.popularBrands.length)
+//         return {
+//           ...prev,
+//           popularBrands: [...prev.popularBrands, brand],
+//           page: 1,
+//         };
 
-      if (checkArray.length < prev.popularBrands.length)
-        return {
-          ...prev,
-          popularBrands: checkArray,
-          page: 1,
-        };
-    });
+//       if (checkArray.length < prev.popularBrands.length)
+//         return {
+//           ...prev,
+//           popularBrands: checkArray,
+//           page: 1,
+//         };
+//     });
 
-  return (
-    <div className="flex flex-col border-b-[2px] py-5 gap-2">
-      <button
-        className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
-        onClick={ClickOpenServices}
-      >
-        popular Brands {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
-      </button>
-      {openServices && (
-        <div className="grid grid-cols-2 gap-2">
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="apple"
-              onChange={(event) => handleCheckboxChange(event, "Apple")}
-            />
-            <label htmlFor="apple">Apple</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="google"
-              onChange={(event) => handleCheckboxChange(event, "Google")}
-            />
-            <label htmlFor="google">Google</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="microsoft"
-              onChange={(event) => handleCheckboxChange(event, "Microsoft")}
-            />
-            <label htmlFor="microsoft">Microsoft</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="samsung"
-              onChange={(event) => handleCheckboxChange(event, "Samsung")}
-            />
-            <label htmlFor="samsung">Samsung</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="dell"
-              onChange={(event) => handleCheckboxChange(event, "Dell")}
-            />
-            <label htmlFor="dell">Dell</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="hp"
-              onChange={(event) => handleCheckboxChange(event, "Hp")}
-            />
-            <label htmlFor="hp">Hp</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="symphony"
-              onChange={(event) => handleCheckboxChange(event, "Symphony")}
-            />
-            <label htmlFor="symphony">Symphony</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="xiaomi"
-              onChange={(event) => handleCheckboxChange(event, "Xiaomi")}
-            />
-            <label htmlFor="xiaomi">Xiaomi</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="sony"
-              onChange={(event) => handleCheckboxChange(event, "Sony")}
-            />
-            <label htmlFor="sony">Sony</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="panasonic"
-              onChange={(event) => handleCheckboxChange(event, "Panasonic")}
-            />
-            <label htmlFor="panasonic">Panasonic</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="lg"
-              onChange={(event) => handleCheckboxChange(event, "LG")}
-            />
-            <label htmlFor="lg">LG</label>
-          </div>
-          <div className="flex flex-row gap-2 text-[#475156] items-center">
-            <input
-              type="checkbox"
-              id="intel"
-              onChange={(event) => handleCheckboxChange(event, "Intel")}
-            />
-            <label htmlFor="intel">Intel</label>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+//   return (
+//     <div className="flex flex-col border-b-[2px] py-5 gap-2">
+//       <button
+//         className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
+//         onClick={ClickOpenServices}
+//       >
+//         popular Brands {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
+//       </button>
+//       {openServices && (
+//         <div className="grid grid-cols-2 gap-2">
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="apple"
+//               onChange={(event) => handleCheckboxChange(event, "Apple")}
+//             />
+//             <label htmlFor="apple">Apple</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="google"
+//               onChange={(event) => handleCheckboxChange(event, "Google")}
+//             />
+//             <label htmlFor="google">Google</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="microsoft"
+//               onChange={(event) => handleCheckboxChange(event, "Microsoft")}
+//             />
+//             <label htmlFor="microsoft">Microsoft</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="samsung"
+//               onChange={(event) => handleCheckboxChange(event, "Samsung")}
+//             />
+//             <label htmlFor="samsung">Samsung</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="dell"
+//               onChange={(event) => handleCheckboxChange(event, "Dell")}
+//             />
+//             <label htmlFor="dell">Dell</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="hp"
+//               onChange={(event) => handleCheckboxChange(event, "Hp")}
+//             />
+//             <label htmlFor="hp">Hp</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="symphony"
+//               onChange={(event) => handleCheckboxChange(event, "Symphony")}
+//             />
+//             <label htmlFor="symphony">Symphony</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="xiaomi"
+//               onChange={(event) => handleCheckboxChange(event, "Xiaomi")}
+//             />
+//             <label htmlFor="xiaomi">Xiaomi</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="sony"
+//               onChange={(event) => handleCheckboxChange(event, "Sony")}
+//             />
+//             <label htmlFor="sony">Sony</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="panasonic"
+//               onChange={(event) => handleCheckboxChange(event, "Panasonic")}
+//             />
+//             <label htmlFor="panasonic">Panasonic</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="lg"
+//               onChange={(event) => handleCheckboxChange(event, "LG")}
+//             />
+//             <label htmlFor="lg">LG</label>
+//           </div>
+//           <div className="flex flex-row gap-2 text-[#475156] items-center">
+//             <input
+//               type="checkbox"
+//               id="intel"
+//               onChange={(event) => handleCheckboxChange(event, "Intel")}
+//             />
+//             <label htmlFor="intel">Intel</label>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
-export const ServicesPopularTags = () => {
-  const [openServices, setOpenServices] = useState(true);
-  const ClickOpenServices = () => setOpenServices((prev) => !prev);
-  return (
-    <div className="flex flex-col border-b-[2px] py-5 gap-2">
-      <button
-        className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
-        onClick={ClickOpenServices}
-      >
-        popular Brands {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
-      </button>
-      {openServices && (
-        <div className="flex flex-wrap gap-2 text-[#191C1F]">
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Game
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Iphone
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            TV
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Asus Laptops
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            MacBook
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            SSD
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Graphics Card
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Power Bank
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Smart TV
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Speaker
-          </span>
-          <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
-            Tablet
-          </span>
-        </div>
-      )}
-    </div>
-  );
-};
+// export const ServicesPopularTags = () => {
+//   const [openServices, setOpenServices] = useState(true);
+//   const ClickOpenServices = () => setOpenServices((prev) => !prev);
+//   return (
+//     <div className="flex flex-col border-b-[2px] py-5 gap-2">
+//       <button
+//         className="flex gap-2 items-center p-2 rounded-md font-[700] uppercase text-[#191C1F]"
+//         onClick={ClickOpenServices}
+//       >
+//         popular Brands {openServices ? <IoIosArrowDown /> : <IoIosArrowUp />}
+//       </button>
+//       {openServices && (
+//         <div className="flex flex-wrap gap-2 text-[#191C1F]">
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Game
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Iphone
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             TV
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Asus Laptops
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             MacBook
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             SSD
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Graphics Card
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Power Bank
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Smart TV
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Speaker
+//           </span>
+//           <span className="border-[2px] p-1 border-[#E4E7E9] rounded-md">
+//             Tablet
+//           </span>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };

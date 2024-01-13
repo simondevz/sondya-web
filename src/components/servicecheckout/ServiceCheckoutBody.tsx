@@ -283,12 +283,12 @@ const ServiceCheckoutBody = () => {
   useEffect(() => {
     if (
       updatedServiceOrderRedux?.success &&
-      updatedServiceOrderRedux?.serverResponse?.data?.buyer.id
+      updatedServiceOrderRedux?.serverResponse?.data?.buyer?.id
     ) {
       dispatch(
         createUserNotificationAction({
           user: {
-            id: updatedServiceOrderRedux?.serverResponse?.data?.buyer.id,
+            id: updatedServiceOrderRedux?.serverResponse?.data?.buyer?.id,
             email: updatedServiceOrderRedux?.serverResponse?.data?.buyer?.email,
             username:
               updatedServiceOrderRedux?.serverResponse?.data?.buyer?.username,
@@ -352,7 +352,7 @@ const ServiceCheckoutBody = () => {
   }, [
     dispatch,
     updatedServiceOrderRedux?.serverResponse?.data?.buyer?.email,
-    updatedServiceOrderRedux?.serverResponse?.data?.buyer.id,
+    updatedServiceOrderRedux?.serverResponse?.data?.buyer?.id,
     updatedServiceOrderRedux?.serverResponse?.data?.buyer?.username,
     updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.name,
     updatedServiceOrderRedux?.serverResponse?.data?.checkout_items?.owner

@@ -15,6 +15,7 @@ import {
   ServiceOrderType,
   TermsType,
 } from "../../redux/types/serviceOrders.types";
+import { RiCloseCircleLine } from "react-icons/ri";
 
 const ReviewTerms = ({
   currentOrder,
@@ -187,9 +188,12 @@ const ReviewTerms = ({
       onHide={handleClose}
       renderBackdrop={renderBackdrop}
     >
-      <div className="flex flex-col gap-3 w-full shadow-md py-4">
-        <div className="bg-[#EDB842] text-white p-3 rounded-t-md">
-          Revive Terms
+      <div className="flex relative flex-col gap-3 w-full shadow-md py-4">
+        <div className="bg-[#EDB842] text-white p-3 rounded-t-md flex justify-between">
+          <span>Revive Terms</span>
+          <button onClick={handleClose} className="my-auto">
+            <RiCloseCircleLine className="w-4 h-4" />
+          </button>
         </div>
         <Terms
           terms={terms}
@@ -208,10 +212,9 @@ const ReviewTerms = ({
             </span>
           ) : (
             <span>
-              Note: Click the "Reject Button" to edit terms and the "Accept
-              Button" to notify the other party of your newly set terms. You and{" "}
-              {isSeller ? "Buyer" : "Seller"} must click the “Accept Button” for
-              the agreement to hold. Both parties will be notified on this
+              Note: You and {isSeller ? "Buyer" : "Seller"} must click the
+              “Accept Button” for the agreement to hold. Both parties will be
+              notified on this
             </span>
           )}
         </div>
@@ -349,6 +352,15 @@ const Terms = ({
             }
           />
         </div>
+        {!(terms.acceptedByBuyer && terms.acceptedBySeller) ? (
+          <span className="ml-8 p-3 font-bold text-[0.875rem]">
+            These terms were set and accepted by the{" "}
+            {terms.acceptedByBuyer ? "Buyer" : "seller"}. Click "Accept" to
+            proceed or "Reject" to Edit the terms
+          </span>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex base-1/2 flex-col">
         <label htmlFor="duration">Duration:</label>

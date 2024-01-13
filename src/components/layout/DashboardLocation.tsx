@@ -109,6 +109,11 @@ const DashboardLocation = () => {
               return (
                 <div
                   key={notification?._id}
+                  onClick={() => {
+                    dispatch(
+                      markNotificationSeenAction(notification?._id!) as any
+                    );
+                  }}
                   className={
                     (notification?.seen ? "" : " bg-slate-500/20 ") +
                     "flex gap-4 justify-between p-2 items-center "
@@ -132,14 +137,7 @@ const DashboardLocation = () => {
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        markNotificationSeenAction(notification?._id!) as any
-                      );
-                    }}
-                    className=""
-                  >
+                  <button className="">
                     <div className=""></div>
                     <button>
                       <MdArrowForwardIos />

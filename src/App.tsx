@@ -354,6 +354,12 @@ const App = createBrowserRouter([
     loader: dashboardCheck,
   },
   {
+    path: "/user/inbox/:id",
+    element: <Inbox />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
     path: "/user/order/confirmation",
     element: <OrderConfirmation />,
     errorElement: <ErrorPage />,
@@ -435,6 +441,12 @@ const App = createBrowserRouter([
   },
   {
     path: "/seller/inbox",
+    element: <SellerInbox />,
+    errorElement: <ErrorPage />,
+    loader: sellerDashboardCheck,
+  },
+  {
+    path: "/seller/inbox/:id",
     element: <SellerInbox />,
     errorElement: <ErrorPage />,
     loader: sellerDashboardCheck,
@@ -600,6 +612,12 @@ const App = createBrowserRouter([
   },
   {
     path: "/admin/inbox",
+    element: <AdminInbox />,
+    errorElement: <ErrorPage />,
+    loader: adminDashboardCheck,
+  },
+  {
+    path: "/admin/inbox/:id",
     element: <AdminInbox />,
     errorElement: <ErrorPage />,
     loader: adminDashboardCheck,

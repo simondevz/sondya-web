@@ -18,12 +18,19 @@ import {
 } from "../../redux/types/products.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 import { Ratings } from "../shareables/Ratings";
+import inWishlist from "../../utils/checkWhishlist";
+import { toast } from "react-toastify";
 import {
   ProductNav,
   ProductPopularBrands,
   ProductPopularTags,
   ProductPriceRange,
 } from "./FilterProductsNav";
+import {
+  addToWishlistAction,
+  removeFromWishlistAction,
+} from "../../redux/actions/wishlist.actions";
+import { WishlistItemType } from "../../redux/types/wishlist.types";
 
 export type QueryType = {
   page: number;
@@ -246,6 +253,47 @@ const ProductBodyMain = ({
     dispatch(userGetProductsAction(queryString) as any);
   }, [dispatch, queryString]);
 
+  // add to wishlist
+  const addToWishlist = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(addToWishlistAction(item) as any);
+
+        // send toast message
+        toast("Added to Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  const deleteWishlistItem = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(removeFromWishlistAction(item) as any);
+
+        // send toast message
+        toast("Removed from Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
   return (
     <div className="flex flex-col w-full gap-3 md:w-9/12">
       <div className="flex flex-row gap-2 justify-between">
@@ -355,9 +403,7 @@ const ProductBodyMain = ({
           )}
 
           {/* No active filters */}
-          {!query.popularBrands.length &&
-          !query.priceRange &&
-          !query.subcategory ? (
+          {!query.priceRange && !query.subcategory ? (
             <span className="flex items-center gap-2 whitespace-nowrap">
               No Active Filters
             </span>
@@ -418,7 +464,38 @@ const ProductBodyMain = ({
                   >
                     Shop now
                   </button>
-                  <ProductLikeButton product={product} />
+                  <div
+                    onClick={() => {
+                      if (
+                        inWishlist({
+                          ...product,
+                          isProduct: true,
+                          sub_category: "",
+                        })
+                      ) {
+                        deleteWishlistItem({
+                          ...product,
+                          isProduct: true,
+                          sub_category: "",
+                        });
+                      } else {
+                        addToWishlist({
+                          ...product,
+                          isProduct: true,
+                          sub_category: "",
+                        });
+                      }
+                    }}
+                    className="text-xl rounded-full"
+                  >
+                    <ProductLikeButton
+                      defaultValue={inWishlist({
+                        ...product,
+                        isProduct: true,
+                        sub_category: "",
+                      })}
+                    />
+                  </div>
                 </div>
               </div>
             );
@@ -481,8 +558,8 @@ const ProductBodyMain = ({
     </div>
   );
 };
-const ProductLikeButton = (product: any) => {
-  const [like, setLike] = useState<boolean>(false);
+const ProductLikeButton = ({ defaultValue }: { defaultValue?: boolean }) => {
+  const [like, setLike] = useState<boolean>(defaultValue || false);
   return (
     <button onClick={() => setLike(!like)}>
       {like ? <MdFavorite /> : <MdOutlineFavoriteBorder />}

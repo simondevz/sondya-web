@@ -12,6 +12,7 @@ import {
 import { ReduxResponseType } from "../../../../redux/types/general.types";
 import { adminUGetUserType } from "../../../../redux/types/users.types";
 import FormatDate from "../../../shareables/dateFormatter";
+import { useNavigate, useParams } from "react-router-dom";
 
 const InboxListItem = ({
   chat,
@@ -26,6 +27,9 @@ const InboxListItem = ({
     value: React.SetStateAction<adminUGetUserType | ChatUserType | undefined>
   ) => void;
 }) => {
+  const navigate = useNavigate();
+  const params = useParams();
+
   const [messageToShow, setMessageToShow] = useState<chatMessageType>();
   const loginRedux = useSelector(
     (state: ReducersType) => state?.login
@@ -40,9 +44,11 @@ const InboxListItem = ({
       key={chat._id}
       onClick={() => {
         setReceiver(chattingWith);
-        setChatId(chat._id);
+        navigate("/user/inbox/" + chattingWith._id!, {
+          replace: params?.id ? true : false,
+        });
       }}
-      className="flex flex-row gap-2 w-full"
+      className={"flex flex-row gap-2 w-full"}
     >
       <img
         className="object-contain w-10 h-10"

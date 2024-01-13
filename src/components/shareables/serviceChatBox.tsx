@@ -188,58 +188,7 @@ export const ServiceDetailsChat = ({
       return;
     }
 
-    // If there are files to be sent process it so it can be sent in json
-    let file_attachments: any[] = [];
-    if (fileList?.length > 0) {
-      if (fileList?.length > 4) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          timer: 5000,
-          text: "You cannot send more than 4 files at a time...",
-        });
-        setSending(false);
-        return;
-      }
-
-      for (let index = 0; index < fileList.length; index++) {
-        if (fileList[index] > 10485760) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            timer: 5000,
-            text: "File too large, Can't send files more than 10mb...",
-          });
-          setSending(false);
-          return;
-        }
-      }
-
-      dispatch(
-        userSendChatMessageAction({
-          message,
-          reciever_id: owner_id || "",
-          file_attachments: files,
-          chat_id: "",
-        }) as any
-      );
-
-      setMessage("");
-      setFiles([]);
-      return;
-    }
-
-    if (message) {
-      sendMessage(
-        JSON.stringify({
-          room_id: "",
-          sender_id: loginRedux?.serverResponse?.data?.id,
-          receiver_id: owner_id,
-          message,
-          file_attachments,
-        })
-      );
-    } else {
+    if (!message && fileList?.length < 1) {
       setSending(false);
       Swal.fire({
         title: "Error",
@@ -248,7 +197,46 @@ export const ServiceDetailsChat = ({
         confirmButtonText: "Okay",
         timer: 5000,
       });
+      return;
     }
+
+    // If there are files to be sent process it so it can be sent in json
+    if (fileList?.length > 4) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        timer: 5000,
+        text: "You cannot send more than 4 files at a time...",
+      });
+      setSending(false);
+      return;
+    }
+
+    for (let index = 0; index < fileList.length; index++) {
+      if (fileList[index] > 10485760) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          timer: 5000,
+          text: "File too large, Can't send files more than 10mb...",
+        });
+        setSending(false);
+        return;
+      }
+    }
+
+    dispatch(
+      userSendChatMessageAction({
+        message,
+        reciever_id: owner_id || "",
+        file_attachments: files,
+        chat_id: "",
+      }) as any
+    );
+
+    setMessage("");
+    setFiles([]);
+    return;
   };
 
   useEffect(() => {

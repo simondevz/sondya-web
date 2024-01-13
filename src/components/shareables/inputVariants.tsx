@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { MdOutlineAdd, MdClose } from "react-icons/md";
 import slugify from "slugify";
 import {
@@ -15,20 +15,29 @@ const InputVariants = ({
     | React.Dispatch<React.SetStateAction<AdminCreateProduct>>;
   existingVariants?: any;
 }) => {
+  const existingVariantsRef = useRef(existingVariants);
   const [numberOfVariations, setNumberOfVariations] = useState<number>(2);
   const [variations, setVariations] = useState<any>({});
+  const variationsRef = useRef(variations);
+  console.log(variations);
+
+  useLayoutEffect(() => {
+    existingVariantsRef.current = existingVariants;
+  }, [existingVariants]);
+
+  useLayoutEffect(() => {
+    variationsRef.current = variations;
+  }, [variations]);
 
   useEffect(() => {
-    console.log("variations ==> ", variations);
-
     setFormData((prev: any) => {
-      console.log("formdata from variations ==>", prev);
       return {
         ...prev,
-        variants: variations,
+        variants: variationsRef.current,
+        total_variants: Object.keys(variationsRef.current).length,
       };
     });
-  }, [variations, setFormData]);
+  }, [setFormData]);
 
   return (
     <div className="flex flex-col gap-3 shadow-md rounded-md p-3">
@@ -41,6 +50,14 @@ const InputVariants = ({
               key={index}
               id={"variation_type_" + index}
               setVariations={setVariations}
+              existingVariantType={
+                Object.keys(existingVariantsRef.current || {})[index] || ""
+              }
+              existingVariantList={
+                existingVariantsRef.current?.[
+                  Object.keys(existingVariantsRef.current || {})[index]
+                ] || []
+              }
             />
           );
         })}
@@ -59,20 +76,52 @@ const InputVariants = ({
 const VariationType = ({
   id,
   setVariations,
+  existingVariantType,
+  existingVariantList,
 }: {
   id: string;
+  existingVariantType: string;
+  existingVariantList: string[];
   setVariations: React.Dispatch<any>;
 }) => {
-  const [variationType, setVariationType] = useState<string>("");
   const [variant, setVariant] = useState<string>("");
   const [variantList, setVariantList] = useState<string[]>([]);
+  const [variationType, setVariationType] = useState<string>("");
+
+  useEffect(() => {
+    if (existingVariantList.length) setVariantList(existingVariantList);
+  }, [existingVariantList]);
+
+  useEffect(() => {
+    if (existingVariantType) setVariationType(existingVariantType);
+  }, [existingVariantType]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (variationType)
+        setVariations((prev: any) => {
+          console.log("prev ==> ", prev);
+
+          return {
+            ...prev,
+            [slugify(variationType, { replacement: "_" })]: variantList,
+          };
+        });
+    }, 1000);
+  }, [setVariations, variantList, variationType]);
 
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="flex gap-2 self-end w-1/2">
         {variantList?.length ? (
           variantList?.map((variantString, index) => {
-            return <VariationButton key={index} variant={variantString} />;
+            return (
+              <VariationButton
+                key={index}
+                variant={variantString}
+                setVariantList={setVariantList}
+              />
+            );
           })
         ) : (
           <></>
@@ -105,12 +154,6 @@ const VariationType = ({
             const newList = [...variantList, variant];
             setVariantList(newList);
             setVariant("");
-            setVariations((prev: any) => {
-              return {
-                ...prev,
-                [slugify(variationType, { replacement: "_" })]: newList,
-              };
-            });
           }}
           className="bg-[#EDB84233] text-[#EDB842] p-[0.65rem] h-fit w-fit rounded-md"
         >
@@ -121,11 +164,27 @@ const VariationType = ({
   );
 };
 
-const VariationButton = ({ variant }: { variant: string }) => {
+const VariationButton = ({
+  variant,
+  setVariantList,
+}: {
+  variant: string;
+  setVariantList: React.Dispatch<React.SetStateAction<string[]>>;
+}) => {
   return (
     <span className="bg-[#EDB84233] flex gap-1 text-[#EDB842] px-[0.65rem] py-2 h-fit w-fit rounded-md">
       <span className="my-auto">{variant}</span>
-      <MdClose className="my-auto" />
+      <MdClose
+        onClick={() => {
+          setVariantList((prevList) => {
+            const newList = prevList.filter((item) => {
+              return item !== variant;
+            });
+            return newList;
+          });
+        }}
+        className="my-auto"
+      />
     </span>
   );
 };
