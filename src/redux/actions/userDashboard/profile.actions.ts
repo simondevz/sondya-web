@@ -1,6 +1,9 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import {
+  GET_PROFILE_DATA_FAIL,
+  GET_PROFILE_DATA_REQUEST,
+  GET_PROFILE_DATA_SUCCESS,
   GET_PROFILE_FAIL,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
@@ -261,6 +264,42 @@ export const UpdateCompanyDetailsAction =
     } catch (error: any) {
       dispatch({
         type: UPDATE_COMPANY_DETAILS_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const GetUserProfileDataAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: GET_PROFILE_DATA_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.profile?.getProfileData + login?.serverResponse?.data?.id,
+        config
+      );
+      dispatch({
+        type: GET_PROFILE_DATA_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: GET_PROFILE_DATA_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

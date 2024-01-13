@@ -9,15 +9,7 @@ import useWebSocket from "react-use-websocket";
 import Swal from "sweetalert2";
 import { CART_SESSION } from "../../extraStorage/storageStore";
 import { circleWavy } from "../../images";
-import {
-  Alipay,
-  ApplePay,
-  GooglePay,
-  Mastercard,
-  PayPal,
-  ShopPay,
-  Visa,
-} from "../../images/checkout";
+import { Mastercard, Visa } from "../../images/checkout";
 import { productImage1 } from "../../images/products";
 import {
   UpdateCartTimeDistanceAction,
@@ -934,7 +926,7 @@ const CheckoutBody = () => {
                       alt=""
                     />
                   </div>
-                  <div className="flex flex-row gap-1 items-center -my-2">
+                  {/* <div className="flex flex-row gap-1 items-center -my-2">
                     <input
                       value="wallet"
                       checked={paymentMethod === "wallet"}
@@ -969,7 +961,7 @@ const CheckoutBody = () => {
                       src={Alipay}
                       alt=""
                     />
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>

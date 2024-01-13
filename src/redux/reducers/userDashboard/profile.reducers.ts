@@ -1,5 +1,9 @@
 import { LOGIN_RESET } from "../../constants/auth.constants";
 import {
+  GET_PROFILE_DATA_FAIL,
+  GET_PROFILE_DATA_REQUEST,
+  GET_PROFILE_DATA_RESET,
+  GET_PROFILE_DATA_SUCCESS,
   GET_PROFILE_FAIL,
   GET_PROFILE_REQUEST,
   GET_PROFILE_RESET,
@@ -166,6 +170,36 @@ export const UpdateCompanyDetailsReducer = (
         error: action.payload,
       };
     case UPDATE_COMPANY_DETAILS_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const GetProfileDataReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case GET_PROFILE_DATA_REQUEST:
+      return { ...initialState, loading: true };
+    case GET_PROFILE_DATA_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case GET_PROFILE_DATA_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case GET_PROFILE_DATA_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

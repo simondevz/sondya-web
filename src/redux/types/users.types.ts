@@ -151,3 +151,9 @@ export type AdminGetUserOrder = {
   ProductOrders: GetProductOrder[];
   ServiceOrders: ServiceOrderType[];
 };
+
+export type ProfileOrderData = {
+  balance: number;
+  total_product_orders: number;
+  total_service_orders: number;
+};

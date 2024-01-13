@@ -9,14 +9,37 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import { useEffect, useMemo } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import { BsFillBagCheckFill } from "react-icons/bs";
-import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import { IoMdWallet } from "react-icons/io";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 import { PiMonitorPlayBold } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
+import { sellerGetAnalysisAction } from "../../../redux/actions/seller/seller-analysis.actions";
+import { ReducersType } from "../../../redux/store";
+import { SellerAnalysisReportType } from "../../../redux/types/analysis.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 
 const SellerAnalyticHero = () => {
+  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+
+  // for products order
+  const getSellerAnalysisRedux = useSelector(
+    (state: ReducersType) => state?.sellerGetAnalysis
+  ) as ReduxResponseType<SellerAnalysisReportType>;
+
+  const analysisData = useMemo(() => {
+    return getSellerAnalysisRedux?.serverResponse?.data;
+  }, [getSellerAnalysisRedux]);
+
+  useEffect(() => {
+    dispatch(sellerGetAnalysisAction() as any);
+  }, [dispatch]);
+
+  // console.log(analysisData);
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row w-full gap-3">
@@ -33,13 +56,19 @@ const SellerAnalyticHero = () => {
                 <MdOutlineMoreHoriz />
               </span>
             </div>
-            <div className="text-[#606060] text-sm font-[400]">Total Sales</div>
+            <div className="text-[#606060] text-sm font-[400]">
+              Total Prod Sales
+            </div>
             <div className="font-[700] text-lg text-[#000] -my-2">
-              $86,784.93
+              $
+              {analysisData?.total_product_sales_amount && (
+                <FormatNumber
+                  price={analysisData?.total_product_sales_amount}
+                />
+              )}
             </div>
             <div className="flex flex-row gap-3 items-center text-[#16C098] text-sm">
-              <FaArrowTrendUp /> <span>13.02%</span>{" "}
-              <span className="text-[#606060]">From Jan</span>
+              <span className="text-[#606060]">For Last 12 months</span>
             </div>
           </div>
           <div className="flex flex-col gap-3 leading-[0.25rem] shadow-md p-4 rounded-xl">
@@ -52,12 +81,18 @@ const SellerAnalyticHero = () => {
               </span>
             </div>
             <div className="text-[#606060] text-sm font-[400]">
-              Avg. Order Value
+              Avg. Prod Sales
             </div>
-            <div className="font-[700] text-lg text-[#000] -my-2">$234.14</div>
+            <div className="font-[700] text-lg text-[#000] -my-2">
+              $
+              {analysisData?.avg_total_product_sales_amount && (
+                <FormatNumber
+                  price={analysisData?.avg_total_product_sales_amount}
+                />
+              )}
+            </div>
             <div className="flex flex-row gap-3 items-center text-[#16C098] text-sm">
-              <FaArrowTrendUp /> <span>3.02%</span>{" "}
-              <span className="text-[#606060]">From Jan</span>
+              <span className="text-[#606060]">For Last 12 months</span>
             </div>
           </div>
           <div className="flex flex-col gap-3 leading-[0.25rem] shadow-md p-4 rounded-xl">
@@ -70,12 +105,18 @@ const SellerAnalyticHero = () => {
               </span>
             </div>
             <div className="text-[#606060] text-sm font-[400]">
-              Online Sessions
+              Total Serv Sales
             </div>
-            <div className="font-[700] text-lg text-[#000] -my-2">$143,422</div>
+            <div className="font-[700] text-lg text-[#000] -my-2">
+              $
+              {analysisData?.total_service_sales_amount && (
+                <FormatNumber
+                  price={analysisData?.total_service_sales_amount}
+                />
+              )}
+            </div>
             <div className="flex flex-row gap-3 items-center text-[#16C098] text-sm">
-              <FaArrowTrendUp /> <span>6.02%</span>{" "}
-              <span className="text-[#606060]">From Jan</span>
+              <span className="text-[#606060]">For Last 12 months</span>
             </div>
           </div>
           <div className="flex flex-col gap-3 leading-[0.25rem] shadow-md p-4 rounded-xl">
@@ -88,12 +129,19 @@ const SellerAnalyticHero = () => {
               </span>
             </div>
             <div className="text-[#606060] text-sm font-[400]">
-              Conversion Rate
+              Avg Serv Sales
             </div>
-            <div className="font-[700] text-lg text-[#000] -my-2">$82.94%</div>
+            <div className="font-[700] text-lg text-[#000] -my-2">
+              {" "}
+              $
+              {analysisData?.avg_total_service_sales_amount && (
+                <FormatNumber
+                  price={analysisData?.avg_total_service_sales_amount}
+                />
+              )}
+            </div>
             <div className="flex flex-row gap-3 items-center text-[#FF0000] text-sm">
-              <FaArrowTrendDown /> <span>13.02%</span>{" "}
-              <span className="text-[#606060]">From Jan</span>
+              <span className="text-[#606060]">For Last 12 months</span>
             </div>
           </div>
         </div>
@@ -104,51 +152,31 @@ const SellerAnalyticHero = () => {
         </div>
         <div className="flex flex-col gap-3 leading-3 shadow-md p-4 rounded-xl w-full md:w-1/2">
           <div className="">Most Sold Items </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row justify-between">
-              <span>Jeans</span>
-              <span>70%</span>
-            </div>
-            <div className="w-full bg-[#E3E7FC] h-4 rounded-md">
-              <div className="w-[70%] bg-[#EDB842] h-full rounded-md"></div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row justify-between">
-              <span>Shirts</span>
-              <span>40%</span>
-            </div>
-            <div className="w-full bg-[#E3E7FC] h-4 rounded-md">
-              <div className="w-[40%] bg-[#EDB842] h-full rounded-md"></div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row justify-between">
-              <span>Belt</span>
-              <span>60%</span>
-            </div>
-            <div className="w-full bg-[#E3E7FC] h-4 rounded-md">
-              <div className="w-[60%] bg-[#EDB842] h-full rounded-md"></div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row justify-between">
-              <span>Caps</span>
-              <span>80%</span>
-            </div>
-            <div className="w-full bg-[#E3E7FC] h-4 rounded-md">
-              <div className="w-[80%] bg-[#EDB842] h-full rounded-md"></div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row justify-between">
-              <span>Others</span>
-              <span>20%</span>
-            </div>
-            <div className="w-full bg-[#E3E7FC] h-4 rounded-md">
-              <div className="w-[20%] bg-[#EDB842] h-full rounded-md"></div>
-            </div>
-          </div>
+          {analysisData?.most_sold_items &&
+          analysisData?.most_sold_items?.length > 0 ? (
+            analysisData?.most_sold_items.map((t, i) => {
+              const pct = t?.percentageCount + "%";
+              const elementStyle = {
+                width: pct, // Set the width in pixels or any other valid CSS unit
+              };
+              return (
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-row justify-between">
+                    <span>{t._id.name}</span>
+                    <span>{t.percentageCount}%</span>
+                  </div>
+                  <div className="w-full bg-[#E3E7FC] h-4 rounded-md">
+                    <div
+                      style={elementStyle}
+                      className="bg-[#EDB842] h-full rounded-md"
+                    ></div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div>No Products sold in the last One year</div>
+          )}
         </div>
       </div>
     </section>

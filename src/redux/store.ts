@@ -95,6 +95,15 @@ import {
   youMayLikeProductsReducer,
   youMayLikeServicesReducer,
 } from "./reducers/home.reducers";
+import {
+  createSellerNotificationReducer,
+  createUserNotificationReducer,
+  deleteNotificationReducer,
+  get4NotificationsReducer,
+  getNotificationUnseenCountReducer,
+  getNotificationsReducer,
+  markNotificationSeenReducer,
+} from "./reducers/notifications.reducers";
 import { getSellerServiceOrdersReducer } from "./reducers/seller/seler-service-orders";
 import {
   sellerAddBankAccountReducer,
@@ -105,6 +114,7 @@ import {
   sellerDeletePaypalReducer,
   sellerGetBalanceReducer,
 } from "./reducers/seller/seller-accounts.reducers";
+import { getSellerAnalysisReducer } from "./reducers/seller/seller-analysis.reducers";
 import {
   sellerDeleteProductOrderByIDReducer,
   sellerGetProductOrderByIDReducer,
@@ -175,6 +185,7 @@ import {
   userGetTopRatedProductsReducer,
 } from "./reducers/userDashboard/products.reducers";
 import {
+  GetProfileDataReducer,
   GetUserProfileReducer,
   UpdateCompanyDetailsReducer,
   UpdatePasswordReducer,
@@ -214,15 +225,6 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
-import {
-  getNotificationsReducer,
-  get4NotificationsReducer,
-  markNotificationSeenReducer,
-  getNotificationUnseenCountReducer,
-  deleteNotificationReducer,
-  createSellerNotificationReducer,
-  createUserNotificationReducer,
-} from "./reducers/notifications.reducers";
 
 export type ReducersType = {
   //cart system
@@ -270,6 +272,7 @@ export type ReducersType = {
 
   //user profile
   getProfile: ReduxResponseType;
+  getProfileData: ReduxResponseType;
   updateProfile: ReduxResponseType;
   updatePassword: ReduxResponseType;
   updateSocials: ReduxResponseType;
@@ -302,6 +305,9 @@ export type ReducersType = {
   adminGetProductsOrders: ReduxResponseType;
   adminGetProductsOrderByID: ReduxResponseType;
   adminDeleteProductsOrderById: ReduxResponseType;
+
+  // seller && analysis
+  sellerGetAnalysis: ReduxResponseType;
 
   // seller && Products orders
   sellerGetProductsOrders: ReduxResponseType;
@@ -497,6 +503,7 @@ const reducer = combineReducers<ReducersType>({
 
   //user profile
   getProfile: GetUserProfileReducer,
+  getProfileData: GetProfileDataReducer,
   updateProfile: UpdateProfileReducer,
   updatePassword: UpdatePasswordReducer,
   updateSocials: UpdateSocialsReducer,
@@ -529,6 +536,9 @@ const reducer = combineReducers<ReducersType>({
   adminGetProductsOrders: adminGetProductsOrdersReducer,
   adminGetProductsOrderByID: adminGetProductOrderByIDReducer,
   adminDeleteProductsOrderById: adminDeleteProductOrderByIDReducer,
+
+  // seller and analysis
+  sellerGetAnalysis: getSellerAnalysisReducer,
 
   // seller and product orders
   sellerGetProductsOrders: sellerGetProductsOrdersReducer,
