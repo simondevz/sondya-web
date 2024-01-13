@@ -310,7 +310,16 @@ const ServiceDetailsBody = () => {
               </span>
               Add to Wishlist
             </span>
-            <button className="border broder-[#62646A] rounded-md text-[#62646A] p-2 w-full">
+            <button
+              onClick={() =>
+                navigate("/user/inbox/" + service?.owner?.id, {
+                  state: {
+                    service_id: service?._id,
+                  },
+                })
+              }
+              className="border broder-[#62646A] rounded-md text-[#62646A] p-2 w-full"
+            >
               Contact Seller
             </button>
           </div>

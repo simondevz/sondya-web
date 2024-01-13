@@ -1,7 +1,7 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import useWebSocket, { SendMessage, ReadyState } from "react-use-websocket";
 import Swal from "sweetalert2";
 import { Chat1 } from "../../../../images/chat";
@@ -47,9 +47,11 @@ const ChatBox = ({
   setMessageHistory: React.Dispatch<React.SetStateAction<chatMessageType[]>>;
   messageHistory: chatMessageType[];
 }) => {
-  // Websockets related logic
   const location = useLocation();
+  const dispatch = useDispatch();
+  const params = useParams();
   const [message, setMessage] = useState<string>("");
+
   const [files, setFiles] = useState<Array<any>>([]);
   const fileList = useMemo(() => {
     let returnList: any[] = [];
@@ -66,7 +68,6 @@ const ChatBox = ({
     location?.state?.product_id
   );
 
-  const dispatch = useDispatch();
   const [attachment, setAttachment] = useState<
     (AdminGetProductType | AdminGetServiceType) & { isProduct: boolean }
   >();
@@ -173,7 +174,7 @@ const ChatBox = ({
           });
         }
       } else {
-        console.log("in chat box ==>> ", data);
+        // console.log("in chat box ==>> ", data);
         setMessageHistory((prev: chatMessageType[]) => {
           setSending(false);
           setMessage("");
@@ -196,7 +197,7 @@ const ChatBox = ({
                 "You recieved a Chat message from " + data?.sender_id?.username,
               message: data?.message || "Tap to see file attachments",
               type: "order_recieved",
-              link: "user/inbox",
+              link: "user/inbox/" + params.id,
               seen: false,
             }) as any
           );
@@ -305,6 +306,10 @@ const ChatBox = ({
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
+  // for attachments from product details page
+  const productIdRef = useRef(location.state?.product_id);
+  const serviceIdRef = useRef(location.state?.service_id);
+
   const handleSendMesage = async () => {
     setSending(true);
     if (connectionStatus !== "Open") {
@@ -372,14 +377,25 @@ const ChatBox = ({
         reciever_id: receiver?._id || "",
         file_attachments: files,
         chat_id: chatId,
-        [attachment?._id
+        product_id: productIdRef.current
+          ? productIdRef.current
+          : attachment?._id
           ? attachment?.isProduct
-            ? "product_id"
-            : "service_id"
-          : "null"]: attachment?._id,
+            ? attachment?._id
+            : undefined
+          : undefined,
+        service_id: serviceIdRef.current
+          ? serviceIdRef.current
+          : attachment?._id
+          ? attachment?.isProduct
+            ? undefined
+            : attachment?._id
+          : undefined,
       }) as any
     );
 
+    productIdRef.current = null;
+    serviceIdRef.current = null;
     setMessage("");
     setFiles([]);
     setAttachment(undefined);
@@ -419,7 +435,12 @@ const ChatBox = ({
   }, [dispatch, receiver?._id, loginRedux?.serverResponse?.data?.id]);
 
   return (
-    <div className="hidden md:flex flex-col w-full h-full border">
+    <div
+      className={
+        (params?.id ? "flex " : "hidden ") +
+        " md:flex flex-col w-full h-full border"
+      }
+    >
       {receiver?._id ? (
         <>
           <div className="flex flex-row items-center justify-between p-2 border-b-2">

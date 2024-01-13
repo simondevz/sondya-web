@@ -12,38 +12,42 @@ import {
 import { adminUGetUserType } from "../../../redux/types/users.types";
 import { userGetChatsAction } from "../../../redux/actions/userDashboard/chats.actions";
 import { getUserAction } from "../../../redux/actions/userDashboard/user.actions";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ChatBox from "./components/chatBox";
 import InboxList from "./components/inboxList";
 
 const SellerInboxBody = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const params = useParams();
 
   const [receiver, setReceiver] = useState<adminUGetUserType | ChatUserType>();
   const [chatId, setChatId] = useState<string>("");
-  const seller_id = location?.state?.seller_id;
   const [userChats, setUserChats] = useState<GetChatsType[]>();
 
   const userChatsRedux = useSelector(
     (state: ReducersType) => state?.getUserChats
   ) as ReduxResponseType<GetChatsType[]>;
 
-  const sellerRedux = useSelector(
+  //details of the person the current user is trying to chat with
+  const recieverRedux = useSelector(
     (state: ReducersType) => state?.userGetUser
   ) as ReduxResponseType<adminUGetUserType>;
 
   useEffect(() => {
-    if (sellerRedux?.success) setReceiver(sellerRedux?.serverResponse?.data);
-  }, [sellerRedux?.serverResponse?.data, sellerRedux?.success]);
+    if (recieverRedux?.success)
+      setReceiver(recieverRedux?.serverResponse?.data);
+  }, [recieverRedux?.serverResponse?.data, recieverRedux?.success]);
 
   useEffect(() => {
     dispatch(userGetChatsAction() as any);
   }, [dispatch]);
 
   useEffect(() => {
-    if (seller_id) dispatch(getUserAction(seller_id) as any);
-  }, [seller_id, dispatch]);
+    if (params.id) {
+      setChatId(params.id);
+      dispatch(getUserAction(params.id) as any);
+    }
+  }, [params.id, dispatch]);
 
   useEffect(() => {
     dispatch(userGetChatsAction() as any);

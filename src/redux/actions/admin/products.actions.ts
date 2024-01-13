@@ -42,6 +42,7 @@ export const adminCreateProductAction =
     discount_percentage,
     vat_percentage,
     total_variants,
+    variants,
     image,
 
     country,
@@ -72,6 +73,7 @@ export const adminCreateProductAction =
       FD.append("discount_percentage", discount_percentage.toString());
       FD.append("vat_percentage", vat_percentage.toString());
       FD.append("total_variants", total_variants.toString());
+      FD.append("variants", JSON.stringify(variants));
 
       // location
       FD.append("country", country);
@@ -133,6 +135,7 @@ export const adminUpdateProductAction =
       discount_percentage,
       vat_percentage,
       total_variants,
+      variants,
       image,
 
       id,
@@ -171,6 +174,7 @@ export const adminUpdateProductAction =
         FD.append("discount_percentage", discount_percentage.toString());
       vat_percentage && FD.append("vat_percentage", vat_percentage.toString());
       total_variants && FD.append("total_variants", total_variants.toString());
+      variants && FD.append("variants", JSON.stringify(variants));
 
       // location
       FD.append("country", country);

@@ -95,6 +95,7 @@ const AdminAddProductsBody = () => {
     discount_percentage: 0,
     vat_percentage: 0,
     total_variants: 0,
+    variants: {},
 
     //location
     country: "",
@@ -354,14 +355,17 @@ const AdminAddProductsBody = () => {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex flex-col justify-center gap-2">
+                      <div className="flex flex-col bg- justify-center gap-2">
                         <div className="mx-auto p-2 bg-[#EDB842] rounded-md text-white">
                           <BsFillImageFill />
                         </div>
                         <span className="text-[#858D9D] text-sm">
                           Drag and drop image here, or click add image
                         </span>
-                        <button className="bg-[#EDB84233] text-[#EDB842] px-4 py-2 rounded-lg mt-2 w-fit mx-auto">
+                        <button
+                          type={"button"}
+                          className="bg-[#EDB84233] text-[#EDB842] px-4 py-2 rounded-lg mt-2 w-fit mx-auto"
+                        >
                           Browse
                         </button>
                       </div>

@@ -318,9 +318,8 @@ const ProductsDetailsBody = () => {
           </div>
           <button
             onClick={() =>
-              navigate("/user/inbox", {
+              navigate("/user/inbox/" + product?.owner?.id, {
                 state: {
-                  seller_id: product?.owner?.id,
                   product_id: product?._id,
                 },
               })

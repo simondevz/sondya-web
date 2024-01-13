@@ -12,8 +12,43 @@ import { Line } from "react-chartjs-2";
 import { ProductsItemsdata } from "../../../data/productsItemsData";
 import { serviceItemsdata2 } from "../../../data/servicesitemdata";
 import { FormatNumber } from "../../shareables/FormatNumber";
+import { google } from "googleapis";
+import { useEffect } from "react";
 
 const AdminDashboardHero = () => {
+
+// const scopes = "https://www.googleapis.com/auth/analytics.readonly";
+
+
+// const jwt = new google.auth.JWT(
+//   process.env.GA4_CLIENT_EMAIL,
+//   undefined,
+//   process.env.GA4_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+//   scopes
+// );
+// const view_id = "6635838970";
+
+// useEffect(() => {
+//   async function getViews(){
+//     try {
+//       await jwt.authorize();
+//       google.analytics.
+  
+//       const response = await google.analytics("v4").data.ga.get({
+//         auth: jwt,
+//         ids: "ga:" + view_id,
+//         "start-date": "30daysAgo",
+//         "end-date": "today",
+//         metrics: "ga:pageviews",
+//       });
+  
+//       console.log(response);
+  
+//     } catch (err) {
+//        console.log(err);
+//     }
+//   };
+// })
   return (
     <section>
       <div className="flex flex-col gap-3">

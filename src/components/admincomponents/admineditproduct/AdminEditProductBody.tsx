@@ -51,6 +51,8 @@ const AdminEditProductBody = () => {
     address: "",
     zip_code: "",
   });
+  console.log("formData ==>> ", formData);
+
   // set the network image for display
   let [networkimage1, setNetworkImage1] = useState<Array<string>>([]);
   let [deleteImageId, setDeleteImageId] = useState<Array<string>>([]);
@@ -174,6 +176,7 @@ const AdminEditProductBody = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData) {
+      console.log("submitted formdata ===> ", formData);
       dispatch(adminUpdateProductAction(formData, deleteImageId) as any);
     }
   };
@@ -227,7 +230,6 @@ const AdminEditProductBody = () => {
   let productCategoriesRedux = useSelector(
     (state: ReducersType) => state?.adminGetProductCategories
   ) as ReduxResponseType<AdminGetCategoryType[]>;
-  console.log(productCategoriesRedux);
 
   useEffect(() => {
     dispatch(adminGetProductCategoriesAction() as any);
@@ -269,7 +271,7 @@ const AdminEditProductBody = () => {
                     name="name"
                     className="border p-2 rounded-md bg-[#F9F9FC]"
                     type="text"
-                    placeholder="Type category name here. . ."
+                    placeholder="Type name here. . ."
                     onChange={onChange}
                     autoFocus={true}
                     value={formData.name}

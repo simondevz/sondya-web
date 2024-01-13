@@ -41,6 +41,7 @@ const SellerEditProductsBody = () => {
     discount_percentage: 0,
     vat_percentage: 0,
     total_variants: 0,
+    variants: {},
     // quantity: 0,
 
     id: id as string,
@@ -627,7 +628,10 @@ const SellerEditProductsBody = () => {
             </div>
           </div>
         </div>
-        <InputVariants setFormData={setFormData} />
+        <InputVariants
+          existingVariants={formData.variants}
+          setFormData={setFormData}
+        />
         <button
           type="submit"
           className="p-2 border text-white bg-[#EDB842] rounded-md"

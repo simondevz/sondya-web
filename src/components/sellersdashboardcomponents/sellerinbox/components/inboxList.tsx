@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { SendMessage } from "react-use-websocket";
 import {
   getUserAction,
@@ -30,6 +30,7 @@ const InboxList = ({
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const params = useParams();
 
   const [search, setSearch] = useState<string>("");
   const seller_id = location?.state?.seller_id;
@@ -93,7 +94,12 @@ const InboxList = ({
   }, [loginRedux?.serverResponse?.data?.id, sendMessage]);
 
   return (
-    <div className="flex flex-col gap-3 w-full md:w-1/2 lg:w-1/3 border p-4">
+    <div
+      className={
+        (params?.id ? "hidden " : "flex ") +
+        "md:flex flex-col gap-3 w-full md:w-1/2 lg:w-1/3 border p-4"
+      }
+    >
       <div className="font-[600] text-lg">Inbox</div>
       <input
         className="p-2 bg-[#EDB84233] rounded-md w-full"

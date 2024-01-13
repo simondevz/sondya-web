@@ -15,19 +15,21 @@ import {
   userGetServicesType,
 } from "../../redux/types/services.types";
 import { FormatNumber } from "../shareables/FormatNumber";
+import { ServicesNav, ServicesPriceRange } from "./FilterServiceNav";
+import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
+import inWishlist from "../../utils/checkWhishlist";
+import { toast } from "react-toastify";
 import {
-  ServicesNav,
-  ServicesPopularBrands,
-  ServicesPopularTags,
-  ServicesPriceRange,
-} from "./FilterServiceNav";
+  addToWishlistAction,
+  removeFromWishlistAction,
+} from "../../redux/actions/wishlist.actions";
+import { WishlistItemType } from "../../redux/types/wishlist.types";
 
 export type QueryType = {
   page: number;
   search: string;
   subcategory: string;
   priceRange: string;
-  popularBrands: string[];
   sortBy: string;
 };
 
@@ -37,7 +39,6 @@ const ServiceBody = () => {
     search: "",
     subcategory: "",
     priceRange: "",
-    popularBrands: [],
     sortBy: "",
   });
 
@@ -116,8 +117,6 @@ export const ServiceBodyNavMain = ({
       </div>
       <ServicesNav query={query} setQuery={setQuery} />
       <ServicesPriceRange query={query} setQuery={setQuery} />
-      <ServicesPopularBrands query={query} setQuery={setQuery} />
-      <ServicesPopularTags />
     </div>
   );
 };
@@ -166,7 +165,6 @@ const ServiceBodyMain = ({
           value !== undefined &&
           value !== null &&
           value !== "" &&
-          (value as string[]).length !== 0 &&
           value !== 0
         ) {
           searchParams.set(key, String(value));
@@ -238,6 +236,47 @@ const ServiceBodyMain = ({
   useEffect(() => {
     dispatch(userGetServicesAction(queryString) as any);
   }, [dispatch, queryString]);
+
+  // add to wishlist
+  const addToWishlist = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(addToWishlistAction(item) as any);
+
+        // send toast message
+        toast("Added to Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
+
+  const deleteWishlistItem = useCallback(
+    (item: WishlistItemType) => {
+      setTimeout(() => {
+        dispatch(removeFromWishlistAction(item) as any);
+
+        // send toast message
+        toast("Removed from Wishlist!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   return (
     <div className="flex flex-col w-full gap-3 md:w-9/12">
@@ -316,46 +355,6 @@ const ServiceBodyMain = ({
               </button>
             </span>
           )}
-
-          {/* Active popular Brands */}
-          {query.popularBrands.length ? (
-            query.popularBrands.map((brand: string, index: number) => {
-              return (
-                <span
-                  key={index}
-                  className="flex items-center gap-2 whitespace-nowrap"
-                >
-                  {brand}
-                  <button
-                    onClick={() =>
-                      setQuery({
-                        ...query,
-                        popularBrands: query.popularBrands.filter(
-                          (otherBrands: string) => brand !== otherBrands
-                        ),
-                        page: 1,
-                      })
-                    }
-                  >
-                    <FaTimes />
-                  </button>
-                </span>
-              );
-            })
-          ) : (
-            <></>
-          )}
-
-          {/* No active filters */}
-          {!query.popularBrands.length &&
-          !query.priceRange &&
-          !query.subcategory ? (
-            <span className="flex items-center gap-2 whitespace-nowrap">
-              No Active Filters
-            </span>
-          ) : (
-            <></>
-          )}
         </div>
         <div className="whitespace-nowrap">
           {servicesRedux?.serverResponse?.data?.count} Results found.
@@ -382,11 +381,66 @@ const ServiceBodyMain = ({
                     <div className="text-[#222325] h-20 line-clamp- 3font-[400]">
                       {service.brief_description}
                     </div>
-                    <div className="flex flex-row gap-2 justify-start text-lg items-center text-[#EDB842]">
-                      <AiFillStar /> <span>{service.rating}</span>
-                      <span className="text-[#A2A6B0] whitespace-nowrap">
-                        ({service.total_rating})
-                      </span>
+                    <div className="flex flex-row justify-between ">
+                      <div className="flex my-auto gap-2 justify-start text-lg items-center text-[#EDB842]">
+                        <AiFillStar /> <span>{service.rating}</span>
+                        <span className="text-[#A2A6B0] whitespace-nowrap">
+                          ({service.total_rating})
+                        </span>
+                      </div>
+
+                      <div
+                        className="text-xl my-auto rounded-full"
+                        onClick={() => {
+                          if (
+                            inWishlist({
+                              ...service,
+                              isProduct: false,
+                              sub_category: "",
+                              country: "",
+                              state: "",
+                              city: "",
+                              address: "",
+                              zip_code: "",
+                            })
+                          ) {
+                            deleteWishlistItem({
+                              ...service,
+                              isProduct: false,
+                              sub_category: "",
+                              country: "",
+                              state: "",
+                              city: "",
+                              address: "",
+                              zip_code: "",
+                            });
+                          } else {
+                            addToWishlist({
+                              ...service,
+                              isProduct: false,
+                              sub_category: "",
+                              country: "",
+                              state: "",
+                              city: "",
+                              address: "",
+                              zip_code: "",
+                            });
+                          }
+                        }}
+                      >
+                        <ServiceLikeButton
+                          defaultValue={inWishlist({
+                            ...service,
+                            isProduct: true,
+                            sub_category: "",
+                            country: "",
+                            state: "",
+                            city: "",
+                            address: "",
+                            zip_code: "",
+                          })}
+                        />
+                      </div>
                     </div>
                     <hr />
                     <div className="flex flex-row gap-1 justify-between">
@@ -463,6 +517,15 @@ const ServiceBodyMain = ({
         </button>
       </div>
     </div>
+  );
+};
+
+const ServiceLikeButton = ({ defaultValue }: { defaultValue?: boolean }) => {
+  const [like, setLike] = useState<boolean>(defaultValue || false);
+  return (
+    <button onClick={() => setLike(!like)}>
+      {like ? <MdFavorite /> : <MdOutlineFavoriteBorder />}
+    </button>
   );
 };
 
