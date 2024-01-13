@@ -39,6 +39,12 @@ export const API_ROUTES = {
     changePassword: BASE + "/profile/update/password/", // PUT :id
     updateSocials: BASE + "/profile/update/socials/", // PUT :id
     updateCompanyDetails: BASE + "/profile/update/company/", // PUT :id
+    getProfileData: BASE + "/profile/data/", // GET :id - user id
+  },
+
+  //seller
+  sellerAnalysis: {
+    getAnalysis: BASE + "/seller/analysis/", // GET :id - user id
   },
 
   //seller

@@ -1,22 +1,22 @@
+import { useCallback, useEffect, useState } from "react";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import { BsSearch, BsThreeDots } from "react-icons/bs";
-import { Logo } from "../../images/logo";
 import { useDispatch, useSelector } from "react-redux";
-import { ReducersType } from "../../redux/store";
-import { ReduxResponseType } from "../../redux/types/general.types";
-import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Logo } from "../../images/logo";
 import {
   getUserGroupChatsAction,
   userGetGroupchatsAction,
 } from "../../redux/actions/userDashboard/groupchat.actions";
+import { USER_GET_GROUPCHATS_RESET } from "../../redux/constants/userDashboard/groupchat.constats";
+import { ReducersType } from "../../redux/store";
+import { LoginResponseType } from "../../redux/types/auth.types";
+import { ReduxResponseType } from "../../redux/types/general.types";
 import {
   adminGroupChatType,
   getGroupChatType,
 } from "../../redux/types/groupchat.types";
 import JoinBtn from "./joinBtn";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LoginResponseType } from "../../redux/types/auth.types";
-import { USER_GET_GROUPCHATS_RESET } from "../../redux/constants/userDashboard/groupchat.constats";
 
 export type QueryType = {
   limit: number;
@@ -221,7 +221,7 @@ const GroupChatListBody = () => {
                             })
                           }
                           className={
-                            " text-[#EDB842] font-semibold font-semibold py-2 w-fit px-4 rounded-md "
+                            " text-[#EDB842] font-semibold py-2 w-fit px-4 rounded-md "
                           }
                         >
                           View Messages

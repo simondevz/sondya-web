@@ -2,10 +2,17 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Package, Receipt, Rocket, userImage } from "../../../images/dashboard";
-import { GetUserProfileAction } from "../../../redux/actions/userDashboard/profile.actions";
+import {
+  GetUserProfileAction,
+  GetUserProfileDataAction,
+} from "../../../redux/actions/userDashboard/profile.actions";
 import { ReducersType } from "../../../redux/store";
 import { ReduxResponseType } from "../../../redux/types/general.types";
-import { adminUGetUserType } from "../../../redux/types/users.types";
+import {
+  ProfileOrderData,
+  adminUGetUserType,
+} from "../../../redux/types/users.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 
 const DashboardHero = () => {
   // fetch data
@@ -99,35 +106,7 @@ const DashboardHero = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap me-auto md:flex-col gap-3">
-          <div className="flex flex-1 flex-row items-center gap-2 bg-[#EDB84233] py-3 px-5 rounded-md w-[16rem]">
-            <div className="p-2 bg-white">
-              <img src={Rocket} alt="" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="font-[700] playfair-display">154</div>
-              <div className="font-[400]">Total Product Orders</div>
-            </div>
-          </div>
-          <div className="flex flex-row items-center gap-2 bg-[#FFF3EB] py-3 px-5 rounded-md w-[16rem]">
-            <div className="p-2 bg-white">
-              <img src={Receipt} alt="" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="font-[700] playfair-display">05</div>
-              <div className="font-[400]">Total Service Orders</div>
-            </div>
-          </div>
-          <div className="flex flex-row items-center gap-2 bg-[#EAF7E9] py-3 px-5 rounded-md w-[16rem]">
-            <div className="p-2 bg-white">
-              <img src={Package} alt="" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="font-[700] playfair-display">149</div>
-              <div className="font-[400]">Total Balance</div>
-            </div>
-          </div>
-        </div>
+        <DashboardHeroProfileData />
       </div>
       <div className="w-full p-2">
         referal link:{" "}
@@ -140,6 +119,68 @@ const DashboardHero = () => {
         </button>
       </div>
     </section>
+  );
+};
+
+const DashboardHeroProfileData = () => {
+  // fetch data
+  const dispatch = useDispatch();
+  //  const navigate = useNavigate();
+
+  const getProfileDataRedux = useSelector(
+    (state: ReducersType) => state?.getProfileData
+  ) as ReduxResponseType<ProfileOrderData>;
+
+  const profileData = useMemo(() => {
+    return getProfileDataRedux?.serverResponse?.data;
+  }, [getProfileDataRedux]);
+
+  useEffect(() => {
+    dispatch(GetUserProfileDataAction() as any);
+  }, [dispatch]);
+
+  console.log(profileData);
+  return (
+    <div className="flex flex-wrap me-auto md:flex-col gap-3">
+      <div className="flex flex-1 flex-row items-center gap-2 bg-[#EDB84233] py-3 px-5 rounded-md w-[16rem]">
+        <div className="p-2 bg-white">
+          <img src={Rocket} alt="" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="font-[700] playfair-display">
+            {profileData?.total_product_orders &&
+              profileData?.total_product_orders}
+          </div>
+          <div className="font-[400]">Total Product Orders</div>
+        </div>
+      </div>
+      <div className="flex flex-row items-center gap-2 bg-[#FFF3EB] py-3 px-5 rounded-md w-[16rem]">
+        <div className="p-2 bg-white">
+          <img src={Receipt} alt="" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="font-[700] playfair-display">
+            {profileData?.total_service_orders &&
+              profileData?.total_service_orders}
+          </div>
+          <div className="font-[400]">Total Service Orders</div>
+        </div>
+      </div>
+      <div className="flex flex-row items-center gap-2 bg-[#EAF7E9] py-3 px-5 rounded-md w-[16rem]">
+        <div className="p-2 bg-white">
+          <img src={Package} alt="" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="font-[700] playfair-display">
+            $
+            {profileData?.balance && (
+              <FormatNumber price={profileData?.balance} />
+            )}
+          </div>
+          <div className="font-[400]">Total Balance</div>
+        </div>
+      </div>
+    </div>
   );
 };
 
