@@ -18,15 +18,19 @@ import { PiMonitorPlayBold } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { sellerGetAnalysisAction } from "../../../redux/actions/seller/seller-analysis.actions";
 import { ReducersType } from "../../../redux/store";
-import { SellerAnalysisReportType } from "../../../redux/types/analysis.types";
+import {
+  GraphDataType,
+  SellerAnalysisReportType,
+} from "../../../redux/types/analysis.types";
 import { ReduxResponseType } from "../../../redux/types/general.types";
+import { SortSellerAnalysisData } from "../../../utils/sortAnalysisData";
 import { FormatNumber } from "../../shareables/FormatNumber";
 
 const SellerAnalyticHero = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
 
-  // for products order
+  // for seller analysis
   const getSellerAnalysisRedux = useSelector(
     (state: ReducersType) => state?.sellerGetAnalysis
   ) as ReduxResponseType<SellerAnalysisReportType>;
@@ -39,12 +43,16 @@ const SellerAnalyticHero = () => {
     dispatch(sellerGetAnalysisAction() as any);
   }, [dispatch]);
 
-  // console.log(analysisData);
+  // analyse graph data to fit use case;
+  const GraphData: GraphDataType[] = useMemo(() => {
+    return SortSellerAnalysisData(analysisData);
+  }, [analysisData]);
+
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row w-full gap-3">
         <div className="p-2 shadow-md rounded-md w-full md:w-1/2">
-          <SellerLineChart />
+          <SellerLineChart analysisData={GraphData} />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-3 leading-[0.25rem] shadow-md p-4 rounded-xl">
@@ -148,7 +156,7 @@ const SellerAnalyticHero = () => {
       </div>
       <div className="flex flex-col md:flex-row w-full gap-3">
         <div className="neumorphic-card p-2 shadow-md rounded-md w-full md:w-1/2">
-          <SellerBarChart />
+          <SellerBarChart analysisData={GraphData} />
         </div>
         <div className="flex flex-col gap-3 leading-3 shadow-md p-4 rounded-xl w-full md:w-1/2">
           <div className="">Most Sold Items </div>
@@ -160,7 +168,7 @@ const SellerAnalyticHero = () => {
                 width: pct, // Set the width in pixels or any other valid CSS unit
               };
               return (
-                <div className="flex flex-col gap-3">
+                <div key={i} className="flex flex-col gap-3">
                   <div className="flex flex-row justify-between">
                     <span>{t._id.name}</span>
                     <span>{t.percentageCount}%</span>
@@ -183,7 +191,7 @@ const SellerAnalyticHero = () => {
   );
 };
 
-const SellerBarChart = () => {
+const SellerBarChart = ({ analysisData }: any) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -206,27 +214,28 @@ const SellerBarChart = () => {
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
+  const productData: number[] = [];
+  const serviceData: number[] = [];
+  const labels: string[] = [];
+
+  if (analysisData && analysisData?.length > 0)
+    analysisData.forEach((item: GraphDataType) => {
+      labels.push(item._id.month);
+      productData.push(item.ProductTotalAmount);
+      serviceData.push(item.ServiceTotalAmount);
+    });
 
   const data = {
     labels,
     datasets: [
       {
-        label: "Dataset 1",
-        data: [65, 59, 80, 81, 56, 46, 89],
+        label: "Product data",
+        data: productData,
         backgroundColor: "#EDB842",
       },
       {
-        label: "Dataset 2",
-        data: [30, 50, 75, 90, 30, 20, 70],
+        label: "Service Data",
+        data: serviceData,
         backgroundColor: "#E3E7FC",
       },
     ],
@@ -239,7 +248,7 @@ const SellerBarChart = () => {
   );
 };
 
-const SellerLineChart = () => {
+const SellerLineChart = ({ analysisData }: any) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -249,19 +258,31 @@ const SellerLineChart = () => {
     Tooltip,
     Legend
   );
+
+  const productData: number[] = [];
+  const serviceData: number[] = [];
+  const labels: string[] = [];
+
+  if (analysisData && analysisData?.length > 0)
+    analysisData.forEach((item: GraphDataType) => {
+      labels.push(item._id.month);
+      productData.push(item.ProductTotalAmount);
+      serviceData.push(item.ServiceTotalAmount);
+    });
+
   const data = {
-    labels: ["January", "February", "March", "April", "May"],
+    labels: labels,
     datasets: [
       {
         label: "Monthly Sales 1",
-        data: [65, 59, 80, 81, 56],
+        data: productData,
         fill: false,
         borderColor: "#EDB842", // Line color
         tension: 0.4, // Adjust this value to control the curve (0 = straight, 1 = highly curved)
       },
       {
         label: "Monthly Sales 2",
-        data: [30, 50, 75, 90, 30],
+        data: serviceData,
         fill: false,
         borderColor: "#1A2B88", // Line color
         borderWidth: 3, // Bar border width
