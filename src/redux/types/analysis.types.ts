@@ -1,3 +1,14 @@
+export type GraphDataType = {
+  _id: {
+    month: string;
+    year: number;
+  };
+  ProductTotalAmount: number;
+  ServiceTotalAmount: number;
+  ProductTotalCount: number;
+  ServiceTotalCount: number;
+};
+
 type MonthlyOrderGroup = {
   _id: {
     month: string;

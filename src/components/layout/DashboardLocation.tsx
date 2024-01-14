@@ -2,25 +2,25 @@ import { useEffect, useMemo, useState } from "react";
 import { AiOutlineBell, AiOutlineRight } from "react-icons/ai";
 import { FaHome, FaTimes } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
-import { user1 } from "../../images/users";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { user1 } from "../../images/users";
 import {
   get4NotificationsAction,
   getNotificationsUnseenCountAction,
   markNotificationSeenAction,
 } from "../../redux/actions/notifications.actions";
+import {
+  GET_NOTIFICATIONS_RESET,
+  MARK_NOTIFICATION_SEEN_RESET,
+} from "../../redux/constants/notifications.constants";
 import { ReducersType } from "../../redux/store";
 import { ReduxResponseType } from "../../redux/types/general.types";
 import {
   GetNotificationType,
   NotificationType,
 } from "../../redux/types/notifications.types";
-import {
-  GET_NOTIFICATIONS_RESET,
-  MARK_NOTIFICATION_SEEN_RESET,
-} from "../../redux/constants/notifications.constants";
 import FormatDate from "../shareables/dateFormatter";
-import { useNavigate } from "react-router-dom";
 
 const DashboardLocation = () => {
   const dispatch = useDispatch();
@@ -76,12 +76,26 @@ const DashboardLocation = () => {
     navigate,
   ]);
 
+  //put location
+  const location = useLocation();
+  const pathSegments = location.pathname
+    .split("/")
+    .filter((segment) => segment !== "");
+
   return (
     <div className="relative flex flex-row justify-between items-center gap-1 bg-[#000000] text-white py-5 px-8">
       <div className="flex flex-row justify-between items-center gap-1">
-        <FaHome /> <span>Home</span> <AiOutlineRight />{" "}
-        <span>User Account</span> <AiOutlineRight />{" "}
-        <span className="text-[#EDB842]">Sign Up</span>
+        <FaHome /> <span>Home</span>
+        {pathSegments.map((t, i) => {
+          return (
+            <div
+              key={i}
+              className="flex flex-row justify-between items-center gap-1"
+            >
+              <AiOutlineRight /> <span>{t}</span>
+            </div>
+          );
+        })}
       </div>
       <button
         onClick={() => setStatus(!status)}
