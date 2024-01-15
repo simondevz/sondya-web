@@ -62,6 +62,7 @@ import {
 import { adminUGetUserType } from "../../redux/types/users.types";
 import { FormatNumber } from "../shareables/FormatNumber";
 import randomstring from "randomstring";
+import ReactGA from "react-ga4";
 
 type TotalingType = {
   SubTotalPrice: number;
@@ -566,6 +567,25 @@ const CheckoutBody = () => {
                   total_cost: checkoutOrder?.total_amount,
                 }) as any
               );
+
+              // Google Analytics: Purchase
+              ReactGA.event("purchase", {
+                currency: "USD",
+                transaction_id:
+                  verifyPaymentRedux?.serverResponse?.data?.tx_ref,
+                value:
+                  checkoutOrder?.total_amount -
+                  (checkoutOrder?.total_discount || 0),
+                shipping: checkoutOrder?.total_shipping_fee,
+                tax: checkoutOrder?.total_tax,
+                items: checkoutOrder?.checkout_items?.map((item) => {
+                  return {
+                    item_id: item?._id,
+                    price: item?.current_price,
+                    quantity: item?.order_quantity,
+                  };
+                }),
+              });
             }
           }, 1000);
 
@@ -610,7 +630,6 @@ const CheckoutBody = () => {
   const productOrderRedux = useSelector(
     (state: ReducersType) => state.userCreateProductOrder
   ) as ReduxResponseType<GetProductOrder>;
-  // console.log("productOrderRedux ==>> ", productOrderRedux);
 
   useEffect(() => {
     if (productOrderRedux?.success && userData?._id) {
