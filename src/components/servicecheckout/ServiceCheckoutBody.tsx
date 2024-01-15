@@ -52,6 +52,7 @@ import {
 } from "../../redux/constants/notifications.constants";
 import { API_ROUTES } from "../../redux/routes";
 import { NotificationType } from "../../redux/types/notifications.types";
+import ReactGA from "react-ga4";
 
 const ServiceCheckoutBody = () => {
   const [serviceOrder, setServiceOrder] = useState<ServiceOrderType>();
@@ -258,6 +259,19 @@ const ServiceCheckoutBody = () => {
               total_cost: serviceOrder?.checkout_items?.total_price,
             }) as any
           );
+
+          // Google Analitics: purcase
+          ReactGA.event("purchase", {
+            currency: "USD",
+            transaction_id: verifyPaymentRedux?.serverResponse?.data?.tx_ref,
+            value: serviceOrder?.checkout_items?.total_price,
+            items: [
+              {
+                item_id: serviceOrder?.checkout_items?._id,
+                price: serviceOrder?.checkout_items?.terms?.amount,
+              },
+            ],
+          });
         } else {
           Swal.fire({
             icon: "error",
