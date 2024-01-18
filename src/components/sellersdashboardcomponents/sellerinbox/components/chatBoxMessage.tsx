@@ -61,7 +61,7 @@ const ChatMessage = ({
     <div key={message?._id} className={"flex flex-row gap-2 w-full my-2"}>
       <div className="">
         <img
-          className="w-5 h-5 rounded-full object-fit"
+          className="w-8 h-8 rounded-full object-fit"
           src={message?.sender_id?.image?.[0]?.url || Chat1}
           alt=""
         />

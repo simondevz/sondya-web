@@ -288,7 +288,7 @@ const ReviewPost = ({
         <div className="">
           {review?.user_id?.image?.[0]?.url ? (
             <img
-              className="w-5 h-5 rounded-full object-fit"
+              className="w-8 h-8 rounded-full object-fit"
               src={review?.user_id?.image?.[0]?.url}
               alt="user profile"
             />
