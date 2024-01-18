@@ -1,7 +1,4 @@
-import {
-  AdminDashboardHero,
-  AdminSalesLatestOrder,
-} from "../../components/admincomponents/admindashboard";
+import { AdminDashboardHero } from "../../components/admincomponents/admindashboard";
 import {
   AdminDashboardNav,
   DashboardLocation,
@@ -18,7 +15,6 @@ const AdminDashboard = () => {
         <AdminDashboardNav />
         <div className="overflow-x-hidden flex flex-col gap-5 w-full">
           <AdminDashboardHero />
-          <AdminSalesLatestOrder />
         </div>
       </div>
       <Footer />

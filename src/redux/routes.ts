@@ -104,6 +104,14 @@ export const API_ROUTES = {
   },
 
   //Admin
+  adminAnalytics: {
+    topProducts: BASE + "/admin/analytics/topproducts", // GET
+    topServices: BASE + "/admin/analytics/topservices", // GET
+    latestProductOrders: BASE + "/admin/analytics/latestorders/products", // GET
+    latestServiceOrders: BASE + "/admin/analytics/latestorders/services", // GET
+    revenueOrderAnalytics: BASE + "/admin/analytics/revenueandorder", // GET
+  },
+
   adminCategories: {
     create: BASE + "/admin/category/create", // POST
     update: BASE + "/admin/category/update/", // PUT :id

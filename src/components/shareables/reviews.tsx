@@ -287,7 +287,11 @@ const ReviewPost = ({
       <div className="flex flex-row gap-4">
         <div className="">
           {review?.user_id?.image?.[0]?.url ? (
-            <img src={review?.user_id?.image?.[0]?.url} alt="user profile" />
+            <img
+              className="w-5 h-5 rounded-full object-fit"
+              src={review?.user_id?.image?.[0]?.url}
+              alt="user profile"
+            />
           ) : (
             <span className="bg-[#E4E5E7] p-2 rounded-full text-white">
               {review?.user_id?.username?.split("")[0].toUpperCase()}
