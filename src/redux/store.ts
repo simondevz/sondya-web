@@ -225,6 +225,13 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
+import {
+  adminAnalyticsRevenueAndOrderReducer,
+  adminAnalytictsLatestProductOrdersReducer,
+  adminAnalytictsLatestServiceOrdersReducer,
+  adminAnalytictsTopProductsReducer,
+  adminAnalytictsTopServicesReducer,
+} from "./reducers/admin/analytics.reducers";
 
 export type ReducersType = {
   //cart system
@@ -403,6 +410,13 @@ export type ReducersType = {
   adminSuspendGroupchat: ReduxResponseType;
   adminActivateGroupchat: ReduxResponseType;
   adminUpdateGroupchat: ReduxResponseType;
+
+  // admin && analytics
+  adminAnalytictsTopServices: ReduxResponseType;
+  adminAnalytictsTopProducts: ReduxResponseType;
+  adminAnalytictsLatestProductOrders: ReduxResponseType;
+  adminAnalytictsLatestServiceOrders: ReduxResponseType;
+  adminAnalyticsRevenueAndOrder: ReduxResponseType;
 
   // user queries
   testimonial: ReduxResponseType;
@@ -629,6 +643,13 @@ const reducer = combineReducers<ReducersType>({
   adminSuspendGroupchat: adminSuspendGroupchatReducer,
   adminActivateGroupchat: adminActivateGroupchatReducer,
   adminUpdateGroupchat: adminUpdateGroupchatReducer,
+
+  // admin && analytics
+  adminAnalytictsTopServices: adminAnalytictsTopServicesReducer,
+  adminAnalytictsTopProducts: adminAnalytictsTopProductsReducer,
+  adminAnalytictsLatestProductOrders: adminAnalytictsLatestProductOrdersReducer,
+  adminAnalytictsLatestServiceOrders: adminAnalytictsLatestServiceOrdersReducer,
+  adminAnalyticsRevenueAndOrder: adminAnalyticsRevenueAndOrderReducer,
 
   // user queries
   testimonial: testimonialReducer,
