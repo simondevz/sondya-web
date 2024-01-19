@@ -110,6 +110,7 @@ export const API_ROUTES = {
     latestProductOrders: BASE + "/admin/analytics/latestorders/products", // GET
     latestServiceOrders: BASE + "/admin/analytics/latestorders/services", // GET
     revenueOrderAnalytics: BASE + "/admin/analytics/revenueandorder", // GET
+    vistorConversionsAnalytics: BASE + "/admin/analytics/visitorsandconversion", // GET
   },
 
   adminCategories: {

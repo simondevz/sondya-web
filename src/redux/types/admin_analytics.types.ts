@@ -15,6 +15,20 @@ export type OrdersAnalyticsType = {
   graphDates: string[];
 };
 
+export type VisitorsAnalyticsType = {
+  total: number;
+  last_diff: number;
+  graphData: GraphDataType;
+  graphDates: string[];
+};
+
+export type ConversionsAnalyticsType = {
+  average: number;
+  last_diff: number;
+  graphData: GraphDataType;
+  graphDates: string[];
+};
+
 export type TopProductsType = {
   count: number;
   product: AdminGetProductType;

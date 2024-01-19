@@ -227,6 +227,7 @@ import {
 import { ReduxResponseType } from "./types/general.types";
 import {
   adminAnalyticsRevenueAndOrderReducer,
+  adminAnalyticsVisitorsAndConversionsReducer,
   adminAnalytictsLatestProductOrdersReducer,
   adminAnalytictsLatestServiceOrdersReducer,
   adminAnalytictsTopProductsReducer,
@@ -417,6 +418,7 @@ export type ReducersType = {
   adminAnalytictsLatestProductOrders: ReduxResponseType;
   adminAnalytictsLatestServiceOrders: ReduxResponseType;
   adminAnalyticsRevenueAndOrder: ReduxResponseType;
+  adminAnalyticsVisitorsAndConversions: ReduxResponseType;
 
   // user queries
   testimonial: ReduxResponseType;
@@ -650,6 +652,8 @@ const reducer = combineReducers<ReducersType>({
   adminAnalytictsLatestProductOrders: adminAnalytictsLatestProductOrdersReducer,
   adminAnalytictsLatestServiceOrders: adminAnalytictsLatestServiceOrdersReducer,
   adminAnalyticsRevenueAndOrder: adminAnalyticsRevenueAndOrderReducer,
+  adminAnalyticsVisitorsAndConversions:
+    adminAnalyticsVisitorsAndConversionsReducer,
 
   // user queries
   testimonial: testimonialReducer,
