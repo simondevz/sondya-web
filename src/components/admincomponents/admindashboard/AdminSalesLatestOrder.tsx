@@ -2,6 +2,7 @@ import { AiOutlineArrowRight, AiOutlineEdit } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { GetProductOrder } from "../../../redux/types/checkout.types";
 import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
+import { useNavigate } from "react-router-dom";
 
 const AdminSalesLatestOrder = ({
   latestProductOrders,
@@ -10,6 +11,7 @@ const AdminSalesLatestOrder = ({
   latestProductOrders: GetProductOrder[];
   latestServiceOrders: ServiceOrderType[];
 }) => {
+  const navigate = useNavigate();
   return (
     <section className="w-full p-2">
       <div className="flex flex-col gap-3 p-3 shadow-md rounded-md">
@@ -17,7 +19,10 @@ const AdminSalesLatestOrder = ({
           <div className="text-[#1C2A53] text-lg font-[600]">
             Latest Product Orders
           </div>
-          <div className="flex flex-row gap-3 items-center text-[#1C2A53] text-lg font-[600]">
+          <div
+            onClick={() => navigate("/admin/product/orders?page=1&limit=10")}
+            className="flex flex-row gap-3 items-center text-[#1C2A53] text-lg font-[600]"
+          >
             <span className="text-[#555F7E]">More</span>
             <AiOutlineArrowRight />
           </div>
@@ -76,7 +81,10 @@ const AdminSalesLatestOrder = ({
           <div className="text-[#1C2A53] text-lg font-[600]">
             Latest Service Orders
           </div>
-          <div className="flex flex-row gap-3 items-center text-[#1C2A53] text-lg font-[600]">
+          <div
+            onClick={() => navigate("/admin/service/orders?page=1&limit=10")}
+            className="flex flex-row gap-3 items-center text-[#1C2A53] text-lg font-[600]"
+          >
             <span className="text-[#555F7E]">More</span>
             <AiOutlineArrowRight />
           </div>

@@ -16,6 +16,9 @@ import {
   ADMIN_ANALYTICS_LATEST_SERVICE_ORDERS_FAIL,
   ADMIN_ANALYTICS_LATEST_SERVICE_ORDERS_REQUEST,
   ADMIN_ANALYTICS_LATEST_SERVICE_ORDERS_SUCCESS,
+  ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_SUCCESS,
+  ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_FAIL,
+  ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_REQUEST,
 } from "../../constants/admin/analytics.constatnts";
 import { API_ROUTES } from "../../routes";
 import { LoginResponseType } from "../../types/auth.types";
@@ -193,6 +196,42 @@ export const adminAnalyticsRevenuAndOrderAction =
     } catch (error: any) {
       dispatch({
         type: ADMIN_ANALYTICS_REVENUE_AND_ORDER_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const adminAnalyticsVisitorsAndConversionsAction =
+  () => async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.adminAnalytics?.vistorConversionsAnalytics,
+        config
+      );
+      dispatch({
+        type: ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message
