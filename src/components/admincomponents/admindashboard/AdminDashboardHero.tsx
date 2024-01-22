@@ -8,20 +8,20 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
-import { FormatNumber } from "../../shareables/FormatNumber";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
+import Swal from "sweetalert2";
+import { productImage1 } from "../../../images/products";
 import {
-  adminAnalytictsTopProductsAction,
-  adminAnalytictsTopServicesAction,
-  adminAnalytictsLatestProductOrdersAction,
-  adminAnalytictsLatestServiceOrdersAction,
   adminAnalyticsRevenuAndOrderAction,
   adminAnalyticsVisitorsAndConversionsAction,
+  adminAnalytictsLatestProductOrdersAction,
+  adminAnalytictsLatestServiceOrdersAction,
+  adminAnalytictsTopProductsAction,
+  adminAnalytictsTopServicesAction,
 } from "../../../redux/actions/admin/analytics.actions";
-import { ReducersType } from "../../../redux/store";
-import { ReduxResponseType } from "../../../redux/types/general.types";
 import {
   ADMIN_ANALYTICS_LATEST_PRODUCT_ORDERS_RESET,
   ADMIN_ANALYTICS_LATEST_SERVICE_ORDERS_RESET,
@@ -30,6 +30,7 @@ import {
   ADMIN_ANALYTICS_TOPSERVICES_RESET,
   ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_RESET,
 } from "../../../redux/constants/admin/analytics.constatnts";
+import { ReducersType } from "../../../redux/store";
 import {
   ConversionsAnalyticsType,
   OrdersAnalyticsType,
@@ -38,12 +39,11 @@ import {
   TopServiceType,
   VisitorsAnalyticsType,
 } from "../../../redux/types/admin_analytics.types";
-import { productImage1 } from "../../../images/products";
 import { GetProductOrder } from "../../../redux/types/checkout.types";
+import { ReduxResponseType } from "../../../redux/types/general.types";
 import { ServiceOrderType } from "../../../redux/types/serviceOrders.types";
+import { FormatNumber } from "../../shareables/FormatNumber";
 import AdminSalesLatestOrder from "./AdminSalesLatestOrder";
-import { ClipLoader } from "react-spinners";
-import Swal from "sweetalert2";
 
 const AdminDashboardHero = () => {
   const dispatch = useDispatch();
@@ -123,14 +123,14 @@ const AdminDashboardHero = () => {
       dispatch({ type: ADMIN_ANALYTICS_TOPPRODUCTS_RESET });
     }
 
-    if (topProductsRedux.error)
-      Swal.fire({
-        title: "Error!!",
-        text: "Could not load top products data",
-        icon: "error",
-        timer: 4000,
-        confirmButtonText: "Okay",
-      });
+    // if (topProductsRedux.error)
+    //   Swal.fire({
+    //     title: "Error!!",
+    //     text: "Could not load top products data",
+    //     icon: "error",
+    //     timer: 4000,
+    //     confirmButtonText: "Okay",
+    //   });
   }, [
     dispatch,
     topProductsRedux.error,
@@ -244,16 +244,16 @@ const AdminDashboardHero = () => {
       dispatch({ type: ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_RESET });
     }
 
-    if (visitorsAndConversionsRedux.error)
-      Swal.fire({
-        title: "Error!!",
-        text: "Could not load visitors and conversion analysis",
-        icon: "error",
-        timer: 4000,
-        confirmButtonText: "Okay",
-      }).finally(() => {
-        dispatch({ type: ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_RESET });
-      });
+    // if (visitorsAndConversionsRedux.error)
+    //   Swal.fire({
+    //     title: "Error!!",
+    //     text: "Could not load visitors and conversion analysis",
+    //     icon: "error",
+    //     timer: 4000,
+    //     confirmButtonText: "Okay",
+    //   }).finally(() => {
+    //     dispatch({ type: ADMIN_ANALYTICS_VISITORS_AND_CONVERSIONS_RESET });
+    //   });
   }, [
     dispatch,
     visitorsAndConversionsRedux.error,
