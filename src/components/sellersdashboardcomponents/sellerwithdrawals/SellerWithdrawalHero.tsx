@@ -17,11 +17,16 @@ import { ReduxResponseType } from "../../../redux/types/general.types";
 import { FormatNumber } from "../../shareables/FormatNumber";
 import AddAccountModal from "./AddAccountModal";
 import RequestWithdrawalModal from "./RequestWithdrawalModal";
+import { WithdrawalStatType } from "../../../redux/types/withdrawal.types";
+import { sellerGetWithdrawalStatAction } from "../../../redux/actions/seller/seller-withdrawal.actions";
+import { LoginResponseType } from "../../../redux/types/auth.types";
+import { SELLER_GET_WITHDRAWAL_STATS_RESET } from "../../../redux/constants/seller/seller-withdrawals.constants";
 
 const SellerWithdrawalHero = () => {
   // React state to control Modal visibility
   const [AddAccount, setAddAccount] = useState(false);
   const [RequestWithdrawal, setRequestWithdrawal] = useState(false);
+  const [witdrawalStat, setWithdrawalStat] = useState<WithdrawalStatType>();
 
   // fetch balance
   // const navigate = useNavigate();
@@ -33,6 +38,10 @@ const SellerWithdrawalHero = () => {
     (state: ReducersType) => state?.sellerGetBalance
   ) as ReduxResponseType<GetBalanceType>;
 
+  const login = useSelector(
+    (state: ReducersType) => state.login
+  ) as ReduxResponseType<LoginResponseType>;
+
   const getBalance = useMemo(() => {
     return sellerGetBalanceRedux?.serverResponse?.data;
   }, [sellerGetBalanceRedux]);
@@ -40,6 +49,41 @@ const SellerWithdrawalHero = () => {
   useEffect(() => {
     dispatch(sellerGetBalanceAction() as any);
   }, [dispatch]);
+
+  // get withdrawal stat (pending and completed transactions)
+  const withdrawalStatRedux = useSelector(
+    (state: ReducersType) => state.sellerGetWithdrawalStat
+  ) as ReduxResponseType<WithdrawalStatType>;
+
+  useEffect(() => {
+    if (login.serverResponse.data?.id)
+      dispatch(
+        sellerGetWithdrawalStatAction({
+          user_id: login.serverResponse.data?.id,
+        }) as any
+      );
+  }, [dispatch, login.serverResponse.data?.id]);
+
+  useEffect(() => {
+    if (withdrawalStatRedux?.success) {
+      setWithdrawalStat(withdrawalStatRedux?.serverResponse?.data);
+      dispatch({ type: SELLER_GET_WITHDRAWAL_STATS_RESET });
+    }
+
+    if (withdrawalStatRedux?.error)
+      Swal.fire({
+        title: "Error!!",
+        text: withdrawalStatRedux?.error,
+        icon: "error",
+        timer: 4000,
+        confirmButtonText: "Okay",
+      }).finally(() => dispatch({ type: SELLER_GET_WITHDRAWAL_STATS_RESET }));
+  }, [
+    dispatch,
+    withdrawalStatRedux?.error,
+    withdrawalStatRedux?.serverResponse?.data,
+    withdrawalStatRedux?.success,
+  ]);
 
   // delete bank Accounts
   const sellerDeleteBankRedux = useSelector(
@@ -145,11 +189,21 @@ const SellerWithdrawalHero = () => {
           </div>
           <div className="border p-8 rounded-md w-fit hit-fit text-center">
             <div className="font-[600] text-sm">Pending Withdrawal</div>
-            <div className="font-[700] text-[2.3rem]">N400,294</div>
+            <div className="font-[700] text-[2.3rem]">
+              $
+              {witdrawalStat?.pending && (
+                <FormatNumber price={witdrawalStat?.pending} />
+              )}
+            </div>
           </div>
           <div className="border p-8 rounded-md w-fit hit-fit text-center flex-1 md:max-w-[24rem]">
             <div className="font-[600] text-sm">Completed</div>
-            <div className="font-[700] text-[2.3rem]">N1,400,294</div>
+            <div className="font-[700] text-[2.3rem]">
+              $
+              {witdrawalStat?.completed && (
+                <FormatNumber price={witdrawalStat?.completed} />
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-row justify-evenly gap-4 overflow-x-scroll">

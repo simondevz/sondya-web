@@ -86,7 +86,17 @@ const DashboardLocation = () => {
     <div className="relative flex flex-row justify-between items-center gap-1 bg-[#000000] text-white py-5 px-8">
       <div className="flex flex-row justify-between items-center gap-1">
         <FaHome /> <span>Home</span>
-        {pathSegments.map((t, i) => {
+        {pathSegments.map((t, i, arr) => {
+          if (arr[i - 1] === "inbox")
+            return (
+              <div
+                key={i}
+                className="flex flex-row justify-between items-center gap-1"
+              >
+                <AiOutlineRight /> <span>Chat</span>
+              </div>
+            );
+
           return (
             <div
               key={i}

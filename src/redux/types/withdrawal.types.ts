@@ -25,3 +25,8 @@ export type WithdrawalResponseType = {
   withdrawal_status: string;
   createdAt?: Date;
 };
+
+export type WithdrawalStatType = {
+  pending: number;
+  completed: number;
+};
