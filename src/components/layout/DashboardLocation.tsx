@@ -3,7 +3,7 @@ import { AiOutlineBell, AiOutlineRight } from "react-icons/ai";
 import { FaHome, FaTimes } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { user1 } from "../../images/users";
 import {
   get4NotificationsAction,
@@ -78,9 +78,16 @@ const DashboardLocation = () => {
 
   //put location
   const location = useLocation();
+  const params = useParams();
+
+  const id = String(params.id);
+  const order_id = String(params.order_id);
+
   const pathSegments = location.pathname
     .split("/")
-    .filter((segment) => segment !== "");
+    .filter(
+      (segment) => segment !== "" && segment !== id && segment !== order_id
+    );
 
   return (
     <div className="relative flex flex-row justify-between items-center gap-1 bg-[#000000] text-white py-5 px-8">
