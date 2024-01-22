@@ -139,6 +139,7 @@ import {
 import {
   sellerDeleteWithdrawalsReducer,
   sellerGetWithdrawalByIdReducer,
+  sellerGetWithdrawalStatReducer,
   sellerGetWithdrawalsReducer,
   sellerWithdrawalReducer,
 } from "./reducers/seller/seller-withdrawal.reducers";
@@ -345,6 +346,7 @@ export type ReducersType = {
   //seller and withdrawal
   sellerWithdraw: ReduxResponseType;
   sellerGetWithdrawals: ReduxResponseType;
+  sellerGetWithdrawalStat: ReduxResponseType;
   sellerGetWithdrawalById: ReduxResponseType;
   sellerDeleteWithdrawal: ReduxResponseType;
 
@@ -590,6 +592,7 @@ const reducer = combineReducers<ReducersType>({
 
   //seller && withdrawals
   sellerGetWithdrawals: sellerGetWithdrawalsReducer,
+  sellerGetWithdrawalStat: sellerGetWithdrawalStatReducer,
   sellerWithdraw: sellerWithdrawalReducer,
   sellerGetWithdrawalById: sellerGetWithdrawalByIdReducer,
   sellerDeleteWithdrawal: sellerDeleteWithdrawalsReducer,

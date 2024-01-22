@@ -10,6 +10,9 @@ import {
   SELLER_GET_WITHDRAWAL_BYID_FAIL,
   SELLER_GET_WITHDRAWAL_BYID_REQUEST,
   SELLER_GET_WITHDRAWAL_BYID_SUCCESS,
+  SELLER_GET_WITHDRAWAL_STATS_FAIL,
+  SELLER_GET_WITHDRAWAL_STATS_REQUEST,
+  SELLER_GET_WITHDRAWAL_STATS_SUCCESS,
   SELLER_WITHDRAWAL_FAIL,
   SELLER_WITHDRAWAL_REQUEST,
   SELLER_WITHDRAWAL_SUCCESS,
@@ -173,6 +176,43 @@ export const sellerDeleteWithdrawalAction =
     } catch (error: any) {
       dispatch({
         type: SELLER_DELETE_WITHDRAWAL_FAIL,
+        payload:
+          error?.response && error.response?.data?.message
+            ? error?.response?.data?.message
+            : error?.message,
+      });
+    }
+  };
+
+export const sellerGetWithdrawalStatAction =
+  ({ user_id }: any) =>
+  async (dispatch: Dispatch, getState: any) => {
+    try {
+      dispatch({
+        type: SELLER_GET_WITHDRAWAL_STATS_REQUEST,
+      });
+
+      const state = getState();
+      const login: ReduxResponseType<LoginResponseType> = state?.login;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        API_ROUTES?.sellerWithdrawal?.getWithdrawalStat + user_id,
+        config
+      );
+      dispatch({
+        type: SELLER_GET_WITHDRAWAL_STATS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: SELLER_GET_WITHDRAWAL_STATS_FAIL,
         payload:
           error?.response && error.response?.data?.message
             ? error?.response?.data?.message

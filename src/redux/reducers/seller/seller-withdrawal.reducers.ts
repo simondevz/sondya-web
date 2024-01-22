@@ -12,6 +12,10 @@ import {
   SELLER_GET_WITHDRAWAL_BYID_REQUEST,
   SELLER_GET_WITHDRAWAL_BYID_RESET,
   SELLER_GET_WITHDRAWAL_BYID_SUCCESS,
+  SELLER_GET_WITHDRAWAL_STATS_FAIL,
+  SELLER_GET_WITHDRAWAL_STATS_REQUEST,
+  SELLER_GET_WITHDRAWAL_STATS_RESET,
+  SELLER_GET_WITHDRAWAL_STATS_SUCCESS,
   SELLER_WITHDRAWAL_FAIL,
   SELLER_WITHDRAWAL_REQUEST,
   SELLER_WITHDRAWAL_RESET,
@@ -132,6 +136,36 @@ export const sellerDeleteWithdrawalsReducer = (
         error: action.payload,
       };
     case SELLER_DELETE_WITHDRAWAL_RESET:
+    case LOGIN_RESET:
+      return { ...initialState };
+
+    default:
+      return state;
+  }
+};
+
+export const sellerGetWithdrawalStatReducer = (
+  state: ReduxResponseType = initialState,
+  action: ActionType
+) => {
+  switch (action.type) {
+    case SELLER_GET_WITHDRAWAL_STATS_REQUEST:
+      return { ...initialState, loading: true };
+    case SELLER_GET_WITHDRAWAL_STATS_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        success: true,
+        serverResponse: action.payload,
+      };
+    case SELLER_GET_WITHDRAWAL_STATS_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        success: false,
+        error: action.payload,
+      };
+    case SELLER_GET_WITHDRAWAL_STATS_RESET:
     case LOGIN_RESET:
       return { ...initialState };
 

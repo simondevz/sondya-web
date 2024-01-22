@@ -81,6 +81,7 @@ export const API_ROUTES = {
     withdraw: BASE + "/seller/withdraw", // POST
     getWithdrawals: BASE + "/seller/withdrawals/", // GET :id - user's id
     getWithdrawalById: BASE + "/seller/withdrawal/details/", // GET :id - withdrawal's id
+    getWithdrawalStat: BASE + "/seller/withdrawal/stat/", // GET :id - user's id
     deleteWithdrawal: BASE + "/seller/withdrawal/delete/", // DELETE :id - withdrawal's id
   },
 
