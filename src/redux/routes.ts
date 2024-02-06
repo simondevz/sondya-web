@@ -42,6 +42,17 @@ export const API_ROUTES = {
     getProfileData: BASE + "/profile/data/", // GET :id - user id
   },
 
+  // kyc
+  kyc: {
+    verifyEmail: BASE + "/kyc/verify/email",
+    verifyCode: BASE + "/kyc/verify/code/", // PUT :id - user id
+    personalInfo: BASE + "/kyc/personal/", // PUT :id - user id
+    contactInfo: BASE + "/kyc/contact/", // PUT :id - user id
+    companyInfo: BASE + "/kyc/company/", // PUT :id - user id
+    documentFile: BASE + "/kyc/document/", // PUT :id - user id
+    displayPicture: BASE + "/kyc/image/", // PUT :id - user id
+  },
+
   //seller
   sellerAnalysis: {
     getAnalysis: BASE + "/seller/analysis/", // GET :id - user id

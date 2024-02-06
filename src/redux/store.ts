@@ -11,6 +11,14 @@ import {
   adminWithdrawalPaymentReducer,
 } from "./reducers/admin/admin-withdrawal.reducers";
 import {
+  adminAnalyticsRevenueAndOrderReducer,
+  adminAnalyticsVisitorsAndConversionsReducer,
+  adminAnalytictsLatestProductOrdersReducer,
+  adminAnalytictsLatestServiceOrdersReducer,
+  adminAnalytictsTopProductsReducer,
+  adminAnalytictsTopServicesReducer,
+} from "./reducers/admin/analytics.reducers";
+import {
   adminCreateCategoryReducer,
   adminDeleteCategoryReducer,
   adminGetCategoriesReducer,
@@ -167,6 +175,15 @@ import {
   userJoinGroupchatReducer,
 } from "./reducers/userDashboard/groupchat.reducers";
 import {
+  kycCompanyInfoReducer,
+  kycContactInfoReducer,
+  kycDisplayPictureReducer,
+  kycDocumentFileReducer,
+  kycPersonalInfoReducer,
+  kycVerifyCodeReducer,
+  kycVerifyEmailReducer,
+} from "./reducers/userDashboard/kyc.reducers";
+import {
   initializePaymentsReducer,
   userGetPaymentsByIdReducer,
   userGetPaymentsReducer,
@@ -226,14 +243,6 @@ import {
   viewWishlistReducer,
 } from "./reducers/wishlist.reducers";
 import { ReduxResponseType } from "./types/general.types";
-import {
-  adminAnalyticsRevenueAndOrderReducer,
-  adminAnalyticsVisitorsAndConversionsReducer,
-  adminAnalytictsLatestProductOrdersReducer,
-  adminAnalytictsLatestServiceOrdersReducer,
-  adminAnalytictsTopProductsReducer,
-  adminAnalytictsTopServicesReducer,
-} from "./reducers/admin/analytics.reducers";
 
 export type ReducersType = {
   //cart system
@@ -275,6 +284,15 @@ export type ReducersType = {
   login: ReduxResponseType;
   forgotPassword: ReduxResponseType;
   resetPassword: ReduxResponseType;
+
+  //kyc registration
+  kycVerifyEmail: ReduxResponseType;
+  kycVerifyCode: ReduxResponseType;
+  kycPersonalInfo: ReduxResponseType;
+  kycContactInfo: ReduxResponseType;
+  kycCompanyInfo: ReduxResponseType;
+  kycDocumentFile: ReduxResponseType;
+  kycDisplayPicture: ReduxResponseType;
 
   // user && Email notification
   orderEmailNotification: ReduxResponseType;
@@ -515,6 +533,15 @@ const reducer = combineReducers<ReducersType>({
   login: loginReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+
+  // kyc && verification
+  kycVerifyEmail: kycVerifyEmailReducer,
+  kycVerifyCode: kycVerifyCodeReducer,
+  kycPersonalInfo: kycPersonalInfoReducer,
+  kycContactInfo: kycContactInfoReducer,
+  kycCompanyInfo: kycCompanyInfoReducer,
+  kycDocumentFile: kycDocumentFileReducer,
+  kycDisplayPicture: kycDisplayPictureReducer,
 
   // user && Email notification
   orderEmailNotification: orderEmailNotificationReducer,
