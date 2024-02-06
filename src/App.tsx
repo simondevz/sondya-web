@@ -2,6 +2,15 @@ import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { DeleteAccount } from "./screens";
 import {
+  CompanyInfo,
+  ContactInfo,
+  DisplayPicture,
+  IdentificationDocument,
+  PersonalInfo,
+  VerifyCode,
+  VerifyEmail,
+} from "./screens/kyc";
+import {
   adminDashboardCheck,
   authCheck,
   dashboardCheck,
@@ -290,6 +299,7 @@ const App = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: homeCheck,
   },
+
   // Authentication
   {
     path: "/auth/error",
@@ -332,6 +342,50 @@ const App = createBrowserRouter([
     element: <SignUp />,
     errorElement: <ErrorPage />,
     loader: authCheck,
+  },
+
+  // kyc routes
+  {
+    path: "/kyc/verify/email",
+    element: <VerifyEmail />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
+    path: "/kyc/verify/code",
+    element: <VerifyCode />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
+    path: "/kyc/personal/info",
+    element: <PersonalInfo />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
+    path: "/kyc/contact/info",
+    element: <ContactInfo />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
+    path: "/kyc/document",
+    element: <IdentificationDocument />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
+    path: "/kyc/picture",
+    element: <DisplayPicture />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
+  },
+  {
+    path: "/kyc/company/info",
+    element: <CompanyInfo />,
+    errorElement: <ErrorPage />,
+    loader: dashboardCheck,
   },
 
   // User DasboardRoutes
