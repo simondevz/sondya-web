@@ -21,7 +21,7 @@ const OrderHistoryBody = () => {
   const productOrderData = useMemo(() => {
     return getProductOrdersRedux?.serverResponse?.data;
   }, [getProductOrdersRedux]);
-  console.log(getProductOrdersRedux);
+  // console.log(getProductOrdersRedux);
 
   useEffect(() => {
     dispatch(userGetProductsOrdersAction("") as any);

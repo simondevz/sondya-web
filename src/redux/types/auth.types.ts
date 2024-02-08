@@ -2,6 +2,8 @@ export type LoginResponseType = {
   id: string;
   email: string;
   username?: string;
+  email_verified?: boolean;
+  kyc_completed?: boolean;
   token: string;
   type: "admin" | "user";
 };

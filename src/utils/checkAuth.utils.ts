@@ -61,6 +61,8 @@ export const sellerDashboardCheck = async () => {
     return redirect("/login");
   } else if (storedData) {
     const parsedData = JSON.parse(storedData);
+
+    // check if the person logged in us a user
     if (parsedData?.serverResponse?.data?.type !== "user") {
       logoutAction();
       if (typeof window !== "undefined") {
@@ -68,6 +70,8 @@ export const sellerDashboardCheck = async () => {
       }
       return redirect("/login");
     }
+
+    // check if the token has expired
     if (checkExpiredToken()) {
       logoutAction();
       if (typeof window !== "undefined") {
@@ -75,6 +79,10 @@ export const sellerDashboardCheck = async () => {
       }
       return redirect("/login");
     }
+    if (!parsedData?.serverResponse?.data?.kyc_completed) {
+      return redirect("/kyc/verify/email");
+    }
+    return null;
   }
   return null;
 };

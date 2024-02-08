@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BsWhatsapp, BsYoutube } from "react-icons/bs";
 import { FaLinkedinIn } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../../css/modal.css";
@@ -68,6 +69,13 @@ const DashboardSettingsBody = () => {
       contact_person_name: "",
       contact_person_number: "",
     },
+
+    // kyc stuffs
+    gender: "",
+    marital_status: "",
+    date_of_birth: "",
+    email_verified: false,
+    kyc_completed: false,
   });
 
   const getProfileDetailsRedux = useSelector(
@@ -279,6 +287,44 @@ const DashboardSettingsBody = () => {
         >
           Change password
         </button>
+      </div>
+      <div className="flex flex-col gap-2 max-w-[40rem]">
+        <div className="font-[600] text-[#191F33] text-xl">
+          Join Sellers(Kyc)
+        </div>
+        <div className="text-[#767E94]">
+          To Join sellers and sell products and services on our website, you
+          have to complete your Kyc registrations
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-[600]">kyc status</span> :{" "}
+          {userData.kyc_completed ? (
+            <div className="flex items-center gap-2">
+              Completed{" "}
+              <span className="text-green-700 text-xl">
+                <MdVerified />
+              </span>{" "}
+            </div>
+          ) : (
+            <div className="text-red-400"> Incomplete</div>
+          )}
+        </div>
+        {!userData.kyc_completed && (
+          <button
+            onClick={() => navigate("/kyc/verify/email")}
+            className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3"
+          >
+            Fill Kyc Details
+          </button>
+        )}
+        {userData.kyc_completed && (
+          <button
+            onClick={() => navigate("/kyc/verify/email")}
+            className="py-2 bg-[#EDB842] text-white rounded-md w-fit self-start px-4 my-3"
+          >
+            Update Kyc Details
+          </button>
+        )}
       </div>
       <div className="overflow-y-scroll">
         <EditAccountInfoModal
