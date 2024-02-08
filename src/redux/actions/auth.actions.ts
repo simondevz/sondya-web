@@ -48,7 +48,7 @@ export const registerAction =
         },
       };
 
-      console.log(API_ROUTES?.auth?.register);
+      // console.log(API_ROUTES?.auth?.register);
       const { data } = await axios.post(
         API_ROUTES?.auth?.register,
         { first_name, last_name, email, username, password, referrer, country },

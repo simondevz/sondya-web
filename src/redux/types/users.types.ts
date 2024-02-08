@@ -84,6 +84,14 @@ export type adminUGetUserType = {
   // balance
   balance?: number;
   order_total?: number;
+
+  // for kyc
+  gender?: string;
+  marital_status?: string;
+  date_of_birth?: string;
+  id_document?: ImageType[];
+  email_verified?: boolean;
+  kyc_completed?: boolean;
 };
 
 export type ImageType = {

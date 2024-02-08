@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
+import { LOGIN_SESSION } from "../../../extraStorage/storageStore";
 import {
   KYC_COMPANY_INFO_FAIL,
   KYC_COMPANY_INFO_REQUEST,
@@ -240,14 +241,23 @@ export const kycCompanyInfoAction =
         contact_person_number,
       };
 
-      const { data } = await axios.put(
-        API_ROUTES?.profile?.updateCompanyDetails +
-          login?.serverResponse?.data?.id,
+      const { data, status } = await axios.put(
+        API_ROUTES?.kyc?.companyInfo + login?.serverResponse?.data?.id,
         {
-          company_details,
+          company_details: company_details,
         },
         config
       );
+
+      // update local storage for email verified and kyc completed
+      if (status === 200 || status === 201) {
+        login.serverResponse.data.email_verified = true;
+        login.serverResponse.data.kyc_completed = true;
+        if (typeof window !== "undefined") {
+          localStorage.setItem(LOGIN_SESSION, JSON.stringify(login));
+        }
+      }
+
       dispatch({
         type: KYC_COMPANY_INFO_SUCCESS,
         payload: data,
@@ -276,7 +286,8 @@ export const kycDocumentFileAction =
 
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
@@ -290,6 +301,7 @@ export const kycDocumentFileAction =
         formData,
         config
       );
+
       dispatch({
         type: KYC_DOCUMENT_FILE_SUCCESS,
         payload: data,
@@ -318,13 +330,14 @@ export const kycDisplayPictureAction =
 
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${login?.serverResponse?.data?.token}`,
         },
       };
       const formData = new FormData();
       if (image) {
-        formData.append("image", image);
+        formData.append("image", image as File);
       }
 
       const { data } = await axios.put(

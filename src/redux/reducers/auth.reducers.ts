@@ -72,6 +72,8 @@ export const loginReducer = (
           action.payload?.data?.token
         );
         decodedToken.token = action.payload?.data?.token;
+        decodedToken.email_verified = action.payload?.data?.email_verified;
+        decodedToken.kyc_completed = action.payload?.data?.kyc_completed;
 
         // add data to it
         login = {
