@@ -14,6 +14,8 @@ const SelectVariant = ({
     return Object.keys(variants);
   }, [variants]);
 
+  console.log(variants);
+
   return (
     <div className="grid grid-cols-2 gap-2 text-[#475156]">
       {labels?.length ? (
@@ -25,16 +27,17 @@ const SelectVariant = ({
                 <select
                   onChange={(event) =>
                     setSelectedVariants((prev) => {
-                      return prev?.map(([label, value]) => {
-                        if (label === labelStr) value = event?.target?.value;
-                        return [label, value];
-                      });
+                      if (variants[labelStr]?.map)
+                        return prev?.map(([label, value]) => {
+                          if (label === labelStr) value = event?.target?.value;
+                          return [label, value];
+                        });
                     })
                   }
                   name=""
                   id={labelStr}
                 >
-                  {variants[labelStr].map((option: string, index: number) => {
+                  {variants[labelStr]?.map((option: string, index: number) => {
                     return (
                       <option key={index} className="" value={option}>
                         {option}
